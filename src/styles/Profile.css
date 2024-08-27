@@ -1,0 +1,102 @@
+.profile{
+    flex: 1;
+    /* width: 250px; */
+    /* padding-left:50px ; */
+    
+}
+.profile--header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.left-content{
+    width: 70%;
+    background-color:  white;
+}
+.edit{
+    background: #dde6ed;
+     padding: 12px;
+     border-radius: 10px;
+     color: #969393;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+}
+.edit .icon{
+    font-size: 20px;
+    transition: 0.5s ease-in-out;
+}
+.user--profile img{
+    max-width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    
+}
+.user--profile{
+    height: 85%;
+    margin-top: 2rem;
+    background: #dde6ed;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;flex-direction: column;
+}
+.user--detail{
+    width: 100%;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+
+}
+h2{
+    color: #726f6f;
+    font-weight:bold;
+}
+.user-course{
+    background-color: #fff;
+    flex: 1;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    
+}
+.courses{
+    background: #dde6ed;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 10px;
+}
+.course-detail{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+.course-cover{
+    background: #fff;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 20px;
+}
+.courses .duration{
+    font-size: 12px;
+
+}
+.courses .action{
+    font-weight: 900;
+    font-size: 1.2rem;
+
+}
+
+.profession{
+    color: #969393;
+    
+}
