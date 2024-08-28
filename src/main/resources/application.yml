@@ -1,0 +1,38 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: BE_PBL6_FastOrderSystem
+  main:
+    allow-circular-references: true
+  datasource:
+    username: root
+    password: 123456789
+    url: jdbc:mysql://localhost:3306/db_pbl6
+    driver-class-name: com.mysql.jdbc.Driver
+    security:
+     jwt:
+       signerKey: "W31fqJQUxdNSy/Y+F+RFsa/Zi4hx3sX2tfRH/dAk/0342mbKCFpdljSyUkeE59vxGYdSPYIAW2UW+pExDCD+1Q=="
+       valid-duration: 86400
+       refreshable-duration: 86400 # in seconds
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      format_sql: true
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+      file-size-threshold: 2KB
+logging:
+  level:
+    com:
+      example:
+        BE_PBL6_FastOrderSystem:
+          service:
+            Impl:
+              ProductServiceImpl=DEBUG: INFO
