@@ -2,17 +2,23 @@ import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
 class ContainerFolderCustom extends StatelessWidget{
+  final String text;
+  final IconData iconData;
+  final Color iconcolor;
   ContainerFolderCustom({
+    required this.iconData,
+    required this.text,
+    required this.iconcolor,
        Key? key,
    }): super(key:key);
    @override
    Widget build(BuildContext context) {
        return Container(
               margin: EdgeInsets.only(left: AppDimention.size5+1,right: AppDimention.size5,top: AppDimention.size10),
-              height: 125,
+              height: 100,
               width: 185,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColor.mainColor,
                 borderRadius: BorderRadius.circular(AppDimention.size10),
                 boxShadow: [
                   BoxShadow(
@@ -23,7 +29,19 @@ class ContainerFolderCustom extends StatelessWidget{
                   )
                 ]
               ),
-              child: Column()
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  SizedBox(height: AppDimention.size10,),
+                  Icon(iconData,size: AppDimention.size40,color:iconcolor),
+                  Text(text,style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: AppDimention.size20
+                  ),)
+                ],
+
+              )
             );
    }
 }

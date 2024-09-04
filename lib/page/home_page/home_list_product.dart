@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:android_project/data/controller/Product_controller.dart';
 import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
@@ -13,50 +16,90 @@ class _HomeListProductState extends State<HomeListProduct>{
    @override
    Widget build(BuildContext context) {
    // TODO: implement build
-       return ListView.builder(
+       return GetBuilder<ProductController>(builder: (productController){
+
+            return  productController.isLoading  ? ListView.builder(
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: 5,
+            itemCount: productController.productList.length > 10 ? 10 : productController.productList.length,
             itemBuilder: (context , index){
                 return GestureDetector(
                     onTap: (){
-                      Get.toNamed(AppRoute.PRODUCT_DETAIL);
+                      Get.toNamed(AppRoute.get_product_detail(productController.productList[index].productId));
                     },
                     child: Container(
                             margin: EdgeInsets.only(left: AppDimention.size20, right:  AppDimention.size20,bottom: AppDimention.size20),
+                             decoration: BoxDecoration(
+                                 border: Border(bottom: BorderSide(width: 1,color: Color.fromRGBO(0, 0, 0, 0.5)))
+                              ),
                             child: Row(
                               children: [
                                 Container(
                                     width: AppDimention.listViewImageSize,
                                     height: AppDimention.listViewImageSize,
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(AppDimention.size20),
+                                     
                                       color: Colors.white,
                                       image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: NetworkImage(
-                                          "https://wallpaperaccess.com/full/6790132.png"
-                                        )
-                                      ),
+                                          fit: BoxFit.cover,
+                                          image: MemoryImage(base64Decode(productController.productList[index].image!)),
+                                        ),
                                     ),
                                   ),
                                 Expanded(
                                   child: Container(
-                                      height: AppDimention.listViewTextContSize,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(AppDimention.size20),
-                                          bottomRight: Radius.circular(AppDimention.size20),
-                                        ),
-                                        color: Colors.white,
-                                      ),
+                                      margin: EdgeInsets.only(left: AppDimention.size10),
+                                      height: AppDimention.listViewImageSize,
+                                     
                                       child: Padding(
                                         padding: EdgeInsets.only(left: AppDimention.size10),
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+
                                           children: [
-                                            
-                                            
+                                             SizedBox(height: AppDimention.size20,),
+                                              Container(
+                                                child: Text(productController.productList[index].productName!,style: TextStyle(
+                                                    fontSize: AppDimention.size15,
+                                                    fontWeight: FontWeight.w500
+                                                ),),
+                                              ),
+                                              SizedBox(height: AppDimention.size10,),
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Icon(Icons.star,color: Colors.yellow,),
+                                                        Text("4.5")
+                                                      ],
+                                                    ),
+                                                    SizedBox(width: AppDimention.size30,),
+                                                     Row(
+                                                      children: [
+                                                        Icon(Icons.location_on,color: Colors.blue,),
+                                                        Text("2.7 km")
+                                                      ],
+                                                    )
+                                                  ],
+                                              ),
+                                              SizedBox(height: AppDimention.size10,),
+                                              Row(
+                                                 mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                 Text(
+                                                    "Giá: " + productController.productList[index].price.toString(),
+                                                    style: TextStyle(
+                                                      fontSize: AppDimention.size10,
+                                                      decoration: TextDecoration.lineThrough,color: Colors.red, 
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: AppDimention.size20,),
+                                                  Text(productController.productList[index].discountedPrice.toString()+" vnđ")
+                                                ],
+                                              )
+                                              
+
                                           ],
                                         ),
                                       ),
@@ -67,6 +110,7 @@ class _HomeListProductState extends State<HomeListProduct>{
                         ),
                 );
               },
-          );
+          ): CircularProgressIndicator();
+       });
    }
 }

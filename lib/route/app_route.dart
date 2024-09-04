@@ -7,4 +7,13 @@ class AppRoute {
   static String CAMERA_PAGE = "/camera";
   static String CART_PAGE = "/cart";
   static String PRODUCT_DETAIL = "/product_detail";
+  static String COMBO_DETAIL = "/combo_detail";
+  static String STORE_PAGE = "/store";
+  static String CATEGORY_PAGE = "/category";
+  static String CATEGORY_DETAIL_PAGE = "/category_detail";
+  static String ORDER_PAGE = "/order";
+
+  static String get_combo_detail(int pageId) => '$COMBO_DETAIL?pageId=$pageId';
+  static String get_product_detail(int productId) => '$PRODUCT_DETAIL?productId=$productId';
+  static String get_product_bycategoryid_detail(int categoryid) => '$CATEGORY_DETAIL_PAGE?categoryid=$categoryid';
 }

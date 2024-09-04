@@ -1,4 +1,3 @@
-
 import 'package:android_project/data/api/AppConstant.dart';
 import 'package:get/get.dart';
 
@@ -16,8 +15,9 @@ class ApiClient extends GetConnect implements GetxService {
       'Authorization': 'Bearer $token',
     };
   }
-  void updateHeader(String token){
-    _mainHeaders={
+  void updateHeader(String token) {
+    this.token = token; 
+    _mainHeaders = {
       'Content-type': 'application/json;charset=UTF-8',
       'Authorization': 'Bearer $token',
     };
@@ -31,22 +31,25 @@ class ApiClient extends GetConnect implements GetxService {
       return Response(statusCode: 1, statusText: e.toString());
     }
   }
-  Future<Response> postData(String uri,dynamic body) async{
-    try{
-      Response response = await post(uri, body,headers: _mainHeaders);
+
+  Future<Response> postData(String uri, dynamic body) async {
+    try {
+      Response response = await post(uri, body, headers: _mainHeaders);
       return response;
-    }catch(e){
+    } catch (e) {
       return Response(statusCode: 1, statusText: e.toString());
     }
   }
-  Future<Response> putData(String uri,dynamic body) async{
-    try{
-      Response response = await put(uri, body,headers: _mainHeaders);
+
+  Future<Response> putData(String uri, dynamic body) async {
+    try {
+      Response response = await put(uri, body, headers: _mainHeaders);
       return response;
-    }catch(e){
+    } catch (e) {
       return Response(statusCode: 1, statusText: e.toString());
     }
   }
+
   Future<Response> deleteData(String uri) async {
     try {
       Response response = await delete(uri, headers: _mainHeaders);
@@ -55,5 +58,4 @@ class ApiClient extends GetConnect implements GetxService {
       return Response(statusCode: 1, statusText: e.toString());
     }
   }
-
 }

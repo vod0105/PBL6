@@ -1,6 +1,8 @@
 import 'package:android_project/custom/container_folder_custom.dart';
+import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_color.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 class HomeFolder extends StatefulWidget{
    const HomeFolder({
        Key? key,
@@ -13,22 +15,38 @@ class _HomeFolderState extends State<HomeFolder>{
    Widget build(BuildContext context) {
    // TODO: implement build
        return Container(
-        height: 280,
+        height: 240,
           decoration: BoxDecoration(
-            color: AppColor.mainColor,
+            color: Colors.white,
           ),
           child: Column(
             children: [
               Row(
                 children: [
-                  ContainerFolderCustom(),
-                  ContainerFolderCustom(),
+                  ContainerFolderCustom(iconData: Icons.discount_outlined, text: "Khuyến mãi",iconcolor: const Color.fromARGB(255, 151, 241, 155),),
+                  GestureDetector(
+                    onTap: (){
+                        Get.toNamed(AppRoute.CATEGORY_PAGE);
+                    },
+                    child: ContainerFolderCustom(iconData: Icons.local_drink_outlined, text: "Thực đơn",iconcolor: AppColor.yellowColor,),
+                  )
+                 
                 ],
               ),
               Row(
                 children: [
-                  ContainerFolderCustom(),
-                  ContainerFolderCustom(),
+                 GestureDetector(
+                  onTap: (){
+                      Get.toNamed(AppRoute.STORE_PAGE);
+                  },
+                  child: ContainerFolderCustom(iconData: Icons.store, text: "Cửa hàng",iconcolor: Color.fromRGBO(37, 203, 245, 1),),
+                 ),
+                 GestureDetector(
+                  onTap:(){
+                      Get.toNamed(AppRoute.ORDER_PAGE);
+                  },
+                  child: ContainerFolderCustom(iconData: Icons.note_alt_outlined, text: "Đơn hàng gần đây",iconcolor: Color.fromRGBO(36, 255, 200, 1)),
+                 )
                 ],
               )
             ],

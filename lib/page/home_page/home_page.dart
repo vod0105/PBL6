@@ -1,11 +1,10 @@
-import 'package:android_project/custom/big_text.dart';
+
 import 'package:android_project/page/home_page/home_banner.dart';
-import 'package:android_project/page/home_page/home_category.dart';
+import 'package:android_project/page/home_page/home_combo.dart';
 import 'package:android_project/page/home_page/home_folder.dart';
 import 'package:android_project/page/home_page/home_footer.dart';
 import 'package:android_project/page/home_page/home_header.dart';
 import 'package:android_project/page/home_page/home_list_product.dart';
-import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
 class HomePage extends StatefulWidget{
@@ -29,17 +28,11 @@ class _HomePageState extends State<HomePage>{
                     HomeBanner(),
                     HomeFolder(),
                     SizedBox(height: AppDimention.size15,),
-                    Container(   
-                      margin: EdgeInsets.only(left: AppDimention.size10,right: AppDimention.size10),
-                      child: BigText(text: "Category",size: 30,),
-                    ),
+                 
                     SizedBox(height: AppDimention.size15,),
-                    HomeCategory(),
+                    HomeCombo(),
                     SizedBox(height: AppDimention.size15,),
-                    Container(   
-                      margin: EdgeInsets.only(left: AppDimention.size10,right: AppDimention.size10),
-                      child: BigText(text: "Product",size: 30,),
-                    ),
+                    
                     SizedBox(height: AppDimention.size15,),
                     HomeListProduct(),
                    

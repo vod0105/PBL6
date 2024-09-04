@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:android_project/custom/big_text.dart';
+import 'package:android_project/data/controller/Cart_controller.dart';
 import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CartList extends StatefulWidget {
   const CartList({
@@ -13,126 +17,155 @@ class CartList extends StatefulWidget {
 }
 
 class _CartListState extends State<CartList> {
-  bool key = true;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          SizedBox(height: AppDimention.size20),
-          Container(
-            width: 375,
-            height: 50,
-            decoration: BoxDecoration(
-                color: AppColor.mainColor,
-                borderRadius: BorderRadius.all(Radius.circular(10))),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                GestureDetector(
-                  onTap: (){
-                      setState(() {
-                        key = !key;
-                      });
-                  },
-                  child: Icon(
-                    key?Icons.square:Icons.square_outlined,
-                    size: 30,
-                    color: Colors.white,
-                  ),
-                ),
-                Container(
-                  width: 250,
-                  child: BigText(
-                    text: "Chi tiết",
-                    color: Colors.white,
-                  ),
-                ),
-                BigText(
-                  text: "#",
-                  color: Colors.white,
-                )
-              ],
-            ),
-          ),
-          ListView.builder(
+    return 
+          GetBuilder<CartController>(builder: (cartcontroler){
+             return ListView.builder(
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: 5,
+            itemCount: cartcontroler.cartlist.length,
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {},
                 child: Container(
                   width: 375,
-                  height: 150,
+                  height: 175,
                   margin: EdgeInsets.only(
                       bottom: AppDimention.size10,
                       left: AppDimention.size10,
                       right: AppDimention.size10),
                  
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(
-                        key?Icons.square:Icons.square_outlined,
-                        size: 30,
-                        color: AppColor.mainColor,
-                      ),
                       Container(
-                        decoration: BoxDecoration(
+                         width: 370,
+                          decoration: BoxDecoration(
                           border: Border(bottom: BorderSide(width: 1))
                         ),
-                        width: 250,
+                 
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(
                               height: AppDimention.size10,
                             ),
-                            BigText(text: "Cá hồi xả sả ớt , cay cay"),
-                            Text("Giá : 20.000 vnđ"),
-                            Text("Đánh giá  : 4.9"),
-                            Text(
-                              "54,Nguyễn Lương Bằng , Liên Chiểu , Đà Nẵng",
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1, 
+                            BigText(text:cartcontroler.cartlist[index].productName),
+                            SizedBox(height: 10,),
+                            Row(
+                              children: [
+                                Container(
+                                  width: 60,
+                                  height: 60,
+                                   decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: MemoryImage(base64Decode(cartcontroler.cartlist[index].image!)),
+                                        ),
+                                      
+                                   ),
+                                ),
+                                SizedBox(width: AppDimention.size10,),
+                                Container(
+                                  width: 300,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [Text("Giá : "+ cartcontroler.cartlist[index].unitPrice.toString(),style: TextStyle(color: AppColor.mainColor),),
+                                    Text("Đánh giá  : 4.9",style: TextStyle(color: Colors.blue[300])),
+                                    Text(
+                                        "54,Nguyễn Lương Bằng , Liên Chiểu , Đà Nẵng",
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                  ],
+                                  ),
+                                )
+                              ],
                             ),
 
                             SizedBox(
-                              height: AppDimention.size10,
+                              height: AppDimention.size30,
                             ),
-                            Container(
-                              height: 30,
-                              width: 150,
-                              decoration: BoxDecoration(
-                                  color: AppColor.mainColor
-                              ),
-                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                      GestureDetector(
+                                        onTap:(){
+                                          // giam so luong
+                                        },
+                                        child: Container(
+                                            width: 30,
+                                            height: 30,
+                                            decoration: BoxDecoration(
+                                              color: AppColor.mainColor,
+                                              borderRadius: BorderRadius.circular(5)
+                                            ),
+                                            child: Center(
+                                              child: Icon(Icons.remove,color: Colors.white,),
+                                            ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 5,),
+                                      Container(
+                                          width: 60,
+                                          height: 30,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(width: 1),
+                                            borderRadius: BorderRadius.circular(5)
+                                          ),
+                                          child: Center(
+                                            child: Text(cartcontroler.cartlist[index].quantity.toString()),
+                                          ),
+                                      ),
+                                      SizedBox(width: 5,),
+                                      GestureDetector(
+                                        onTap:(){
+                                          // tang so luong
+                                        },
+                                        child: Container(
+                                            width: 30,
+                                            height: 30,
+                                            decoration: BoxDecoration(
+                                              color: AppColor.mainColor,
+                                              borderRadius: BorderRadius.circular(5)
+                                            ),
+                                            child: Center(
+                                              child: Icon(Icons.add,color: Colors.white,),
+                                            ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Container(
+                                      child: Center(
+                                        child: Icon(Icons.border_color,color: Colors.green[400],),
+                                      ),
+                                    ),
+                                    SizedBox(width: 30,),
+                                    Container(
+                                      child: Center(
+                                        child: Icon(Icons.delete_outline,color: AppColor.mainColor,),
+                                      ),
+                                    )
+                                  ],
+                                )
+                              ],
+                            )
                           ],
                         ),
                       ),
-                     Column(
-                      children: [
-                        Container(
-                          width: 40,
-                          height: 75,
-                          child: Icon(Icons.restore_from_trash,color: Color.fromARGB(255, 255, 130, 130),size: AppDimention.size40,),
-                        ),
-                        Container(
-                          width: 40,
-                          height: 75,
-                           child: Icon(Icons.shopping_cart_checkout_outlined,color: Colors.greenAccent,size: AppDimention.size40,),
-                        ),
-                      ],
-                     )
                     ],
                   ),
                 ),
               );
             },
-          )
-        ],
-      ),
-    );
+          );
+          });
+       
   }
 }

@@ -1,5 +1,4 @@
-import 'package:android_project/custom/big_text.dart';
-import 'package:android_project/custom/select_profile_custom.dart';
+
 import 'package:android_project/custom/select_setting_custom.dart';
 import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_color.dart';
@@ -25,15 +24,13 @@ class _ProfileSettingState extends State<ProfileSetting> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: AppDimention.size20,),
-        BigText(text: "Account",size: AppDimention.size40,),
-        SizedBox(height: AppDimention.size5,),
         Container(
-            width: 373,
+            width: AppDimention.screenWidth,
             height: 277,
             padding: EdgeInsets.all(AppDimention.size10),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(AppDimention.size10),
+            
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.2),

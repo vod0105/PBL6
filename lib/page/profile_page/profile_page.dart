@@ -1,4 +1,4 @@
-import 'package:android_project/page/home_page/home_footer.dart';
+
 import 'package:android_project/page/profile_page/profile_controll.dart';
 import 'package:android_project/page/profile_page/profile_footer.dart';
 import 'package:android_project/page/profile_page/profile_header.dart';
@@ -17,25 +17,25 @@ class _ProfilePageState extends State<ProfilePage>{
    Widget build(BuildContext context) {
         return Scaffold(
           backgroundColor: Color.fromRGBO(243, 243, 243, 1),
-        body: Column(
-          children: [
-            ProfileHeader(),
-            SizedBox(height: AppDimention.size15,),
-             Expanded(
-              child: SingleChildScrollView(
-              child: Column(
-                children: [
-                   ProfileControll(),
-                   ProfileSetting(),
-                   
-                ],
+          body: Column(
+            children: [
+              SizedBox(height: AppDimention.size15,),
+              Expanded(
+                child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    ProfileHeader(),
+                    SizedBox(height: AppDimention.size10,),
+                    ProfileControll(),
+                    ProfileSetting(),
+                    
+                  ],
+                ),
+              )
               ),
               
-            )
-            ),
-            
-            ProfileFooter(),
-            
+              ProfileFooter(),
+              
           ],
         ),
       );

@@ -1,7 +1,13 @@
+import 'dart:convert';
+
+import 'package:android_project/data/controller/Combo_controller.dart';
+import 'package:android_project/models/Model/ComboModel.dart';
+import 'package:android_project/route/app_route.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
+import 'package:get/get.dart';
 
 class HomeBanner extends StatefulWidget {
   const HomeBanner({Key? key}) : super(key: key);
@@ -15,6 +21,7 @@ class _HomeBannerState extends State<HomeBanner> {
   double currentPageValue = 0.0;
   final double _scaleFactor = 0.8;
   final double _height = AppDimention.pageView;
+  
 
   @override
   void initState() {
@@ -36,36 +43,40 @@ class _HomeBannerState extends State<HomeBanner> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: _height,
-      width: double.maxFinite,
-      child: Column(
-        children: [
-          Expanded(
-            child: PageView.builder(
-              controller: pageController,
-              itemCount: 5,
-              itemBuilder: (context, position) {
-                return _buildView(position);
-              },
+    return GetBuilder<ComboController>(builder: (comboController) {
+          return comboController.isLoading ? Container(
+            height: _height,
+            width: double.maxFinite,
+            child: Column(
+              children: [
+                Expanded(
+                  child: PageView.builder(
+                    controller: pageController,
+                    itemCount: comboController.comboList.length,
+                    itemBuilder: (context, position) {
+                      return _buildView(comboController.comboList[position],position);
+                    },
+                  ),
+                ),
+                DotsIndicator(
+                    dotsCount: comboController.comboList.length,
+                    position: currentPageValue,
+                    decorator: DotsDecorator(
+                    activeColor: AppColor.mainColor,
+                    size: const Size.square(9.0),
+                    activeSize: const Size(18.0, 9.0),
+                    activeShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+                  ),
+                )
+              ],
             ),
-          ),
-          DotsIndicator(
-              dotsCount: 5,
-              position: currentPageValue,
-              decorator: DotsDecorator(
-              activeColor: AppColor.mainColor,
-              size: const Size.square(9.0),
-              activeSize: const Size(18.0, 9.0),
-              activeShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-            ),
-          )
-        ],
-      ),
-    );
+          ): CircularProgressIndicator();
+    });
+     
   }
 
-  Widget _buildView(int index) {
+  Widget _buildView(ComboModel combomodel,int index) {
+
     Matrix4 matrix = Matrix4.identity();
     if (index == currentPageValue.floor()) {
       var currentScale = 1 - (currentPageValue - index) * (1 - _scaleFactor);
@@ -93,19 +104,19 @@ class _HomeBannerState extends State<HomeBanner> {
         children: [
           GestureDetector(
             onTap: () {
-              // Handle tap event
+                Get.toNamed(AppRoute.get_combo_detail(index));
             },
             child: Container(
               height: AppDimention.pageViewContainer,
               margin: EdgeInsets.symmetric(horizontal: AppDimention.size5),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(AppDimention.size30),
-                color: const Color(0xFF69c5df),
-                image: const DecorationImage(
+                color: Color(0xFF69c5df),
+                image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: NetworkImage(
-                      "https://wallpaperaccess.com/full/6790132.png"),
+                  image: MemoryImage(base64Decode(combomodel.image!)),
                 ),
+
               ),
             ),
           ),
@@ -137,31 +148,22 @@ class _HomeBannerState extends State<HomeBanner> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("Gà xào sả ớt"),
+                    Text(combomodel.comboName!),
                     SizedBox(height: AppDimention.size10),
                     Row(
                       children: [
-                        Wrap(
-                          children: List.generate(
-                              5,
-                              (index) => Icon(
-                                    Icons.star,
-                                    color: AppColor.mainColor,
-                                    size: AppDimention.size15,
-                                  )),
-                        ),
-                        SizedBox(width: AppDimention.size10),
-                        const Text("4.5"),
+                        // Wrap(
+                        //   children: List.generate(
+                        //       5,
+                        //       (index) => Icon(
+                        //             Icons.star,
+                        //             color: AppColor.mainColor,
+                        //             size: AppDimention.size15,
+                        //           )),
+                        // ),
+                        Text("Giá :" + combomodel.comboPrice!.toString() +" vnđ"),
                         SizedBox(width: AppDimention.size25),
-                        const Text("200 reviews"),
-                      ],
-                    ),
-          
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("Chuyên mục"),
-                        Text("Chi tiết"),
+                       
                       ],
                     ),
                   ],

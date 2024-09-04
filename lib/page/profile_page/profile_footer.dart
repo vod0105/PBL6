@@ -1,4 +1,5 @@
 import 'package:android_project/route/app_route.dart';
+import 'package:android_project/theme/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -20,7 +21,7 @@ class _ProfileFooterState extends State<ProfileFooter> {
       }else if(index == 1){
 
       }else if(index == 2){
-        
+         Get.toNamed(AppRoute.ORDER_PAGE);
       }
       else if(index == 3){
          
@@ -58,7 +59,7 @@ class _ProfileFooterState extends State<ProfileFooter> {
           label: 'Profile',
         ),
       ],
-      selectedItemColor: Colors.amber[800], 
+      selectedItemColor: AppColor.mainColor, 
       unselectedItemColor: Colors.grey, 
     );
   }
