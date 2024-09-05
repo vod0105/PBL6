@@ -26,9 +26,9 @@ body {
     -o-transition: background 0.2s ease;
 } */
 :root {
-    --background: #1a1a2e;
-    --color: #ffffff;
-    --primary-color: #0f3460;
+  --background: #1a1a2e;
+  --color: #ffffff;
+  --primary-color: #0f3460;
 }
 a {
   text-decoration: none;
@@ -220,3 +220,7 @@ h1 {
     -o-transform: scale(1);
   }
 } */
+.error-message {
+  color: red;
+  
+}
