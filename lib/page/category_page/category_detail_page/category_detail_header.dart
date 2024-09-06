@@ -6,16 +6,23 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CategoryDetailHeader extends StatefulWidget {
-  const CategoryDetailHeader({Key? key}) : super(key: key);
+  final String categoryname;
+  const CategoryDetailHeader({Key? key,required this.categoryname}) : super(key: key);
 
   @override
   _CategoryDetailHeaderState createState() => _CategoryDetailHeaderState();
 }
 
 class _CategoryDetailHeaderState extends State<CategoryDetailHeader> {
-
+  late String title;
+@override
+  void initState() {
+    super.initState();
+    title = widget.categoryname;
+  }
   @override
   Widget build(BuildContext context) {
+
       return Column(
         children: [
           Container(
@@ -68,7 +75,7 @@ class _CategoryDetailHeaderState extends State<CategoryDetailHeader> {
               border: Border(bottom: BorderSide(width: 1))
             ),
             child: Center(
-              child: Text("Gà giòn vui vẻ",style: TextStyle(color: AppColor.mainColor,fontSize: 20,fontWeight: FontWeight.bold),),
+              child: Text(title,style: TextStyle(color: AppColor.mainColor,fontSize: 20,fontWeight: FontWeight.bold),),
             ),
           )
           

@@ -12,8 +12,9 @@ class AppRoute {
   static String CATEGORY_PAGE = "/category";
   static String CATEGORY_DETAIL_PAGE = "/category_detail";
   static String ORDER_PAGE = "/order";
+  static String PRODUCT_ALL_PAGE = "/product_all";
 
   static String get_combo_detail(int pageId) => '$COMBO_DETAIL?pageId=$pageId';
   static String get_product_detail(int productId) => '$PRODUCT_DETAIL?productId=$productId';
-  static String get_product_bycategoryid_detail(int categoryid) => '$CATEGORY_DETAIL_PAGE?categoryid=$categoryid';
+  static String get_product_bycategoryid_detail(int categoryid,String categoryname) => '$CATEGORY_DETAIL_PAGE?categoryid=$categoryid&categoryname=$categoryname';
 }

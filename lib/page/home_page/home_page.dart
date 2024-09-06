@@ -5,8 +5,10 @@ import 'package:android_project/page/home_page/home_folder.dart';
 import 'package:android_project/page/home_page/home_footer.dart';
 import 'package:android_project/page/home_page/home_header.dart';
 import 'package:android_project/page/home_page/home_list_product.dart';
+import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 class HomePage extends StatefulWidget{
    const HomePage({
        Key? key,
@@ -35,6 +37,18 @@ class _HomePageState extends State<HomePage>{
                     
                     SizedBox(height: AppDimention.size15,),
                     HomeListProduct(),
+                    Container(
+                      width: AppDimention.screenWidth,
+                      height: 50,
+                      child: Center(
+                        child: GestureDetector(
+                          onTap: (){
+                            Get.toNamed(AppRoute.PRODUCT_ALL_PAGE);
+                          },
+                          child: Text("Xem thêm"),
+                        ),
+                      ),
+                    )
                    
                 ],
               ),

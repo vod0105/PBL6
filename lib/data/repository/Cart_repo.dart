@@ -17,5 +17,8 @@ class CartRepo {
    Future<Response> orderproduct(Cartdto cart) async{
       return await apiClient.postData(Appconstant.ORDER_PRODUCT_URL,cart.toJson());
    }
+    Future<Response> orderproductMOMO(Cartdto cart) async{
+      return await apiClient.postData(Appconstant.ORDER_PRODUCT_MOMO_URL,cart.toJson());
+   }
    
 }

@@ -52,6 +52,7 @@ class AuthController extends GetxController implements GetxService{
         responeModel = Responemodel(false,response.statusText!);
 
       }
+      print(response.body);
       _isLoading = true;
       update();
       return responeModel;

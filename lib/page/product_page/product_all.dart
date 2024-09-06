@@ -5,22 +5,29 @@ import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-class HomeListProduct extends StatefulWidget{
-   const HomeListProduct({
+class ProductAll extends StatefulWidget{
+   const ProductAll({
        Key? key,
    }): super(key:key);
    @override
-   _HomeListProductState createState() => _HomeListProductState();
+   _ProductAllState createState() => _ProductAllState();
 }
-class _HomeListProductState extends State<HomeListProduct>{
+class _ProductAllState extends State<ProductAll>{
    @override
    Widget build(BuildContext context) {
-   // TODO: implement build
-       return GetBuilder<ProductController>(builder: (productController){
+      return Scaffold(
+        body: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+              child: Column(
+                children: [
+                    
+                    GetBuilder<ProductController>(builder: (productController){
             return  productController.isLoading  ? ListView.builder(
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: productController.productList.length > 10 ? 10 : productController.productList.length,
+            itemCount: productController.productList.length ,
             itemBuilder: (context , index){
                 return GestureDetector(
                     onTap: (){
@@ -110,6 +117,18 @@ class _HomeListProductState extends State<HomeListProduct>{
                 );
               },
           ): CircularProgressIndicator();
-       });
+       })
+                    
+                   
+                ],
+              ),
+              
+            )
+            ),
+            
+            
+          ],
+        ),
+      );
    }
 }

@@ -13,8 +13,13 @@ class CartPage extends StatefulWidget{
 }
 class _CartPageState extends State<CartPage>{
    @override
+    void initState() {
+      super.initState();
+      Get.find<CartController>().getall();
+    }
+   @override
    Widget build(BuildContext context) {
-    Get.find<CartController>().getall();
+
       return Scaffold(
         body: Column(
           children: [

@@ -1,4 +1,5 @@
 
+import 'package:android_project/data/controller/Product_controller.dart';
 import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
@@ -6,8 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CategoryDetailList extends StatefulWidget {
+  final categoryid;
   const CategoryDetailList({
     Key? key,
+    required this.categoryid
   }) : super(key: key);
 
   @override
@@ -15,12 +18,22 @@ class CategoryDetailList extends StatefulWidget {
 }
 
 class _CategoryDetailListState extends State<CategoryDetailList> {
+  late ProductController productController;
+  @override
+  void initState() {
+    super.initState();
+    productController = Get.find();
+    productController.getProductByCategoryId(widget.categoryid);
+  }
+
+
   @override
   Widget build(BuildContext context) {
-        return  ListView.builder(
+        return  GetBuilder<ProductController>(builder: (productController){
+          return ListView.builder(
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: 5,
+            itemCount: productController.productListBycategory.length,
             itemBuilder: (context, index) {
               return Align(
                 alignment: Alignment.center,
@@ -35,7 +48,7 @@ class _CategoryDetailListState extends State<CategoryDetailList> {
                   ),
                   child: GestureDetector(
                     onTap: (){
-                        Get.toNamed(AppRoute.get_product_detail(1));
+                        Get.toNamed(AppRoute.get_product_detail(productController.productListBycategory[index].productId));
                     },
                     child: Row(
                               children: [
@@ -65,7 +78,7 @@ class _CategoryDetailListState extends State<CategoryDetailList> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                               Container(
-                                                child: Text("Gà công nghiệp ươn",style: TextStyle(
+                                                child: Text(productController.productListBycategory[index].productName,style: TextStyle(
                                                     fontSize: AppDimention.size15,
                                                     fontWeight: FontWeight.w500
                                                 ),
@@ -97,14 +110,14 @@ class _CategoryDetailListState extends State<CategoryDetailList> {
                                                  mainAxisAlignment: MainAxisAlignment.start,
                                                 children: [
                                                  Text(
-                                                    "Giá: 91.000 ",
+                                                    productController.productListBycategory[index].price.toString(),
                                                     style: TextStyle(
                                                       fontSize: AppDimention.size10,
                                                       decoration: TextDecoration.lineThrough,color: Colors.red, 
                                                     ),
                                                   ),
                                                   SizedBox(width: AppDimention.size20,),
-                                                  Text("81.000 vnđ")
+                                                  Text(productController.productListBycategory[index].discountedPrice.toString())
                                                 ],
                                               ),
                                               SizedBox(height: AppDimention.size5,),
@@ -135,6 +148,7 @@ class _CategoryDetailListState extends State<CategoryDetailList> {
 
             },
           );
+        });
          
        
   }

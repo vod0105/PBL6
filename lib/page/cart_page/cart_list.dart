@@ -17,15 +17,21 @@ class CartList extends StatefulWidget {
 }
 
 class _CartListState extends State<CartList> {
+
   @override
   Widget build(BuildContext context) {
     return 
           GetBuilder<CartController>(builder: (cartcontroler){
+            if(cartcontroler.cartlist.length <1 ){
+              return Container(width: 375,height: 175,child: Center(child: Text("Bạn không có món ăn trong giỏ hàng"),),);
+            }
+            else{
              return ListView.builder(
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: cartcontroler.cartlist.length,
             itemBuilder: (context, index) {
+
               return GestureDetector(
                 onTap: () {},
                 child: Container(
@@ -51,7 +57,7 @@ class _CartListState extends State<CartList> {
                             SizedBox(
                               height: AppDimention.size10,
                             ),
-                            BigText(text:cartcontroler.cartlist[index].productName),
+                            BigText(text: cartcontroler.cartlist[index].product != null? cartcontroler.cartlist[index].product.productName : cartcontroler.cartlist[index].combo.comboName.toString()),
                             SizedBox(height: 10,),
                             Row(
                               children: [
@@ -62,7 +68,7 @@ class _CartListState extends State<CartList> {
                                     borderRadius: BorderRadius.circular(10),
                                     image: DecorationImage(
                                           fit: BoxFit.cover,
-                                          image: MemoryImage(base64Decode(cartcontroler.cartlist[index].image!)),
+                                          image: MemoryImage(base64Decode(cartcontroler.cartlist[index].product != null?cartcontroler.cartlist[index].product.image!:cartcontroler.cartlist[index].combo.image!)),
                                         ),
                                       
                                    ),
@@ -72,8 +78,14 @@ class _CartListState extends State<CartList> {
                                   width: 300,
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [Text("Giá : "+ cartcontroler.cartlist[index].unitPrice.toString(),style: TextStyle(color: AppColor.mainColor),),
-                                    Text("Đánh giá  : 4.9",style: TextStyle(color: Colors.blue[300])),
+                                    children: [Text(
+                                      "Giá : " +
+                                      (cartcontroler.cartlist[index].product != null
+                                          ? cartcontroler.cartlist[index].product!.unitPrice.toString()
+                                          : cartcontroler.cartlist[index].combo!.unitPrice.toString()),
+                                      style: TextStyle(color: AppColor.mainColor),
+                                    ),
+                                    Text("Cửa hàng số " + (cartcontroler.cartlist[index].product != null? cartcontroler.cartlist[index].product.storeId.toString() : cartcontroler.cartlist[index].combo.storeId.toString()),style: TextStyle(color: Colors.blue[300])),
                                     Text(
                                         "54,Nguyễn Lương Bằng , Liên Chiểu , Đà Nẵng",
                                         overflow: TextOverflow.ellipsis,
@@ -94,7 +106,7 @@ class _CartListState extends State<CartList> {
                                   children: [
                                       GestureDetector(
                                         onTap:(){
-                                          // giam so luong
+                                        
                                         },
                                         child: Container(
                                             width: 30,
@@ -117,13 +129,13 @@ class _CartListState extends State<CartList> {
                                             borderRadius: BorderRadius.circular(5)
                                           ),
                                           child: Center(
-                                            child: Text(cartcontroler.cartlist[index].quantity.toString()),
+                                            child: Text(cartcontroler.cartlist[index].product != null? cartcontroler.cartlist[index].product.quantity.toString() :  cartcontroler.cartlist[index].combo.quantity.toString()),
                                           ),
                                       ),
                                       SizedBox(width: 5,),
                                       GestureDetector(
                                         onTap:(){
-                                          // tang so luong
+                                          
                                         },
                                         child: Container(
                                             width: 30,
@@ -164,7 +176,7 @@ class _CartListState extends State<CartList> {
                 ),
               );
             },
-          );
+          );}
           });
        
   }

@@ -33,7 +33,7 @@ class _CategoryListState extends State<CategoryList> {
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: (){
-                  Get.toNamed(AppRoute.get_product_bycategoryid_detail(categoryController.categoryList[index].categoryId));
+                  Get.toNamed(AppRoute.get_product_bycategoryid_detail(categoryController.categoryList[index].categoryId,categoryController.categoryList[index].categoryName));
               },
               child: Container(
                 width: 150, 

@@ -11,8 +11,8 @@ class Storecontroller extends GetxController {
   bool _isLoading= false;
   bool get isLoading =>_isLoading;
 
-  List<dynamic> _productList = [];
-  List<dynamic> get productList => _productList;
+  List<dynamic> _storeList = [];
+  List<dynamic> get storeList => _storeList;
 
   Future<void> getall() async{  
       _isLoading = false;
@@ -21,8 +21,9 @@ class Storecontroller extends GetxController {
       if(response.statusCode == 200){
         print("Getting ... store ");
         var data = response.body;
-        _productList = [];
-        _productList.addAll(StoreModel.fromJson(data).stores);
+        _storeList = [];
+        _storeList.addAll(StoreModel.fromJson(data).stores);
+        print(_storeList);
       }else{
         print("Error"+ response.statusCode.toString());
       }

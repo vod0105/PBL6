@@ -6,9 +6,11 @@ import 'package:android_project/page/category_page/category_list.dart';
 import 'package:flutter/material.dart';
 class CategoryDetailPage extends StatefulWidget{
   final int categoryid;
+  final String categoryname;
    const CategoryDetailPage({
        Key? key,
-       required this.categoryid
+       required this.categoryid,
+       required this.categoryname,
    }): super(key:key);
    @override
    _CategoryDetailPageState createState() => _CategoryDetailPageState();
@@ -19,12 +21,12 @@ class _CategoryDetailPageState extends State<CategoryDetailPage>{
       return Scaffold(
         body: Column(
           children: [
-           CategoryDetailHeader(),
+           CategoryDetailHeader(categoryname:widget.categoryname),
             Expanded(
               child: SingleChildScrollView(
               child: Column(
                 children: [
-                    CategoryDetailList()
+                    CategoryDetailList(categoryid :widget.categoryid)
                    
                 ],
               ),

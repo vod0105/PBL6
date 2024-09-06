@@ -6,6 +6,7 @@ import 'package:android_project/page/home_page/detail_page/banner/banner_detail.
 import 'package:android_project/page/home_page/home_page.dart';
 import 'package:android_project/page/login_page/login_page.dart';
 import 'package:android_project/page/order_page/order_page.dart';
+import 'package:android_project/page/product_page/product_all.dart';
 import 'package:android_project/page/product_page/product_page.dart';
 import 'package:android_project/page/profile_page/profile_page.dart';
 import 'package:android_project/page/register_page/register_page.dart';
@@ -25,6 +26,7 @@ class AppPages {
     GetPage(name:AppRoute.STORE_PAGE,page:() => StorePage()),
     GetPage(name:AppRoute.CATEGORY_PAGE,page:() => CategoryPage()),
     GetPage(name:AppRoute.ORDER_PAGE,page:() => OrderPage()),
+    GetPage(name:AppRoute.PRODUCT_ALL_PAGE,page:() => ProductAll()),
 
     GetPage(name: AppRoute.COMBO_DETAIL, 
              page: () {
@@ -40,8 +42,9 @@ class AppPages {
     }),
     GetPage(name:AppRoute.CATEGORY_DETAIL_PAGE,page:() {
       var categoryid = Get.parameters['categoryid'];
+      var categoryname = Get.parameters['categoryname'];
       int categoryidInt = int.tryParse(categoryid ?? '0') ?? 0;
-      return CategoryDetailPage(categoryid: categoryidInt);
+      return CategoryDetailPage(categoryid: categoryidInt,categoryname:categoryname!);
     }),
   ];
 }

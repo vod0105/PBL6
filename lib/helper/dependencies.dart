@@ -38,14 +38,12 @@ Future<void> init() async {
  Get.lazyPut(() => OrderRepo(apiClient: Get.find()));
  Get.lazyPut(() => OrderController(orderRepo: Get.find()));
 
- Get.lazyPut(() => StoreRepo(apiClient: Get.find()));
- Get.lazyPut(() => Storecontroller(storeRepo: Get.find()));
 
   Get.lazyPut(() => CategoryRepo(apiClient: Get.find()));
   Get.lazyPut(() => CategoryController(categoryRepo: Get.find()));
 
-  Get.lazyPut(() => CartRepo(apiClient: Get.find()));
-  Get.lazyPut(() => CartController(cartRepo: Get.find()));
+  Get.put(CartRepo(apiClient: Get.find()));
+  Get.put(CartController(cartRepo: Get.find()));
 
 
-}
+} 

@@ -3,6 +3,7 @@ import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 class CartFooter extends StatefulWidget{
    const CartFooter({
        Key? key,
@@ -13,12 +14,18 @@ class CartFooter extends StatefulWidget{
 class _CartFooterState extends State<CartFooter>{
  TextEditingController addressController = TextEditingController();
 String? selectedPaymentMethod;
-void _order(){
-    String address = addressController.text.trim();
-    String paymentMethod = selectedPaymentMethod!;
-    Get.find<CartController>().orderall(address,paymentMethod);
-    
+void _order() async {
+  String address = addressController.text.trim();
+  String paymentMethod = selectedPaymentMethod!;
+
+  await Get.find<CartController>().orderall(address, paymentMethod);
+  var payUrl = Get.find<CartController>().qrcode.payUrl;
+  final Uri _url = Uri.parse(payUrl!);
+  if (!await launchUrl(_url)) {
+    throw Exception('Could not launch $_url');
+  }
 }
+
 
 void _showDropdown() {
   showDialog(
@@ -77,26 +84,23 @@ void _showDropdown() {
           },
         ),
         actions: [
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text("Đóng"),
-          ),
-          GestureDetector(
-            onTap: (){
-              _order();
-            },
-            child: Container(
-              width: 150,
-              height: 50,
-              decoration: BoxDecoration(
-                color: AppColor.mainColor
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text("Đóng"),
               ),
-              child: Center(
-                child: Text("Đặt hàng",style: TextStyle(color: Colors.white,fontSize: 20),),
-              ),
-            ),
+              ElevatedButton(
+                onPressed: (){
+                  _order();
+                  Navigator.of(context).pop();
+                },
+                child: Text("Đặt hàng"),
+              )
+            ],
           )
         ],
       );
