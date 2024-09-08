@@ -22,7 +22,7 @@ class BannerDetail extends StatelessWidget{
             Positioned(
               top: 0,
               left: 0,
-              height: 350,
+              height: AppDimention.screenWidth - AppDimention.size40,
               width: AppDimention.screenWidth,
               child: Container(
                 decoration: BoxDecoration(
@@ -54,7 +54,7 @@ class BannerDetail extends StatelessWidget{
             Positioned(
                 bottom: 0,
                 width: AppDimention.screenWidth,
-                height: 60,
+                height: AppDimention.size60,
                 child: Container(
                   decoration: BoxDecoration(
                     color: AppColor.yellowColor

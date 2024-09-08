@@ -1,4 +1,5 @@
 import 'package:android_project/custom/big_text.dart';
+import 'package:android_project/data/controller/User_controller.dart';
 import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
@@ -14,7 +15,8 @@ class ProfileHeader extends StatefulWidget{
 class _ProfileHeaderState extends State<ProfileHeader>{
    @override
    Widget build(BuildContext context) {
-      return Container(
+      return GetBuilder<UserController>(builder: (usercontroller){
+          return Container(
           width: AppDimention.screenWidth,
           height: 180,
           decoration: BoxDecoration(
@@ -124,9 +126,13 @@ class _ProfileHeaderState extends State<ProfileHeader>{
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                           SizedBox(height: AppDimention.size30,),
-                          BigText(text: "Nguyễn Văn Nhật",color:Colors.white,),
-                          Text("ID:38A04990",style: TextStyle(color:Colors.white,),),
-                          Text("Rank:kim cương",style: TextStyle(color:Colors.white,)),
+                          BigText(text: usercontroller.userprofile?.fullName ?? 'Default Name', color:Colors.white,),
+                          Text(
+                            "ID: ${usercontroller.userprofile?.id}",
+                            style: TextStyle(color: Colors.white),
+                          ),
+
+                          Text("Ngày tham gia : ${usercontroller.userprofile?.createdAt}" ,style: TextStyle(color:Colors.white,)),
                       ],
                     )
                 ],
@@ -134,5 +140,6 @@ class _ProfileHeaderState extends State<ProfileHeader>{
             ],
           ),
       );
+      });
    }
 }

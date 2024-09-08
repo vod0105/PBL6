@@ -24,29 +24,35 @@ class CartController extends GetxController implements GetxService{
   double _totalprice = 0;
   double get totalprice => _totalprice;
 
+  List<int> _IDSelectedProduct = [];
+  List<int> get IDSelectedProduct => _IDSelectedProduct ;
+
+  List<int> _IDSelectedCombo = [];
+  List<int> get IDSelectedCombo => _IDSelectedCombo ;
+
   Future<void> getall() async{  
       _isLoading = false;
       Response response = await cartRepo.getall();
     
       if(response.statusCode == 200){
-        print("Getting ... cart");
+        print("Lấy dữ liệu danh sách giỏ hàng thành công");
         var data = response.body;
         _cartlist = [];
-      var cartData = Cartmodel.fromJson(data).getdata;
-      if (cartData != null) {
-        _cartlist.addAll(cartData);
-      }
-      print(_cartlist[0].product.productName);
+        var cartData = Cartmodel.fromJson(data).getdata;
+        if (cartData != null) {
+          _cartlist.addAll(cartData);
+        }
 
-       _totalprice = _cartlist
-      .where((item) => item.product != null) 
-      .map((item) => item.product!.totalPrice?.toDouble() ?? 0.0) 
-      .fold(0.0, (previous, current) => previous + current); 
+        _totalprice = _cartlist
+        .where((item) => item.product != null) 
+        .map((item) => item.product!.totalPrice?.toDouble() ?? 0.0) 
+        .fold(0.0, (previous, current) => previous + current); 
 
 
       }else{
-        print("Error "+ response.statusCode.toString());
+        print("Lỗi không lấy được danh sách đơn hàng "+ response.statusCode.toString());
          _cartlist = [];
+         _totalprice = 0;
       }
       _isLoading = true;
       update();
@@ -56,13 +62,15 @@ class CartController extends GetxController implements GetxService{
   MomoModels get qrcode => _qrcode;
 
   Future<void> orderall(String address , String paymentMethod) async{
-   
-      List<int> listcart = _cartlist.map<int>((item) => item.cartItemId).toList();
-      Response response = await cartRepo.orderproduct(Cartdto(cartlist: listcart,deliveryAddress: address,paymentMethod: paymentMethod));
-      if(response.statusCode == 200){
+    print(_IDSelectedCombo.length.toString() +" - "+ _IDSelectedProduct.length.toString());
+
+    if( !_IDSelectedProduct.isEmpty  && _IDSelectedCombo.isEmpty)
+    {
+      Response response = await cartRepo.orderproduct(Cartdto(cartlist: _IDSelectedProduct,deliveryAddress: address,paymentMethod: paymentMethod));
+      if(response.statusCode == 200 ){
           if(paymentMethod == "CASH")
           {
-            Get.snackbar("Announce", "Order product success");
+            Get.snackbar("Thông báo", "Đặt đơn hàng thành công");
             await getall(); 
           }
           else{
@@ -72,8 +80,51 @@ class CartController extends GetxController implements GetxService{
           }
            
       }else{
-        print("Error"+ response.statusCode.toString());
+        print("Đặt đơn hàng sản phẩm thất bại : "+ response.statusCode.toString());
       }
+    }
+    else if( _IDSelectedProduct.isEmpty  && !_IDSelectedCombo.isEmpty )
+    {
+  
+      Response response = await cartRepo.ordercombo(Cartdto(cartlist: _IDSelectedCombo,deliveryAddress: address,paymentMethod: paymentMethod));
+      if(response.statusCode == 200 ){
+          if(paymentMethod == "CASH")
+          {
+            Get.snackbar("Thông báo", "Đặt đơn hàng thành công");
+            await getall(); 
+          }
+          else{
+            var data = response.body;
+            _qrcode = (MomoModels.fromJson(data).momo);
+            print(_qrcode.payUrl);
+          }
+           
+      }else{
+        print("Đặt đơn hàng combo thất bại : "+ response.statusCode.toString());
+      }
+    }
+    else if ( !_IDSelectedProduct.isEmpty  && !_IDSelectedCombo.isEmpty ){
+      Response response = await cartRepo.orderproduct(Cartdto(cartlist: _IDSelectedProduct,deliveryAddress: address,paymentMethod: paymentMethod));
+      Response responsecombo = await cartRepo.ordercombo(Cartdto(cartlist: _IDSelectedCombo,deliveryAddress: address,paymentMethod: paymentMethod));
+            if(response.statusCode == 200 ){
+                if(paymentMethod == "CASH")
+                {
+                  Get.snackbar("Thông báo", "Đặt đơn hàng thành công");
+                  await getall(); 
+                }
+                else{
+                  var data = response.body;
+                  _qrcode = (MomoModels.fromJson(data).momo);
+                  print(_qrcode.payUrl);
+                }
+                
+            }else{
+              print("Lỗi đặt đơn hàng"+ response.statusCode.toString());
+            }
+    }
+    else{
+       Get.snackbar("Thông báo", "Vui lòng chọn sản phẩm đặt đơn");
+    }
     update();
 
     
@@ -81,6 +132,34 @@ class CartController extends GetxController implements GetxService{
 
   void updateTotal(double newtotal) {
     this._totalprice = newtotal;
+    update();
+  }
+  void resetIDSelected(){
+    _IDSelectedProduct.clear();
+    _IDSelectedCombo.clear();
+    update();
+  }
+  void updateIDSelectedProduct( int id , bool value){
+    if( value){
+      _IDSelectedProduct.add(id);
+    }
+    else{
+      _IDSelectedProduct.remove(id);
+    }
+    print("Product Selected : ");
+    _IDSelectedProduct.forEach((item) => print(item));
+    update();
+  }
+   void updateIDSelectedCombo( int id , bool value){
+    if( value){
+      _IDSelectedCombo.add(id);
+    }
+    else{
+      _IDSelectedCombo.remove(id);
+    }
+    
+    print("Combo Selected : ");
+    _IDSelectedCombo.forEach((item) => print(item));
     update();
   }
 }

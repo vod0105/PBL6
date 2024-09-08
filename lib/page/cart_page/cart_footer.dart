@@ -19,10 +19,13 @@ void _order() async {
   String paymentMethod = selectedPaymentMethod!;
 
   await Get.find<CartController>().orderall(address, paymentMethod);
-  var payUrl = Get.find<CartController>().qrcode.payUrl;
-  final Uri _url = Uri.parse(payUrl!);
-  if (!await launchUrl(_url)) {
-    throw Exception('Could not launch $_url');
+  if(paymentMethod == "MOMO")
+  {
+    var payUrl = Get.find<CartController>().qrcode.payUrl;
+    final Uri _url = Uri.parse(payUrl!);
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
   }
 }
 
@@ -127,11 +130,11 @@ void _showDropdown() {
                 Get.back();
               },
               child: Container(
-                  width: 30,
-                  height: 30,
+                  width: AppDimention.size30,
+                  height: AppDimention.size30,
                   decoration: BoxDecoration(
                     color: AppColor.mainColor,
-                    borderRadius: BorderRadius.circular(30)
+                    borderRadius: BorderRadius.circular(AppDimention.size30)
                   ),
                   child: Icon(Icons.arrow_back_ios_new,color: Colors.white,size: 15,),
               ),
@@ -147,8 +150,8 @@ void _showDropdown() {
                   _showDropdown();
               },
               child: Container(
-                width: 120,
-                height: 50,
+                width: AppDimention.size120,
+                height: AppDimention.size50,
                 decoration: BoxDecoration(
                   color: AppColor.mainColor,
                   borderRadius: BorderRadius.circular(5)

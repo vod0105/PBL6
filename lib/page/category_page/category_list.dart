@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:android_project/data/controller/Category_controller.dart';
 import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_color.dart';
+import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -38,11 +39,11 @@ class _CategoryListState extends State<CategoryList> {
               child: Container(
                 width: 150, 
                 height: 150,  
-                margin: index % 2 == 0 ? EdgeInsets.only(left: 10):EdgeInsets.only(right: 10),
+                margin: index % 2 == 0 ? EdgeInsets.only(left: AppDimention.size10):EdgeInsets.only(right: AppDimention.size10),
                 decoration: BoxDecoration(
                   color: AppColor.mainColor,
                   border: Border.all(width: 1, color: Color.fromRGBO(0, 0, 0, 0.5)),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(AppDimention.size10),
                   image: DecorationImage(
                       fit: BoxFit.cover,
                       image: MemoryImage(base64Decode(categoryController.categoryList[index].image!)),
@@ -53,14 +54,14 @@ class _CategoryListState extends State<CategoryList> {
                   children: [
                     Container(),
                     Container(
-                      width: 180,
-                      height: 50,
+                      width: AppDimention.size150 + AppDimention.size30,
+                      height: AppDimention.size50,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10),bottomRight: Radius.circular(10)),
+                        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(AppDimention.size10),bottomRight: Radius.circular(AppDimention.size10)),
                         color: AppColor.mainColor
                       ),
                       child: Center(
-                        child: Text(categoryController.categoryList[index].categoryName,style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 20),),
+                        child: Text(categoryController.categoryList[index].categoryName,style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: AppDimention.size20),),
                       )
                     )
 

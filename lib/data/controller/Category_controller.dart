@@ -18,12 +18,12 @@ class CategoryController extends GetxController{
       Response response = await categoryRepo.getall();
     
       if(response.statusCode == 200){
-        print("Getting ... category");
+        print("Lấy dữ liệu danh sách danh mục sản phẩm thành công");
         var data = response.body;
         _categoryList = [];
         _categoryList.addAll(Categorymodel.fromJson(data).categories);
       }else{
-        print("Error"+ response.statusCode.toString());
+        print("Lỗi không lấy được danh sách danh mục sản phẩm"+ response.statusCode.toString());
       }
       _isLoading = true;
       update();

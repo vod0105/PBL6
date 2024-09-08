@@ -1,5 +1,29 @@
-import 'package:android_project/models/Model/RoleModels.dart';
 class Usermodel {
+  bool? status;
+  String? message;
+  User? user;
+  User? get getuser => user;
+
+  Usermodel({this.status, this.message, this.user});
+
+  Usermodel.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    message = json['message'];
+    user = json['data'] != null ? new User.fromJson(json['data']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status'] = this.status;
+    data['message'] = this.message;
+    if (this.user != null) {
+      data['data'] = this.user!.toJson();
+    }
+    return data;
+  }
+}
+
+class User {
   int? id;
   String? phoneNumber;
   String? fullName;
@@ -9,9 +33,9 @@ class Usermodel {
   String? createdAt;
   String? updatedAt;
   bool? accountLocked;
-  Rolemodels? role;
+  Role? role;
 
-  Usermodel(
+  User(
       {this.id,
       this.phoneNumber,
       this.fullName,
@@ -23,7 +47,7 @@ class Usermodel {
       this.accountLocked,
       this.role});
 
-  Usermodel.fromJson(Map<String, dynamic> json) {
+  User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     phoneNumber = json['phoneNumber'];
     fullName = json['fullName'];
@@ -33,7 +57,7 @@ class Usermodel {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     accountLocked = json['accountLocked'];
-    role = json['role'] != null ? new Rolemodels.fromJson(json['role']) : null;
+    role = json['role'] != null ? new Role.fromJson(json['role']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -50,6 +74,25 @@ class Usermodel {
     if (this.role != null) {
       data['role'] = this.role!.toJson();
     }
+    return data;
+  }
+}
+
+class Role {
+  int? id;
+  String? name;
+
+  Role({this.id, this.name});
+
+  Role.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
     return data;
   }
 }

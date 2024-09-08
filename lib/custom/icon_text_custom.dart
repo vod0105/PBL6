@@ -28,7 +28,7 @@ class IconTextCustom extends StatelessWidget{
                 height: height,
                 decoration: BoxDecoration(
                   color: color,
-                  borderRadius: BorderRadius.all(Radius.circular(30))
+                  borderRadius: BorderRadius.all(Radius.circular(AppDimention.size30))
                 ),
                 child: Icon(iconData,color: colorIcon,),
               ),

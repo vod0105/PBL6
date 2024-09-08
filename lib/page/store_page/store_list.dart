@@ -82,44 +82,44 @@ class _StoreListState extends State<StoreList> {
           return Align(
             alignment: Alignment.center,
             child: Container(
-              width: 370,
-              height: 200,
-              margin: EdgeInsets.only(bottom: 20),
+              width: AppDimention.screenWidth - AppDimention.size20,
+              height: AppDimention.size220,
+              margin: EdgeInsets.only(bottom: AppDimention.size20),
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(width: 1, color: Color.fromRGBO(0, 0, 0, 0.1)),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(AppDimention.size10),
               ),
               child: Row(
                 children: [
                   Column(
                     children: [
                       Container(
-                        padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+                        padding: EdgeInsets.only(top: AppDimention.size10, left: AppDimention.size10, right: AppDimention.size10),
                         child: Icon(Icons.location_on, color: AppColor.mainColor),
                       )
                     ],
                   ),
                   Container(
-                    width: 324,
-                    height: 200,
+                    width: AppDimention.screenWidth - AppDimention.size70,
+                    height: AppDimention.size220,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 10),
+                        SizedBox(height: AppDimention.size10),
                         Text(
                           storecontroller.storeList[index].storeName,
                           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: AppDimention.size10),
                         Row(
                           children: [
                             Container(
-                              width: 20,
-                              height: 20,
+                              width:  AppDimention.size20,
+                              height:  AppDimention.size20,
                               decoration: BoxDecoration(
                                 color: AppColor.yellowColor,
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(AppDimention.size10),
                               ),
                               child: Center(
                                 child: Icon(Icons.home, size: 12),
@@ -127,7 +127,7 @@ class _StoreListState extends State<StoreList> {
                             ),
                             SizedBox(width: 5),
                             Container(
-                              width: 295,
+                              width: AppDimention.size290,
                               child: Text(storecontroller.storeList[index].location),
                             )
                           ],
@@ -136,11 +136,11 @@ class _StoreListState extends State<StoreList> {
                         Row(
                           children: [
                             Container(
-                              width: 20,
-                              height: 20,
+                              width:  AppDimention.size20,
+                              height:  AppDimention.size20,
                               decoration: BoxDecoration(
                                 color: AppColor.yellowColor,
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(AppDimention.size10),
                               ),
                               child: Center(
                                 child: Icon(Icons.phone, size: 12),
@@ -157,11 +157,11 @@ class _StoreListState extends State<StoreList> {
                         Row(
                           children: [
                             Container(
-                              width: 20,
-                              height: 20,
+                              width:  AppDimention.size20,
+                              height:  AppDimention.size20,
                               decoration: BoxDecoration(
                                 color: AppColor.yellowColor,
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(AppDimention.size10),
                               ),
                               child: Center(
                                 child: Icon(Icons.timelapse_rounded, size: 12),
@@ -169,7 +169,7 @@ class _StoreListState extends State<StoreList> {
                             ),
                             SizedBox(width: 8),
                             Container(
-                              width: 295,
+                              width: AppDimention.size290,
                               child: Text(
                                 formatTime(storecontroller.storeList[index].openingTime) +
                                     " - " +
@@ -178,13 +178,13 @@ class _StoreListState extends State<StoreList> {
                             )
                           ],
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: AppDimention.size10),
                         Container(
                           width: AppDimention.screenWidth,
                           child: Center(
                             child: Container(
-                              width: 120,
-                              height: 40,
+                              width: AppDimention.size120,
+                              height: AppDimention.size40,
                               decoration: BoxDecoration(
                                 color: AppColor.mainColor,
                                 borderRadius: BorderRadius.circular(10),

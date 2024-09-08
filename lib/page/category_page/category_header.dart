@@ -20,7 +20,7 @@ class _CategoryHeaderState extends State<CategoryHeader> {
         children: [
           Container(
             width: AppDimention.screenWidth,
-            height: 100,
+            height: AppDimention.size100,
             decoration: BoxDecoration(color: AppColor.mainColor),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -32,16 +32,16 @@ class _CategoryHeaderState extends State<CategoryHeader> {
                   child: Icon(
                     Icons.highlight_remove_rounded,
                     color: Colors.white,
-                    size: 40,
+                    size: AppDimention.size40,
                   ),
                 ),
                 Container(
-                  width: 200,
+                  width: AppDimention.size100 *2 ,
                   child: Center(
                     child: Text(
                       "THỰC ĐƠN",
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: AppDimention.size20,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
@@ -55,7 +55,7 @@ class _CategoryHeaderState extends State<CategoryHeader> {
                   child: Icon(
                     Icons.shopping_cart_outlined,
                     color: Colors.white,
-                    size: 40,
+                    size: AppDimention.size40,
                   ),
                 ),
               ],

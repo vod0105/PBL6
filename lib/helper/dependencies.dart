@@ -8,6 +8,7 @@ import 'package:android_project/data/controller/Combo_controller.dart';
 import 'package:android_project/data/controller/Order_controller.dart';
 import 'package:android_project/data/controller/Product_controller.dart';
 import 'package:android_project/data/controller/Store_Controller.dart';
+import 'package:android_project/data/controller/User_controller.dart';
 import 'package:android_project/data/repository/Auth_repo.dart';
 import 'package:android_project/data/repository/Cart_repo.dart';
 import 'package:android_project/data/repository/Category_repo.dart';
@@ -15,6 +16,8 @@ import 'package:android_project/data/repository/Combo_repo.dart';
 import 'package:android_project/data/repository/Order_repo.dart';
 import 'package:android_project/data/repository/Product_repo.dart';
 import 'package:android_project/data/repository/Store_repo.dart';
+import 'package:android_project/data/repository/User_repo.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 Future<void> init() async {
@@ -41,6 +44,10 @@ Future<void> init() async {
 
   Get.lazyPut(() => CategoryRepo(apiClient: Get.find()));
   Get.lazyPut(() => CategoryController(categoryRepo: Get.find()));
+
+  Get.lazyPut(() => UserRepo(apiClient: Get.find()));
+  Get.lazyPut(() => UserController(userRepo: Get.find()));
+
 
   Get.put(CartRepo(apiClient: Get.find()));
   Get.put(CartController(cartRepo: Get.find()));

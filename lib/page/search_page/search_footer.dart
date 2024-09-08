@@ -3,15 +3,15 @@ import 'package:android_project/theme/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ProfileFooter extends StatefulWidget {
-  const ProfileFooter({Key? key}) : super(key: key);
+class SearchFooter extends StatefulWidget {
+  const SearchFooter({Key? key}) : super(key: key);
 
   @override
-  _ProfileFooterState createState() => _ProfileFooterState();
+  _SearchFooterState createState() => _SearchFooterState();
 }
 
-class _ProfileFooterState extends State<ProfileFooter> {
-  int _selectedIndex = 4;
+class _SearchFooterState extends State<SearchFooter> {
+  int _selectedIndex = 1;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -21,7 +21,7 @@ class _ProfileFooterState extends State<ProfileFooter> {
       }else if(index == 1){
         Get.toNamed(AppRoute.SEARCH_PAGE);
       }else if(index == 2){
-         Get.toNamed(AppRoute.ORDER_PAGE);
+        Get.toNamed(AppRoute.ORDER_PAGE);
       }
       else if(index == 3){
          

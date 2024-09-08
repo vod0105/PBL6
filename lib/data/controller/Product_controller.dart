@@ -23,7 +23,7 @@ class ProductController extends GetxController {
           _productList = [];
           _productList.addAll(ProductModel.fromJson(data).products);
       }else{
-          print("Error"+ response.statusCode.toString());
+          print("Lỗi không lấy được dữ liệu danh sách sản phẩm : "+ response.statusCode.toString());
       }
       _isLoading = true;
       update();
@@ -40,7 +40,7 @@ class ProductController extends GetxController {
           _productListDetail = [];
           _productListDetail.addAll(ProductModel.fromJson(data).products);
       } else {
-        print("Error" + response.statusCode.toString());
+        print("Lỗi không lấy được dữ liệu chi tiết sản phẩm : " + response.statusCode.toString());
       }
       _isLoading = true;
       update(); 
@@ -51,9 +51,9 @@ class ProductController extends GetxController {
       _isLoading = false; 
       Response response = await productRepo.addtocart(productid,quantity,idstore);
       if (response.statusCode == 200) {
-        Get.snackbar("Announce", "Add to cart success");
+        Get.snackbar("Thông báo", "Thêm vào giỏ hàng thành công");
       } else {
-        print("Error" + response.statusCode.toString());
+        print("Lỗi thêm sản phẩm vào giỏ hàng" + response.statusCode.toString());
       }
       _isLoading = true;
       update(); 
@@ -62,7 +62,6 @@ class ProductController extends GetxController {
   List<dynamic> _productListBycategory = [];
   List<dynamic> get productListBycategory => _productListBycategory;
   Future<void> getProductByCategoryId(int id) async {
-    print("Vai lõ");
       _isLoading = false;
       Response response = await productRepo.getbycategoryid(id);
       if (response.statusCode == 200) {
@@ -70,12 +69,40 @@ class ProductController extends GetxController {
           _productListBycategory = [];
           _productListBycategory.addAll(ProductModel.fromJson(data).products);
       } else {
-        print("Error" + response.statusCode.toString());
+        print("Lỗi không lấy được danh sách sản phẩm theo danh mục" + response.statusCode.toString());
       }
       _isLoading = true;
       update(); 
   }
-  
-  
+  // get product by name
+  String textSearch ="";
+  String get gettextSearch => textSearch;
 
+  void updateTextSearch(String text){
+    this.textSearch = text;
+    update();
+  }
+
+  List<dynamic> _productListSearch = [];
+  List<dynamic> get productListSearch => _productListSearch;
+  Future<void> search() async{
+    if(textSearch == "")
+    {
+      _productListSearch = _productList;
+      print("Searching");
+    }
+    else{
+    Response response = await productRepo.getbyname(this.textSearch);
+        if(response.statusCode == 200){
+            var data = response.body;
+            _productListSearch = [];
+            _productListSearch.addAll(ProductModel.fromJson(data).products);
+        }
+        else{
+          print("Lỗi không lấy được danh sách sản phẩm theo tên" + response.statusCode.toString());
+          _productListSearch = [];
+        } 
+    }
+    update();
+  }
 }

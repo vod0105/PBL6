@@ -16,6 +16,7 @@ class _ProfilePageState extends State<ProfilePage>{
    @override
    Widget build(BuildContext context) {
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: Color.fromRGBO(243, 243, 243, 1),
           body: Column(
             children: [

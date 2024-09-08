@@ -15,6 +15,7 @@ class ProductModel {
   DateTime? updatedAt;
   bool? bestSale;
 
+
   ProductModel({
     required this.productId,
     required this.productName,

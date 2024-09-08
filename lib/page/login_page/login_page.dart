@@ -51,6 +51,7 @@ class _LoginPageState extends State<LoginPage> {
       }
 
       return Scaffold(
+        resizeToAvoidBottomInset: false,
       body:  Stack(
         children: [
           // Background blue
@@ -58,11 +59,11 @@ class _LoginPageState extends State<LoginPage> {
             top: 0,
             left: 0,
             right: 0,
-            height: AppDimention.size380,
+            height: AppDimention.size320,
             child: ClipPath(
               clipper: ClippathCustomer(
                 svgPath:
-                    "M1.97472e-05 -18.394H392.162C392.162 -18.394 451.502 274.651 384.001 194.575C316.5 114.5 6.41783e-05 577.567 1.97472e-05 194.575C-2.4684e-05 -188.416 1.97472e-05 -18.394 1.97472e-05 -18.394Z",
+                    "M1.97342e-05 -24.75H391.904C391.904 -24.75 451.205 218.765 383.748 152.224C316.292 85.6825 6.41361e-05 470.483 1.97342e-05 152.224C-2.46677e-05 -166.036 1.97342e-05 -24.75 1.97342e-05 -24.75Z",
               ),
               child: Container(
                 decoration: BoxDecoration(

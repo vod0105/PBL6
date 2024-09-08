@@ -32,4 +32,9 @@ class ProductRepo {
   return await apiClient.postData(url, null); 
   }
 
+  // get product by name
+  Future<Response> getbyname(String textsearch) async{
+    String url = Appconstant.PRODUCT_LIST_BYNAME_URL.replaceFirst("{productname}", textsearch);
+    return await apiClient.getData(url);
+  }
 }

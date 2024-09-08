@@ -20,7 +20,7 @@ class InputTextCustom extends StatelessWidget{
                 borderRadius: BorderRadius.circular(AppDimention.size30),
                 boxShadow: [
                   BoxShadow(
-                    blurRadius: 10,
+                    blurRadius: AppDimention.size10,
                     spreadRadius: 7,
                     offset: Offset(1, 10),
                     color: Colors.grey.withOpacity(0.2)

@@ -19,7 +19,7 @@ class _HomeFooterState extends State<HomeFooter> {
       if(index == 0){
         Get.toNamed(AppRoute.HOME_PAGE);
       }else if(index == 1){
-
+        Get.toNamed(AppRoute.SEARCH_PAGE);
       }else if(index == 2){
         Get.toNamed(AppRoute.ORDER_PAGE);
       }

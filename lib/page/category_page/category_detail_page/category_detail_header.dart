@@ -27,7 +27,7 @@ class _CategoryDetailHeaderState extends State<CategoryDetailHeader> {
         children: [
           Container(
             width: AppDimention.screenWidth,
-            height: 100,
+            height: AppDimention.size100,
             decoration: BoxDecoration(color: AppColor.mainColor),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -39,16 +39,16 @@ class _CategoryDetailHeaderState extends State<CategoryDetailHeader> {
                   child: Icon(
                     Icons.highlight_remove_rounded,
                     color: Colors.white,
-                    size: 40,
+                    size: AppDimention.size40,
                   ),
                 ),
                 Container(
-                  width: 200,
+                  width: AppDimention.size100 * 2,
                   child: Center(
                     child: Text(
                       "CHỌN MÓN",
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: AppDimention.size20,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
@@ -62,7 +62,7 @@ class _CategoryDetailHeaderState extends State<CategoryDetailHeader> {
                   child: Icon(
                     Icons.shopping_cart_outlined,
                     color: Colors.white,
-                    size: 40,
+                    size: AppDimention.size40,
                   ),
                 ),
               ],
@@ -70,7 +70,7 @@ class _CategoryDetailHeaderState extends State<CategoryDetailHeader> {
           ),
           Container(
             width: AppDimention.screenWidth,
-            height: 50,
+            height: AppDimention.size50,
             decoration: BoxDecoration(
               border: Border(bottom: BorderSide(width: 1))
             ),

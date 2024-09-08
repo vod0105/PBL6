@@ -80,6 +80,7 @@ class _ProductPageState extends State<ProductPage> {
         productController.getProductByCategoryId(product.category.categoryId);
       }
       return Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         body: CustomScrollView(
           slivers: [

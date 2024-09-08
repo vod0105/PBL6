@@ -16,7 +16,10 @@ class Appconstant {
   static const String ADD_TOCART_URL = "/api/v1/user/cart/add/product?productId={productid}&quantity={quantity}&storeId={storeid}";
   static const String CART_URL = "/api/v1/user/cart/history";
   static const String ORDER_PRODUCT_URL = "/api/v1/user/order/create/product";
+  static const String ORDER_COMBO_URL = "/api/v1/user/order/create/combo";
   static const String ORDER_PRODUCT_MOMO_URL = "/api/v1/user/order/create";
+  static const String USER_PROFILE_URL = "/api/v1/user/auth/profile";
+  static const String PRODUCT_LIST_BYNAME_URL = "/api/v1/public/products/search/{productname}";
 
   static const String TOKEN = "DBtoken";
 }

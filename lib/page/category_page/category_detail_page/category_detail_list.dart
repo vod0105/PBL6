@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:android_project/data/controller/Product_controller.dart';
 import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_color.dart';
@@ -38,8 +40,8 @@ class _CategoryDetailListState extends State<CategoryDetailList> {
               return Align(
                 alignment: Alignment.center,
                 child: Container(
-                  width: 370,
-                  height: 150,
+                  width: AppDimention.size170 + 2 * AppDimention.size100,
+                  height: AppDimention.size150,
                   margin: EdgeInsets.only(bottom: 20),
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -53,17 +55,15 @@ class _CategoryDetailListState extends State<CategoryDetailList> {
                     child: Row(
                               children: [
                                 Container(
-                                    width: 150  ,
-                                    height: 150,
+                                    width: AppDimention.size150  ,
+                                    height: AppDimention.size150,
                                     decoration: BoxDecoration(
                                       
                                       color: Colors.white,
-                                      image: const DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: NetworkImage(
-                                          "https://wallpaperaccess.com/full/6790132.png"
-                                        )
-                                      ),
+                                      image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: MemoryImage(base64Decode(productController.productListBycategory[index].image!)),
+                                        ),
                                       borderRadius: BorderRadius.only(topLeft: Radius.circular(10),bottomLeft: Radius.circular(10))
                                     ),
                                   ),
@@ -122,8 +122,8 @@ class _CategoryDetailListState extends State<CategoryDetailList> {
                                               ),
                                               SizedBox(height: AppDimention.size5,),
                                               Container(
-                                                width: 120,
-                                                height: 40,
+                                                width: AppDimention.size120,
+                                                height: AppDimention.size40,
                                                 decoration: BoxDecoration(
                                                   color: AppColor.mainColor,
                                                   borderRadius: BorderRadius.circular(10)

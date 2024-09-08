@@ -15,14 +15,14 @@ class ContainerFolderCustom extends StatelessWidget{
    Widget build(BuildContext context) {
        return Container(
               margin: EdgeInsets.only(left: AppDimention.size5+1,right: AppDimention.size5,top: AppDimention.size10),
-              height: 100,
-              width: 185,
+              height: AppDimention.size100,
+              width: AppDimention.screenWidth / 2.129,
               decoration: BoxDecoration(
                 color: AppColor.mainColor,
                 borderRadius: BorderRadius.circular(AppDimention.size10),
                 boxShadow: [
                   BoxShadow(
-                    blurRadius: 10,
+                    blurRadius: AppDimention.size10,
                     spreadRadius: 7,
                     offset: Offset(1, 10),
                     color: Colors.grey.withOpacity(0.2)

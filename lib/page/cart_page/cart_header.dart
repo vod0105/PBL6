@@ -27,7 +27,7 @@ class _CartHeaderState extends State<CartHeader>{
                 child: Center(
                   child: Text("Phần ăn đã chọn",style: TextStyle(
                     color: Colors.white,
-                    fontSize: 30
+                    fontSize: AppDimention.size30
                   ),),
                 )
               ),

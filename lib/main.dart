@@ -6,6 +6,7 @@ import 'package:android_project/data/controller/Combo_controller.dart';
 import 'package:android_project/data/controller/Order_controller.dart';
 import 'package:android_project/data/controller/Product_controller.dart';
 import 'package:android_project/data/controller/Store_Controller.dart';
+import 'package:android_project/data/controller/User_controller.dart';
 import 'package:android_project/route/app_pages.dart';
 import 'package:android_project/route/app_route.dart';
 import 'package:flutter/material.dart';
@@ -29,11 +30,12 @@ class MyApp extends StatelessWidget {
 
     authController.IsLogin.listen((loggedIn) {
       if (loggedIn) {
-        Get.find<OrderController>().getall();
+       
         Get.find<ComboController>().getall();
         Get.find<ProductController>().getall();
         Get.find<Storecontroller>().getall();
         Get.find<CategoryController>().getall();
+        Get.find<UserController>().getuserprofile();
       }
     });
    

@@ -4,11 +4,13 @@ class ComboModel {
   String? comboName;
   String? image;
   double? comboPrice;
+  String? description;
   ComboModel({
     required this.comboId,
     required this.comboName,
     required this.image,
     required this.comboPrice,
+    required this.description,
   });
   Map<String, dynamic> toJson(){
     Map<String, dynamic> map = new Map<String, dynamic>();
@@ -17,6 +19,7 @@ class ComboModel {
     map["comboName"] = this.comboName;
     map["image"] = this.image;
     map["comboPrice"] = this.comboPrice;
+    map["description"] = this.description;
 
     return map;
   }
@@ -28,6 +31,7 @@ class ComboModel {
     comboId = json['comboId'];
     comboName = json['comboName'];
     image = json['image'];
+    description = json['description'];
     comboPrice = json['price'];
     if(json['data'] != null){
       _combos = <ComboModel>[];

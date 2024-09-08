@@ -1,6 +1,7 @@
 import 'package:android_project/custom/container_folder_custom.dart';
 import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_color.dart';
+import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 class HomeFolder extends StatefulWidget{
@@ -15,7 +16,7 @@ class _HomeFolderState extends State<HomeFolder>{
    Widget build(BuildContext context) {
    // TODO: implement build
        return Container(
-        height: 240,
+        height: AppDimention.size40 + 2 * AppDimention.size100,
           decoration: BoxDecoration(
             color: Colors.white,
           ),

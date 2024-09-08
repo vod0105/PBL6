@@ -19,13 +19,13 @@ class Storecontroller extends GetxController {
       Response response = await storeRepo.getall();
     
       if(response.statusCode == 200){
-        print("Getting ... store ");
+        print("Lấy dữ liệu danh sách cửa hàng thành công");
         var data = response.body;
         _storeList = [];
         _storeList.addAll(StoreModel.fromJson(data).stores);
         print(_storeList);
       }else{
-        print("Error"+ response.statusCode.toString());
+        print("Lỗi không lấy được danh sách cửa hàng : "+ response.statusCode.toString());
       }
       _isLoading = true;
       update();

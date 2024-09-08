@@ -33,7 +33,7 @@ class _HomeComboState extends State<HomeCombo>{
    Widget build(BuildContext context) {
     return GetBuilder<ComboController>(builder: (comboController) {
         return comboController.isLoading ? Container(
-          height: 130,
+          height: AppDimention.size130,
           child: Column(
             children: [
               Expanded(
@@ -60,8 +60,8 @@ class _HomeComboState extends State<HomeCombo>{
                 right: 0,
                 child:  Container(
                   padding: EdgeInsets.only(left: AppDimention.size10),
-                  height: 130,
-                  width: 230,
+                  height: AppDimention.size130,
+                  width: AppDimention.size130+ AppDimention.size100,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(topRight: Radius.circular(AppDimention.size10),bottomRight:Radius.circular(AppDimention.size10) ),
                     color: Colors.white,
@@ -107,8 +107,8 @@ class _HomeComboState extends State<HomeCombo>{
                 top:0,
                 left: 0,
                 child: Container(
-                  height: 130,
-                  width: 130,
+                  height: AppDimention.size120,
+                  width: AppDimention.size120,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(topLeft: Radius.circular(AppDimention.size10),bottomLeft:Radius.circular(AppDimention.size10) ),
                     image: DecorationImage(

@@ -11,6 +11,7 @@ import 'package:android_project/page/product_page/product_page.dart';
 import 'package:android_project/page/profile_page/profile_page.dart';
 import 'package:android_project/page/register_page/register_page.dart';
 import 'package:android_project/page/search_page/camera_page.dart';
+import 'package:android_project/page/search_page/search_page.dart';
 import 'package:android_project/page/store_page/store_page.dart';
 import 'package:android_project/route/app_route.dart';
 import 'package:get/get.dart';
@@ -27,6 +28,8 @@ class AppPages {
     GetPage(name:AppRoute.CATEGORY_PAGE,page:() => CategoryPage()),
     GetPage(name:AppRoute.ORDER_PAGE,page:() => OrderPage()),
     GetPage(name:AppRoute.PRODUCT_ALL_PAGE,page:() => ProductAll()),
+    GetPage(name:AppRoute.PRODUCT_ALL_PAGE,page:() => ProductAll()),
+    GetPage(name:AppRoute.SEARCH_PAGE,page:() => SearchPage()),
 
     GetPage(name: AppRoute.COMBO_DETAIL, 
              page: () {

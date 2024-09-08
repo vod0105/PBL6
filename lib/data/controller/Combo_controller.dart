@@ -18,12 +18,12 @@ class ComboController extends GetxController{
       Response response = await comboRepo.getall();
     
       if(response.statusCode == 200){
-        print("Getting ... combo");
+        print("Lấy dữ liệu danh sách combo thành công");
         var data = response.body;
         _comboList = [];
         _comboList.addAll(ComboModel.fromJson(data).combos);
       }else{
-        print("Error"+ response.statusCode.toString());
+        print("Lỗi không lấy được danh sách com bo : "+ response.statusCode.toString());
       }
       _isLoading = true;
       update();

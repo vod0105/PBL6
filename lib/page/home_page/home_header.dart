@@ -40,7 +40,7 @@ class _HomeHeaderState extends State<HomeHeader> {
               color: AppColor.mainColor,
             ),
           ),
-          SizedBox(width: 10),
+          SizedBox(width: AppDimention.size10),
           Expanded(
             child: TextField(
               controller: searchController,
@@ -65,7 +65,7 @@ class _HomeHeaderState extends State<HomeHeader> {
               ),
             ),
           ),
-          SizedBox(width: 5,),
+          SizedBox(width: AppDimention.size5,),
           GestureDetector(
             onTap: (){
                 Get.toNamed(AppRoute.CART_PAGE);

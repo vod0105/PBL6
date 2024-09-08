@@ -1,6 +1,7 @@
 class StoreModel {
   int? storeId;
   String? storeName;
+  String? image;
   String? location;
   double? longitude;
   double? latitude;
@@ -14,6 +15,7 @@ class StoreModel {
   StoreModel(
       {this.storeId,
       this.storeName,
+      this.image,
       this.location,
       this.longitude,
       this.latitude,
@@ -32,6 +34,7 @@ class StoreModel {
   StoreModel.fromJson(Map<String,dynamic> json){
     storeId = json['storeId'];
     storeName = json['storeName'];
+    image = json['image'];
     location = json['location'];
     longitude = json['longitude'];
     latitude = json['latitude'];
@@ -53,6 +56,7 @@ class StoreModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['storeId'] = this.storeId;
     data['storeName'] = this.storeName;
+    data['image'] = this.image;
     data['location'] = this.location;
     data['longitude'] = this.longitude;
     data['latitude'] = this.latitude;

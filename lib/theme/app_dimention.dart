@@ -13,9 +13,16 @@ class AppDimention {
     static double size40 = screenHeight / 20.1;
     static double size50 = screenHeight / 16.8;
     static double size60 = screenHeight / 13.4;
+    static double size70 = screenHeight / 11.4857;
     static double size80 = screenHeight / 10.5;
+    static double size100 = screenHeight / 8.04;
     static double size110 = screenHeight / 7.309;
+    static double size120 = screenHeight / 6.7;
+    static double size130 = screenHeight / 6.18;
+    static double size150 = screenHeight / 5.36;
     static double size170 = screenHeight / 4.72 ;
+    static double size220 = screenHeight / 3.65 ;
+    static double size290 = screenHeight / 2.772;
     static double size310 = screenHeight / 2.59;
     static double size320 = screenHeight / 2.5125;
     static double size380 = screenHeight / 2.11;

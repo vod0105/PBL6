@@ -10,24 +10,24 @@ class OrderController extends GetxController{
   bool _isLoading= false;
   bool get isLoading =>_isLoading;
 
-  List<dynamic> _orderlist = [];
-  List<dynamic> get orderlist => _orderlist;
+  List<OrderItem> _orderlist = [];
+  List<OrderItem> get orderlist => _orderlist;
 
-  Future<void> getall() async{  
-      _isLoading = false;
-      Response response = await orderRepo.getall();
-    
-      if(response.statusCode == 200){
-        print("Getting ... order ");
-        var data = response.body;
-        _orderlist = [];
-        _orderlist.addAll(Ordermodel.fromJson(data).orders);
-        print(_orderlist.length);
-      }else{
-        print("Error"+ response.statusCode.toString());
-      }
-      _isLoading = true;
-      update();
+Future<void> getall() async {
+  _isLoading = true;
+  Response response = await orderRepo.getall();
+  if (response.statusCode == 200) {
+    print("Lấy thành công danh sách đơn hàng");
+    var data = response.body;
+    _orderlist = Ordermodel.fromJson(data).getorderitem ?? [];
+  } else {
+    print("Lỗi không lấy được danh sách đơn hàng: " + response.statusCode.toString());
+    _orderlist = [];
   }
+  _isLoading = false;
+  update();
+}
+
+
 
 }

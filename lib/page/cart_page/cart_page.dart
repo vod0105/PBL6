@@ -16,6 +16,8 @@ class _CartPageState extends State<CartPage>{
     void initState() {
       super.initState();
       Get.find<CartController>().getall();
+      Get.find<CartController>().resetIDSelected();
+      
     }
    @override
    Widget build(BuildContext context) {
