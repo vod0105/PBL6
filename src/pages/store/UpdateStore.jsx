@@ -53,7 +53,7 @@ const UpdateStore = ({ url }) => {
     const fetchData = async () => {
       try {
         //   const token = localStorage.getItem("access_token");
-        const response = await axios.get(`${url}/api/v1/public/stores/4`);
+        const response = await axios.get(`${url}/api/v1/public/stores/${id}`);
 
         // truyen du lieu qua data
         setData({

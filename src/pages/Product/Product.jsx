@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react";
-import "../CateGory/Category.css";
+import "../Product/Product.css";
 import axios from "axios";
 import LoadingSpinner from "../../Action/LoadingSpiner.js";
 import ModalComponent from "../../components/ModalComponent.js";
 import Example from "../../components/ModalComponent.js";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-const Category = ({ url }) => {
+const Product = ({ url }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState(""); // Trạng thái lưu từ khóa tìm kiếm
-  const itemsPerPage = 2; // Số lượng phần tử mỗi trang
+  const itemsPerPage = 4; // Số lượng phần tử mỗi trang
   const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("access_token");
-        const response = await axios.get(`${url}/api/v1/public/categories/all`);
+        const response = await axios.get(`${url}/api/v1/public/products/all`);
         setData(response.data.data);
       } catch (err) {
         setError(err);
@@ -31,17 +31,17 @@ const Category = ({ url }) => {
   }, []);
 
   // delete store
-  const deleteStore = async (storeId) => {
+  const deleteProduct = async (productId) => {
     try {
       const tk = localStorage.getItem("access_token");
       const headers = {
         Authorization: `Bearer ${tk}`,
         "Content-Type": "application/json",
       };
-      await axios.delete(`${url}/api/v1/admin/categories/delete/${storeId}`, {
+      await axios.delete(`${url}/api/v1/admin/products/delete/${productId}`, {
         headers,
       });
-      setData(data.filter((cat) => cat.categoryId !== storeId));
+      setData(data.filter((cat) => cat.productId !== productId));
       toast.success("Deleted Category Successful");
     } catch (error) {
       if (error.response) {
@@ -54,9 +54,9 @@ const Category = ({ url }) => {
     }
   };
   // chuyen huong update store
-  const handleUpdateClick = (cateId) => {
+  const handleUpdateClick = (productId) => {
     // navigate(`admin/UpdateCategory/${cateId}`);
-    navigate(`/admin/UpdateCategory/${cateId}`);
+    navigate(`/admin/UpdateProduct/${productId}`);
   };
   //
 
@@ -74,7 +74,7 @@ const Category = ({ url }) => {
 
   // Xử lý từ khóa tìm kiếm
   const filteredData = data.filter((item) =>
-    item.categoryName.toLowerCase().includes(searchTerm.toLowerCase())
+    item.productName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Xác định các phần tử cần hiển thị trên trang hiện tại
@@ -89,7 +89,7 @@ const Category = ({ url }) => {
     <div className="store">
       <div className="content">
         <div className="heading">
-          <h1>List Category</h1>
+          <h1 className="h-product">List Product</h1>
           <div className="store-search">
             <input
               type="text"
@@ -99,36 +99,48 @@ const Category = ({ url }) => {
             />
           </div>
         </div>
-        <table className="table text-center">
-          <thead className="table-dark">
+        <table className="table text-center align-items-center">
+          <thead className="table-dark text-center">
             <tr>
-              <th scope="col">CategoryId</th>
+              <th scope="col">Product Id</th>
               <th scope="col">Image</th>
-              <th scope="col">categoryName</th>
-              <th scope="col">description</th>
+              <th scope="col">Product Name</th>
+              <th scope="col">Description</th>
+              <th scope="col">Price</th>
+              <th scope="col">Category Name</th>
+              <th scope="col">Discounted Price</th>
+              <th scope="col">Stock Quantity</th>
+              <th scope="col">Best Sale</th>
               <th scope="col">Sửa</th>
               <th scope="col">Xóa</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="align-middle">
             {currentItems.length > 0 ? (
               currentItems.map((data) => (
-                <tr key={data.categoryId}>
-                  <td>{data.categoryId}</td>
+                <tr key={data.productId}>
+                  <td>{data.productId}</td>
                   <td>
-                    <img
+                    <img 
                       src={`data:image/jpeg;base64,${data.image}`}
-                      className="img-cate"
+                      className="img-pro"
                       alt="Image cate"
                     />
                   </td>
-                  <td>{data.categoryName}</td>
+                  <td>{data.productName}</td>
                   <td>{data.description}</td>
+
+                  <td>{data.price}</td>
+                  <td>{data.category.categoryName}</td>
+                  <td>{data.discountedPrice}</td>
+                  <td>{data.stockQuantity}</td>
+                  {/* <td>{data.bestSale?"Best sales":"Normal"}</td> */}
+                  <td><input type="checkbox" checked={data.bestSale ? true : false} /></td>
                   <td>
                     <button
                       type="button"
                       className="btn btn-primary"
-                      onClick={() => handleUpdateClick(data.categoryId)}
+                      onClick={() => handleUpdateClick(data.productId)}
                     >
                       Update
                     </button>
@@ -137,7 +149,7 @@ const Category = ({ url }) => {
                     <button
                       type="button"
                       className="btn btn-danger"
-                      onClick={() => deleteStore(data.categoryId)}
+                      onClick={() => deleteProduct(data.productId)}
                     >
                       Delete
                     </button>
@@ -151,7 +163,7 @@ const Category = ({ url }) => {
             )}
           </tbody>
         </table>
-        <div className="pagination">
+        <div className="pagination pagenigate-pd">
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
@@ -182,4 +194,4 @@ const Category = ({ url }) => {
   );
 };
 
-export default Category;
+export default Product;

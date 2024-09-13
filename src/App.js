@@ -36,10 +36,18 @@ import Add from "./pages/store/Add";
 import Toastify from "./Action/Toastify";
 import UpdateStore from "./pages/store/UpdateStore";
 import Category from "./pages/CateGory/Category";
+import Dashboard from "./pages/Dashboard/Dasboard";
+import AddCategory from "./pages/CateGory/Category";
+import AddCate from "./pages/CateGory/AddCate";
+import UpdateCategory from "./pages/CateGory/UpdateCategory";
+import Product from "./pages/Product/Product";
+import AddProduct from "./pages/Product/AddProduct";
+import AddProducToStore from "./pages/Product/AddproductToStore";
 
 const App = () => {
   // const isAuthenticated = !!localStorage.getItem("access_token"); // Kiểm tra nếu có token
-  const { isAuthenticated, setIsAuthenticated ,url,setUrl } = useContext(StoreContext);
+  const { isAuthenticated, setIsAuthenticated, url, setUrl } =
+    useContext(StoreContext);
 
   useEffect(() => {
     // Kiểm tra token trong localStorage khi component mount
@@ -59,7 +67,13 @@ const App = () => {
       <Routes>
         <Route
           path="/"
-          element={!isAuthenticated ? <Login url={url} /> : <Navigate to="/trangchu" />}
+          element={
+            !isAuthenticated ? (
+              <Login url={url} />
+            ) : (
+              <Navigate to="/admin/dashboard" />
+            )
+          }
         />
         <Route
           path="/register"
@@ -67,7 +81,7 @@ const App = () => {
         />
 
         <Route
-          path="/trangchu"
+          path="/admin/dashboard"
           element={
             !isAuthenticated ? (
               <Navigate to="/" />
@@ -77,7 +91,7 @@ const App = () => {
                   {/* <div className="side-bar collapse"><Sidebar /></div> */}
                   <Sidebar />
                   <div className="dashboard-content">
-                    <Content />
+                    <Dashboard />
                   </div>
                 </div>
               </>
@@ -94,8 +108,7 @@ const App = () => {
                 <div className="dashboard">
                   <Sidebar />
                   <div className="dashboard-content">
-                  
-                    <Home/>
+                    <Home />
                   </div>
                 </div>
               </>
@@ -113,7 +126,7 @@ const App = () => {
                 <div className="dashboard">
                   <Sidebar />
                   <div className="dashboard-content">
-                    <Store url={url}/>
+                    <Store url={url} />
                   </div>
                 </div>
               </>
@@ -131,14 +144,14 @@ const App = () => {
                 <div className="dashboard">
                   <Sidebar />
                   <div className="dashboard-content">
-                    <Add url={url}/>
+                    <Add url={url} />
                   </div>
                 </div>
               </>
             )
           }
         />
-          <Route
+        <Route
           path="/UpdateStore/:id"
           element={
             !isAuthenticated ? (
@@ -148,7 +161,7 @@ const App = () => {
                 <div className="dashboard">
                   <Sidebar />
                   <div className="dashboard-content">
-                    <UpdateStore url={url}/>
+                    <UpdateStore url={url} />
                   </div>
                 </div>
               </>
@@ -166,7 +179,7 @@ const App = () => {
                 <div className="dashboard">
                   <Sidebar />
                   <div className="dashboard-content">
-                    <Category url={url}/>
+                    <Category url={url} />
                   </div>
                 </div>
               </>
@@ -183,18 +196,83 @@ const App = () => {
                 <div className="dashboard">
                   <Sidebar />
                   <div className="dashboard-content">
-                    <UpdateStore url={url}/>
+                    <AddCate url={url} />
                   </div>
                 </div>
               </>
             )
           }
         />
-
-
-
+         <Route
+          path="/admin/UpdateCategory/:id"
+          element={
+            !isAuthenticated ? (
+              <Navigate to="/" />
+            ) : (
+              <>
+                <div className="dashboard">
+                  <Sidebar />
+                  <div className="dashboard-content">
+                    <UpdateCategory url={url} />
+                  </div>
+                </div>
+              </>
+            )
+          }
+        />
+        {/* end Category */}
+        <Route
+          path="/admin/product"
+          element={
+            !isAuthenticated ? (
+              <Navigate to="/" />
+            ) : (
+              <>
+                <div className="dashboard">
+                  <Sidebar />
+                  <div className="dashboard-content">
+                    <Product url={url} />
+                  </div>
+                </div>
+              </>
+            )
+          }
+        />
+         <Route
+          path="/admin/AddProduct"
+          element={
+            !isAuthenticated ? (
+              <Navigate to="/" />
+            ) : (
+              <>
+                <div className="dashboard">
+                  <Sidebar />
+                  <div className="dashboard-content">
+                    <AddProduct url={url} />
+                  </div>
+                </div>
+              </>
+            )
+          }
+        />
+         <Route
+          path="/admin/AddProductToStore"
+          element={
+            !isAuthenticated ? (
+              <Navigate to="/" />
+            ) : (
+              <>
+                <div className="dashboard">
+                  <Sidebar />
+                  <div className="dashboard-content">
+                    <AddProducToStore url={url} />
+                  </div>
+                </div>
+              </>
+            )
+          }
+        />
       </Routes>
-      
     </div>
   );
 };

@@ -90,3 +90,13 @@ div.add-category {
   padding: 8px; /* Thêm padding để phần tử có cảm giác rộng rãi hơn */
   box-sizing: border-box; /* Đảm bảo padding và border không làm tăng kích thước tổng của phần tử */
 }
+
+.ipdes{
+  height: 50px;
+  width: 200px;
+}
+.cover-left{
+  width: 1200px;
+  max-width: calc(100% - 48px);
+  
+}

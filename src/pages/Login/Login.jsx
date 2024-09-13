@@ -91,7 +91,7 @@ import "../../styles/Login.css";
 import { Link } from "react-router-dom";
 import { StoreContext } from "../../context/StoreContext";
 
-const Login = ({url}) => {
+const Login = ({ url }) => {
   const [numberPhone, setnumberPhone] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -102,13 +102,10 @@ const Login = ({url}) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post(
-        `${url}/api/v1/auth/login`,
-        {
-          numberPhone,
-          password,
-        }
-      );
+      const response = await axios.post(`${url}/api/v1/auth/login`, {
+        numberPhone,
+        password,
+      });
       const access_token = response.data.data.token;
       const role = response.data.data.roles[0];
       localStorage.setItem("access_token", access_token);
@@ -117,7 +114,7 @@ const Login = ({url}) => {
       setUserData(response.data.data.roles[0]);
       console.log("userData", userData);
 
-      navigate("/trangchu");
+      navigate("/admin/dashboard");
     } catch (err) {
       setError(
         "Đăng nhập không thành công. Vui lòng kiểm tra lại tên người dùng và mật khẩu."

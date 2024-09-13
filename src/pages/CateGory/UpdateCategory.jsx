@@ -1,42 +1,50 @@
 import React, { useState, useEffect } from "react";
-import "./AddCate.css";
+import "./UpdateCategory.css";
 import { assets } from "../../assets/assets.js";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-
-const AddCate = ({ url }) => {
+import { useParams } from "react-router-dom";
+const UpdateCategory = ({ url }) => {
   const [image, setImage] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [dataUpdate, setDataUpdate] = useState([]);
+  const { id } = useParams();
   const [data, setData] = useState({
     categoryName: "",
     description: "",
   });
 
-  //get user
-  const [users, setUsers] = useState([]);
-  const [selectedUserId, setSelectedUserId] = useState("");
   const token = localStorage.getItem("access_token");
 
   useEffect(() => {
-    if (token) {
-      const headers = {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      };
-      axios
-        .get(`${url}/api/v1/admin/auth/all_roles`, {
-          headers,
-          params: { role: "ROLE_OWNER" },
-        })
-        .then((response) => {
-          setUsers(response.data.data);
-        })
-        .catch((error) => {
-          console.error("There was an error fetching users!", error);
+    const fetchData = async () => {
+      try {
+        //   const token = localStorage.getItem("access_token");
+        const response = await axios.get(
+          `${url}/api/v1/public/categories/${id}`
+        );
+
+        // truyen du lieu qua data
+        setData({
+          categoryName: response.data.data.categoryName,
+          description: response.data.data.description,
         });
-    } else {
-      console.error("Access token is missing");
-    }
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
+
+  useEffect(() => {
+    console.log("DAta update", dataUpdate);
+    console.log("DAta", data);
+  }, [data]);
+
   //
 
   const onChangeHandler = (event) => {
@@ -64,8 +72,8 @@ const AddCate = ({ url }) => {
     formData.append("description", data.description);
 
     try {
-      const response = await axios.post(
-        `${url}/api/v1/admin/categories/add`,
+      const response = await axios.put(
+        `${url}/api/v1/admin/categories/update/${id}`,
         formData,
         { headers }
       );
@@ -75,7 +83,7 @@ const AddCate = ({ url }) => {
           description: "",
         });
         setImage(null);
-        toast.success("Added Category");
+        toast.success("Updated Category");
       } else {
         toast.error(response.data.message);
       }
@@ -145,7 +153,7 @@ const AddCate = ({ url }) => {
           </div>
 
           <button className="add-btn" type="submit">
-            Add
+            Update
           </button>
         </form>
       </div>
@@ -157,4 +165,4 @@ const AddCate = ({ url }) => {
   );
 };
 
-export default AddCate;
+export default UpdateCategory;

@@ -120,6 +120,7 @@ h3.admin {
 }
 .side-bar.collaps {
   width: 6%;
+  margin-top: 5px;
 }
 .side-bar.collaps .menu-list .item p {
   display: none;
@@ -177,4 +178,7 @@ h3.admin {
 .sub-item{
   margin-left: 15px;
   min-width: 150px;
+}
+.linkitem{
+  margin-top: -5px;
 }

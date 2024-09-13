@@ -1,4 +1,4 @@
-/* .add {
+.add {
   width: 70%;
   margin-left: max(5vw, 25px);
   margin-top: 20px;
@@ -76,70 +76,47 @@
   object-fit: cover;
 }
 
+/* select.select-manager{
+      display: inline-block;
+     
+  }*/
 div.add-category {
   width: 450px;
-
+  /* background-color: red; */
 }
 .select-manager {
   display: block;
-  width: 400px; 
-  padding: 8px; 
-  box-sizing: border-box; 
+  width: 400px; /* Hoặc giá trị cụ thể như 300px, tùy thuộc vào thiết kế của bạn */
+  padding: 8px; /* Thêm padding để phần tử có cảm giác rộng rãi hơn */
+  box-sizing: border-box; /* Đảm bảo padding và border không làm tăng kích thước tổng của phần tử */
 }
-h2.h2-add {
+
+.ipdes {
+  height: 50px;
+  width: 200px;
+}
+.cover-left {
+  width: 1200px;
+  max-width: calc(100% - 48px);
+}
+h1.h-product {
   background: linear-gradient(to bottom right, #a22fce, #ff7000);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-} */
-.dashboard-content .add {
-  display: flex;
 }
-.dashboard-content .add .cover-left {
-  width: 60%;
+.img-pro {
+  width: 70px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 10px;
 }
-.dashboard-content .add .cover-right {
-  flex: 1;
-  height: 90%;
+.pagenigate-pd {
+  /* position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 109%;   */
+  margin-top: 55px;
 }
-.dashboard-content .add .cover-left table {
-  background-color: blue;
-}
-.dashboard-content .add .cover-right {
-  flex: 1;
-}
-table.table {
-  width: 100%;
-  border-collapse: collapse; /* Đảm bảo không có khoảng cách giữa các ô */
-}
-
-table.table,
-table.table th,
-table.table td {
-  border: none; /* Bỏ đường viền */
-}
-.add .select-manager {
-  width: 220px;
-}
-.dashboard-content .add input {
-  border: 1px solid #c5c5c5;
-  padding: 10px;
-  border-radius: 4px;
-  outline-color: tomato;
-  font-size: 15px;
-  width: 250px;
-}
-h2.h2-add {
-  background: linear-gradient(to bottom right, #8117bf, #06b9eb);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.dashboard-content .add .cover-right {
-  margin-left: 0px;
-  padding: 25px 25;
-}
-.dashboard-content .add .cover-right img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  border-radius: 12px;
+.store .content {
+  position: relative;
 }

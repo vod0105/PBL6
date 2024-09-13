@@ -1,0 +1,56 @@
+.form-table td {
+  padding-right: 70px; /* Cách khoảng giữa các cột */
+  padding-bottom: 20px; /* Cách khoảng giữa các hàng (nếu muốn) */
+  width: 100%;
+  color: tomato;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+
+.cover-ip p {
+  margin-right: 90px;
+  min-width: 130px;
+  font-size: 20px;
+  font-weight: 600;
+
+}
+.cover-ip{
+    display: flex;
+    margin-bottom: 15px;
+
+}
+select.ip{
+    width: 250px;
+    padding: 10px;
+    border: 1px solid #c5c5c5;
+    outline-color: tomato;
+}
+.cover-right {
+  margin-left: 0;
+  flex: 1;
+}
+.add .cover-left1 {
+  width: 60%;
+  align-items: center;
+  padding: 15px 100px;
+}
+.add {
+  /* background-color: red; */
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+label img{
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+}
+.add .cover-left1 h2 {
+  background: linear-gradient(to bottom right, #8117bf, #06b9eb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

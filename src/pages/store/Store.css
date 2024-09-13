@@ -16,3 +16,16 @@ padding: 2px 5px;
 .store-search{
     margin-left: auto;
 }
+.pagination{
+    position: fixed;
+    top: 80%;
+    left: 47%;
+}
+.pagination .active{
+    background-color: tomato;
+}
+h1.h1-store {
+    background: linear-gradient(to bottom right, #a22fce, #ff7000);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }

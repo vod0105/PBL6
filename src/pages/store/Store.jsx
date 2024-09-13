@@ -5,14 +5,14 @@ import LoadingSpinner from "../../Action/LoadingSpiner.js";
 import ModalComponent from "../../components/ModalComponent.js";
 import Example from "../../components/ModalComponent.js";
 import { ToastContainer, toast } from "react-toastify";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 const Store = ({ url }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState(""); // Trạng thái lưu từ khóa tìm kiếm
-  const itemsPerPage = 2; // Số lượng phần tử mỗi trang
+  const itemsPerPage = 3; // Số lượng phần tử mỗi trang
   const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
@@ -41,10 +41,9 @@ const Store = ({ url }) => {
       const headers = {
         Authorization: `Bearer ${tk}`,
       };
-      await axios.delete(
-        `${url}/api/v1/admin/stores/delete/${storeId}`,
-        {headers}
-      );
+      await axios.delete(`${url}/api/v1/admin/stores/delete/${storeId}`, {
+        headers,
+      });
       setData(data.filter((store) => store.storeId !== storeId));
       toast.success("Deleted Store Successful");
     } catch (error) {
@@ -59,12 +58,9 @@ const Store = ({ url }) => {
   };
   // chuyen huong update store
   const handleUpdateClick = (storeId) => {
-   
     navigate(`/UpdateStore/${storeId}`);
   };
   //
-
-
 
   if (loading) {
     return (
@@ -95,7 +91,7 @@ const Store = ({ url }) => {
     <div className="store">
       <div className="content">
         <div className="heading">
-          <h1>List Store</h1>
+          <h1 className="h1-store">List Store</h1>
           <div className="store-search">
             <input
               type="text"
@@ -129,7 +125,11 @@ const Store = ({ url }) => {
                   <td>{store.numberPhone}</td>
                   <td>{store.openingTime}</td>
                   <td>
-                    <button type="button" className="btn btn-primary" onClick={()=>handleUpdateClick(store.storeId)}>
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={() => handleUpdateClick(store.storeId)}
+                    >
                       Update
                     </button>
                   </td>

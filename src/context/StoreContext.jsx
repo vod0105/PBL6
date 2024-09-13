@@ -6,7 +6,7 @@ const StoreContextProvider = ({ children }) => {
   const [user, setUser] = useState({ name: "Son" });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userData, setUserData] = useState("");
-  const [url, setUrl] = useState("http://192.168.1.33:8080");
+  const [url, setUrl] = useState("http://localhost:8082");
   const [token, setToken] = useState("");
   const value = {
     user,

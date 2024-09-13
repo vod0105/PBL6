@@ -6,7 +6,8 @@ import {
   BiLogoProductHunt,
   BiBorderAll,
   BiCart,
-  BiCategory
+  BiCategory,
+  BiSolidDashboard,
 } from "react-icons/bi";
 import "../styles/Sidebar.css";
 import { StoreContext } from "../context/StoreContext";
@@ -66,9 +67,14 @@ const Sidebar = () => {
             <BiHome className="icon" />
             <p>Dashboard</p>
           </Link> */}
-
+          <Link className="item" to="/admin/dashboard">
+            <BiSolidDashboard className="icon" />
+            <p>Dashboard</p>
+          </Link>
           <div className="item" onClick={() => toggleSubMenu("user")}>
-          <BiHome className="icon" />
+            <Link to="/Liststore" className="linkitem">
+              <BiHome className="icon" />
+            </Link>
             <p>
               Store
               <div
@@ -80,10 +86,10 @@ const Sidebar = () => {
               >
                 <ul>
                   <li>
-                    <Link to="/Liststore">Danh sách Store</Link>
+                    <Link to="/Liststore">List Store</Link>
                   </li>
                   <li>
-                    <Link to="/AddStore">Thêm Store</Link>
+                    <Link to="/AddStore">Add Store</Link>
                   </li>
                 </ul>
               </div>
@@ -94,7 +100,10 @@ const Sidebar = () => {
           </div>
 
           <div className="item" onClick={() => toggleSubMenu("category")}>
-            <BiCategory className="icon icon-item" />
+            {/* <BiCategory className="icon icon-item" /> */}
+            <Link to="/admin/Category" className="linkitem">
+              <BiCategory className="icon icon-item" />
+            </Link>
             <p>
               Category
               <div
@@ -110,7 +119,7 @@ const Sidebar = () => {
                     <Link to="/admin/Category">List CateGory</Link>
                   </li>
                   <li>
-                    <Link to="/admin/addCategory">Thêm CateGory</Link>
+                    <Link to="/admin/addCategory">Add CateGory</Link>
                   </li>
                 </ul>
               </div>
@@ -120,10 +129,45 @@ const Sidebar = () => {
             </p>
           </div>
 
-          <Link className="item" to="/product">
-            <BiLogoProductHunt className="icon" />
-            <p>Product</p>
-          </Link>
+          <div className="item" onClick={() => toggleSubMenu("product")}>
+            {/* <BiLogoProductHunt className="icon icon-item" /> */}
+            <Link to="/admin/product" className="linkitem">
+              <BiLogoProductHunt className="icon icon-item" />
+            </Link>
+            <p>
+              Product
+              <div
+                className={
+                  openSubMenus["product"]
+                    ? "sub-menu active-sub"
+                    : "sub-menu hidden"
+                }
+              >
+                <ul className="sub-item">
+                  <li>
+                    {" "}
+                    <Link to="/admin/product">List Product</Link>
+                  </li>
+                  <li>
+                    <Link to="/admin/addProduct">Add Product</Link>
+                  </li>
+                  <li>
+                    <Link to="/admin/addProductToStore">
+                      Add Product To Store
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/admin/addProductToAllStore">
+                      Add Product To All Store
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </p>
+            <p className="dropdownn">
+              <FontAwesomeIcon icon={faChevronDown} />
+            </p>
+          </div>
           <Link className="item" to="/category">
             <BiBorderAll className="icon" />
             <p>CateGory</p>

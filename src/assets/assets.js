@@ -5,6 +5,9 @@ import profile_image from './profile_image.png'
 import upload_area from './upload_area.png'
 import parcel_icon from './parcel_icon.png'
 import store from './store.jpg'
+import category from './category.jfif'
+import dola from './dola.png'
+import product from './product-add.jpg'
 export const assets ={
     logo,
     add_icon,
@@ -12,7 +15,7 @@ export const assets ={
     profile_image,
     upload_area,
     parcel_icon,
-    store
+    store,
+    category,dola,product
 }
 
-export const url = 'http://localhost:4000'

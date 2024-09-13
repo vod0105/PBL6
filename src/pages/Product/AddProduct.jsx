@@ -1,24 +1,26 @@
 import React, { useState, useEffect } from "react";
-import "./adddemo.css";
+import "./AddProduct.css";
 import { assets } from "../../assets/assets.js";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 
-const Add = ({ url }) => {
+const AddProduct = ({ url }) => {
   const [image, setImage] = useState(false);
   const [data, setData] = useState({
-    storeName: "",
-    PhoneNumber: "",
-    Location: "",
-    Latitude: "",
-    Open: "",
-    Close: "",
-    longitude: "",
+    categoryName: "",
+    description: "",
+    productName: "",
+    price: "",
+    description: "",
+    categoryId: "",
+    stockQuantity: "",
+    bestSale: "",
   });
 
   //get user
-  const [users, setUsers] = useState([]);
+  const [cate, setCate] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState("");
+  const [bestSale, setbestSale] = useState("");
   const token = localStorage.getItem("access_token");
 
   useEffect(() => {
@@ -28,12 +30,9 @@ const Add = ({ url }) => {
         "Content-Type": "application/json",
       };
       axios
-        .get(`${url}/api/v1/admin/auth/all_roles`, {
-          headers,
-          params: { role: "ROLE_OWNER" },
-        })
+        .get(`${url}/api/v1/public/categories/all`)
         .then((response) => {
-          setUsers(response.data.data);
+          setCate(response.data.data);
         })
         .catch((error) => {
           console.error("There was an error fetching users!", error);
@@ -43,10 +42,6 @@ const Add = ({ url }) => {
     }
   }, []);
   //
-  useEffect(() => {
-    console.log("date", data.Open);
-    console.log("date", data.storeName);
-  });
 
   const onChangeHandler = (event) => {
     const name = event.target.name;
@@ -68,34 +63,33 @@ const Add = ({ url }) => {
     };
 
     const formData = new FormData();
-    formData.append("storeName", data.storeName);
-    formData.append("phoneNumber", Number(data.PhoneNumber));
-    formData.append("location", data.Location);
-    formData.append("latitude", data.Latitude);
-    formData.append("longitude", data.longitude);
+    formData.append("productName", data.productName);
+    formData.append("price", data.price);
+    formData.append("description", data.description);
+    formData.append("categoryId", selectedUserId);
+    formData.append("stockQuantity", data.stockQuantity);
     formData.append("image", image);
-    formData.append("openingTime", data.Open);
-    formData.append("closingTime", data.Close);
-    formData.append("managerId", selectedUserId);
+    formData.append("bestSale", bestSale);
 
     try {
       const response = await axios.post(
-        `${url}/api/v1/admin/stores/add`,
+        `${url}/api/v1/admin/products/add`,
         formData,
         { headers }
       );
       if (response.data.status) {
         setData({
-          name: "",
-          PhoneNumber: "",
-          Location: "",
-          Latitude: "",
-          Open: "",
-          Close: "",
-          longitude: "",
+          categoryName: "",
+          description: "",
+          productName: "",
+          price: "",
+          description: "",
+          categoryId: "",
+          stockQuantity: "",
+          bestSale: "",
         });
         setImage(null);
-        toast.success("Added Store");
+        toast.success("Added Category");
       } else {
         toast.error(response.data.message);
       }
@@ -110,149 +104,144 @@ const Add = ({ url }) => {
       }
     }
   };
+  useEffect(() => {
+    console.log("data", data);
+
+    console.log("selectedUserId", selectedUserId);
+    console.log("bestSale", bestSale);
+  });
 
   return (
     <div className="add">
-      <div className="cover-left">
-        <h2 className="h2-add">Add Store</h2>
+      <div className="cover-left1">
+        <h2 className="">Add Product</h2>
         <form className="flex-col" onSubmit={onSubmitHandler}>
-          <table className="table">
+          <table className="form-table">
             <tbody>
               <tr>
-                <td colSpan="2">
-                  <div className="add-img-upload">
-                    <p>Upload Image</p>
-                    <label htmlFor="image">
-                      <img
-                        className="img-upload"
-                        src={
-                          image
-                            ? URL.createObjectURL(image)
-                            : assets.upload_area
-                        }
-                        alt=""
-                      />
-                    </label>
-                    <input
-                      onChange={(e) => setImage(e.target.files[0])}
-                      type="file"
-                      id="image"
-                      hidden
-                      required
+                <td className="td-text">Upload Image</td>
+                <td>
+                  <label htmlFor="image">
+                    <img
+                      className="img-uploa  d"
+                      src={
+                        image ? URL.createObjectURL(image) : assets.upload_area
+                      }
+                      alt=""
                     />
-                  </div>
+                  </label>
+                  <input
+                    onChange={(e) => setImage(e.target.files[0])}
+                    type="file"
+                    id="image"
+                    hidden
+                    required
+                  />
                 </td>
               </tr>
               <tr>
+                <td>Product Name</td>
                 <td>
-                  <p>Store Name</p>
                   <input
                     onChange={onChangeHandler}
-                    value={data.name}
+                    value={data.productName}
                     type="text"
-                    name="storeName"
+                    name="productName"
                     placeholder="Type here"
                   />
                 </td>
+              </tr>
+              <tr>
+                <td>Price</td>
                 <td>
-                  <p>Longitude</p>
                   <input
-                    name="longitude"
+                    name="price"
                     type="text"
                     placeholder="Write content here"
                     onChange={onChangeHandler}
-                    value={data.longitude}
+                    value={data.price}
                   />
                 </td>
               </tr>
               <tr>
+                <td>Description</td>
                 <td>
-                  <p>Phone Number</p>
                   <input
-                    name="PhoneNumber"
+                    name="description"
                     type="text"
                     placeholder="Write content here"
                     onChange={onChangeHandler}
-                    value={data.PhoneNumber}
+                    value={data.description}
                   />
                 </td>
+              </tr>
+
+              <tr>
+                <td>Stock Quantity</td>
                 <td>
-                  <p>Location</p>
                   <input
-                    name="Location"
+                    name="stockQuantity"
                     type="text"
                     placeholder="Write content here"
                     onChange={onChangeHandler}
-                    value={data.Location}
+                    value={data.stockQuantity}
                   />
                 </td>
               </tr>
               <tr>
+                <td>Category Id</td>
                 <td>
-                  <p>Latitude</p>
-                  <input
-                    name="Latitude"
-                    type="text"
-                    placeholder="Write content here"
-                    onChange={onChangeHandler}
-                    value={data.Latitude}
-                  />
-                </td>
-                <td>
-                  <p>Open</p>
-                  <input
-                    type="datetime-local"
-                    name="Open"
-                    onChange={onChangeHandler}
-                    value={data.Open}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <p>Close</p>
-                  <input
-                    type="datetime-local"
-                    name="Close"
-                    onChange={onChangeHandler}
-                    value={data.Close}
-                  />
-                </td>
-                <td>
-                  <p>Manager</p>
                   <select
-                    className="select-manager"
+                    className="ip"
                     onChange={(e) => setSelectedUserId(e.target.value)}
                     name="Manager"
                   >
-                    <option value="">-- Select Manager --</option>
-                    {users.map((user) => (
-                      <option key={user.id} value={user.id}>
-                        {user.fullName}
+                    <option value="">-- Select Category --</option>
+                    {cate.map((cate) => (
+                      <option key={cate.categoryId} value={cate.categoryId}>
+                        {cate.categoryName}
                       </option>
                     ))}
                   </select>
                 </td>
               </tr>
+              <tr>
+                <td>Best sale</td>
+                <td>
+                  <select
+                    className="ip"
+                    onChange={(e) => setbestSale(e.target.value)}
+                    name="bestSale"
+                  >
+                    <option value="">-- Select --</option>
+
+                    <option key={true} value={true}>
+                      true
+                    </option>
+                    <option key={false} value={false}>
+                      false
+                    </option>
+                  </select>
+                </td>
+              </tr>
             </tbody>
           </table>
+
           <button className="add-btn" type="submit">
             Add
           </button>
         </form>
       </div>
       <div className="cover-right">
-        {/* <img src={assets.store} alt="" /> */}
         <img
-          className="img-upload"
+          className="img-uploa  d"
           src={image ? URL.createObjectURL(image) : assets.upload_area}
           alt=""
         />
       </div>
-
       <ToastContainer />
     </div>
   );
 };
 
-export default Add;
+export default AddProduct;
