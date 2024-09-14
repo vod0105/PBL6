@@ -16,7 +16,7 @@ class SelectSettingCustom extends StatelessWidget{
           child: Row(
             children: [
               SizedBox(width: AppDimention.size10,),
-              Icon(icon,size: 40,color: AppColor.mainColor,),
+              Icon(icon,size: 30,color: AppColor.mainColor,),
               SizedBox(width: AppDimention.size20,),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,8 +24,7 @@ class SelectSettingCustom extends StatelessWidget{
                   Text(
                     title,
                     style: TextStyle(
-                      fontSize: AppDimention.size20,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
                     ),
                   ),
                  

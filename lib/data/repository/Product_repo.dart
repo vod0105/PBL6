@@ -24,11 +24,12 @@ class ProductRepo {
     return await apiClient.getData(url);
   }
   // add product to cart
-  Future<Response> addtocart(int productid,int quantity, int idstore) async {
+  Future<Response> addtocart(int productid,int quantity, int idstore,String sizename) async {
   String url = Appconstant.ADD_TOCART_URL
     .replaceFirst("{productid}", productid.toString())
     .replaceFirst("{quantity}", quantity.toString())
-    .replaceFirst("{storeid}", idstore.toString());
+    .replaceFirst("{storeid}", idstore.toString())
+    .replaceFirst("{size}", sizename);
   return await apiClient.postData(url, null); 
   }
 

@@ -1,8 +1,7 @@
-import 'package:android_project/custom/big_text.dart';
+
 import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 class OrderHeader extends StatefulWidget{
    const OrderHeader({
        Key? key,

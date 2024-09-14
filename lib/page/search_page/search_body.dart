@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:android_project/data/controller/Product_controller.dart';
+import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +24,7 @@ class _SearchBodyState extends State<SearchBody> {
   }
   @override
   Widget build(BuildContext context) {
-    List<String> listrecommend = ["Gà chiên tỏi", "Hambeger salad", "Trà sữa trân châu"];
+    List<String> listrecommend = ["Classic Burger", "Pepsi", "Trà chanh"];
     return GetBuilder<ProductController>(builder: (productController) {
         return Column(
           children: [
@@ -65,51 +68,77 @@ class _SearchBodyState extends State<SearchBody> {
                 shrinkWrap: true, 
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,  
-                  crossAxisSpacing: 10.0,  
-                  mainAxisSpacing: 10.0, 
-                  childAspectRatio: 1.0,  
+                  childAspectRatio: 0.7,  
                 ),
                 itemCount: productController.productListSearch.length,  
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: (){
-                       
+                       Get.toNamed(AppRoute.get_product_detail(productController.productList[index].productId));
                     },
                     child: Container(
-                      width: 150, 
-                      height: 150,  
-                      margin: index % 2 == 0 ? EdgeInsets.only(left: AppDimention.size10):EdgeInsets.only(right: AppDimention.size10),
                       decoration: BoxDecoration(
-                        color: AppColor.mainColor,
-                        border: Border.all(width: 1, color: Color.fromRGBO(0, 0, 0, 0.5)),
-                        borderRadius: BorderRadius.circular(AppDimention.size10),
-                        image: const DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(
-                            "https://wallpaperaccess.com/full/6790132.png"
-                          )
-                        )
+                        color: Colors.white,
+                        border: Border.all(width: 1, color: Color.fromRGBO(218, 218, 218, 0.494)),
                       ),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(),
-                          Container(
-                            width: AppDimention.size150 + AppDimention.size30,
-                            height: AppDimention.size50,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(AppDimention.size10),bottomRight: Radius.circular(AppDimention.size10)),
-                              color: AppColor.mainColor
-                            ),
-                            child: Center(
-                              child: Text("hola"),
-                            )
-                          )
-
-                        ],
-                      ),
-                      
+                      children: [
+                        Container(
+                          width: 170, 
+                          height: 150,  
+                        
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: MemoryImage(base64Decode(productController.productListSearch[index].image!)),
+                              ),
+                          ),
+                        ),
+                        Container(
+                           width: 170,
+        
+                           padding: EdgeInsets.only(left: AppDimention.size10),
+                           
+                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: AppDimention.size5,),
+                              Text(productController.productList[index].productName,style: TextStyle(fontWeight: FontWeight.bold,color: AppColor.mainColor),),
+                                  Text("${productController.productList[index].price} vnđ",style: TextStyle(fontSize: 13),),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                        Wrap(children: List.generate(5, (index) => Icon(Icons.star,color: AppColor.mainColor,size: 8)),),
+                                        Text("(5)",style: TextStyle(fontSize: 12,color: AppColor.mainColor),),
+                                      ],
+                                  ),
+                                  Row(
+                                    children: [
+                                        Text("1028",style: TextStyle(fontSize: 12),),
+                                        SizedBox(width: 5,),
+                                        Icon(Icons.chat_bubble_outline_rounded,size: 12,),
+                                        
+                                      ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: AppDimention.size15),
+                              Row(
+                                children: [
+                                  Icon(Icons.delivery_dining_sharp),
+                                  Text("Miễn phí vận chuyển" ,style: TextStyle(fontSize: 10),overflow: TextOverflow.ellipsis,)
+                                ],
+                              )
+                              
+                              
+                            ],
+                           ),
+                        )
+                      ],
                     ),
+                    )
                   );
                 },
               )

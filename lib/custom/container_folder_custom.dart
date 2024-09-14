@@ -37,7 +37,7 @@ class ContainerFolderCustom extends StatelessWidget{
                   Text(text,style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
-                    fontSize: AppDimention.size20
+                    fontSize:18
                   ),)
                 ],
 

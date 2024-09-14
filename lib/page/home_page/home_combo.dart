@@ -2,9 +2,12 @@ import 'dart:convert';
 
 import 'package:android_project/data/controller/Combo_controller.dart';
 import 'package:android_project/models/Model/ComboModel.dart';
+import 'package:android_project/models/Model/Item/ComboItem.dart';
+import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 class HomeCombo extends StatefulWidget{
    const HomeCombo({
@@ -50,7 +53,7 @@ class _HomeComboState extends State<HomeCombo>{
         ): CircularProgressIndicator();
     });
    }
-   Widget _buildView(int index,ComboModel combomodel){
+   Widget _buildView(int index,Comboitem combomodel){
     return Container(
       margin: EdgeInsets.only(left: AppDimention.size5,right: AppDimention.size5),
       child:Stack(
@@ -58,49 +61,54 @@ class _HomeComboState extends State<HomeCombo>{
               Positioned(
                 top:0,
                 right: 0,
-                child:  Container(
-                  padding: EdgeInsets.only(left: AppDimention.size10),
-                  height: AppDimention.size130,
-                  width: AppDimention.size130+ AppDimention.size100,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(topRight: Radius.circular(AppDimention.size10),bottomRight:Radius.circular(AppDimention.size10) ),
-                    color: Colors.white,
-                  ),
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        top: 0,
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(combomodel.comboName.toString(),style: TextStyle(fontSize: AppDimention.size20,fontWeight: FontWeight.bold),maxLines: 2,),
-                              Text("Giá :" + combomodel.comboPrice.toString() +"vnđ",style: TextStyle(fontSize: 16,color: AppColor.mainColor))
-                            ],
-                        ),
-                      ),
-                     Positioned(
-                        bottom: 0,
-                        child: Container(
-                          width: AppDimention.size170 - AppDimention.size50,
-                          height: AppDimention.size50,
-                          decoration: BoxDecoration(
-                            color: AppColor.mainColor,
-                            borderRadius: BorderRadius.circular(AppDimention.size10),
+                child:  GestureDetector(
+                  onTap: (){
+                      Get.toNamed(AppRoute.get_combo_detail(combomodel.comboId!));
+                  },
+                  child: Container(
+                    padding: EdgeInsets.only(left: AppDimention.size10),
+                    height: AppDimention.size130,
+                    width: AppDimention.size130+ AppDimention.size100,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(topRight: Radius.circular(AppDimention.size10),bottomRight:Radius.circular(AppDimention.size10) ),
+                      color: Colors.white,
+                    ),
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          top: 0,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(combomodel.comboName.toString(),style: TextStyle(fontSize: AppDimention.size20,fontWeight: FontWeight.bold),maxLines: 2,),
+                                Text("Giá :" + combomodel.price.toString() +"vnđ",style: TextStyle(fontSize: 16,color: AppColor.mainColor))
+                              ],
                           ),
-                          child: Center(
-                            child: Text(
-                              "Mua ngay",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: AppDimention.size20,
+                        ),
+                      Positioned(
+                          bottom: 0,
+                          child: Container(
+                            width: AppDimention.size170 - AppDimention.size50,
+                            height: AppDimention.size50,
+                            decoration: BoxDecoration(
+                              color: AppColor.mainColor,
+                              borderRadius: BorderRadius.circular(AppDimention.size10),
+                            ),
+                            child: Center(
+                              child: Text(
+                                "Mua ngay",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: AppDimention.size20,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      )
+                        )
 
-                    ],
-                  )
+                      ],
+                    )
+                  ),
                 )
               ),
               Positioned(

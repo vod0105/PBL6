@@ -41,7 +41,7 @@ class _CategoryDetailListState extends State<CategoryDetailList> {
                 alignment: Alignment.center,
                 child: Container(
                   width: AppDimention.size170 + 2 * AppDimention.size100,
-                  height: AppDimention.size150,
+                  height: AppDimention.size150 + AppDimention.size10,
                   margin: EdgeInsets.only(bottom: 20),
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -56,7 +56,7 @@ class _CategoryDetailListState extends State<CategoryDetailList> {
                               children: [
                                 Container(
                                     width: AppDimention.size150  ,
-                                    height: AppDimention.size150,
+                                    height: AppDimention.size150  ,
                                     decoration: BoxDecoration(
                                       
                                       color: Colors.white,
@@ -70,7 +70,7 @@ class _CategoryDetailListState extends State<CategoryDetailList> {
                                 Expanded(
                                   child: Container(
                                       margin: EdgeInsets.only(left: AppDimention.size10),
-                                      height: AppDimention.listViewImageSize,
+                                      height: AppDimention.size150,
                                      
                                       child: Padding(
                                         padding: EdgeInsets.only(left: AppDimention.size10),
@@ -79,7 +79,7 @@ class _CategoryDetailListState extends State<CategoryDetailList> {
                                           children: [
                                               Container(
                                                 child: Text(productController.productListBycategory[index].productName,style: TextStyle(
-                                                    fontSize: AppDimention.size15,
+                                                    fontSize: AppDimention.size25,
                                                     fontWeight: FontWeight.w500
                                                 ),
                                                 maxLines: 1,overflow: TextOverflow.ellipsis,),
@@ -96,33 +96,19 @@ class _CategoryDetailListState extends State<CategoryDetailList> {
                                                       ],
                                                     ),
                                                     SizedBox(width: AppDimention.size30,),
-                                                     Row(
-                                                      children: [
-                                                        Text("2.7 km"),
-                                                        Icon(Icons.location_on,color: Colors.blue,),
-                                                       
-                                                      ],
-                                                    )
+                                                     Text(
+                                                      "Giá : ${productController.productListBycategory[index].price.toString()} vnđ",
+                                                      style: TextStyle(
+                                                        fontSize: AppDimention.size10,
+                                                      ),
+                                                  ),
                                                   ],
                                               ),
                                               SizedBox(height: AppDimention.size5,),
-                                              Row(
-                                                 mainAxisAlignment: MainAxisAlignment.start,
-                                                children: [
-                                                 Text(
-                                                    productController.productListBycategory[index].price.toString(),
-                                                    style: TextStyle(
-                                                      fontSize: AppDimention.size10,
-                                                      decoration: TextDecoration.lineThrough,color: Colors.red, 
-                                                    ),
-                                                  ),
-                                                  SizedBox(width: AppDimention.size20,),
-                                                  Text(productController.productListBycategory[index].discountedPrice.toString())
-                                                ],
-                                              ),
+                                             
                                               SizedBox(height: AppDimention.size5,),
                                               Container(
-                                                width: AppDimention.size120,
+                                                width: AppDimention.size150,
                                                 height: AppDimention.size40,
                                                 decoration: BoxDecoration(
                                                   color: AppColor.mainColor,

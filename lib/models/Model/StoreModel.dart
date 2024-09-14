@@ -1,71 +1,31 @@
-class StoreModel {
-  int? storeId;
-  String? storeName;
-  String? image;
-  String? location;
-  double? longitude;
-  double? latitude;
-  String? numberPhone;
-  String? openingTime;
-  String? closingTime;
-  String? managerName;
-  String? createdAt;
-  String? updatedAt;
+import 'package:android_project/models/Model/Item/StoresItem.dart';
 
-  StoreModel(
-      {this.storeId,
-      this.storeName,
-      this.image,
-      this.location,
-      this.longitude,
-      this.latitude,
-      this.numberPhone,
-      this.openingTime,
-      this.closingTime,
-      this.managerName,
-      this.createdAt,
-      this.updatedAt}
-    );
+class Storesmodel {
+  bool? status;
+  String? message;
+  List<Storesitem>? liststores;
+  List<Storesitem>? get get_liststores => liststores;
 
-  
-  late List<StoreModel> _stores;
-  List<StoreModel> get stores => _stores;
+  Storesmodel({this.status, this.message, this.liststores});
 
-  StoreModel.fromJson(Map<String,dynamic> json){
-    storeId = json['storeId'];
-    storeName = json['storeName'];
-    image = json['image'];
-    location = json['location'];
-    longitude = json['longitude'];
-    latitude = json['latitude'];
-    numberPhone = json['numberPhone'];
-    openingTime = json['openingTime'];
-    closingTime = json['closingTime'];
-    managerName = json['managerName'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
-    if(json['data'] != null){
-      _stores = <StoreModel>[];
+  Storesmodel.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    message = json['message'];
+    if (json['data'] != null) {
+      liststores = <Storesitem>[];
       json['data'].forEach((v) {
-        _stores.add(StoreModel.fromJson(v));
+        liststores!.add(new Storesitem.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['storeId'] = this.storeId;
-    data['storeName'] = this.storeName;
-    data['image'] = this.image;
-    data['location'] = this.location;
-    data['longitude'] = this.longitude;
-    data['latitude'] = this.latitude;
-    data['numberPhone'] = this.numberPhone;
-    data['openingTime'] = this.openingTime;
-    data['closingTime'] = this.closingTime;
-    data['managerName'] = this.managerName;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
+    data['status'] = this.status;
+    data['message'] = this.message;
+    if (this.liststores != null) {
+      data['data'] = this.liststores!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }

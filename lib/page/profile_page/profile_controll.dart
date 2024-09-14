@@ -228,7 +228,7 @@ class _ProfileControllState extends State<ProfileControll> {
                           width: 40,
                           height: 130,
                           
-                          child: Icon(Icons.arrow_circle_right_outlined,size: AppDimention.size40,color: AppColor.yellowColor,),
+                          child: Icon(Icons.arrow_forward_ios_outlined,size: AppDimention.size30,color: AppColor.yellowColor,),
                         )
                       ],
                     ),
@@ -245,14 +245,15 @@ class _ProfileControllState extends State<ProfileControll> {
     return Container(
       margin: EdgeInsets.only(right: AppDimention.size10),
       decoration: BoxDecoration(
-        border: Border.all(width: 0.5),
+        border: Border(right: BorderSide(width: 1))
       ),
+      
       child:Container(
         child: Row(
           children: [
             Container(
-              width: 130,
-              height: 130,
+              width: 100,
+              height: 100,
               decoration: BoxDecoration(
     
                 image: const DecorationImage(
@@ -272,7 +273,10 @@ class _ProfileControllState extends State<ProfileControll> {
                 children: [
                   SizedBox(height: AppDimention.size10,),
                   Text("Trà sữa trân châu",overflow: TextOverflow.ellipsis,maxLines: 1, ),
-                  Text("54, Nguyễn Lương Bằng , Liên Chiểu , Đà Nẵng",overflow: TextOverflow.ellipsis,maxLines: 1, ),
+                 Container(
+                  width: 200,
+                  child:  Text("54, Nguyễn Lương Bằng , Liên Chiểu , Đà Nẵng",overflow: TextOverflow.ellipsis,maxLines: 1, ),
+                 ),
                   Text("Đã mua 1 lần ", ),
                   SizedBox(height: AppDimention.size20,),
                   Text("Giá : 20.000 VNĐ ", ),

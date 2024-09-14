@@ -10,4 +10,7 @@ class OrderRepo {
   Future<Response> getall() async{
       return await apiClient.getData(Appconstant.ORDERT_URL);
   }
+  Future<Response> getorderbyordercode(String ordercode) async{
+      return await apiClient.getData(Appconstant.ORDER_BY_ORDERCODE_URL.replaceFirst("{ordercode}", ordercode));
+  }
 }

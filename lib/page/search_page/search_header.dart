@@ -26,7 +26,7 @@ class _SearchHeaderState extends State<SearchHeader> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ProductController>(builder: (productController){
-      searchController.text = productController.textSearch;
+
         return Container(
             margin: EdgeInsets.only(
                 top: AppDimention.size40, bottom: AppDimention.size20),
@@ -46,14 +46,24 @@ class _SearchHeaderState extends State<SearchHeader> {
                 SizedBox(width: AppDimention.size10),
                 Expanded(
                   child: TextField(
+                    onChanged: (Text){
+                      productController.textSearch =searchController.text;
+                      productController.search();
+                    },
+                  
                     controller: searchController,
                     decoration: InputDecoration(
                       
                       hintText: "Search ... ",
-                      prefixIcon: Icon(
-                        Icons.search,
-                        color: AppColor.yellowColor,
-                      ),
+                      prefixIcon: IconButton(
+                          icon: Icon(
+                            Icons.search,
+                            color: AppColor.yellowColor,
+                          ),
+                          onPressed: () {
+                            productController.search();
+                          },
+                        ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(AppDimention.size30),
                         borderSide: BorderSide(width: 1.0, color: Colors.white),

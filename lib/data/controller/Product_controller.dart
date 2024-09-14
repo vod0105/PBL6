@@ -2,6 +2,7 @@ import 'package:android_project/data/api/AppConstant.dart';
 import 'package:android_project/data/repository/Product_repo.dart';
 import 'package:android_project/models/Dto/CartDto.dart';
 import 'package:android_project/models/Model/ProductModel.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 
 class ProductController extends GetxController {
@@ -21,7 +22,7 @@ class ProductController extends GetxController {
       if(response.statusCode == 200){
           var data = response.body;
           _productList = [];
-          _productList.addAll(ProductModel.fromJson(data).products);
+          _productList.addAll(Productmodel.fromJson(data).get_listproduct ?? []);
       }else{
           print("Lỗi không lấy được dữ liệu danh sách sản phẩm : "+ response.statusCode.toString());
       }
@@ -38,7 +39,7 @@ class ProductController extends GetxController {
       if (response.statusCode == 200) {
           var data = response.body;
           _productListDetail = [];
-          _productListDetail.addAll(ProductModel.fromJson(data).products);
+          _productListDetail.addAll(Productmodel.fromJson(data).get_listproduct ?? []);
       } else {
         print("Lỗi không lấy được dữ liệu chi tiết sản phẩm : " + response.statusCode.toString());
       }
@@ -47,9 +48,9 @@ class ProductController extends GetxController {
   }
 
   // add to cart
-  Future<void> addtocart(int productid,int quantity,int idstore) async {
+  Future<void> addtocart(int productid,int quantity,int idstore,String sizename) async {
       _isLoading = false; 
-      Response response = await productRepo.addtocart(productid,quantity,idstore);
+      Response response = await productRepo.addtocart(productid,quantity,idstore,sizename);
       if (response.statusCode == 200) {
         Get.snackbar("Thông báo", "Thêm vào giỏ hàng thành công");
       } else {
@@ -67,7 +68,7 @@ class ProductController extends GetxController {
       if (response.statusCode == 200) {
           var data = response.body;
           _productListBycategory = [];
-          _productListBycategory.addAll(ProductModel.fromJson(data).products);
+          _productListBycategory.addAll(Productmodel.fromJson(data).get_listproduct ?? []);
       } else {
         print("Lỗi không lấy được danh sách sản phẩm theo danh mục" + response.statusCode.toString());
       }
@@ -85,24 +86,30 @@ class ProductController extends GetxController {
 
   List<dynamic> _productListSearch = [];
   List<dynamic> get productListSearch => _productListSearch;
-  Future<void> search() async{
-    if(textSearch == "")
-    {
+  
+Future<void> search() async {
+  try {
+    if (textSearch == "") {
       _productListSearch = _productList;
-      print("Searching");
+    } else {
+      Response response = await productRepo.getbyname(this.textSearch);
+      if (response.statusCode == 200) {
+        var data = response.body;
+        _productListSearch = [];
+        _productListSearch.addAll(Productmodel.fromJson(data).get_listproduct ?? []);
+      } else {
+        print("Lỗi không lấy được danh sách sản phẩm theo tên" + response.statusCode.toString());
+        _productListSearch = [];
+      }
     }
-    else{
-    Response response = await productRepo.getbyname(this.textSearch);
-        if(response.statusCode == 200){
-            var data = response.body;
-            _productListSearch = [];
-            _productListSearch.addAll(ProductModel.fromJson(data).products);
-        }
-        else{
-          print("Lỗi không lấy được danh sách sản phẩm theo tên" + response.statusCode.toString());
-          _productListSearch = [];
-        } 
-    }
-    update();
+  } catch (e) {
+    print("Exception: $e");
+    _productListSearch = [];
+  } finally {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      update();
+    });
   }
+}
+
 }

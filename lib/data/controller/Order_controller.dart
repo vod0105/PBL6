@@ -28,6 +28,24 @@ Future<void> getall() async {
   update();
 }
 
+  OrderItem? _orderdetail ;
+  OrderItem? get orderdetail => _orderdetail;
+
+Future<void> getorderbyOrdercode(String ordercode) async {
+  _isLoading = true;
+  Response response = await orderRepo.getorderbyordercode(ordercode);
+  if (response.statusCode == 200) {
+    print("Lấy thành công chi tiết đơn hàng");
+    var data = response.body;
+
+    _orderdetail =OrderItem.fromJson(data["data"]);
+  } else {
+    print("Lỗi không lấy được danh sách đơn hàng: " + response.statusCode.toString());
+  }
+  _isLoading = false;
+  update();
+}
+
 
 
 }

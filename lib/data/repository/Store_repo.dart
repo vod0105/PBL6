@@ -11,4 +11,7 @@ class StoreRepo {
   Future<Response> getall() async{
     return await apiClient.getData(Appconstant.STORE_URL);
   }
+  Future<Response> getbyid(int id) async{
+    return await apiClient.getData(Appconstant.STORE_BY_ID_URL.replaceFirst("{id}", id.toString()));
+  }
 }

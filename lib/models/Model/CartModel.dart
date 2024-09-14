@@ -70,7 +70,7 @@ class ProductInCart {
   String? status;
   String? createdAt;
   String? updatedAt;
-
+  String? size;
   ProductInCart(
       {this.userId,
       this.productId,
@@ -82,7 +82,8 @@ class ProductInCart {
       this.storeId,
       this.status,
       this.createdAt,
-      this.updatedAt});
+      this.updatedAt,
+      this.size});
 
   ProductInCart.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];
@@ -96,6 +97,7 @@ class ProductInCart {
     status = json['status'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
+    size = json['size'];
   }
 
   Map<String, dynamic> toJson() {
@@ -111,6 +113,7 @@ class ProductInCart {
     data['status'] = this.status;
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
+    data['size'] = this.size;
     return data;
   }
 }
@@ -127,7 +130,7 @@ class ComboInCart {
   String? status;
   String? createdAt;
   String? updatedAt;
-
+  String? size;
   ComboInCart(
       {this.userId,
       this.comboId,
@@ -139,7 +142,8 @@ class ComboInCart {
       this.storeId,
       this.status,
       this.createdAt,
-      this.updatedAt});
+      this.updatedAt,
+      this.size});
 
   ComboInCart.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];
@@ -153,6 +157,7 @@ class ComboInCart {
     status = json['status'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
+    size = json['size'];
   }
 
   Map<String, dynamic> toJson() {
@@ -168,6 +173,7 @@ class ComboInCart {
     data['status'] = this.status;
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
+     data['size'] = this.size;
     return data;
   }
 }

@@ -24,7 +24,12 @@ class _HomeFolderState extends State<HomeFolder>{
             children: [
               Row(
                 children: [
-                  ContainerFolderCustom(iconData: Icons.discount_outlined, text: "Khuyến mãi",iconcolor: const Color.fromARGB(255, 151, 241, 155),),
+                  GestureDetector(
+                    onTap: (){
+                      Get.toNamed(AppRoute.PROMOTION_PAGE);
+                    },
+                    child: ContainerFolderCustom(iconData: Icons.discount_outlined, text: "Khuyến mãi",iconcolor: const Color.fromARGB(255, 151, 241, 155),),
+                  ),
                   GestureDetector(
                     onTap: (){
                         Get.toNamed(AppRoute.CATEGORY_PAGE);

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:android_project/custom/big_text.dart';
 import 'package:android_project/data/controller/Cart_controller.dart';
+import 'package:android_project/data/controller/Store_Controller.dart';
 import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,6 @@ class _CartListState extends State<CartList> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CartController>(builder: (cartController) {
-
       if (isSelected.length != cartController.cartlist.length) {
         isSelected = List<bool>.filled(cartController.cartlist.length, false);
       }
@@ -42,11 +42,12 @@ class _CartListState extends State<CartList> {
               onTap: () {},
               child: Container(
                 width: AppDimention.screenWidth - AppDimention.size100,
-                height: AppDimention.size170 + AppDimention.size5,
+                height: AppDimention.size170 + AppDimention.size10,
                 margin: EdgeInsets.only(
-                    bottom: AppDimention.size10,
-                    left: AppDimention.size10,
-                    right: AppDimention.size10),
+                  bottom: AppDimention.size10,
+                  left: AppDimention.size10,
+                  right: AppDimention.size10,
+                ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -55,9 +56,10 @@ class _CartListState extends State<CartList> {
                       onChanged: (bool? value) {
                         setState(() {
                           isSelected[index] = value!;
-                           var id = cartController.cartlist[index].cartId ;
-                           cartController.cartlist[index].product != null ?  cartController.updateIDSelectedProduct(id, value!) : cartController.updateIDSelectedCombo(id, value!) ;
-                         
+                          var id = cartController.cartlist[index].cartId;
+                          cartController.cartlist[index].product != null
+                              ? cartController.updateIDSelectedProduct(id, value)
+                              : cartController.updateIDSelectedCombo(id, value);
                         });
                       },
                     ),
@@ -89,10 +91,10 @@ class _CartListState extends State<CartList> {
                                   image: DecorationImage(
                                     fit: BoxFit.cover,
                                     image: MemoryImage(base64Decode(
-                                        cartController.cartlist[index].product !=
-                                                null
-                                            ? cartController.cartlist[index].product.image!
-                                            : cartController.cartlist[index].combo.image!)),
+                                      cartController.cartlist[index].product != null
+                                          ? cartController.cartlist[index].product.image!
+                                          : cartController.cartlist[index].combo.image!,
+                                    )),
                                   ),
                                 ),
                               ),
@@ -110,23 +112,39 @@ class _CartListState extends State<CartList> {
                                       style: TextStyle(color: AppColor.mainColor),
                                     ),
                                     Text(
-                                      "Cửa hàng số " +
+                                      "Size : " +
                                           (cartController.cartlist[index].product != null
-                                              ? cartController.cartlist[index].product.storeId.toString()
-                                              : cartController.cartlist[index].combo.storeId.toString()),
+                                              ? cartController.cartlist[index].product.size.toString()
+                                              : cartController.cartlist[index].combo.size.toString()),
                                       style: TextStyle(color: Colors.blue[300]),
                                     ),
-                                    Text(
-                                      "54,Nguyễn Lương Bằng , Liên Chiểu , Đà Nẵng",
-                                      overflow: TextOverflow.ellipsis,
+                                    // FutureBuilder to load store name
+                                    FutureBuilder<String>(
+                                      future: Get.find<Storecontroller>().getnamestoreByid(
+                                        cartController.cartlist[index].product != null
+                                            ? cartController.cartlist[index].product.storeId
+                                            : cartController.cartlist[index].combo.storeId,
+                                      ),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState == ConnectionState.waiting) {
+                                          return Text("Loading...");
+                                        } else if (snapshot.hasError) {
+                                          return Text("Error loading store name");
+                                        } else {
+                                          return Text(
+                                            snapshot.data ?? "No store name",
+                                            overflow: TextOverflow.ellipsis,
+                                          );
+                                        }
+                                      },
                                     ),
                                   ],
                                 ),
-                              )
+                              ),
                             ],
                           ),
                           SizedBox(
-                            height: AppDimention.size30,
+                            height: AppDimention.size20,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -151,15 +169,17 @@ class _CartListState extends State<CartList> {
                                   ),
                                   SizedBox(width: 5),
                                   Container(
-                                    width: 2* AppDimention.size30,
+                                    width: 2 * AppDimention.size30,
                                     height: AppDimention.size30,
                                     decoration: BoxDecoration(
                                         border: Border.all(width: 1),
                                         borderRadius: BorderRadius.circular(5)),
                                     child: Center(
-                                      child: Text(cartController.cartlist[index].product != null
-                                          ? cartController.cartlist[index].product.quantity.toString()
-                                          : cartController.cartlist[index].combo.quantity.toString()),
+                                      child: Text(
+                                        cartController.cartlist[index].product != null
+                                            ? cartController.cartlist[index].product.quantity.toString()
+                                            : cartController.cartlist[index].combo.quantity.toString(),
+                                      ),
                                     ),
                                   ),
                                   SizedBox(width: 5),
@@ -203,7 +223,7 @@ class _CartListState extends State<CartList> {
                                 ],
                               )
                             ],
-                          )
+                          ),
                         ],
                       ),
                     ),

@@ -20,7 +20,6 @@ class _ProfilePageState extends State<ProfilePage>{
           backgroundColor: Color.fromRGBO(243, 243, 243, 1),
           body: Column(
             children: [
-              SizedBox(height: AppDimention.size15,),
               Expanded(
                 child: SingleChildScrollView(
                 child: Column(

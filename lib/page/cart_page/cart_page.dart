@@ -17,6 +17,7 @@ class _CartPageState extends State<CartPage>{
       super.initState();
       Get.find<CartController>().getall();
       Get.find<CartController>().resetIDSelected();
+      Get.find<CartController>().getDistinctStoreId();
       
     }
    @override

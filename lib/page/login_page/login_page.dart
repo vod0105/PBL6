@@ -33,21 +33,29 @@ class _LoginPageState extends State<LoginPage> {
         String username = usernameController.text.trim();
         String password = passwordController.text.trim();
 
-
+/*
         if(username.isEmpty){
             Get.snackbar("Username", "Type in your username");
         }else if(password.isEmpty){
           Get.snackbar("Password", "Type in your password");
         }else{
-          Userdto userdto =  Userdto(password: password,username: username);
+          Userdto userdto =  Userdto(password: "123456789",username: "0763764915");
           auth_controller.login(userdto).then((status){
-              if(status.isSuccess){
+              if(status){
                   Get.toNamed(AppRoute.HOME_PAGE);
               }else{
-                Get.snackbar("Error", status.message);
+                Get.snackbar("Error", status.toString());
               }
           });
-        }
+        }*/
+         Userdto userdto =  Userdto(password: "123456789",username: "0763764915");
+          auth_controller.login(userdto).then((status){
+              if(status){
+                  Get.toNamed(AppRoute.HOME_PAGE);
+              }else{
+                Get.snackbar("Error", status.toString());
+              }
+          });
       }
 
       return Scaffold(

@@ -21,9 +21,10 @@ class CategoryController extends GetxController{
         print("Lấy dữ liệu danh sách danh mục sản phẩm thành công");
         var data = response.body;
         _categoryList = [];
-        _categoryList.addAll(Categorymodel.fromJson(data).categories);
+        _categoryList.addAll(Categorymodel.fromJson(data).get_listCategory ?? []);
       }else{
         print("Lỗi không lấy được danh sách danh mục sản phẩm"+ response.statusCode.toString());
+        _categoryList = [];
       }
       _isLoading = true;
       update();

@@ -13,33 +13,8 @@ class StoreHeader extends StatefulWidget {
 }
 
 class _StoreHeaderState extends State<StoreHeader> {
-  String? selectedProvince;
-  String? selectedDistrict;
-  List<String> provinces = ["Tỉnh 1", "Tỉnh 2", "Tỉnh 3"];
-  List<String> districts = ["Quận 1", "Quận 2", "Quận 3"];
 
-  void _showDropdown(List<String> items, Function(String) onItemSelected) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          height: 200,
-          child: ListView.builder(
-            itemCount: items.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(items[index]),
-                onTap: () {
-                  onItemSelected(items[index]);
-                  Navigator.pop(context);
-                },
-              );
-            },
-          ),
-        );
-      },
-    );
-  }
+
     void _showDropdown2(List<String> items, Function(String) onItemSelected) {
       showModalBottomSheet(
         context: context,
@@ -65,7 +40,6 @@ class _StoreHeaderState extends State<StoreHeader> {
 
   @override
   Widget build(BuildContext context) {
-    // return GetBuilder<Storecontroller>(builder: (storecontroller){
       return Column(
         children: [
           Container(
@@ -111,56 +85,9 @@ class _StoreHeaderState extends State<StoreHeader> {
               ],
             ),
           ),
-          Container(
-            width: AppDimention.screenWidth,
-            height: 50,
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () => _showDropdown(provinces, (value) {
-                    setState(() {
-                      selectedProvince = value;
-                      //storecontroller.setProvinceSearch(value);
-                    });
-                  }),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width / 2,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(width: 1),
-                          right: BorderSide(width: 1)),
-                    ),
-                    child: Center(
-                      child: Text(selectedProvince ?? "Chọn Tỉnh/Thành"),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () => _showDropdown2(districts, (value) {
-                    setState(() {
-                      selectedDistrict = value;
-                     // storecontroller.setDistrictSearch(value);
-                    });
-                  }),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width / 2,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(width: 1),
-                          right: BorderSide(width: 1)),
-                    ),
-                    child: Center(
-                      child: Text(selectedDistrict ?? "Chọn Quận/Huyện"),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          
         ],
       );
-    // });
+
   }
 }

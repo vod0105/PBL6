@@ -17,6 +17,7 @@ class ProfileSetting extends StatefulWidget {
 class _ProfileSettingState extends State<ProfileSetting> {
   Color _rowColor = Colors.transparent;
   Color _rowColor1 = Colors.transparent;
+  Color _rowColor2 = Colors.transparent;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +46,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
               children: [
                 GestureDetector(
                   onTap: (){
-                    
+                    Get.toNamed(AppRoute.PROFILE_SETTING_PAGE);
                   },
                   onTapDown: (_) {
                     setState(() {
@@ -73,16 +74,17 @@ class _ProfileSettingState extends State<ProfileSetting> {
                         ),
                         Icon(
                           Icons.arrow_right_rounded,
-                          size: AppDimention.size80,
+                          size: AppDimention.size40,
                           color: AppColor.mainColor,
                         ),
                       ],
                     ),
                   ),
                 ),
+                SizedBox(height: AppDimention.size10,),
                 GestureDetector(
                   onTap: (){
-                    
+                    Get.toNamed(AppRoute.PROFILE_SETUP_PAGE);
                   },
                   onTapDown: (_) {
                     setState(() {
@@ -109,30 +111,31 @@ class _ProfileSettingState extends State<ProfileSetting> {
                         ),
                         Icon(
                           Icons.arrow_right_rounded,
-                          size: AppDimention.size80,
+                          size: AppDimention.size40,
                           color: AppColor.mainColor,
                         ),
                       ],
                     ),
                   ),
                 ),
+                SizedBox(height: AppDimention.size10,),
                 GestureDetector(
                   onTap: (){
                     Get.toNamed(AppRoute.LOGIN_PAGE);
                   },
                   onTapDown: (_) {
                     setState(() {
-                      _rowColor1 = Colors.grey.withOpacity(0.3); 
+                      _rowColor2 = Colors.grey.withOpacity(0.3); 
                     });
                   },
                   onTapUp: (_) {
                     setState(() {
-                      _rowColor1 = Colors.transparent; 
+                      _rowColor2 = Colors.transparent; 
                     });
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                        color: _rowColor1, 
+                        color: _rowColor2, 
                         borderRadius: BorderRadius.circular(AppDimention.size10),
                     ),
                     
@@ -145,7 +148,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                         ),
                         Icon(
                           Icons.arrow_right_rounded,
-                          size: AppDimention.size80,
+                          size: AppDimention.size40,
                           color: AppColor.mainColor,
                         ),
                       ],

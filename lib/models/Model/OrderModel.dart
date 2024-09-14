@@ -1,4 +1,5 @@
 import 'package:android_project/models/Model/ComboModel.dart';
+import 'package:android_project/models/Model/Item/ComboItem.dart';
 
 class Ordermodel {
   bool? status;
@@ -16,6 +17,14 @@ class Ordermodel {
       json['data'].forEach((v) {
         orderitem!.add(new OrderItem.fromJson(v));
       });
+    }
+  }
+  Ordermodel.fromAJson(Map<String, dynamic> json) {
+    status = json['status'];
+    message = json['message'];
+    if (json['data'] != null) {
+      orderitem = <OrderItem>[];
+      orderitem!.add(new OrderItem.fromJson(json['data']));
     }
   }
 
@@ -186,7 +195,7 @@ class ProductDetail {
 }
 class ComboDetail {
   int? orderDetailId;
-  ComboModel? combo;
+  Comboitem? combo;
   int? quantity;
   double? unitPrice;
   double? totalPrice;
@@ -202,7 +211,7 @@ class ComboDetail {
 
   ComboDetail.fromJson(Map<String, dynamic> json) {
     orderDetailId = json['orderDetailId'];
-    combo = json['combo'] != null ? new ComboModel.fromJson(json['combo']) : null;
+    combo = json['combo'] != null ? new Comboitem.fromJson(json['combo']) : null;
     quantity = json['quantity'];
     unitPrice = json['unitPrice'];
     totalPrice = json['totalPrice'];

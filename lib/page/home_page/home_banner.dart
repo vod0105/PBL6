@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:android_project/data/controller/Combo_controller.dart';
 import 'package:android_project/models/Model/ComboModel.dart';
+import 'package:android_project/models/Model/Item/ComboItem.dart';
 import 'package:android_project/route/app_route.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
@@ -75,7 +76,7 @@ class _HomeBannerState extends State<HomeBanner> {
      
   }
 
-  Widget _buildView(ComboModel combomodel,int index) {
+  Widget _buildView(Comboitem combomodel,int index) {
 
     Matrix4 matrix = Matrix4.identity();
     if (index == currentPageValue.floor()) {
@@ -161,7 +162,7 @@ class _HomeBannerState extends State<HomeBanner> {
                         //             size: AppDimention.size15,
                         //           )),
                         // ),
-                        Text("Giá :" + combomodel.comboPrice!.toString() +" vnđ"),
+                        Text("Giá :" + combomodel.price!.toString() +" vnđ"),
                         SizedBox(width: AppDimention.size25),
                        
                       ],

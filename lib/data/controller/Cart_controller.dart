@@ -1,4 +1,5 @@
 import 'package:android_project/data/api/ApiClient.dart';
+import 'package:android_project/data/controller/Store_Controller.dart';
 import 'package:android_project/data/repository/Auth_repo.dart';
 import 'package:android_project/data/repository/Cart_repo.dart';
 import 'package:android_project/models/Dto/CartDto.dart';
@@ -6,7 +7,6 @@ import 'package:android_project/models/Dto/UserDto.dart';
 import 'package:android_project/models/Dto/UserRegisterDto.dart';
 import 'package:android_project/models/Model/CartModel.dart';
 import 'package:android_project/models/Model/MomoModel.dart';
-import 'package:android_project/models/Model/ResponeModel.dart';
 import 'package:get/get.dart';
 
 
@@ -62,7 +62,6 @@ class CartController extends GetxController implements GetxService{
   MomoModels get qrcode => _qrcode;
 
   Future<void> orderall(String address , String paymentMethod) async{
-    print(_IDSelectedCombo.length.toString() +" - "+ _IDSelectedProduct.length.toString());
 
     if( !_IDSelectedProduct.isEmpty  && _IDSelectedCombo.isEmpty)
     {
@@ -146,8 +145,6 @@ class CartController extends GetxController implements GetxService{
     else{
       _IDSelectedProduct.remove(id);
     }
-    print("Product Selected : ");
-    _IDSelectedProduct.forEach((item) => print(item));
     update();
   }
    void updateIDSelectedCombo( int id , bool value){
@@ -158,8 +155,38 @@ class CartController extends GetxController implements GetxService{
       _IDSelectedCombo.remove(id);
     }
     
-    print("Combo Selected : ");
-    _IDSelectedCombo.forEach((item) => print(item));
     update();
   }
+
+  bool checkInList(int storeId, List<int> listId) {
+    for (int item in listId) {
+      if (item == storeId) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  List<int> listIDStore =[];
+  List<int> get getlistIDStore => listIDStore;
+
+  void getDistinctStoreId() async{
+    _cartlist.forEach((item) {
+        if(checkInList(item.product.storeId, listIDStore)){
+            listIDStore.add(item.product.storeId);
+        };
+    });
+
+  }
+  List<dynamic> listCartWithStoreId = [];
+  List<dynamic> get getlistCartWithStoreId => listCartWithStoreId;
+  void getCartWithStoreId(int storeId){
+    _cartlist.forEach((item) {
+        if(item.product.storeId == storeId){
+          listCartWithStoreId.add(item.product);
+        }
+    });
+  }
+
+
 }

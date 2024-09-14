@@ -43,13 +43,7 @@ class _RegisterPageState extends State<RegisterPage> {
           Get.snackbar("Password", "Type in your password");
         }else{
           Userregisterdto userdto =  Userregisterdto(fullname: fullname,password: password,phonenumber: phonenumber,email: email,address: address);
-          auth_controller.register(userdto).then((status){
-              if(status.isSuccess){
-                 Get.snackbar("Announce", "Register success");
-              }else{
-                Get.snackbar("Error", status.message);
-              }
-          });
+          auth_controller.register(userdto);
         }
       }
 

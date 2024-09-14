@@ -1,4 +1,5 @@
 
+import 'package:android_project/data/controller/Product_controller.dart';
 import 'package:android_project/page/home_page/home_banner.dart';
 import 'package:android_project/page/home_page/home_combo.dart';
 import 'package:android_project/page/home_page/home_folder.dart';
@@ -38,18 +39,19 @@ class _HomePageState extends State<HomePage>{
                     
                     SizedBox(height: AppDimention.size15,),
                     HomeListProduct(),
-                    Container(
-                      width: AppDimention.screenWidth,
-                      height: 50,
-                      child: Center(
-                        child: GestureDetector(
-                          onTap: (){
-                            Get.toNamed(AppRoute.PRODUCT_ALL_PAGE);
-                          },
-                          child: Text("Xem thêm"),
+                    if(Get.find<ProductController>().productList.length > 10)
+                      Container(
+                        width: AppDimention.screenWidth,
+                        height: 50,
+                        child: Center(
+                          child: GestureDetector(
+                            onTap: (){
+                              Get.toNamed(AppRoute.SEARCH_PAGE);
+                            },
+                            child: Text("Xem thêm"),
+                          ),
                         ),
-                      ),
-                    )
+                      )
                    
                 ],
               ),

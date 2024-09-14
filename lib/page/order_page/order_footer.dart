@@ -1,6 +1,5 @@
 import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_color.dart';
-import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 class OrderFooter extends StatefulWidget{

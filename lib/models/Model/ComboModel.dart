@@ -1,45 +1,32 @@
+import 'package:android_project/models/Model/Item/ComboItem.dart';
+import 'package:android_project/models/Model/Item/ProductItem.dart';
 
-class ComboModel {
-  int? comboId;
-  String? comboName;
-  String? image;
-  double? comboPrice;
-  String? description;
-  ComboModel({
-    required this.comboId,
-    required this.comboName,
-    required this.image,
-    required this.comboPrice,
-    required this.description,
-  });
-  Map<String, dynamic> toJson(){
-    Map<String, dynamic> map = new Map<String, dynamic>();
+class Combomodel {
+  bool? status;
+  String? message;
+  List<Comboitem>? listcombo;
+  List<Comboitem>? get get_listcombo => listcombo;
 
-    map["comboId"] = this.comboId;
-    map["comboName"] = this.comboName;
-    map["image"] = this.image;
-    map["comboPrice"] = this.comboPrice;
-    map["description"] = this.description;
+  Combomodel({this.status, this.message, this.listcombo});
 
-    return map;
-  }
-
-  late List<ComboModel> _combos;
-  List<ComboModel> get combos => _combos;
-
-  ComboModel.fromJson(Map<String,dynamic> json){
-    comboId = json['comboId'];
-    comboName = json['comboName'];
-    image = json['image'];
-    description = json['description'];
-    comboPrice = json['price'];
-    if(json['data'] != null){
-      _combos = <ComboModel>[];
+  Combomodel.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    message = json['message'];
+    if (json['data'] != null) {
+      listcombo = <Comboitem>[];
       json['data'].forEach((v) {
-        _combos.add(ComboModel.fromJson(v));
+        listcombo!.add(new Comboitem.fromJson(v));
       });
     }
   }
 
-
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status'] = this.status;
+    data['message'] = this.message;
+    if (this.listcombo != null) {
+      data['data'] = this.listcombo!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
 }

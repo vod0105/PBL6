@@ -1,8 +1,8 @@
 import 'dart:convert';
-
+import 'dart:typed_data';
 import 'package:android_project/custom/big_text.dart';
 import 'package:android_project/data/controller/Order_controller.dart';
-import 'package:android_project/theme/app_color.dart';
+import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -46,167 +46,157 @@ class _OrderListState extends State<OrderList> {
                       vertical: AppDimention.size10, 
                       horizontal: AppDimention.size10,
                     ),
-                    decoration: BoxDecoration(
-                      color: Colors.red, 
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                  
+                  
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          margin: EdgeInsets.only(left: AppDimention.size10),
-                          child: Text('Mã đơn hàng : ${orderController.orderlist[index].orderCode}', style: TextStyle(fontWeight: FontWeight.bold)),
+                         
+                          height: AppDimention.size60,
+                           decoration: BoxDecoration(
+                              color: Colors.red, 
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Text('Mã đơn hàng : ${orderController.orderlist[index].orderCode}', style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white)),
+                              GestureDetector(
+                                onTap: (){
+                                    Get.toNamed(AppRoute.get_order_detail(orderController.orderlist[index].orderCode!));
+                                },
+                                child: Container(
+                                  width: AppDimention.size100,
+                                  height: AppDimention.size30,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(5)
+                                  ),
+                                  child: Center(
+                                    child: Text("Chi tiết",style: TextStyle(fontWeight: FontWeight.bold),),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
                         ),
                         Column(
                           children: orderDetails.map<Widget>((detail) {
                             var productOrder = detail.productDetail;
                             var comboOrder = detail.comboDetail;
                             bool key = productOrder != null;
+                            Uint8List decodeImage() {
+                                if (productOrder != null && productOrder.productImage != null) {
+                                  try {
+                                    return base64Decode(productOrder.productImage!);
+                                  } catch (e) {
+                                    print("Error decoding product image: $e");
+                                    return Uint8List(0);
+                                  }
+                                } 
+                                else {
+                                  try {
+                                    return base64Decode(comboOrder!.combo!.image!);
+                                  } catch (e) {
+                                    print("Error decoding combo image: $e");
+                                    return Uint8List(0);
+                                  }
+                                }
+                               
+                              }
                             return Container(
-                              padding: EdgeInsets.all(AppDimention.size10),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: 60,
-                                    height: 60,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      image: DecorationImage(
-                                                      fit: BoxFit.cover,
-                                                      image: MemoryImage(base64Decode(key ? (productOrder?.productImage ?? '') : (comboOrder?.combo?.image ?? ''))
-                                                      ),
-                                                    ),
-                                    ),
-                                  ),
-                                  SizedBox(width: AppDimention.size10),
-                                  Expanded(
-                                    child: Column(
+                              padding: EdgeInsets.only(top: AppDimention.size10,left: AppDimention.size10,bottom: AppDimention.size20,right: AppDimention.size10),
+                              width: AppDimention.screenWidth,
+                              margin: EdgeInsets.only(top: AppDimention.size10),
+                              decoration: BoxDecoration(
+                                color: Colors.black12,
+                                borderRadius: BorderRadius.circular(AppDimention.size10)
+                              ),
+
+                              child: 
+                                    Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        BigText(
-                                          text: key
-                                              ? productOrder?.productName ?? "No name"
-                                              : comboOrder?.combo?.comboName ?? "No name",
-                                        ),
-                                        SizedBox(height: 10),
-                                        Text(
-                                          "Giá : ${key ? productOrder?.totalPrice : comboOrder?.totalPrice} vnđ",
-                                          style: TextStyle(color: Colors.black),
-                                        ),
-                                        Text(
-                                          "Ngày đặt ${orderController.orderlist[index].orderDate}",
-                                          style: TextStyle(color: Colors.black),
-                                        ),
-                                        
-                                        SizedBox(height: AppDimention.size10),
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                
-                                                SizedBox(width: 5),
-                                                Container(
-                                                  width: 120,
-                                                  height: 30,
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(width: 1, color: Colors.white),
-                                                    borderRadius: BorderRadius.circular(5),
-                                                  ),
-                                                  child: Center(
-                                                    child: Text(
-                                                    "Số lượng : ${key ? productOrder?.quantity : comboOrder?.quantity}",
-                                                      style: TextStyle(color: Colors.white),
+                                            children: [
+                                            Container(
+                                              width: 60,
+                                              height: 60,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(10),
+                                                image: DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                  image: MemoryImage(
+                                                      decodeImage()
                                                     ),
+
                                                   ),
-                                                ),
-                                                SizedBox(width: 5),
-                                                
-                                              ],
+                                              ),
                                             ),
-                                            Row(
+                                            SizedBox(width: AppDimention.size40,),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                              
-                                                SizedBox(width: 30),
-                                                Container(
-                                                  child: Center(
-                                                    child: orderController.orderlist[index].status == "Đang chờ " ? Icon(Icons.delete_outline, color: Colors.red) : Text("Không thể hủy đơn"),
-                                                  ),
+                                                Text(
+                                                  key
+                                                      ? productOrder?.productName ?? "No name"
+                                                      : comboOrder?.combo?.comboName ?? "No name",
+                                                  style: TextStyle(color: Colors.black,fontSize: AppDimention.size25,fontWeight: FontWeight.bold),
                                                 ),
+                                                SizedBox(height: AppDimention.size10,),
+                                                Text(
+                                                  "Giá : ${key ? productOrder?.unitPrice : comboOrder?.unitPrice} vnđ",
+                                                  style: TextStyle(color: Colors.black),
+                                                ),
+                                                SizedBox(height: AppDimention.size10,),
+                                                Text(
+                                                  "Số lượng : ${key ? productOrder?.quantity : comboOrder?.quantity}",
+                                                  style: TextStyle(color: Colors.black),
+                                                ),
+                                                SizedBox(height: AppDimention.size10,),
+                                                Container(
+                                                    width: 200, // Chiều rộng tối đa mong muốn
+                                                    child: Text(
+                                                      "Ngày đặt : ${orderController.orderlist[index].orderDate}",
+                                                      style: TextStyle(color: Colors.black),
+                                                      overflow: TextOverflow.ellipsis,
+                                                    ),
+                                                  )
+
                                               ],
-                                            ),
+                                            )
                                           ],
                                         ),
-                                        SizedBox(height: AppDimention.size10),
-                                        
+                                         
                                       ],
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                    )
+                              
+                            
                             );
                           }).toList(),
                         ),
                       ],
                     ),
                   ),
-                  Column(
-                    children: [
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  Container(
+                    width: AppDimention.screenWidth,
+                    margin: EdgeInsets.only(left: AppDimention.size10,right: AppDimention.size10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                         Row(
                           children: [
-                            Container(
-                              width: AppDimention.size20,
-                              height: AppDimention.size20,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(AppDimention.size20),
-                                color: Colors.grey
-                              ),
-                            ),
-                            Container(
-                              width: AppDimention.size20,
-                              height: AppDimention.size20,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(AppDimention.size20),
-                                color: Colors.greenAccent
-                              ),
-                            ),
-                            Container(
-                              width: AppDimention.size20,
-                              height: AppDimention.size20,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(AppDimention.size20),
-                                color: Colors.grey
-                              ),
-                            ),
-                            Container(
-                              width: AppDimention.size20,
-                              height: AppDimention.size20,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(AppDimention.size20),
-                                color: Colors.grey
-                              ),
-                            ),
+                             Icon(Icons.today_outlined,size: AppDimention.size30,),
+                            SizedBox(width: AppDimention.size10,),
+                            Text(orderController.orderlist[index].totalAmount.toString() +" vnđ ",style: TextStyle())
                           ],
-                    ),
-                    Container(
-                      width: AppDimention.screenWidth,
-                      height: 50,
-                      margin: EdgeInsets.only(left: 10,right: 10),
-                      decoration: BoxDecoration(
-                        border: Border(left: BorderSide(width: 1),right: BorderSide(width: 1),bottom: BorderSide(width: 1)),
-                        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10),bottomRight: Radius.circular(10))
+                         ),
+                         Text(orderController.orderlist[index].status.toString(),)
+                        ],
                       ),
-                      child: Center(
-                        child: Text("Tổng giá : ${orderController.orderlist[index].totalAmount} vnđ",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-                      ),
-                    ),
-                    SizedBox(height: AppDimention.size50,)
-                  
-                    ],
-                  )
-                
+                  ),
+                  SizedBox(height: AppDimention.size40,)
               ],
             );
           },

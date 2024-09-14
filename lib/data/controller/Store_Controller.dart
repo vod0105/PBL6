@@ -22,13 +22,23 @@ class Storecontroller extends GetxController {
         print("Lấy dữ liệu danh sách cửa hàng thành công");
         var data = response.body;
         _storeList = [];
-        _storeList.addAll(StoreModel.fromJson(data).stores);
-        print(_storeList);
+        _storeList.addAll(Storesmodel.fromJson(data).get_liststores ?? []);
       }else{
         print("Lỗi không lấy được danh sách cửa hàng : "+ response.statusCode.toString());
       }
       _isLoading = true;
       update();
+  }
+  
+  Future<String> getnamestoreByid(int id) async{
+      Response response = await storeRepo.getbyid(id);
+      if(response.statusCode == 200){
+        var data = response.body["data"];
+        return data["storeName"];
+      }
+      else{
+        return "No name";
+      }
   }
 
 }
