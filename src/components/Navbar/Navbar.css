@@ -1,0 +1,229 @@
+.navbar {
+  padding: 20px 0px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 50px;
+  position: relative;
+}
+
+.navbar .logo{
+  display: flex;
+  align-items: flex-end;
+}
+.navbar .logo .logo-image {
+  width: 60px;
+}
+
+/* .navbar .logo .logo-name {
+  font-size: 25px;
+  font-weight: 800;
+  color: red;
+  margin: 0;
+} */
+
+.navbar-menu {
+  display: flex;
+  list-style: none;
+  gap: 20px;
+  color: #49557e;
+  font-size: 15px;
+  padding-top: 20px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+.navbar button {
+  background: transparent;
+  font-size: 16px;
+  color: #49557e;
+  border: 1px solid tomato;
+  padding: 10px 30px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.navbar button:hover {
+  background-color: #fff4f2;
+}
+.navbar .active {
+  padding-bottom: 2px;
+  border-bottom: 3px solid #d64747;
+}
+
+.navbar li {
+  cursor: pointer;
+}
+.navbar-search-icon {
+  position: relative;
+}
+.navbar-search-icon .dot {
+  position: absolute;
+  min-width: 10px;
+  min-height: 10px;
+  background-color: tomato;
+  border-radius: 5px;
+  top: -8px;
+  right: -8px;
+}
+
+
+/* Drop-down */
+.navbar-profile {
+  position: relative;
+}
+.navbar-profile-dropdown hr {
+  height: 1px;
+  padding: 0;
+  margin: 0;
+}
+.navbar-profile-dropdown {
+  position: absolute;
+  display: none; /* Ẩn drop-down đi */
+  right: 0;
+  z-index: 1;
+  /* margin: 0 auto; */
+}
+
+
+.navbar-profile:hover .navbar-profile-dropdown {  /* Khi nào hover vô div mới hiện drop-down ni => Ko hover => Dropdown tự về mặc định (display: none)  */
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  background-color: #fff2ef;
+  padding: 5px 25px;
+  border-radius: 4px;
+  border: 1px solid tomato;
+  outline: 2px solid white;
+  list-style: none;
+}
+.navbar-profile-dropdown li {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  cursor: pointer;
+  height: auto;
+  min-width: 25px;
+  min-height: 25px;
+}
+.navbar-profile-dropdown li p {
+  align-items: center;
+  padding-top: 10px;
+}
+.navbar-profile img {
+  padding-bottom: 5px;
+  padding-right: 15px;
+}
+.navbar-profile-dropdown li:hover {
+  color: tomato;
+}
+.navbar-profile-dropdown li img{
+  width: 35px;
+}
+
+
+/*  */
+@media (max-width: 1050px) {
+  .navbar .logo {
+    width: 140px;
+  }
+  .navbar-menu {
+    gap: 20px;
+    font-size: 17px;
+  }
+  .navbar-right {
+    gap: 30px;
+  }
+  .navbar-right img {
+    width: 24px;
+  }
+  .navbar-right button {
+    padding: 8px 25px;
+  }
+}
+
+@media (max-width: 900px) {
+  .navbar .logo {
+    width: 120px;
+  }
+  .navbar-menu {
+    gap: 15px;
+    font-size: 16px;
+  }
+  .navbar-right {
+    gap: 20px;
+  }
+  .navbar-right img {
+    width: 22px;
+  }
+  .navbar-right button {
+    padding: 7px 20px;
+    font-size: 15px;
+  }
+}
+@media (max-width: 750px) {
+  .navbar-menu {
+    display: none;
+  }
+}
+
+
+
+/* Thực đơn */
+.navbar-category{
+  /* padding-bottom: 30px; */
+}
+.navbar-category-dropdown {
+  position: absolute;
+  display: none; /* Ẩn drop-down đi */
+  top: 65%; /* Vị trí ngay phía dưới phần tử cha */
+  left: 50%; /* Đẩy phần tử sang giữa */
+  transform: translateX(-50%); /* Dịch ngược lại 50% chiều rộng để căn giữa */
+  z-index: 1;
+  width: 80%; /* Chiều rộng của dropdown */
+  background-color: white; /* Đặt màu nền nếu cần */
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2); /* Tạo hiệu ứng đổ bóng */
+}
+
+/* .navbar-category:hover  */
+.navbar-category:hover .navbar-category-dropdown {  /* Khi nào hover vô div mới hiện drop-down ni => Ko hover => Dropdown tự về mặc định (display: none)  */
+  display: flex;
+  gap: 20px;
+  background-color: #fff2ef;
+  padding: 20px 30px;
+  border-radius: 4px;
+  border: 1px solid tomato;
+  list-style: none;
+  justify-content: space-around;
+  border-radius: 15px;
+}
+.navbar-category-dropdown li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  cursor: pointer;
+  height: auto;
+  min-width: 25px;
+  min-height: 25px;
+}
+.navbar-category-dropdown li p {
+  align-items: center;
+  padding-top: 10px;
+  font-size: 13px;
+  margin: 0;
+}
+.navbar-category-dropdown li:hover {
+  color: tomato;
+}
+.navbar-category-dropdown li img{
+  width: 70px;
+  height: 50px;
+}
