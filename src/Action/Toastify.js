@@ -7,7 +7,7 @@ const Toastify = () => {
   }
   return (
     <div>
-      <button onClick={notify}>click</button>
+      <button onClick={notify}>clickNeAhihi</button>
       <ToastContainer/>
     </div>
   )
