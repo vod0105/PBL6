@@ -43,6 +43,7 @@ import UpdateCategory from "./pages/CateGory/UpdateCategory";
 import Product from "./pages/Product/Product";
 import AddProduct from "./pages/Product/AddProduct";
 import AddProducToStore from "./pages/Product/AddproductToStore";
+import AddProducToAllStore from "./pages/Product/AddproductToAllStore";
 
 const App = () => {
   // const isAuthenticated = !!localStorage.getItem("access_token"); // Kiểm tra nếu có token
@@ -266,6 +267,23 @@ const App = () => {
                   <Sidebar />
                   <div className="dashboard-content">
                     <AddProducToStore url={url} />
+                  </div>
+                </div>
+              </>
+            )
+          }
+        />
+        <Route
+          path="/admin/AddProductToAllStore"
+          element={
+            !isAuthenticated ? (
+              <Navigate to="/" />
+            ) : (
+              <>
+                <div className="dashboard">
+                  <Sidebar />
+                  <div className="dashboard-content">
+                    <AddProducToAllStore url={url} />
                   </div>
                 </div>
               </>
