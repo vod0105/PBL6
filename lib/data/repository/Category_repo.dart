@@ -7,7 +7,7 @@ class CategoryRepo {
   CategoryRepo({
     required this.apiClient,
   });
-  Future<Response> getall() async{
-      return await apiClient.getData(Appconstant.CATEGORY_URL);
+  Future<Response> getall() async {
+    return await apiClient.getData(Appconstant.CATEGORY_URL);
   }
 }

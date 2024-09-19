@@ -1,4 +1,3 @@
-
 import 'package:android_project/data/api/ApiClient.dart';
 import 'package:android_project/data/api/AppConstant.dart';
 import 'package:android_project/data/controller/Auth_controller.dart';
@@ -24,27 +23,28 @@ import 'package:android_project/data/repository/User_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 Future<void> init() async {
-  final sharedPreferences = await SharedPreferences.getInstance(); 
-  Get.lazyPut(() => sharedPreferences); 
+  final sharedPreferences = await SharedPreferences.getInstance();
+  Get.lazyPut(() => sharedPreferences);
   // api client
- Get.lazyPut(() => ApiClient(appBaseUrl: Appconstant.BASE_URL));
- 
- Get.lazyPut(() => AuthRepo(apiClient: Get.find(), sharedPreferences: Get.find()));
- Get.lazyPut(() => AuthController(authRepo: Get.find()));
+  Get.lazyPut(() => ApiClient(appBaseUrl: Appconstant.BASE_URL));
 
- Get.lazyPut(() => ComboRepo(apiClient: Get.find()));
- Get.lazyPut(() => ComboController(comboRepo: Get.find()));
+  Get.lazyPut(
+      () => AuthRepo(apiClient: Get.find(), sharedPreferences: Get.find()));
+  Get.lazyPut(() => AuthController(authRepo: Get.find()));
 
- Get.lazyPut(() => ProductRepo(apiClient: Get.find()));
- Get.lazyPut(() => ProductController(productRepo: Get.find()));
+  Get.lazyPut(() => ComboRepo(apiClient: Get.find()));
+  Get.lazyPut(() => ComboController(comboRepo: Get.find()));
+
+  Get.lazyPut(() => ProductRepo(apiClient: Get.find()));
+  Get.lazyPut(() => ProductController(productRepo: Get.find()));
 
   Get.lazyPut(() => StoreRepo(apiClient: Get.find()));
- Get.lazyPut(() => Storecontroller(storeRepo: Get.find()));
+  Get.lazyPut(() => Storecontroller(storeRepo: Get.find()));
 
- Get.lazyPut(() => OrderRepo(apiClient: Get.find()));
- Get.lazyPut(() => OrderController(orderRepo: Get.find()));
-
+  Get.lazyPut(() => OrderRepo(apiClient: Get.find()));
+  Get.lazyPut(() => OrderController(orderRepo: Get.find()));
 
   Get.lazyPut(() => CategoryRepo(apiClient: Get.find()));
   Get.lazyPut(() => CategoryController(categoryRepo: Get.find()));
@@ -58,9 +58,6 @@ Future<void> init() async {
   Get.lazyPut(() => ChartRepo(apiClient: Get.find()));
   Get.lazyPut(() => ChartController(chartRepo: Get.find()));
 
-
   Get.put(CartRepo(apiClient: Get.find()));
   Get.put(CartController(cartRepo: Get.find()));
-
-
-} 
+}

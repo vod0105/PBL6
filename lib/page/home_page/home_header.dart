@@ -28,14 +28,14 @@ class _HomeHeaderState extends State<HomeHeader> {
     return Container(
       margin: EdgeInsets.only(
           top: AppDimention.size40, bottom: AppDimention.size20),
-      padding:
-          EdgeInsets.only(left: AppDimention.size20, right: AppDimention.size20),
+      padding: EdgeInsets.only(
+          left: AppDimention.size20, right: AppDimention.size20),
       child: Row(
         children: [
           GestureDetector(
-            onTap: (){
-                Get.toNamed(AppRoute.CAMERA_PAGE);
-            },  
+            onTap: () {
+              Get.toNamed(AppRoute.CAMERA_PAGE);
+            },
             child: Icon(
               Icons.camera_alt_outlined,
               color: AppColor.mainColor,
@@ -46,7 +46,6 @@ class _HomeHeaderState extends State<HomeHeader> {
             child: TextField(
               controller: searchController,
               decoration: InputDecoration(
-                
                 hintText: "Search ...",
                 prefixIcon: Icon(
                   Icons.search,
@@ -66,19 +65,25 @@ class _HomeHeaderState extends State<HomeHeader> {
               ),
             ),
           ),
-          SizedBox(width: AppDimention.size5,),
+          SizedBox(
+            width: AppDimention.size5,
+          ),
           Container(
             width: 40,
             height: 40,
-            child:Stack(
+            child: Stack(
               children: [
                 Positioned(
                   bottom: 0,
                   child: GestureDetector(
-                    onTap: (){
-                       Get.toNamed(AppRoute.CART_PAGE);
+                    onTap: () {
+                      Get.toNamed(AppRoute.CART_PAGE);
                     },
-                    child: Icon(Icons.shopping_cart_outlined,color: Colors.black,size: AppDimention.size30,),
+                    child: Icon(
+                      Icons.shopping_cart_outlined,
+                      color: Colors.black,
+                      size: AppDimention.size30,
+                    ),
                   ),
                 ),
                 Positioned(
@@ -86,23 +91,30 @@ class _HomeHeaderState extends State<HomeHeader> {
                   top: 0,
                   width: 20,
                   height: 20,
-                  child: Container(   
+                  child: Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(20),),
-                      border: Border.all(color: Colors.white,width: 2),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                      border: Border.all(color: Colors.white, width: 2),
                       color: AppColor.mainColor,
                     ),
                     child: Container(
-                      width: AppDimention.size10,
-                      height:  AppDimention.size10,
-                      child: Center(
-                        child: Text(Get.find<CartController>().cartlist.length.toString(),style: TextStyle(color: Colors.white,fontSize: 12),),
-                      )
-                    ),
+                        width: AppDimention.size10,
+                        height: AppDimention.size10,
+                        child: Center(
+                          child: Text(
+                            Get.find<CartController>()
+                                .cartlist
+                                .length
+                                .toString(),
+                            style: TextStyle(color: Colors.white, fontSize: 12),
+                          ),
+                        )),
                   ),
                 )
               ],
-            ) ,
+            ),
           ),
         ],
       ),

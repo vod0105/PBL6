@@ -22,7 +22,6 @@ class _HomeBannerState extends State<HomeBanner> {
   double currentPageValue = 0.0;
   final double _scaleFactor = 0.8;
   final double _height = AppDimention.pageView;
-  
 
   @override
   void initState() {
@@ -45,39 +44,41 @@ class _HomeBannerState extends State<HomeBanner> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ComboController>(builder: (comboController) {
-          return comboController.isLoading ? Container(
-            height: _height,
-            width: double.maxFinite,
-            child: Column(
-              children: [
-                Expanded(
-                  child: PageView.builder(
-                    controller: pageController,
-                    itemCount: comboController.comboList.length,
-                    itemBuilder: (context, position) {
-                      return _buildView(comboController.comboList[position],position);
-                    },
+      return comboController.isLoading
+          ? Container(
+              height: _height,
+              width: double.maxFinite,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: PageView.builder(
+                      controller: pageController,
+                      itemCount: comboController.comboList.length,
+                      itemBuilder: (context, position) {
+                        return _buildView(
+                            comboController.comboList[position], position);
+                      },
+                    ),
                   ),
-                ),
-                DotsIndicator(
+                  DotsIndicator(
                     dotsCount: comboController.comboList.length,
                     position: currentPageValue,
                     decorator: DotsDecorator(
-                    activeColor: AppColor.mainColor,
-                    size: const Size.square(9.0),
-                    activeSize: const Size(18.0, 9.0),
-                    activeShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-                  ),
-                )
-              ],
-            ),
-          ): CircularProgressIndicator();
+                      activeColor: AppColor.mainColor,
+                      size: const Size.square(9.0),
+                      activeSize: const Size(18.0, 9.0),
+                      activeShape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0)),
+                    ),
+                  )
+                ],
+              ),
+            )
+          : CircularProgressIndicator();
     });
-     
   }
 
-  Widget _buildView(Comboitem combomodel,int index) {
-
+  Widget _buildView(Comboitem combomodel, int index) {
     Matrix4 matrix = Matrix4.identity();
     if (index == currentPageValue.floor()) {
       var currentScale = 1 - (currentPageValue - index) * (1 - _scaleFactor);
@@ -85,7 +86,8 @@ class _HomeBannerState extends State<HomeBanner> {
       matrix = Matrix4.diagonal3Values(1, currentScale, 1)
         ..setTranslationRaw(0, currentTransform, 0);
     } else if (index == currentPageValue.floor() + 1) {
-      var currentScale = _scaleFactor + (currentPageValue - index + 1) * (1 - _scaleFactor);
+      var currentScale =
+          _scaleFactor + (currentPageValue - index + 1) * (1 - _scaleFactor);
       var currentTransform = _height * (1 - currentScale) / 2;
       matrix = Matrix4.diagonal3Values(1, currentScale, 1)
         ..setTranslationRaw(0, currentTransform, 0);
@@ -105,7 +107,7 @@ class _HomeBannerState extends State<HomeBanner> {
         children: [
           GestureDetector(
             onTap: () {
-                Get.toNamed(AppRoute.get_combo_detail(index));
+              Get.toNamed(AppRoute.get_combo_detail(index));
             },
             child: Container(
               height: AppDimention.pageViewContainer,
@@ -117,7 +119,6 @@ class _HomeBannerState extends State<HomeBanner> {
                   fit: BoxFit.cover,
                   image: MemoryImage(base64Decode(combomodel.image!)),
                 ),
-
               ),
             ),
           ),
@@ -162,9 +163,8 @@ class _HomeBannerState extends State<HomeBanner> {
                         //             size: AppDimention.size15,
                         //           )),
                         // ),
-                        Text("Giá :" + combomodel.price!.toString() +" vnđ"),
+                        Text("Giá :" + combomodel.price!.toString() + " vnđ"),
                         SizedBox(width: AppDimention.size25),
-                       
                       ],
                     ),
                   ],

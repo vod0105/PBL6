@@ -28,7 +28,8 @@ class CameraPageState extends State<CameraPage>
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
-    _rotationAnimation = Tween<double>(begin: 0, end: 90).animate(_animationController);
+    _rotationAnimation =
+        Tween<double>(begin: 0, end: 90).animate(_animationController);
 
     _setupCameraController();
   }
@@ -45,7 +46,8 @@ class CameraPageState extends State<CameraPage>
     if (_camera.isNotEmpty) {
       setState(() {
         cameras = _camera;
-        cameraController = CameraController(_camera.first, ResolutionPreset.high);
+        cameraController =
+            CameraController(_camera.first, ResolutionPreset.high);
       });
       cameraController?.initialize().then((_) {
         setState(() {});
@@ -55,17 +57,15 @@ class CameraPageState extends State<CameraPage>
 
   void _onTap() {
     if (_animationController.status == AnimationStatus.completed) {
-      _animationController.reverse(); 
+      _animationController.reverse();
     } else {
       _animationController.forward().then((_) {
-        
-        Future.delayed(const Duration(microseconds:100 ), () {
-          _animationController.reverse(); 
+        Future.delayed(const Duration(microseconds: 100), () {
+          _animationController.reverse();
         });
       });
     }
   }
-
 
   Widget _buildUI() {
     if (cameraController == null || !cameraController!.value.isInitialized) {
@@ -94,7 +94,8 @@ class CameraPageState extends State<CameraPage>
                       animation: _rotationAnimation,
                       builder: (context, child) {
                         return Transform.rotate(
-                          angle: _rotationAnimation.value * (3.1415926535 / 180),
+                          angle:
+                              _rotationAnimation.value * (3.1415926535 / 180),
                           child: const Icon(
                             Icons.camera,
                             color: Colors.white,

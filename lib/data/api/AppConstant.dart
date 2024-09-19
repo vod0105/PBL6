@@ -28,6 +28,7 @@ class Appconstant {
   static const String ORDER_COMBO_URL = "/api/v1/user/order/create/combo";
   static const String ORDER_PRODUCT_MOMO_URL = "/api/v1/user/order/create";
   static const String ORDER_BY_ORDERCODE_URL = "/api/v1/user/order/history/{ordercode}";
+  static const String ORDER_BY_ORDERSTATUS_URL = "/api/v1/user/order/history/status?status={status}";
   
   static const String USER_PROFILE_URL = "/api/v1/user/auth/profile";
   static const String USER_UPDATE_PROFILE_URL = "/api/v1/user/auth/profile/update";

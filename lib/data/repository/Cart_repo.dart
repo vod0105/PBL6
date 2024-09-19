@@ -7,21 +7,25 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CartRepo {
-   final ApiClient apiClient;
-   CartRepo({
+  final ApiClient apiClient;
+  CartRepo({
     required this.apiClient,
-   });
-   Future<Response> getall() async{
-      return await apiClient.getData(Appconstant.CART_URL);
-   }
-   Future<Response> orderproduct(Cartdto cart) async{
-      return await apiClient.postData(Appconstant.ORDER_PRODUCT_URL,cart.toJson());
-   }
-    Future<Response> ordercombo(Cartdto cart) async{
-      return await apiClient.postData(Appconstant.ORDER_COMBO_URL,cart.toJson());
-   }
-    Future<Response> orderproductMOMO(Cartdto cart) async{
-      return await apiClient.postData(Appconstant.ORDER_PRODUCT_MOMO_URL,cart.toJson());
-   }
-   
+  });
+  Future<Response> getall() async {
+    return await apiClient.getData(Appconstant.CART_URL);
+  }
+
+  Future<Response> orderproduct(Cartdto cart) async {
+    return await apiClient.postData(
+        Appconstant.ORDER_PRODUCT_URL, cart.toJson());
+  }
+
+  Future<Response> ordercombo(Cartdto cart) async {
+    return await apiClient.postData(Appconstant.ORDER_COMBO_URL, cart.toJson());
+  }
+
+  Future<Response> orderproductMOMO(Cartdto cart) async {
+    return await apiClient.postData(
+        Appconstant.ORDER_PRODUCT_MOMO_URL, cart.toJson());
+  }
 }

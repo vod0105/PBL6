@@ -4,13 +4,13 @@ import 'package:get/get.dart';
 
 class SizeRepo {
   final ApiClient apiClient;
-  SizeRepo({
-    required this.apiClient
-  });
-  Future<Response> getall() async{
+  SizeRepo({required this.apiClient});
+  Future<Response> getall() async {
     return await apiClient.getData(Appconstant.SIZE_URL);
   }
-  Future<Response> getbyid(int id) async{
-    return await apiClient.getData(Appconstant.SIZE_BY_ID_URL.replaceFirst(("{id}"), id.toString()));
+
+  Future<Response> getbyid(int id) async {
+    return await apiClient.getData(
+        Appconstant.SIZE_BY_ID_URL.replaceFirst(("{id}"), id.toString()));
   }
 }

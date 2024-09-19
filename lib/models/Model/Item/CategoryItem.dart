@@ -4,7 +4,8 @@ class Categoryitem {
   String? description;
   String? image;
 
-  Categoryitem({this.categoryId, this.categoryName, this.description, this.image});
+  Categoryitem(
+      {this.categoryId, this.categoryName, this.description, this.image});
 
   Categoryitem.fromJson(Map<String, dynamic> json) {
     categoryId = json['categoryId'];

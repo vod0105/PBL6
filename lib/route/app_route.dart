@@ -21,8 +21,13 @@ class AppRoute {
   static String ORDER_DETAIL_PAGE = "/order-detail";
   static String CHART_PAGE = "/chart";
 
-  static String get_order_detail(String orderCode) => '$ORDER_DETAIL_PAGE?orderCode=$orderCode';
-  static String get_combo_detail(int comboId) => '$COMBO_DETAIL?comboId=$comboId';
-  static String get_product_detail(int productId) => '$PRODUCT_DETAIL?productId=$productId';
-  static String get_product_bycategoryid_detail(int categoryid,String categoryname) => '$CATEGORY_DETAIL_PAGE?categoryid=$categoryid&categoryname=$categoryname';
+  static String get_order_detail(String orderCode) =>
+      '$ORDER_DETAIL_PAGE?orderCode=$orderCode';
+  static String get_combo_detail(int comboId) =>
+      '$COMBO_DETAIL?comboId=$comboId';
+  static String get_product_detail(int productId) =>
+      '$PRODUCT_DETAIL?productId=$productId';
+  static String get_product_bycategoryid_detail(
+          int categoryid, String categoryname) =>
+      '$CATEGORY_DETAIL_PAGE?categoryid=$categoryid&categoryname=$categoryname';
 }

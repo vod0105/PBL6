@@ -7,13 +7,13 @@ class ComboRepo {
   ComboRepo({
     required this.apiClient,
   });
-  Future<Response> getall() async{
-      return await apiClient.getData(Appconstant.COMBO_URL);
+  Future<Response> getall() async {
+    return await apiClient.getData(Appconstant.COMBO_URL);
   }
- Future<Response> getbyid(int id) async {
-  String url = Appconstant.COMBO_BY_COMBOID_URL.replaceFirst("{id}", id.toString());
-  return await apiClient.getData(url);
-}
 
-  
+  Future<Response> getbyid(int id) async {
+    String url =
+        Appconstant.COMBO_BY_COMBOID_URL.replaceFirst("{id}", id.toString());
+    return await apiClient.getData(url);
+  }
 }

@@ -8,7 +8,7 @@ class Productitem {
   String? description;
   double? price;
   double? discountedPrice;
-  Categoryitem ? category;
+  Categoryitem? category;
   List<Storesitem>? stores;
   int? stockQuantity;
   String? createdAt;

@@ -1,4 +1,3 @@
-
 class Cartmodel {
   bool? status;
   String? message;
@@ -40,8 +39,9 @@ class CartData {
   CartData.fromJson(Map<String, dynamic> json) {
     cartId = json['cartId'];
     type = json['type'];
-    product =
-        json['product'] != null ? new ProductInCart.fromJson(json['product']) : null;
+    product = json['product'] != null
+        ? new ProductInCart.fromJson(json['product'])
+        : null;
     combo =
         json['combo'] != null ? new ComboInCart.fromJson(json['combo']) : null;
   }
@@ -173,7 +173,7 @@ class ComboInCart {
     data['status'] = this.status;
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
-     data['size'] = this.size;
+    data['size'] = this.size;
     return data;
   }
 }

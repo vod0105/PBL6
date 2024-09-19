@@ -58,7 +58,8 @@ class _CartListState extends State<CartList> {
                           isSelected[index] = value!;
                           var id = cartController.cartlist[index].cartId;
                           cartController.cartlist[index].product != null
-                              ? cartController.updateIDSelectedProduct(id, value)
+                              ? cartController.updateIDSelectedProduct(
+                                  id, value)
                               : cartController.updateIDSelectedCombo(id, value);
                         });
                       },
@@ -76,7 +77,8 @@ class _CartListState extends State<CartList> {
                           ),
                           BigText(
                             text: cartController.cartlist[index].product != null
-                                ? cartController.cartlist[index].product.productName
+                                ? cartController
+                                    .cartlist[index].product.productName
                                 : cartController.cartlist[index].combo.comboName
                                     .toString(),
                           ),
@@ -91,45 +93,69 @@ class _CartListState extends State<CartList> {
                                   image: DecorationImage(
                                     fit: BoxFit.cover,
                                     image: MemoryImage(base64Decode(
-                                      cartController.cartlist[index].product != null
-                                          ? cartController.cartlist[index].product.image!
-                                          : cartController.cartlist[index].combo.image!,
+                                      cartController.cartlist[index].product !=
+                                              null
+                                          ? cartController
+                                              .cartlist[index].product.image!
+                                          : cartController
+                                              .cartlist[index].combo.image!,
                                     )),
                                   ),
                                 ),
                               ),
                               SizedBox(width: AppDimention.size10),
                               Container(
-                                width: AppDimention.size220 - AppDimention.size20,
+                                width:
+                                    AppDimention.size220 - AppDimention.size20,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       "Giá : " +
-                                          (cartController.cartlist[index].product != null
-                                              ? cartController.cartlist[index].product!.unitPrice.toString()
-                                              : cartController.cartlist[index].combo!.unitPrice.toString()),
-                                      style: TextStyle(color: AppColor.mainColor),
+                                          (cartController.cartlist[index]
+                                                      .product !=
+                                                  null
+                                              ? cartController.cartlist[index]
+                                                  .product!.unitPrice
+                                                  .toString()
+                                              : cartController.cartlist[index]
+                                                  .combo!.unitPrice
+                                                  .toString()),
+                                      style:
+                                          TextStyle(color: AppColor.mainColor),
                                     ),
                                     Text(
                                       "Size : " +
-                                          (cartController.cartlist[index].product != null
-                                              ? cartController.cartlist[index].product.size.toString()
-                                              : cartController.cartlist[index].combo.size.toString()),
+                                          (cartController.cartlist[index]
+                                                      .product !=
+                                                  null
+                                              ? cartController
+                                                  .cartlist[index].product.size
+                                                  .toString()
+                                              : cartController
+                                                  .cartlist[index].combo.size
+                                                  .toString()),
                                       style: TextStyle(color: Colors.blue[300]),
                                     ),
                                     // FutureBuilder to load store name
                                     FutureBuilder<String>(
-                                      future: Get.find<Storecontroller>().getnamestoreByid(
-                                        cartController.cartlist[index].product != null
-                                            ? cartController.cartlist[index].product.storeId
-                                            : cartController.cartlist[index].combo.storeId,
+                                      future: Get.find<Storecontroller>()
+                                          .getnamestoreByid(
+                                        cartController
+                                                    .cartlist[index].product !=
+                                                null
+                                            ? cartController
+                                                .cartlist[index].product.storeId
+                                            : cartController
+                                                .cartlist[index].combo.storeId,
                                       ),
                                       builder: (context, snapshot) {
-                                        if (snapshot.connectionState == ConnectionState.waiting) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
                                           return Text("Loading...");
                                         } else if (snapshot.hasError) {
-                                          return Text("Error loading store name");
+                                          return Text(
+                                              "Error loading store name");
                                         } else {
                                           return Text(
                                             snapshot.data ?? "No store name",
@@ -158,7 +184,8 @@ class _CartListState extends State<CartList> {
                                       height: AppDimention.size30,
                                       decoration: BoxDecoration(
                                           color: AppColor.mainColor,
-                                          borderRadius: BorderRadius.circular(5)),
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
                                       child: Center(
                                         child: Icon(
                                           Icons.remove,
@@ -176,9 +203,15 @@ class _CartListState extends State<CartList> {
                                         borderRadius: BorderRadius.circular(5)),
                                     child: Center(
                                       child: Text(
-                                        cartController.cartlist[index].product != null
-                                            ? cartController.cartlist[index].product.quantity.toString()
-                                            : cartController.cartlist[index].combo.quantity.toString(),
+                                        cartController
+                                                    .cartlist[index].product !=
+                                                null
+                                            ? cartController.cartlist[index]
+                                                .product.quantity
+                                                .toString()
+                                            : cartController
+                                                .cartlist[index].combo.quantity
+                                                .toString(),
                                       ),
                                     ),
                                   ),
@@ -190,7 +223,8 @@ class _CartListState extends State<CartList> {
                                       height: AppDimention.size30,
                                       decoration: BoxDecoration(
                                           color: AppColor.mainColor,
-                                          borderRadius: BorderRadius.circular(5)),
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
                                       child: Center(
                                         child: Icon(
                                           Icons.add,

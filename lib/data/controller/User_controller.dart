@@ -7,15 +7,14 @@ import 'package:android_project/models/Dto/UserUpdateDto.dart';
 import 'package:android_project/models/Model/UserModel.dart';
 import 'package:get/get.dart';
 
-
-class UserController extends GetxController implements GetxService{
+class UserController extends GetxController implements GetxService {
   final UserRepo userRepo;
   UserController({
     required this.userRepo,
   });
-  bool _isLoading= false;
-  bool get isLoading =>_isLoading;
-  
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
   User? _userprofile;
   User? get userprofile => _userprofile;
 
@@ -26,31 +25,26 @@ class UserController extends GetxController implements GetxService{
     if (response.statusCode == 200) {
       var data = response.body;
       _userprofile = Usermodel.fromJson(data).getuser;
-    } else {
-      
-    }
+    } else {}
     _isLoading = false;
     update();
   }
 
   MultipartFile? base64Image;
-  void updateAvatar(MultipartFile newimage){
+  void updateAvatar(MultipartFile newimage) {
     base64Image = newimage;
     update();
   }
-  
+
   Future<void> updateprofile(Userupdatedto updatedto) async {
     _isLoading = true;
     update();
-  
+
     Response response = await userRepo.updateprofile(updatedto);
     if (response.statusCode == 200) {
       Get.snackbar("Thông báo", "Cập nhật thành công");
-    } else {
-      
-    }
+    } else {}
     _isLoading = false;
     update();
   }
-
 }

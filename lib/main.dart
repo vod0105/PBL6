@@ -1,4 +1,3 @@
-
 import 'package:android_project/data/controller/Auth_controller.dart';
 import 'package:android_project/data/controller/Cart_controller.dart';
 import 'package:android_project/data/controller/Category_controller.dart';
@@ -14,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:android_project/helper/dependencies.dart' as dep;
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dep.init();
@@ -23,10 +21,9 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
-
     final authController = Get.find<AuthController>();
 
     authController.IsLogin.listen((loggedIn) {
@@ -40,14 +37,12 @@ class MyApp extends StatelessWidget {
         Get.find<SizeController>().getall();
       }
     });
-   
-    
+
     return GetMaterialApp(
       initialRoute: AppRoute.LOGIN_PAGE,
       getPages: AppPages.list,
-        debugShowCheckedModeBanner: false,
-      
-        themeMode: ThemeMode.light,
+      debugShowCheckedModeBanner: false,
+      themeMode: ThemeMode.light,
     );
   }
 }

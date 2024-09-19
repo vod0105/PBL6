@@ -33,7 +33,8 @@ class ProfileCameraState extends State<ProfileCamera>
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
-    _rotationAnimation = Tween<double>(begin: 0, end: 90).animate(_animationController);
+    _rotationAnimation =
+        Tween<double>(begin: 0, end: 90).animate(_animationController);
 
     _setupCameraController();
   }
@@ -50,7 +51,8 @@ class ProfileCameraState extends State<ProfileCamera>
     if (_camera.isNotEmpty) {
       setState(() {
         cameras = _camera;
-        cameraController = CameraController(_camera.first, ResolutionPreset.high);
+        cameraController =
+            CameraController(_camera.first, ResolutionPreset.high);
       });
       cameraController?.initialize().then((_) {
         setState(() {});
@@ -58,39 +60,35 @@ class ProfileCameraState extends State<ProfileCamera>
     }
   }
 
-Future<void> _onTap() async {
-  if (_animationController.status == AnimationStatus.completed) {
-    _animationController.reverse(); 
-  } else {
-    _animationController.forward().then((_) async {
-      await Future.delayed(const Duration(microseconds: 100));
-      
-      try {
-        final image = await cameraController?.takePicture();
-        
-        if (image != null) {
-          final imagePath = image.path;
-          final imageFile = File(imagePath);
-          final imageBytes = await imageFile.readAsBytes();
-          
-          
-          final multipartFile = http.MultipartFile.fromBytes(
-            'file', 
-            imageBytes, 
-            filename: 'image.jpg'  
-          );
-          final userController = Get.find<UserController>();
-          //  userController.updateAvatar(multipartFile);
+  Future<void> _onTap() async {
+    if (_animationController.status == AnimationStatus.completed) {
+      _animationController.reverse();
+    } else {
+      _animationController.forward().then((_) async {
+        await Future.delayed(const Duration(microseconds: 100));
+
+        try {
+          final image = await cameraController?.takePicture();
+
+          if (image != null) {
+            final imagePath = image.path;
+            final imageFile = File(imagePath);
+            final imageBytes = await imageFile.readAsBytes();
+
+            final multipartFile = http.MultipartFile.fromBytes(
+                'file', imageBytes,
+                filename: 'image.jpg');
+            final userController = Get.find<UserController>();
+            //  userController.updateAvatar(multipartFile);
+          }
+        } catch (e) {
+          print('Lỗi khi chụp ảnh: $e');
         }
-        
-      } catch (e) {
-        print('Lỗi khi chụp ảnh: $e');
-      }
-      
-      _animationController.reverse(); 
-    });
+
+        _animationController.reverse();
+      });
+    }
   }
-}
 
   Widget _buildUI() {
     if (cameraController == null || !cameraController!.value.isInitialized) {
@@ -119,7 +117,8 @@ Future<void> _onTap() async {
                       animation: _rotationAnimation,
                       builder: (context, child) {
                         return Transform.rotate(
-                          angle: _rotationAnimation.value * (3.1415926535 / 180),
+                          angle:
+                              _rotationAnimation.value * (3.1415926535 / 180),
                           child: const Icon(
                             Icons.camera,
                             color: Colors.white,

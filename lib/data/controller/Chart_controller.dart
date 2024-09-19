@@ -5,22 +5,20 @@ import 'package:android_project/models/Dto/UserDto.dart';
 import 'package:android_project/models/Dto/UserRegisterDto.dart';
 import 'package:get/get.dart';
 
-
-class ChartController extends GetxController implements GetxService{
+class ChartController extends GetxController implements GetxService {
   final ChartRepo chartRepo;
   var IsLogin = false.obs;
   ChartController({
     required this.chartRepo,
   });
-  bool _isLoading= false;
-  bool get isLoading =>_isLoading;
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
 
   bool _isShow = true;
   bool get isShow => _isShow;
 
-  void ChangeShow(){
+  void ChangeShow() {
     _isShow = !_isShow;
     update();
   }
-
 }

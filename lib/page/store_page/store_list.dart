@@ -17,8 +17,9 @@ class StoreList extends StatefulWidget {
 }
 
 class _StoreListState extends State<StoreList> {
-  final Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
-  static const LatLng sourceLocation = LatLng(105.83416,21.027763);
+  final Completer<GoogleMapController> _controller =
+      Completer<GoogleMapController>();
+  static const LatLng sourceLocation = LatLng(105.83416, 21.027763);
   static const LatLng destination = LatLng(37.33429383, -122.06600055);
 
   final Set<Polyline> _polylines = {};
@@ -29,47 +30,46 @@ class _StoreListState extends State<StoreList> {
   }
 
   void _showDropdown(double latitude, double longitude) {
-  LatLng dynamicLocation = LatLng(latitude, longitude);
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text("Bản đồ"),
-        content: SizedBox(
-          width: double.maxFinite,
-          height: 400,
-          child: GoogleMap(
-            onMapCreated: (GoogleMapController controller) {
-              if (!_controller.isCompleted) {
-                _controller.complete(controller);
-              }
-            },
-            initialCameraPosition: CameraPosition(
-              target: dynamicLocation,
-              zoom: 13.5,
-            ),
-            markers: {
-              Marker(
-                markerId: MarkerId("source"),
-                position: dynamicLocation,
+    LatLng dynamicLocation = LatLng(latitude, longitude);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Bản đồ"),
+          content: SizedBox(
+            width: double.maxFinite,
+            height: 400,
+            child: GoogleMap(
+              onMapCreated: (GoogleMapController controller) {
+                if (!_controller.isCompleted) {
+                  _controller.complete(controller);
+                }
+              },
+              initialCameraPosition: CameraPosition(
+                target: dynamicLocation,
+                zoom: 13.5,
               ),
-            },
-            polylines: _polylines,
+              markers: {
+                Marker(
+                  markerId: MarkerId("source"),
+                  position: dynamicLocation,
+                ),
+              },
+              polylines: _polylines,
+            ),
           ),
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text("Đóng"),
-          ),
-        ],
-      );
-    },
-  );
-}
-
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Đóng"),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +87,8 @@ class _StoreListState extends State<StoreList> {
               margin: EdgeInsets.only(bottom: AppDimention.size20),
               decoration: BoxDecoration(
                 color: Colors.white,
-                border: Border.all(width: 1, color: Color.fromRGBO(0, 0, 0, 0.1)),
+                border:
+                    Border.all(width: 1, color: Color.fromRGBO(0, 0, 0, 0.1)),
                 borderRadius: BorderRadius.circular(AppDimention.size10),
               ),
               child: Row(
@@ -95,8 +96,12 @@ class _StoreListState extends State<StoreList> {
                   Column(
                     children: [
                       Container(
-                        padding: EdgeInsets.only(top: AppDimention.size10, left: AppDimention.size10, right: AppDimention.size10),
-                        child: Icon(Icons.location_on, color: AppColor.mainColor),
+                        padding: EdgeInsets.only(
+                            top: AppDimention.size10,
+                            left: AppDimention.size10,
+                            right: AppDimention.size10),
+                        child:
+                            Icon(Icons.location_on, color: AppColor.mainColor),
                       )
                     ],
                   ),
@@ -109,17 +114,19 @@ class _StoreListState extends State<StoreList> {
                         SizedBox(height: AppDimention.size10),
                         Text(
                           storecontroller.storeList[index].storeName,
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                         SizedBox(height: AppDimention.size10),
                         Row(
                           children: [
                             Container(
-                              width:  AppDimention.size20,
-                              height:  AppDimention.size20,
+                              width: AppDimention.size20,
+                              height: AppDimention.size20,
                               decoration: BoxDecoration(
                                 color: AppColor.yellowColor,
-                                borderRadius: BorderRadius.circular(AppDimention.size10),
+                                borderRadius:
+                                    BorderRadius.circular(AppDimention.size10),
                               ),
                               child: Center(
                                 child: Icon(Icons.home, size: 12),
@@ -128,7 +135,8 @@ class _StoreListState extends State<StoreList> {
                             SizedBox(width: 5),
                             Container(
                               width: AppDimention.size290,
-                              child: Text(storecontroller.storeList[index].location),
+                              child: Text(
+                                  storecontroller.storeList[index].location),
                             )
                           ],
                         ),
@@ -136,11 +144,12 @@ class _StoreListState extends State<StoreList> {
                         Row(
                           children: [
                             Container(
-                              width:  AppDimention.size20,
-                              height:  AppDimention.size20,
+                              width: AppDimention.size20,
+                              height: AppDimention.size20,
                               decoration: BoxDecoration(
                                 color: AppColor.yellowColor,
-                                borderRadius: BorderRadius.circular(AppDimention.size10),
+                                borderRadius:
+                                    BorderRadius.circular(AppDimention.size10),
                               ),
                               child: Center(
                                 child: Icon(Icons.phone, size: 12),
@@ -149,7 +158,8 @@ class _StoreListState extends State<StoreList> {
                             SizedBox(width: 5),
                             Container(
                               width: 295,
-                              child: Text(storecontroller.storeList[index].numberPhone),
+                              child: Text(
+                                  storecontroller.storeList[index].numberPhone),
                             )
                           ],
                         ),
@@ -157,11 +167,12 @@ class _StoreListState extends State<StoreList> {
                         Row(
                           children: [
                             Container(
-                              width:  AppDimention.size20,
-                              height:  AppDimention.size20,
+                              width: AppDimention.size20,
+                              height: AppDimention.size20,
                               decoration: BoxDecoration(
                                 color: AppColor.yellowColor,
-                                borderRadius: BorderRadius.circular(AppDimention.size10),
+                                borderRadius:
+                                    BorderRadius.circular(AppDimention.size10),
                               ),
                               child: Center(
                                 child: Icon(Icons.timelapse_rounded, size: 12),
@@ -171,9 +182,11 @@ class _StoreListState extends State<StoreList> {
                             Container(
                               width: AppDimention.size290,
                               child: Text(
-                                formatTime(storecontroller.storeList[index].openingTime) +
+                                formatTime(storecontroller
+                                        .storeList[index].openingTime) +
                                     " - " +
-                                    formatTime(storecontroller.storeList[index].closingTime),
+                                    formatTime(storecontroller
+                                        .storeList[index].closingTime),
                               ),
                             )
                           ],
@@ -192,11 +205,17 @@ class _StoreListState extends State<StoreList> {
                               child: Center(
                                 child: GestureDetector(
                                   onTap: () {
-                                    _showDropdown(storecontroller.storeList[index].latitude,storecontroller.storeList[index].longitude);
+                                    _showDropdown(
+                                        storecontroller
+                                            .storeList[index].latitude,
+                                        storecontroller
+                                            .storeList[index].longitude);
                                   },
                                   child: Text(
                                     "Xem bản đồ",
-                                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ),

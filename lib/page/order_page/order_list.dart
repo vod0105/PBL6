@@ -21,16 +21,9 @@ class _OrderListState extends State<OrderList> {
   Widget build(BuildContext context) {
     return GetBuilder<OrderController>(
       builder: (orderController) {
-        if (orderController.orderlist.isEmpty) {
-          return Container(
-            width: 400,
-            height: 175,
-            child: Center(
-              child: Text("Bạn không có món ăn trong đơn hàng"),
-            ),
-          );
-        }
-        return ListView.builder(
+        
+        return !orderController.isLoading ? 
+        ListView.builder(
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: orderController.orderlist.length,
@@ -200,7 +193,8 @@ class _OrderListState extends State<OrderList> {
               ],
             );
           },
-        );
+        ) 
+        : CircularProgressIndicator();
       },
     );
   }

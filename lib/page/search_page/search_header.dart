@@ -25,69 +25,68 @@ class _SearchHeaderState extends State<SearchHeader> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ProductController>(builder: (productController){
-
-        return Container(
-            margin: EdgeInsets.only(
-                top: AppDimention.size40, bottom: AppDimention.size20),
-            padding:
-                EdgeInsets.only(left: AppDimention.size20, right: AppDimention.size20),
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: (){
-                      Get.toNamed(AppRoute.CAMERA_PAGE);
-                  },  
-                  child: Icon(
-                    Icons.camera_alt_outlined,
-                    color: AppColor.mainColor,
-                  ),
-                ),
-                SizedBox(width: AppDimention.size10),
-                Expanded(
-                  child: TextField(
-                    onChanged: (Text){
-                      productController.textSearch =searchController.text;
+    return GetBuilder<ProductController>(builder: (productController) {
+      return Container(
+        margin: EdgeInsets.only(
+            top: AppDimention.size40, bottom: AppDimention.size20),
+        padding: EdgeInsets.only(
+            left: AppDimention.size20, right: AppDimention.size20),
+        child: Row(
+          children: [
+            GestureDetector(
+              onTap: () {
+                Get.toNamed(AppRoute.CAMERA_PAGE);
+              },
+              child: Icon(
+                Icons.camera_alt_outlined,
+                color: AppColor.mainColor,
+              ),
+            ),
+            SizedBox(width: AppDimention.size10),
+            Expanded(
+              child: TextField(
+                onChanged: (Text) {
+                  productController.textSearch = searchController.text;
+                  productController.search();
+                },
+                controller: searchController,
+                decoration: InputDecoration(
+                  hintText: "Search ... ",
+                  prefixIcon: IconButton(
+                    icon: Icon(
+                      Icons.search,
+                      color: AppColor.yellowColor,
+                    ),
+                    onPressed: () {
                       productController.search();
                     },
-                  
-                    controller: searchController,
-                    decoration: InputDecoration(
-                      
-                      hintText: "Search ... ",
-                      prefixIcon: IconButton(
-                          icon: Icon(
-                            Icons.search,
-                            color: AppColor.yellowColor,
-                          ),
-                          onPressed: () {
-                            productController.search();
-                          },
-                        ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(AppDimention.size30),
-                        borderSide: BorderSide(width: 1.0, color: Colors.white),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(AppDimention.size30),
-                        borderSide: BorderSide(width: 1.0, color: Colors.white),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(AppDimention.size30),
-                      ),
-                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppDimention.size30),
+                    borderSide: BorderSide(width: 1.0, color: Colors.white),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppDimention.size30),
+                    borderSide: BorderSide(width: 1.0, color: Colors.white),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppDimention.size30),
                   ),
                 ),
-                SizedBox(width: AppDimention.size5,),
-                GestureDetector(
-                  onTap: (){
-                      Get.toNamed(AppRoute.CART_PAGE);
-                  },
-                  child: Icon(Icons.shopping_cart_outlined),
-                )
-              ],
+              ),
             ),
-          );
+            SizedBox(
+              width: AppDimention.size5,
+            ),
+            GestureDetector(
+              onTap: () {
+                Get.toNamed(AppRoute.CART_PAGE);
+              },
+              child: Icon(Icons.shopping_cart_outlined),
+            )
+          ],
+        ),
+      );
     });
   }
 }

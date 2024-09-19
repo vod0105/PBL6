@@ -6,13 +6,12 @@ import '../api/AppConstant.dart';
 
 class UserRepo {
   final ApiClient apiClient;
-  UserRepo({
-    required this.apiClient
-  });
-  Future<Response> getuserprofile() async{
+  UserRepo({required this.apiClient});
+  Future<Response> getuserprofile() async {
     return await apiClient.getData(Appconstant.USER_PROFILE_URL);
   }
-  Future<Response> updateprofile(Userupdatedto updatedto) async{
-    return await apiClient.postData(Appconstant.USER_PROFILE_URL,updatedto);
+
+  Future<Response> updateprofile(Userupdatedto updatedto) async {
+    return await apiClient.postData(Appconstant.USER_PROFILE_URL, updatedto);
   }
 }
