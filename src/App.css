@@ -51,7 +51,6 @@
   display: flex;
   gap: 1.5rem;
   justify-content: space-between;
-  
   z-index: 2;
 }
 .logo .icon {
@@ -61,6 +60,19 @@
 .side-bar {
   width: 12%;
   overflow: auto;
+}
+table {
+  /* box-shadow: 0 0.5rem 0.4rem #0002; */
+  
+}
+input {
+
+  padding: 10px;
+  border-radius: 4px;
+  outline-color: 5px solid tomato;
+  font-size: 15px;
+  width: 250px;
+  border: 1px solid black;
 }
 
 /* .side-bar.collaps .menu-list {

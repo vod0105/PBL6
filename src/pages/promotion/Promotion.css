@@ -1,0 +1,13 @@
+.promotion .content h1 {
+  background: linear-gradient(to bottom right, #83026d, #06b9eb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.promotion table thead tr th {
+  color: #f10660;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  /* color: rgb(228, 223, 223); */
+}
+.promotion table tbody tr td {
+  font-weight: 500;
+}

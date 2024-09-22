@@ -109,17 +109,26 @@ const AddProduct = ({ url }) => {
 
     console.log("selectedUserId", selectedUserId);
     console.log("bestSale", bestSale);
+    console.log("data.stockQuantity", data.stockQuantity);
   });
 
   return (
-    <div className="add">
+    <div className="add add-product">
       <div className="cover-left1">
         <h2 className="">Add Product</h2>
-        <form className="flex-col" onSubmit={onSubmitHandler}>
+        <form
+          className="flex-col"
+          onSubmit={onSubmitHandler}
+        >
           <table className="form-table">
             <tbody>
               <tr>
-                <td className="td-text">Upload Image</td>
+                <td
+                  className="td-text"
+                 
+                >
+                  Upload Image
+                </td>
                 <td>
                   <label htmlFor="image">
                     <img

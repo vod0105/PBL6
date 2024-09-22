@@ -1,0 +1,28 @@
+/* .promotion {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+td img {
+  width: 36px;
+  height: 36px;
+  margin-right: 0.5rem;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+table,
+th,
+td {
+  padding: 1rem;
+}
+main.table {
+  width: 82vw;
+  height: 90wh;
+  background-color: #fff5;
+  backdrop-filter: blur(7px);
+  box-shadow: 0 0.4rem 0.8rem #0005;
+  border-radius: 0.8rem;
+
+  overflow: hidden;
+} */

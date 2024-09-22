@@ -161,7 +161,6 @@ const Sidebar = () => {
                       Add Product To All Store
                     </Link>
                   </li>
-                  
                 </ul>
               </div>
             </p>
@@ -169,10 +168,45 @@ const Sidebar = () => {
               <FontAwesomeIcon icon={faChevronDown} />
             </p>
           </div>
-          <Link className="item" to="/category">
-            <BiBorderAll className="icon" />
-            <p>CateGory</p>
-          </Link>
+          <div className="item" onClick={() => toggleSubMenu("promotion")}>
+            {/* <BiLogoProductHunt className="icon icon-item" /> */}
+            <Link to="/admin/promotion" className="linkitem">
+              <BiLogoProductHunt className="icon icon-item" />
+            </Link>
+            <p>
+              Promotion
+              <div
+                className={
+                  openSubMenus["promotion"]
+                    ? "sub-menu active-sub"
+                    : "sub-menu hidden"
+                }
+              >
+                <ul className="sub-item">
+                  <li>
+                    {" "}
+                    <Link to="/admin/promotion">List Promotion</Link>
+                  </li>
+                  <li>
+                    <Link to="/admin/addPromotion">Add Promotion</Link>
+                  </li>
+                  <li>
+                    <Link to="/admin/addPromotionToStore">
+                      Add Promotion To Store
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/admin/addPromotionToAllStore">
+                      Add Promotion To All Store
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </p>
+            <p className="dropdownn">
+              <FontAwesomeIcon icon={faChevronDown} />
+            </p>
+          </div>
           <Link className="item" to="/orders">
             <BiMessage className="icon" />
             <p>Orders</p>

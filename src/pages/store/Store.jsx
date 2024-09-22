@@ -105,6 +105,7 @@ const Store = ({ url }) => {
           <thead className="table-dark">
             <tr>
               <th scope="col">storeId</th>
+              <th scope="col">Image</th>
               <th scope="col">storeName</th>
               <th scope="col">location</th>
               <th scope="col">managerName</th>
@@ -119,6 +120,17 @@ const Store = ({ url }) => {
               currentItems.map((store) => (
                 <tr key={store.storeId}>
                   <td>{store.storeId}</td>
+                  <td>
+                    <img
+                      src={`data:image/jpeg;base64,${store.image}`}
+                      className="img-product"
+                      alt="Image cate"
+                      style={{
+                        height: "70px",
+                        width: "70px",
+                      }}
+                    />
+                  </td>
                   <td>{store.storeName}</td>
                   <td>{store.location}</td>
                   <td>{store.managerName}</td>

@@ -44,6 +44,8 @@ import Product from "./pages/Product/Product";
 import AddProduct from "./pages/Product/AddProduct";
 import AddProducToStore from "./pages/Product/AddproductToStore";
 import AddProducToAllStore from "./pages/Product/AddproductToAllStore";
+import Promotion from "./pages/promotion/Promotion";
+import AddPromotion from "./pages/promotion/AddPromotion";
 
 const App = () => {
   // const isAuthenticated = !!localStorage.getItem("access_token"); // Kiểm tra nếu có token
@@ -204,7 +206,7 @@ const App = () => {
             )
           }
         />
-         <Route
+        <Route
           path="/admin/UpdateCategory/:id"
           element={
             !isAuthenticated ? (
@@ -239,7 +241,7 @@ const App = () => {
             )
           }
         />
-         <Route
+        <Route
           path="/admin/AddProduct"
           element={
             !isAuthenticated ? (
@@ -256,7 +258,7 @@ const App = () => {
             )
           }
         />
-         <Route
+        <Route
           path="/admin/AddProductToStore"
           element={
             !isAuthenticated ? (
@@ -284,6 +286,41 @@ const App = () => {
                   <Sidebar />
                   <div className="dashboard-content">
                     <AddProducToAllStore url={url} />
+                  </div>
+                </div>
+              </>
+            )
+          }
+        />
+        {/* end product */}
+        <Route
+          path="/admin/promotion"
+          element={
+            !isAuthenticated ? (
+              <Navigate to="/" />
+            ) : (
+              <>
+                <div className="dashboard">
+                  <Sidebar />
+                  <div className="dashboard-content">
+                    <Promotion url={url} />
+                  </div>
+                </div>
+              </>
+            )
+          }
+        />
+        <Route
+          path="/admin/Addpromotion"
+          element={
+            !isAuthenticated ? (
+              <Navigate to="/" />
+            ) : (
+              <>
+                <div className="dashboard">
+                  <Sidebar />
+                  <div className="dashboard-content">
+                    <AddPromotion url={url} />
                   </div>
                 </div>
               </>

@@ -1,21 +1,35 @@
-.store{
-    width: 950px;
-    margin: 0 auto;
+/* .store {
+  width: 950px;
+  margin: 0 auto;
 }
-h1{
-    color: red;
+h1 {
+  color: red;
 }
-.pagination button{
-margin-left: 10px;
-padding: 2px 5px;
+.pagination button {
+  margin-left: 10px;
+  padding: 2px 5px;
 }
-.store .heading{
+.store .heading {
+  display: flex;
+}
+.store-search {
+  margin-left: auto;
+}
+.img-cate {
+  width: 155px;
+} */
+ .category .heading {
     display: flex;
-    
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 25px;
+ }
+.category table thead tr th {
+  color: #f10660;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
-.store-search{
-    margin-left: auto;
-}
-.img-cate{
-    width: 155px;
-}
+.category .content h1 {
+    background: linear-gradient(to bottom right, #83026d, #06b9eb);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }

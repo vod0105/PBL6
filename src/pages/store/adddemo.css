@@ -96,10 +96,12 @@ h2.h2-add {
 }
 .dashboard-content .add .cover-left {
   width: 60%;
+
 }
 .dashboard-content .add .cover-right {
   flex: 1;
   height: 90%;
+  margin-left: auto;
 }
 .dashboard-content .add .cover-left table {
   background-color: blue;
