@@ -3,26 +3,32 @@
   margin-top: 30px;
     .section-1-up{
         background: var(--yellow);
-        padding-left: 60px;
-        .introduce-section-1-title{
-            font-size: 2rem;
-            font-family: 'MergeBlack', sans-serif !important;
-            color: #e31837;
-            text-transform: uppercase;
-            font-weight: 700;
-        }
-        .introduce-section-1-description{
-            text-align: left;
-            margin: 30px 0;
-            line-height: 24px;
-            color: rgb(21, 20, 20);
-            font-size: 17px;
-            font-weight: 500;
-        }
-        .introduce-section-1-image{
-            width: 550px;
-            height: 450px;
-            padding: 80px;
+        // width: 80%;
+        // padding: 0 60px;
+        .container-edit{
+          width: 80%;
+          margin: 80px auto;
+          display: flex;
+          .introduce-section-1-title{
+              font-size: 2rem;
+              font-family: 'MergeBlack', sans-serif !important;
+              color: #e31837;
+              text-transform: uppercase;
+              font-weight: 700;
+          }
+          .introduce-section-1-description{
+              text-align: left;
+              margin: 30px 0;
+              line-height: 24px;
+              color: rgb(21, 20, 20);
+              font-size: 17px;
+              font-weight: 500;
+          }
+          .introduce-section-1-image{
+              margin-left: 60px;
+              width: 550px;
+              height: 400px;
+          }
         }
     }
     .section-1-down {

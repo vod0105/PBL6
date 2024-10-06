@@ -1,0 +1,116 @@
+.account-page {
+    width: 100%;
+    height: 100vh;
+  }
+  
+  /* Header Styling */
+  .header-account {
+    background-color: #f8f8f8;
+    display: flex;                   /* Sử dụng Flexbox */
+    flex-direction: column;         /* Căn giữa theo chiều dọc */
+    align-items: center;            /* Căn giữa theo chiều ngang */
+    text-align: center;             /* Căn giữa văn bản */
+    padding: 20px;                  /* Thêm khoảng cách bên trong */
+    border-bottom: 1px solid #ddd;
+    background-color: #F4F4F4;
+  }
+  
+  .breadcrumb {
+    color: #999;
+    font-size: 14px;
+   
+  }
+  
+  .breadcrumb span {
+    cursor: pointer;
+  }
+  
+  .breadcrumb span:hover {
+    text-decoration: underline;
+  }
+  
+  .header-account h1 {
+    font-size: 25px;
+    margin-top: 10px;
+    font-weight: 600;
+  }
+  
+  /* Main content container */
+  .main-content {
+    display: flex;
+    width: 100%;
+    height: calc(100vh - 100px);
+    padding: 20px;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    width: 20%;
+    background-color: #f9f9f9;
+    border-right: 1px solid #ddd;
+    padding: 20px;
+  }
+  
+  .sidebar ul {
+    list-style: none;
+  }
+  
+  .sidebar ul li {
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    border-bottom: 1px solid #E7E7E7;
+    margin-left: 6px;
+    position: relative;
+  }
+  // Thẻ <a> chiếm toàn không gian của <li>
+  .sidebar ul li a {
+    display: block; /* Make the a take up the full width and height of the li */
+    padding: 10px; /* Add some padding */
+    color: #333; /* Default color */
+    text-decoration: none; /* Remove underline */
+  }
+  
+  .sidebar ul li a.active {
+    background-color: #e3000e; /* Apply red background for active links */
+    color: white; /* Ensure active links have white text */
+  }
+  
+  .sidebar ul li a:hover {
+    background-color: #e3000e; /* On hover, same background as active */
+    color: white; /* Ensure hover color is white */
+  }
+  
+  /* Content Area */
+  .content {
+    width: 80%;
+    padding: 20px;
+  }
+  
+  .content h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .content p {
+    font-size: 16px;
+    color: #555;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .main-content {
+      flex-direction: column;
+    }
+  
+    .sidebar {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid #ddd;
+    }
+  
+    .content {
+      width: 100%;
+    }
+  }
+  

@@ -1,6 +1,6 @@
 .login-popup {
   position: absolute;
-  z-index: 1;
+  z-index: 1001;
   width: 100%;
   height: 100%;
   background-color: #00000090;
@@ -43,15 +43,20 @@
     border-radius: 4px;
 }
 .login-popup-container button{
-    border: none;
+    border: 1px solid #e3000e; 
     padding: 10px;
     border-radius: 4px;
     color: white;
-    background-color: tomato;
+    background-color: #e3000e;
     font-size: 15px;
     cursor: pointer;
-
 }
+.login-popup-container button:hover{
+    color: #e3000e;
+    background: transparent;
+}
+
+
 .login-popup-condition{
     display: flex;
     align-items: start;
@@ -66,7 +71,7 @@
 }
 .login-popup p span{
     cursor: pointer;
-    color: tomato;
+    color: e3000e;
     padding-left: 10px;
     font-weight: 500;
 }

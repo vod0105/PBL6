@@ -2,6 +2,10 @@
 // $TitleStyles
 .page-category {
   margin-top: 50px;
+  background: url('../../assets/category/jollibee.png') no-repeat; /* Đặt hình nền và không lặp lại */
+  background-size: contain; /* Đảm bảo hình nền bao phủ toàn bộ phần tử */
+  background-position: center; /* Canh giữa hình nền */
+    // width: 100%;
   .title {
     margin-top: 30px;
     text-align: center;
@@ -43,7 +47,7 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 1rem;
       // margin: 3rem 0 100px 100px; 
-      margin: 0 100px;
+      margin: 0 200px;
       .hr-separate {
         grid-column: 1 / -1; /* Đặt hr để nó trải dài hết chiều rộng của grid */
         border: 2px dashed red; /* Tùy chỉnh kiểu đường ngăn cách */

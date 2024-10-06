@@ -20,8 +20,9 @@ const Introduce = () => {
   return (
     <div>
       <section className="introduce-section-1">
-        <Container>
-          <Row className="align-items-center section-1-up">
+
+        <Row className="align-items-center section-1-up">
+          <div className="container-edit">
             <Col lg={6} className="text-center text-lg-start mb-5 mb-lg-0 introduce">
               <h4 className="introduce-section-1-title">LỊCH SỬ HÌNH THÀNH</h4>
               <p className="introduce-section-1-description">
@@ -36,22 +37,22 @@ const Introduce = () => {
             <Col lg={6} className='introduce-section-1-image'>
               <img src={Introduce_1} alt="e-introduce" className="img-fluid" />
             </Col>
-          </Row>
-          <Row className="align-items-center section-1-down">
-            <Col lg={3} className='section-1-down-subimage'>
-              <img src={Introduce_2} alt="e-introduce" className="img-fluid" />
-            </Col>
-            <Col lg={3} className='section-1-down-subimage'>
-              <img src={Introduce_3} alt="e-introduce" className="img-fluid" />
-            </Col>
-            <Col lg={3} className='section-1-down-subimage'>
-              <img src={Introduce_4} alt="e-introduce" className="img-fluid" />
-            </Col>
-            <Col lg={3} className='section-1-down-subimage'>
-              <img src={Introduce_5} alt="e-introduce" className="img-fluid" />
-            </Col>
-          </Row>
-        </Container>
+          </div>
+        </Row>
+        <Row className="align-items-center section-1-down">
+          <Col lg={3} className='section-1-down-subimage'>
+            <img src={Introduce_2} alt="e-introduce" className="img-fluid" />
+          </Col>
+          <Col lg={3} className='section-1-down-subimage'>
+            <img src={Introduce_3} alt="e-introduce" className="img-fluid" />
+          </Col>
+          <Col lg={3} className='section-1-down-subimage'>
+            <img src={Introduce_4} alt="e-introduce" className="img-fluid" />
+          </Col>
+          <Col lg={3} className='section-1-down-subimage'>
+            <img src={Introduce_5} alt="e-introduce" className="img-fluid" />
+          </Col>
+        </Row>
       </section>
 
       <section className="introduce-section-2">
@@ -74,88 +75,87 @@ const Introduce = () => {
       </section>
 
       <section className="introduce-section-3">
-        <Container>
-          <Row>
-            <Carousel>
-              <Carousel.Item>
-                <Carousel.Caption>
-                  <div className="user_img">
-                    <img src={mission} className="img-fluid" alt="User-1" />
-                  </div>
-                  <p>
-                    "Tất cả những gì mà chúng tôi phải làm là mang đến những hương vị tuyệt vời trong từng món ăn, mang lại niềm vui ẩm thực cho tất cả mọi người."
-                  </p>
-                  <div className="item_rating mb-2">
-                    <i className="bi bi-star-fill"></i>
-                    <i className="bi bi-star-fill"></i>
-                    <i className="bi bi-star-fill"></i>
-                    <i className="bi bi-star-fill"></i>
-                    <i className="bi bi-star-fill"></i>
-                  </div>
-                  <h5>SỨ MỆNH</h5>
-                </Carousel.Caption>
-              </Carousel.Item>
+        <Row>
+          <Carousel>
+            <Carousel.Item>
+              <Carousel.Caption>
+                <div className="user_img">
+                  <img src={mission} className="img-fluid" alt="User-1" />
+                </div>
+                <p>
+                  "Tất cả những gì mà chúng tôi phải làm là mang đến những hương vị tuyệt vời trong từng món ăn, mang lại niềm vui ẩm thực cho tất cả mọi người."
+                </p>
+                <div className="item_rating mb-2">
+                  <i className="bi bi-star-fill"></i>
+                  <i className="bi bi-star-fill"></i>
+                  <i className="bi bi-star-fill"></i>
+                  <i className="bi bi-star-fill"></i>
+                  <i className="bi bi-star-fill"></i>
+                </div>
+                <h5>SỨ MỆNH</h5>
+              </Carousel.Caption>
+            </Carousel.Item>
 
-              <Carousel.Item>
-                <Carousel.Caption>
-                  <div className="user_img">
-                    <img src={teamwork} className="img-fluid" alt="User-2" />
-                  </div>
-                  <p>
-                    " Tinh thần tập thể là sức mạnh của sự đoàn kết, nơi mọi người cùng hợp tác, hỗ trợ lẫn nhau để đạt được mục tiêu chung. Khi cùng nhau cố gắng, chúng ta không chỉ thành công mà còn tạo ra môi trường làm việc tích cực và gắn kết. "
-                  </p>
-                  <div className="item_rating mb-2">
-                    <i className="bi bi-star-fill"></i>
-                    <i className="bi bi-star-fill"></i>
-                    <i className="bi bi-star-fill"></i>
-                    <i className="bi bi-star-fill"></i>
-                    <i className="bi bi-star-fill"></i>
-                  </div>
-                  <h5>TINH THẦN TẬP THỂ</h5>
-                </Carousel.Caption>
-              </Carousel.Item>
+            <Carousel.Item>
+              <Carousel.Caption>
+                <div className="user_img">
+                  <img src={teamwork} className="img-fluid" alt="User-2" />
+                </div>
+                <p>
+                  " Tinh thần tập thể là sức mạnh của sự đoàn kết, nơi mọi người cùng hợp tác, hỗ trợ lẫn nhau để đạt được mục tiêu chung. Khi cùng nhau cố gắng, chúng ta không chỉ thành công mà còn tạo ra môi trường làm việc tích cực và gắn kết. "
+                </p>
+                <div className="item_rating mb-2">
+                  <i className="bi bi-star-fill"></i>
+                  <i className="bi bi-star-fill"></i>
+                  <i className="bi bi-star-fill"></i>
+                  <i className="bi bi-star-fill"></i>
+                  <i className="bi bi-star-fill"></i>
+                </div>
+                <h5>TINH THẦN TẬP THỂ</h5>
+              </Carousel.Caption>
+            </Carousel.Item>
 
-              <Carousel.Item>
-                <Carousel.Caption>
-                  <div className="user_img">
-                    <img src={quality} className="img-fluid" alt="User-2" />
-                  </div>
-                  <p>
-                    " Cam kết của chúng tôi là mang đến những sản phẩm chất lượng cao nhất, được chế biến từ nguyên liệu tươi ngon và đảm bảo an toàn vệ sinh. Chúng tôi cam kết không ngừng cải tiến để mỗi món ăn đều đạt tiêu chuẩn chất lượng, mang lại sự hài lòng tối đa cho khách hàng. "
-                  </p>
-                  <div className="item_rating mb-2">
-                    <i className="bi bi-star-fill"></i>
-                    <i className="bi bi-star-fill"></i>
-                    <i className="bi bi-star-fill"></i>
-                    <i className="bi bi-star-fill"></i>
-                    <i className="bi bi-star-fill"></i>
-                  </div>
-                  <h5>CHẤT LƯỢNG SẢN PHẨM</h5>
-                </Carousel.Caption>
-              </Carousel.Item>
+            <Carousel.Item>
+              <Carousel.Caption>
+                <div className="user_img">
+                  <img src={quality} className="img-fluid" alt="User-2" />
+                </div>
+                <p>
+                  " Cam kết của chúng tôi là mang đến những sản phẩm chất lượng cao nhất, được chế biến từ nguyên liệu tươi ngon và đảm bảo an toàn vệ sinh. Chúng tôi cam kết không ngừng cải tiến để mỗi món ăn đều đạt tiêu chuẩn chất lượng, mang lại sự hài lòng tối đa cho khách hàng. "
+                </p>
+                <div className="item_rating mb-2">
+                  <i className="bi bi-star-fill"></i>
+                  <i className="bi bi-star-fill"></i>
+                  <i className="bi bi-star-fill"></i>
+                  <i className="bi bi-star-fill"></i>
+                  <i className="bi bi-star-fill"></i>
+                </div>
+                <h5>CHẤT LƯỢNG SẢN PHẨM</h5>
+              </Carousel.Caption>
+            </Carousel.Item>
 
-              <Carousel.Item>
-                <Carousel.Caption>
-                  <div className="user_img">
-                    <img src={saving} className="img-fluid" alt="User-2" />
-                  </div>
-                  <p>
-                    " Chúng tôi luôn hướng tới việc tiết kiệm tối đa mà không ảnh hưởng đến chất lượng sản phẩm. Bằng cách tối ưu hóa quy trình và lựa chọn nguyên liệu hiệu quả, chúng tôi giúp bạn thưởng thức những món ăn ngon với mức giá hợp lý. "
-                  </p>
-                  <div className="item_rating mb-2">
-                    <i className="bi bi-star-fill"></i>
-                    <i className="bi bi-star-fill"></i>
-                    <i className="bi bi-star-fill"></i>
-                    <i className="bi bi-star-fill"></i>
-                    <i className="bi bi-star-fill"></i>
-                  </div>
-                  <h5>TIẾT KIỆM</h5>
-                </Carousel.Caption>
-              </Carousel.Item>
+            <Carousel.Item>
+              <Carousel.Caption>
+                <div className="user_img">
+                  <img src={saving} className="img-fluid" alt="User-2" />
+                </div>
+                <p>
+                  " Chúng tôi luôn hướng tới việc tiết kiệm tối đa mà không ảnh hưởng đến chất lượng sản phẩm. Bằng cách tối ưu hóa quy trình và lựa chọn nguyên liệu hiệu quả, chúng tôi giúp bạn thưởng thức những món ăn ngon với mức giá hợp lý. "
+                </p>
+                <div className="item_rating mb-2">
+                  <i className="bi bi-star-fill"></i>
+                  <i className="bi bi-star-fill"></i>
+                  <i className="bi bi-star-fill"></i>
+                  <i className="bi bi-star-fill"></i>
+                  <i className="bi bi-star-fill"></i>
+                </div>
+                <h5>TIẾT KIỆM</h5>
+              </Carousel.Caption>
+            </Carousel.Item>
 
-            </Carousel>
-          </Row>
-        </Container>
+          </Carousel>
+        </Row>
+
       </section>
 
 

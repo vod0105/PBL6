@@ -1,0 +1,130 @@
+.custom-modal {
+    max-width: 60%; // Mở rộng chiều rộng modal (80% của viewport)
+    height: 80vh;   // Mở rộng chiều cao modal (80% chiều cao viewport)
+    .modal-body {
+      overflow-y: auto; // Thêm thanh cuộn nếu nội dung vượt quá chiều cao
+    }
+    p{
+        margin: 0;
+    }
+    .order-detail {
+        display: flex;
+        flex-direction: column;
+        .order-detail-orderID{
+            display: flex;
+            .orderID-title{
+                font-weight: 600;
+                margin-right: 20px;
+            }
+        }
+        .order-detail-infor {
+            display: flex;                  // Sử dụng Flexbox để dễ dàng căn chỉnh
+            flex-wrap: wrap;               // Cho phép các mục xuống dòng nếu cần
+            margin: 10px 0;                // Thêm khoảng cách giữa các hàng
+            border: 1px solid #E7E7E7;
+            .order-detail-infor-item {
+              flex: 1;                      // Mỗi mục chiếm đều không gian
+            //   min-width: 200px;            // Đặt chiều rộng tối thiểu để các mục không quá nhỏ
+              padding: 10px;               // Thêm padding cho mục
+            //   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); // Thêm bóng nhẹ để tạo cảm giác nổi bật
+            //   background-color: #f9f9f9;   // Thay đổi màu nền cho dễ phân biệt
+            }
+            .infor-title{
+                font-weight: 600;
+            }
+            .infor-content{
+                font-size: 14px;
+            }
+        }
+
+        .order-detail-status {
+            margin: 40px 0; // Khoảng cách phía trên
+            .status-line {
+              display: flex; // Căn chỉnh các đoạn gạch theo hàng
+              align-items: center; // Căn giữa theo chiều dọc
+            }
+          
+            .status-segment {
+              flex: 1; // Mỗi đoạn gạch chiếm đều
+              display: flex; // Hiển thị theo hàng
+              align-items: center; // Căn giữa icon và đường gạch
+              position: relative; // Cần thiết cho đường gạch
+          
+              .status-bar {
+                flex: 1; // Đường gạch chiếm không gian
+                height: 5px; // Chiều cao của gạch
+                background-color: lightgray; // Màu nền mặc định
+                transition: background-color 0.3s; // Hiệu ứng chuyển màu
+          
+                &.active {
+                  background-color: red; // Đổi màu nền khi đang ở trạng thái active
+                }
+              }
+          
+              .status-icon {
+                font-size: 20px; // Kích thước icon
+                padding: 10px;
+                background-color: lightgray;
+                // border: 1px solid #E7E7E7;
+                border-radius: 50%;
+                text-align: center;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                &.active {
+                    color: white; // Đổi màu nền khi đang ở trạng thái active
+                    background-color: red;
+                }
+              }
+            }
+          
+            .status-labels {
+              display: flex; // Căn chỉnh các nhãn theo hàng
+              justify-content: space-between; // Giãn cách đều giữa các nhãn
+              margin-top: 5px; // Khoảng cách giữa gạch và nhãn
+              span {
+                font-size: 14px; // Kích thước chữ\
+                flex: 1;
+                text-align: center;
+                font-weight: 500;
+              }
+              
+            }
+          }
+        .order-detail-product{
+            display: flex;
+            flex-direction: row;
+            border: 1px solid #E7E7E7;
+            .order-detail-product-item{
+                flex: 1;
+                display: flex;
+                flex-direction: row;
+                .product-item-image{
+                    width: 70px;
+                    height: 70px;
+                    border: 1px solid #E7E7E7;
+                    img{
+                        background-size: contain; /* Đảm bảo hình nền bao phủ toàn bộ phần tử */
+                        background-position: center; /* Canh giữa hình nền */
+                        width: 100%;
+
+                    }
+                }
+                .product-item-infor{
+                    display: flex;
+                    flex-direction: column;
+                    margin: 10px 15px;
+                    justify-content: center;
+                    p{
+                        margin: 0;
+                    }
+                    .infor-price-quantity{
+                        display: flex;
+                    }
+                }
+            }
+        }
+      }
+      
+  }
+  

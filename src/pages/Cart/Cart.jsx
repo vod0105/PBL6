@@ -35,8 +35,9 @@ const Cart = () => {
                     onClick={() => {
                       removeFromCart(item._id);
                     }}
+
                   >
-                    x
+                    <i className="fa-solid fa-trash action-delete" ></i>
                   </p>
                 </div>
                 <hr />
@@ -55,12 +56,12 @@ const Cart = () => {
             </div>
             <div className="cart-total-details">
               <p>Phí giao hàng</p>
-              <p>{getTotalCartAmount() === 0 ? 0 : 2}</p>
+              <p>{getTotalCartAmount() === 0 ? 0 : 10}</p>
             </div>
             <hr />
             <div className="cart-total-details">
               <p>Tổng cộng</p>
-              <b>{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 2}</b>
+              <b>{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 10}</b>
             </div>
           </div>
           <button

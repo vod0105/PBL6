@@ -117,6 +117,15 @@ const Navbar = ({ setShowLogin }) => {
         >
           Cửa hàng
         </Link>
+
+        {/* <Link
+          to="/account"
+          onClick={() => setMenu("account")}
+          className={menu === "account" ? "active" : ""}
+        >
+          Tài khoản
+        </Link> */}
+
       </ul>
       <div className="navbar-right">
         {/* <img src={assets.search_icon} alt="" /> */}
@@ -125,23 +134,26 @@ const Navbar = ({ setShowLogin }) => {
           <div className={getTotalCartAmount() > 0 ? "dot" : ""}></div>
         </Link>
         {
-          !token ? (
+          token ? (
             <button onClick={() => setShowLogin(true)}>Đăng nhập</button>
           ) : (
-            <div className="navbar-profile">
+            // <div className="navbar-profile">
+            //   <img src={assets.profile_icon} alt="" />
+            //   <ul className="navbar-profile-dropdown">
+            //     <li onClick={logOut} >
+            //       <img src={assets.logout_icon} alt="" />
+            //       <p>Logout</p>
+            //     </li>
+            //     <hr />
+            //     <li>
+            //       <img src={assets.bag_icon} alt="" />
+            //       <p>Orders</p>
+            //     </li>
+            //   </ul>
+            // </div>
+            <Link to="/account" className="navbar-profile">
               <img src={assets.profile_icon} alt="" />
-              <ul className="navbar-profile-dropdown">
-                <li>
-                  <img src={assets.bag_icon} alt="" />
-                  <p>Orders</p>
-                </li>
-                <hr />
-                <li>
-                  <img src={assets.logout_icon} alt="" />
-                  <p onClick={logOut}>Logout</p>
-                </li>
-              </ul>
-            </div>
+            </Link>
           )
         }
       </div>

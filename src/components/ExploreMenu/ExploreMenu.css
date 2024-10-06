@@ -27,6 +27,10 @@
 .explore-menu-list::-webkit-scrollbar {
   display: none;
 }
+
+.explore-menu-list-item:hover p{
+  color: red;
+}
 .explore-menu-list-item img {
   width: 7vw;
   height: 7vw;
@@ -44,6 +48,9 @@
   text-transform: uppercase;
   font-weight: 700;
 }
+
+
+
 .explore-menu hr {
   margin-top: 10px 0px;
   height: 2px;
@@ -51,7 +58,7 @@
   border: none;
 }
 .explore-menu-list-item .active {
-  border: 4px solid tomato;
+  border: 4px solid #e3000e;
   padding: 2px;
 }
 

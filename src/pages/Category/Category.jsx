@@ -31,29 +31,34 @@ export default function Category() {
     },
     {
       image: product1,
-      name: "Chicken Burger",
+      name: "Combo thơm phức",
       price: "$1",
     },
     {
       image: product2,
-      name: "Toasted Bread",
+      name: "Gà sốt cay",
       price: "$2",
     },
     {
       image: product3,
-      name: "Egg Sandwich",
+      name: "Burger",
       price: "$3",
     },
 
     {
       image: product4,
-      name: "Raspberry Cake",
+      name: "Tropical Sundae",
       price: "$4",
     },
     {
       image: product1,
-      name: "Chicken Burger",
+      name: "Combo thơm phức",
       price: "$1",
+    },
+    {
+      image: product2,
+      name: "Gà sốt cay",
+      price: "$2",
     },
   ];
   return (
