@@ -1,19 +1,20 @@
-import React, { useEffect, useContext } from 'react';
-import { Route } from "react-router-dom";
-import { useHistory, Redirect } from "react-router-dom";
-import { UserContext } from '../context/UserContext';
+import React from 'react';
+import { Navigate } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { showLoginModal } from '../redux/actions/modalActions';
 
-const PrivateRoutes = (props) => {
-    const { user } = useContext(UserContext);
+const PrivateRoutes = ({ element }) => {
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.authentication.user);
+
     if (user && user.isAuthenticated === true) {
-        return (
-            <>
-                <Route path={props.path} element={props.element} />
-            </>
-        );
+        // Nếu người dùng đã xác thực, trả về element của route
+        return element;
     } else {
-        return <Redirect to='/login'></Redirect>
+        // Nếu chưa xác thực, hiển thị modal login và điều hướng
+        dispatch(showLoginModal());
+        return <Navigate to="/" />;
     }
-}
+};
 
 export default PrivateRoutes;

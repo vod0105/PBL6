@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
 import "./Navbar.css";
 import { assets } from "../../assets/assets";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, NavLink } from "react-router-dom";
 import { StoreContext } from "../../context/StoreContext";
-import LoginModal from "../LoginModal/LoginModal";
-import RegisterModal from "../RegisterModal/RegisterModal";
+import { useDispatch, useSelector } from 'react-redux';
+import { showLoginModal, showRegisterModal } from "../../redux/actions/modalActions";
 
 import cate_1 from "../../assets/navbar/cate_1.png";
 import cate_2 from "../../assets/navbar/cate_2.png";
@@ -17,6 +17,18 @@ import cate_8 from "../../assets/navbar/cate_8.png";
 
 
 const Navbar = () => {
+  // redux modal
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.authentication.user);
+
+  const handleShowLogin = () => {
+    dispatch(showLoginModal());
+  };
+
+  const handleShowRegister = () => {
+    dispatch(showRegisterModal());
+  };
+
   const [menu, setMenu] = useState("home");
   const { getTotalCartAmount, setToken, token, setFoodList } = useContext(StoreContext);
   const navigate = useNavigate();
@@ -31,48 +43,34 @@ const Navbar = () => {
   //   console.log("Logged out successfully");
   // };
 
-  const [showModalLogin, setShowModalLogin] = useState(false);
-  const [showModalRegister, setShowModalRegister] = useState(false);
-
-  const handleShowLogin = () => {
-    setShowModalLogin(true); // Hiển thị modal
-  };
-  const handleCloseLogin = () => {
-    setShowModalLogin(false); // Đóng modal
-  };
-
-  const handleShowRegister = () => {
-    setShowModalRegister(true); // Hiển thị modal
-  };
-  const handleCloseRegister = () => {
-    setShowModalRegister(false); // Đóng modal
-  };
 
   return (
     <div className="navbar">
-      <Link to="/" className="logo">
+      <NavLink
+        to="/" className="logo"
+        end // 'end' đảm bảo rằng chỉ '/' (Trang Chủ) được kích hoạt, không phải các trang khác chứa '/' như '/about'
+      >
         <img src={assets.logo} alt="" className="logo-image" />
         {/* <p className="logo-name">LILI</p> */}
-      </Link>
+      </NavLink>
       <ul className="navbar-menu">
-        <Link
+        <NavLink
           to="/"
-          onClick={() => setMenu("home")}
-          className={menu === "home" ? "active" : ""}
+          className={({ isActive }) => (isActive ? 'active' : '')}
+          end
         >
           Trang chủ
-        </Link>
-        <Link
+        </NavLink>
+        <NavLink
           to="/introduce"
-          onClick={() => setMenu("introduce")}
-          className={menu === "introduce" ? "active" : ""}
+          className={({ isActive }) => (isActive ? 'active' : '')}
         >
           Giới thiệu
-        </Link>
-        <Link
+        </NavLink>
+        <NavLink
           to="/category"
+          className={({ isActive }) => (isActive ? "active navbar-category" : "navbar-category")}
           onClick={() => setMenu("category")}
-          className={menu === "category" ? "active navbar-category" : "navbar-category"}
         >
           Thực đơn
           <ul className="navbar-category-dropdown">
@@ -112,88 +110,50 @@ const Navbar = () => {
               <p >THỨC UỐNG</p>
             </li>
           </ul>
-        </Link>
+        </NavLink>
 
-        <Link
+        <NavLink
           to="/promotion"
-          onClick={() => setMenu("promotion")}
-          className={menu === "promotion" ? "active" : ""}
+          className={({ isActive }) => (isActive ? 'active' : '')}
         >
           Khuyến mãi
-        </Link>
-        <Link
+        </NavLink>
+        <NavLink
           to="/contact"
-          onClick={() => setMenu("contact")}
-          className={menu === "contact" ? "active" : ""}
+          className={({ isActive }) => (isActive ? 'active' : '')}
         >
           Liên hệ
-        </Link>
-        <Link
+        </NavLink>
+        <NavLink
           to="/store"
-          onClick={() => setMenu("store")}
-          className={menu === "store" ? "active" : ""}
+          className={({ isActive }) => (isActive ? 'active' : '')}
         >
           Cửa hàng
-        </Link>
-
-        {/* <Link
-          to="/account"
-          onClick={() => setMenu("account")}
-          className={menu === "account" ? "active" : ""}
-        >
-          Tài khoản
-        </Link> */}
+        </NavLink>
 
       </ul>
       <div className="navbar-right">
-        {/* <img src={assets.search_icon} alt="" /> */}
-        <Link to="/cart" className="navbar-search-icon">
-          <img src={assets.basket_icon} alt="" />
-          <div className={getTotalCartAmount() > 0 ? "dot" : ""}></div>
-        </Link>
         {
-          // token ? (
-          //   <button onClick={() => setShowLogin(true)}>Đăng nhập</button>
-          // ) : (
-          //   // <div className="navbar-profile">
-          //   //   <img src={assets.profile_icon} alt="" />
-          //   //   <ul className="navbar-profile-dropdown">
-          //   //     <li  >
-          //   //       <img src={assets.logout_icon} alt="" />
-          //   //       <p>Logout</p>
-          //   //     </li>
-          //   //     <hr />
-          //   //     <li>
-          //   //       <img src={assets.bag_icon} alt="" />
-          //   //       <p>Orders</p>
-          //   //     </li>
-          //   //   </ul>
-          //   // </div>
-          //   <Link to="/account" className="navbar-profile">
-          //     <img src={assets.profile_icon} alt="" />
-          //   </Link>
-          // )
-
-          <>
-            <Link to="/account" className="navbar-profile">
-              <img src={assets.profile_icon} alt="" />
-            </Link>
-            {/* <button onClick={() => handleShowLogin()}>Đăng nhập</button> */}
-            <button onClick={handleShowLogin}>Đăng nhập</button>
-            <button onClick={handleShowRegister}>Đăng ký</button>
-
-            <LoginModal
-              showModalLogin={showModalLogin}
-              handleCloseLogin={handleCloseLogin}
-              handleShowRegister={handleShowRegister} // Truyền hàm mở modal đăng ký
-            />
-
-            <RegisterModal
-              showModalRegister={showModalRegister}
-              handleCloseRegister={handleCloseRegister}
-              handleShowLogin={handleShowLogin}
-            />
-          </>
+          user && user.isAuthenticated === true
+            ? <>
+              <Link
+                to="/cart"
+                className="navbar-search-icon"
+              >
+                <img src={assets.basket_icon} alt="" />
+                <div className={getTotalCartAmount() > 0 ? "dot" : ""}></div>
+              </Link>
+              <Link
+                to="/account"
+                className="navbar-profile"
+              >
+                <img src={assets.profile_icon} alt="" />
+              </Link>
+            </>
+            : <>
+              <button onClick={handleShowLogin}>Đăng nhập</button>
+              <button onClick={handleShowRegister}>Đăng ký</button>
+            </>
 
         }
       </div>

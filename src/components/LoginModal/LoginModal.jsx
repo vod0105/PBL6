@@ -2,75 +2,74 @@ import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import './LoginModal.scss';
 import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { hideLoginModal, showRegisterModal } from '../../redux/actions/modalActions';
+import { loginSuccess, loginError } from '../../redux/actions/authenticationActions';
 
-const LoginModal = ({ showModalLogin, handleCloseLogin, handleShowRegister }) => {
-  const switchToRegister = () => {
-    handleCloseLogin(); // Đóng LoginModal => Need to clear all infor
-    handleShowRegister(); // Mở RegisterModal
-  };
-
-  // JWT
+const LoginModal = () => {
+  const dispatch = useDispatch();
+  const showModalLogin = useSelector((state) => state.modal.isLoginModalVisible); // Lấy trạng thái từ Redux
+  // Kiểm tra giá trị showModalLogin
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const defaultValidInput = {
     isValidEmail: true,
     isValidPassword: true,
   }
-  const [objCheckInput, setObjCheckInput] = useState(defaultValidInput)
+  const [objCheckInput, setObjCheckInput] = useState(defaultValidInput);
+
+  // Hàm để reset lại dữ liệu input
+  const resetInputs = () => {
+    setEmail("");
+    setPassword("");
+    setObjCheckInput(defaultValidInput);
+  }
+
+  const switchToRegister = () => {
+    resetInputs();
+    dispatch(hideLoginModal()); // Đóng LoginModal => Need to clear all infor
+    dispatch(showRegisterModal());
+  };
+
   const handleLogin = async () => {
     let objCheckValidInput = {
       isValidEmail: true,
       isValidPassword: true,
     }
     if (!email) {
-      toast.error("Vui lòng nhập email của bạn!");
       objCheckValidInput.isValidEmail = false;
     }
     if (!password) {
-      toast.error("Vui lòng nhập mật khẩu của bạn!");
       objCheckValidInput.isValidPassword = false;
     }
     setObjCheckInput({ ...objCheckValidInput });
     const hasInvalidInput = Object.values(objCheckValidInput).some(value => value === false);
-    // Default: Login Successfully
-    if (!hasInvalidInput) {
-      toast.success("Đăng nhập thành công nha em zai");
-      handleCloseLogin();
-    }
 
-    // let response = await loginUser(email, password); // return Object răng cần await biết
-    // if (response && +response.EC === 0) {
-    //   // Login successfully
-    //   toast.success(response.EM);
-    //   // React - Context
-    //   let groupWithRoles = response.DT.groupWithRoles;
-    //   let email = response.DT.email;
-    //   let username = response.DT.username;
-    //   let token = response.DT.access_token;
-    //   let data = {
-    //     isAuthenticated: true,
-    //     token,
-    //     account: {
-    //       groupWithRoles,
-    //       email,
-    //       username
-    //     }
-    //   }
-    //   localStorage.setItem("jwt", token);
-    //   loginContext(data); // setState in Context
-    //   history.push("/users");
-    // }
-    // if (response && +response.EC !== 0) {
-    //   // Login fail // Error server(500)
-    //   toast.error(response.EM);
-    // }
-    // return;
+    if (hasInvalidInput) {
+      toast.error("Chưa điền hết input em ơi!");
+    }
+    else {
+      // Check login
+      if (email == 'hoahoe' && password == 'hoala') { // Success
+        dispatch(loginSuccess());
+        dispatch(hideLoginModal());
+        toast.success('Ngon luôn! Đăng nhập OK đó!')
+      }
+      else { // Fail
+        dispatch(loginError());
+        toast.error('Sai email hoặc mật khẩu vô Web anh rồi đó em!')
+      }
+    }
   }
 
   return (
     <Modal
       show={showModalLogin}
-      onHide={handleCloseLogin}
+      onHide={() => { // Khi đóng Modal
+        dispatch(hideLoginModal());
+        resetInputs();
+      }}
       centered
       dialogClassName="custom-modal-login"
       animation={false}
@@ -95,20 +94,18 @@ const LoginModal = ({ showModalLogin, handleCloseLogin, handleShowRegister }) =>
                 value={password}
                 className={objCheckInput.isValidPassword ? 'form-control' : 'form-control is-invalid'}
                 onChange={(event) => setPassword(event.target.value)}
-              // onKeyPress={(event) => handlePressenter(event)}
               />
             </div>
-            <button className='btn btn-danger' onClick={() => handleLogin()}>Đăng nhập</button>
+            <button className='btn btn-danger' onClick={handleLogin}>Đăng nhập</button>
             <div className="click-register">
               <p>Bạn chưa có tài khoản?</p>
-              {/* Khi nhấn "Đăng ký ngay", chuyển sang modal đăng ký */}
               <button onClick={switchToRegister}>Đăng ký ngay</button>
             </div>
           </div>
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleCloseLogin}>
+        <Button variant="secondary" onClick={() => dispatch(hideLoginModal())}>
           Đóng
         </Button>
       </Modal.Footer>
