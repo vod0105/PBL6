@@ -25,7 +25,12 @@ const OrderDetailModal = ({ showModal, handleClose, orderDetails }) => {
     },
   ];
   return (
-    <Modal show={showModal} onHide={handleClose} dialogClassName="custom-modal">
+    <Modal
+      show={showModal}
+      onHide={handleClose}
+      dialogClassName="custom-modal-orderDetail"
+      centered
+    >
       <Modal.Header closeButton>
         <Modal.Title>Chi tiết đơn hàng</Modal.Title>
       </Modal.Header>

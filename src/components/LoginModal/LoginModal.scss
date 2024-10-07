@@ -1,0 +1,44 @@
+.custom-modal-login {
+    max-width: 30% !important;
+    .title-bold{
+        font-weight: 700;
+    }
+    .form-login {
+        .form-login-input{
+            margin-bottom: 20px;
+            input {
+                width: 100%;
+                border-radius: 5px;
+                border: 1px solid #E7E7E7;
+                padding: 10px 15px;
+                margin: 10px 0;
+                // Thêm style khi input được focus
+                &:focus {
+                    outline: none; // Bỏ viền mặc định
+                    border: 1px solid red; // Viền màu đỏ
+                }
+            }
+            
+        }
+
+        .btn {
+            width: 100%; // Đảm bảo nút đăng nhập chiếm toàn bộ chiều rộng
+        }
+
+        .click-register {
+            // text-align: center;
+            margin-top: 20px;
+            display: flex;
+            p {
+                margin: 0;
+                padding-right: 10px;
+            }
+            button {
+                background-color: transparent;
+                border: none;
+                color: #e3000e;
+                cursor: pointer;
+            }
+        }
+    }
+}

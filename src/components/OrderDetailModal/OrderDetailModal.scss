@@ -1,6 +1,5 @@
-.custom-modal {
+.custom-modal-orderDetail {
     max-width: 60%; // Mở rộng chiều rộng modal (80% của viewport)
-    height: 80vh;   // Mở rộng chiều cao modal (80% chiều cao viewport)
     .modal-body {
       overflow-y: auto; // Thêm thanh cuộn nếu nội dung vượt quá chiều cao
     }
