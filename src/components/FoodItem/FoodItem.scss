@@ -50,21 +50,21 @@
   cursor: pointer;
   border-radius: 50%;
 }
-.food-item-counter {
+.food-item-addtocart {
   position: absolute;
   bottom: 15px;
   right: 15px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 6px;
+  padding: 10px;
   border-radius: 50px;
-  background-color: white;
-}
-.food-item-counter img{
-    width: 30px;
+  background-color: red;
+  color: white;
+  &:hover{
+    background-color: transparent;
+    color: red;
+    cursor: pointer;
+    border: 1px solid red;
+  }
 }
 
-.food-item-counter p{
-  margin-bottom: 0;
-}

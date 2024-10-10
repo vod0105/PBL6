@@ -1,0 +1,166 @@
+.custom-modal-productitem{
+    min-width: 60% !important;
+    .modal-product-item{
+        display: flex;
+        flex-direction: column;
+        .product-detail-infor{
+            display: flex;
+            // min-width: 600px;
+            // height: 80vh;
+            .infor-left{
+                flex: 1;
+                .img-container {
+                    // height: 100%; /* Đặt chiều cao là 100% để chiếm hết div cha */
+                    // width: 100%; /* Đặt chiều rộng là 100% để chiếm hết div cha */          
+                    img {
+                      height: 100%; /* Đảm bảo hình ảnh chiếm hết chiều cao */
+                      width: 100%; /* Đảm bảo hình ảnh chiếm hết chiều rộng */
+                      object-fit: contain; /* Đảm bảo tỉ lệ hình ảnh không bị biến dạng */
+                      // object-position: left; /* Đặt hình ảnh nằm bên trái */
+                    }
+                  }
+            }
+            .infor-right{
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                .category{
+                    font-size: 20px;
+                    font-weight: 500;
+                    color: grey;
+                }
+                .name{
+                    font-size: 30px;
+                    font-weight: 600;
+                    color: rgb(32, 32, 32);
+                    text-transform: uppercase;
+                }
+                .size-container {
+                    margin-top: 10px;
+                    .title{
+                      font-weight: bold;
+                    }
+                    .list-size {
+                      margin-top: 10px;
+                      font-size: 15px;
+                      display: flex;
+                      flex-wrap: wrap; // Tự động xuống dòng khi có nhiều phần tử
+                      gap: 30px; // Khoảng cách giữa các phần tử
+                    
+                      .size-item {
+                        padding: 5px 30px; // Căn chỉnh padding để dễ nhìn hơn
+                        border: 1px solid #ccc;
+                        cursor: pointer;
+                        border-radius: 20px;
+                        text-align: center;
+                        transition: background-color 0.3s, border-color 0.3s, color 0.3s; // Hiệu ứng khi hover hoặc chọn
+                    
+                        &:hover {
+                          background-color: #eee; // Thêm hiệu ứng hover để tăng UX
+                        }
+                      }
+                    
+                      .size-item.selected {
+                        background-color: #ffc522; // Màu nền khi được chọn
+                        // color: #fff;
+                        font-weight: bold;
+                        border-color: #ffc522; // Màu viền khi được chọn
+                      }
+                    }
+                    
+                  }
+                  
+                  .quantity-totalprice-container {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 10px;
+                    border: 1px solid #ccc;
+                    border-radius: 8px;
+                    // max-width: 300px;
+                    margin: 20px 0;
+                  
+                    .quantity-container {
+                      display: flex;
+                      align-items: center;
+                  
+                      .quantity-btn {
+                        color: var(--white);
+                        background: var(--light-red);
+                        border: var(--light-red);
+                        padding: 10px 15px;
+                        font-size: 13px;
+                        font-weight: 600;
+                        letter-spacing: 0.5px;
+                        font-family: var(--oswald-font);
+                        vertical-align: middle;
+                        text-transform: uppercase;
+                        transition: all 0.3s ease-in-out;
+                        border-radius: 8px;
+                        outline: none;
+                        border: none;
+                        &:hover, &:focus{
+                            color: var(--light-red);
+                            background: transparent;
+                            outline: 1px solid var(--light-red);
+                        }
+                      }
+                  
+                      .quantity-input {
+                        width: 60px;
+                        height: 40px;
+                        text-align: center;
+                        border: 1px solid #ccc;
+                        margin: 0 5px;
+                        border-radius: 5px;
+                        font-size: 16px;
+                      }
+                    }
+                    .totalprice-container {
+                      font-size: 25px;
+                      font-weight: 700;
+                      color: var(--light-red);
+                    }
+                  }
+                  .btn-container{
+                    margin-top: 10px;
+                    .btn-buynow{
+                      color: var(--white);
+                      background: var(--light-red);
+                      border: var(--light-red);
+                      padding: 10px 15px;
+                      font-size: 15px;
+                      font-weight: 600;
+                      letter-spacing: 0.5px;
+                      font-family: var(--oswald-font);
+                      vertical-align: middle;
+                      text-transform: uppercase;
+                      transition: all 0.3s ease-in-out;
+                      border-radius: 8px;
+                      outline: none;
+                      border: none;
+                      &:hover, &:focus{
+                          color: var(--light-red);
+                          background: transparent;
+                          outline: 1px solid var(--light-red);
+                      }
+                    }
+                  } 
+                
+                .store{
+                    .store-title{
+                        font-size: 15px;
+                        margin-bottom: 10px;
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+    
+        .product-detail-comment{
+            text-align: center;
+            margin-top: 50px;
+            font-size: 50px;
+        }
+    }
+}

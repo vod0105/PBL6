@@ -5,83 +5,70 @@ import product1 from "../../assets/food-yummy/product1.jpg";
 import product2 from "../../assets/food-yummy/product2.jpg";
 import product3 from "../../assets/food-yummy/product3.jpg";
 import product4 from "../../assets/food-yummy/product4.jpg";
+import ProductItem from "../../components/ProductItem/ProductItem";
 // import { imageZoomEffect, TitleStyles } from "./ReusableStyles";
 export default function Category() {
   const data = [
     {
       image: product1,
       name: "Combo thơm phức",
-      price: "$1",
+      price: "10000",
     },
     {
       image: product2,
       name: "Gà sốt cay",
-      price: "$2",
+      price: "20000",
     },
     {
       image: product3,
       name: "Burger",
-      price: "$3",
+      price: "30000",
     },
 
     {
       image: product4,
       name: "Tropical Sundae",
-      price: "$4",
+      price: "40000",
     },
     {
       image: product1,
       name: "Combo thơm phức",
-      price: "$1",
+      price: "10000",
     },
     {
       image: product2,
       name: "Gà sốt cay",
-      price: "$2",
+      price: "20000",
     },
     {
       image: product3,
       name: "Burger",
-      price: "$3",
+      price: "30000",
     },
 
     {
       image: product4,
       name: "Tropical Sundae",
-      price: "$4",
+      price: "40000",
     },
     {
       image: product1,
       name: "Combo thơm phức",
-      price: "$1",
+      price: "10000",
     },
     {
       image: product2,
       name: "Gà sốt cay",
-      price: "$2",
+      price: "20000",
     },
   ];
   return (
-    // <Section id="products">
     <div className="page-category">
-      <div className="title">
-        {/* <h1>
-          <span>Favourite</span> Trời ơi ngon quá đi!
-        </h1> */}
-      </div>
-      <div className="products">
+      <div className="category-list-products">
         {data.map((product, index) => {
           return (
             <>
-              <div className={(index + 1) % 4 !== 0 ? "product" : "product product-no-border-right"} key={index}>
-                <div className="image">
-                  <img src={product.image} alt="" />
-                </div>
-                <h4>{product.name}</h4>
-                <h3>{product.price}</h3>
-                <button>MUA ĐI EM</button>
-              </div>
-
+              <ProductItem product={product} key={index} />
               {
                 (index + 1) % 4 === 0 && (index + 1) !== +data.length && <hr className="hr-separate" />
               }
@@ -90,12 +77,11 @@ export default function Category() {
         })}
       </div>
     </div>
-    // </Section>
   );
 }
 
 // const Section = styled.section`
-//   ${TitleStyles};
+//   {TitleStyles};
 //   .products {
 //     display: grid;
 //     grid-template-columns: repeat(4, 1fr);
@@ -116,7 +102,7 @@ export default function Category() {
 //         line-height: 2rem;
 //         letter-spacing: 0.1rem;
 //       }
-//       ${imageZoomEffect};
+//       {imageZoomEffect};
 //       .image {
 //         max-height: 20rem;
 //         overflow: hidden;

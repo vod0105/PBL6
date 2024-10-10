@@ -59,7 +59,7 @@ const Introduce = () => {
         <Container>
           <Row>
             <Col lg={12} className="mb-5 mb-lg-0">
-              <h4 className="introduce-section-2-title">CỬA HÀNG QUẦN QUÈ CỦA BẠN</h4>
+              <h4 className="introduce-section-2-title">CỬA HÀNG  CỦA BẠN</h4>
             </Col>
           </Row>
           <Row>

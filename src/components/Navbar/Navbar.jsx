@@ -131,9 +131,38 @@ const Navbar = () => {
           Cửa hàng
         </NavLink>
 
+        <NavLink
+          to="/test-product-detail"
+          className={({ isActive }) => (isActive ? 'active' : '')}
+        >
+          TEST P.DETAIL
+        </NavLink>
+
+        <NavLink
+          to="/test-store"
+          className={({ isActive }) => (isActive ? 'active' : '')}
+        >
+          TEST PAGE STORE
+        </NavLink>
+
       </ul>
       <div className="navbar-right">
-        {
+        <Link
+          to="/cart"
+          className="navbar-search-icon"
+        >
+          <img src={assets.basket_icon} alt="" />
+          <div className={getTotalCartAmount() > 0 ? "dot" : ""}></div>
+        </Link>
+        <Link
+          to="/account"
+          className="navbar-profile"
+        >
+          <img src={assets.profile_icon} alt="" />
+        </Link>
+        <button onClick={handleShowLogin}>Đăng nhập</button>
+        <button onClick={handleShowRegister}>Đăng ký</button>
+        {/* {
           user && user.isAuthenticated === true
             ? <>
               <Link
@@ -155,7 +184,7 @@ const Navbar = () => {
               <button onClick={handleShowRegister}>Đăng ký</button>
             </>
 
-        }
+        } */}
       </div>
     </div>
   );
