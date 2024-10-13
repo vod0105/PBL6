@@ -3,7 +3,7 @@ import { Modal, Button } from 'react-bootstrap';
 import './ProductItemModal.scss'
 import test_product from "../../assets/food-yummy/product1.jpg";
 import StoreList from '../StoreList/StoreList';
-const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, stores }) => {
+const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, stores, isAddToCart }) => {
 
   // Size
   const sizes = ['S', 'M', 'L', 'XL']; // Danh sách kích cỡ
@@ -47,11 +47,11 @@ const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, 
                 <div className="product-detail-infor">
                   <div className="infor-left">
                     <div className="img-container">
-                      <img src={test_product} alt="" />
+                      <img src={product.image} alt="" />
                     </div>
                   </div>
                   <div className="infor-right">
-                    <div className="name">Gà sốt cay</div>
+                    <div className="name">{product.name}</div>
                     <div className="size-container">
                       <span className='title'>Kích cỡ</span>
                       <div className="list-size">
@@ -94,12 +94,10 @@ const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, 
                       <StoreList stores={stores} />
                     </div>
                     <div className="btn-container">
-                      <button
-                        className='btn-buynow'
-                      // onClick={handleShowModalProduct}
-                      >
-                        MUA NGAY <i className="fa-solid fa-file-invoice-dollar"></i>
-                      </button>
+                      {
+                        isAddToCart ? <button>THÊM VÀO GIỎ HÀNG <i className="fa-solid fa-cart-shopping"></i></button>
+                          : <button>MUA NGAY <i className="fa-solid fa-file-invoice-dollar"></i></button>
+                      }
                     </div>
                     {/* <button>THÊM VÀO GIỎ HÀNG</button> */}
 

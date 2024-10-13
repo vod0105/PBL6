@@ -1,0 +1,19 @@
+.food-display{
+    margin-top: 30px;
+    text-align: center;  
+    h2{
+        font-size: 2.5rem;
+        color: red;
+        margin-bottom: 20px;
+    }
+    .food-display-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 30px;
+        /* justify-content: center; */
+        padding: 0 20px; /* Thêm khoảng cách ở 2 bên để căn giữa tốt hơn */
+        margin: 0 auto; /* Đảm bảo container được căn giữa */
+        max-width: 1200px; /* Đặt giới hạn chiều rộng để căn giữa grid */
+    }
+}
+

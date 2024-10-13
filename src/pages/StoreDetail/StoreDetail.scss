@@ -1,0 +1,100 @@
+.page-store-detail{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    .store-detail-infor{
+        display: flex;
+        // min-width: 600px;
+        // height: 60vh;
+        .infor-left{
+            flex: 3;
+            display: flex;
+            flex-direction: column;
+            .infor-left-img-container {            
+                img {
+                    width: 100%;
+                    height: auto;
+                    border-radius: 15px; /* Bo tròn góc ảnh */
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ cho hình ảnh */
+                    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Hiệu ứng chuyển động mượt khi hover */
+                    
+                    &:hover {
+                        transform: scale(1.05); /* Phóng to ảnh nhẹ khi hover */
+                        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Tăng đổ bóng khi hover */
+                    }
+                }
+            }
+            
+            .infor-left-infor-container {
+                flex: 1;
+                border: 1px solid #e60000; /* Đổi màu viền nhẹ hơn */
+                padding: 10px 30px;
+                margin-top: 20px;
+                border-radius: 10px; /* Bo góc cho container */
+                background-color: #fff; /* Màu nền nhẹ nhàng */
+              
+                .infor-left-name {
+                  font-size: 20px;
+                  font-weight: 700; /* Tăng độ dày chữ */
+                  color: #e60000;
+                  text-transform: uppercase;
+                  margin-bottom: 10px; /* Tạo khoảng cách giữa tên và các thông tin liên hệ */
+                  text-align: center; /* Căn giữa tên */
+                }
+              
+                .infor-left-contact-container {
+                  display: flex;
+                  flex-direction: column;
+                  gap: 10px; /* Tăng khoảng cách giữa các dòng liên hệ */
+                  
+                  span {
+                    display: flex;
+                    align-items: center; /* Căn giữa icon và nội dung */
+                    font-size: 14px;
+                    color: #333;
+                    background-color: #fff; /* Màu nền trắng cho mỗi dòng liên hệ */
+                    padding: 5px;
+                    border-radius: 8px; /* Bo góc cho mỗi dòng liên hệ */
+                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Tạo hiệu ứng đổ bóng nhẹ */
+                  }
+              
+                  i {
+                    padding: 8px;
+                    background-color: #e60000; /* Màu nền vàng nổi bật cho icon */
+                    color: white;
+                    font-weight: bold;
+                    border-radius: 50%; /* Icon dạng tròn */
+                    margin-right: 10px; /* Khoảng cách giữa icon và text */
+                  }
+                }
+              }
+              
+        }
+        .infor-right{
+            flex: 7;
+            // display: flex;
+            // flex-direction: column;
+            margin-left: 20px;
+            .infor-right-img-container {
+                // height: 100%; /* Đặt chiều cao là 100% để chiếm hết div cha */
+                // width: 100%; /* Đặt chiều rộng là 100% để chiếm hết div cha */          
+                img {
+                  height: 100%; /* Đảm bảo hình ảnh chiếm hết chiều cao */
+                  width: 100%; /* Đảm bảo hình ảnh chiếm hết chiều rộng */
+                //   object-fit: contain; /* Đảm bảo tỉ lệ hình ảnh không bị biến dạng */
+                //   object-position: left; /* Đặt hình ảnh nằm bên trái */
+                }
+            }
+        }
+    }
+    .list-products{
+        text-align: center;
+        margin-top: 50px;
+        h2{
+            font-size: 2.5rem;
+            color: red;
+            margin-bottom: 20px;
+        }
+    }
+
+}

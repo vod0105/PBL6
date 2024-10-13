@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import DownloadImage from "../../assets/shop/ggmap.jpg";
 const Store_Old = () => {
   return (
-    <section className="page-store">
+    <section className="page-store-old">
       <Container>
         <Row className="align-items-center">
           <Col lg={6} className="text-center text-lg-start mb-5 mb-lg-0 list-stores">

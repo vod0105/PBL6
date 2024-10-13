@@ -95,6 +95,7 @@ const LoginModal = () => {
                 className={objCheckInput.isValidPassword ? 'form-control' : 'form-control is-invalid'}
                 onChange={(event) => setPassword(event.target.value)}
               />
+              <button className='btn-forgot-password'>Quên mật khẩu</button>
             </div>
             <button className='btn btn-danger' onClick={handleLogin}>Đăng nhập</button>
             <div className="click-register">

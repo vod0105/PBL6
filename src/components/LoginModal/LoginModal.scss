@@ -5,7 +5,7 @@
     }
     .form-login {
         .form-login-input{
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             input {
                 width: 100%;
                 border-radius: 5px;
@@ -16,6 +16,16 @@
                 &:focus {
                     outline: none; // Bỏ viền mặc định
                     border: 1px solid red; // Viền màu đỏ
+                }
+            }
+            .btn-forgot-password {
+                background-color: transparent;
+                border: none;
+                color: #e3000e;
+                cursor: pointer;
+                text-decoration: underline;
+                &:hover{
+                    opacity: 0.5;
                 }
             }
             

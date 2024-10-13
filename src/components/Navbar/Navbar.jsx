@@ -124,25 +124,19 @@ const Navbar = () => {
         >
           Liên hệ
         </NavLink>
-        <NavLink
+
+        {/* <NavLink
           to="/store"
           className={({ isActive }) => (isActive ? 'active' : '')}
         >
           Cửa hàng
-        </NavLink>
-
-        <NavLink
-          to="/test-product-detail"
-          className={({ isActive }) => (isActive ? 'active' : '')}
-        >
-          TEST P.DETAIL
-        </NavLink>
+        </NavLink> */}
 
         <NavLink
           to="/test-store"
           className={({ isActive }) => (isActive ? 'active' : '')}
         >
-          TEST PAGE STORE
+          Cửa hàng
         </NavLink>
 
       </ul>

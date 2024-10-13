@@ -18,6 +18,7 @@ import Account from '../pages/Account/Account';
 import ProductItemDetail from '../components/ProductItemDetail/ProductItemDetail';
 import Store_Old from '../pages/Store_Old/Store_Old';
 import Store from '../pages/Store/Store';
+import StoreDetail from '../pages/StoreDetail/StoreDetail';
 
 const Projects = () => { // component
     return (
@@ -46,8 +47,9 @@ const AppRoutes = (props) => {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/account/*" element={<Account />} />
 
-                <Route path="/test-product-detail" element={<ProductItemDetail />} />
+                <Route path="/test-product-detail/:id" element={<ProductItemDetail />} />
                 <Route path="/test-store" element={<Store />} />
+                <Route path="/test-store-detail/:id" element={<StoreDetail />} />
 
                 <Route path="*" element={<div>404 Not Found!!!</div>} />
 

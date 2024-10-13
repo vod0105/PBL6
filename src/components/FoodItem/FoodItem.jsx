@@ -1,40 +1,91 @@
 import React, { useContext, useState } from 'react'
 import './FoodItem.scss'
-import { assets } from '../../assets/assets'
-import { StoreContext } from '../../context/StoreContext'
-const FoodItem = ({ id, name, price, description, image }) => {
+import { Link } from "react-router-dom";
 
-  const [itemCount, setItemCount] = useState(0)
+import store1 from "../../assets/image_gg/introduce_1.png";
+import store2 from "../../assets/image_gg/introduce_2.png";
+import store3 from "../../assets/image_gg/introduce_3.png";
+import store4 from "../../assets/image_gg/introduce_4.png";
+import store5 from "../../assets/image_gg/introduce_5.png";
+import ProductItemModal from '../ProductItemModal/ProductItemModal';
 
-  const { cartItems, setCartItem, addToCart, removeFromCart, url } = useContext(StoreContext);
-  console.log(url + "images/" + image);
-  // const renderContent =()=>{
-  //   if(!itemCount) return(<img src={assets.add_icon_white} className='add' onClick={()=>setItemCount(prev=>prev+1)}/>);
-  //   else return(<div className='food-item-counter'>
-  //     <img onClick={()=>setItemCount(prev=>prev-1)} src={assets.remove_icon_red} alt="" />
-  //     <p>{itemCount}</p>
-  //     <img onClick={()=>setItemCount(prev=>prev+1)} src={assets.add_icon_green} alt="" />
-  //   </div>);
-
-  // }
-
+const FoodItem = ({ product }) => {
+  // Modal
+  const [showModalProduct, setShowModalProduct] = useState(false);
+  const [isAddToCart, setIsAddToCart] = useState(false);
+  const handleShowModalProduct = () => {
+    setShowModalProduct(true); // Hiển thị modal
+  };
+  const handleCloseModalProduct = () => {
+    setShowModalProduct(false); // Đóng modal
+    setTimeout(() => {
+      setIsAddToCart(false);
+    }, 200);
+  };
+  const handleAddToCartClick = () => {
+    setIsAddToCart(true); // Kích hoạt chế độ "Thêm vào giỏ hàng"
+    handleShowModalProduct(); // Hiển thị modal
+  };
+  // List stores
+  const stores = [
+    {
+      image: store1,
+      name: 'Cửa hàng 1',
+      address: 'Địa chỉ cửa hàng 1',
+    },
+    {
+      image: store2,
+      name: 'Cửa hàng 2',
+      address: 'Địa chỉ cửa hàng 2',
+    },
+    {
+      image: store3,
+      name: 'Cửa hàng 3',
+      address: 'Địa chỉ cửa hàng 3',
+    },
+    {
+      image: store4,
+      name: 'Cửa hàng 4',
+      address: 'Địa chỉ cửa hàng 4',
+    },
+    {
+      image: store5,
+      name: 'Cửa hàng 5',
+      address: 'Địa chỉ cửa hàng 5',
+    },
+  ];
   return (
     <div className='food-item'>
       <div className="food-item-img-container">
-        <img src={image} alt="" className="food-item-image" />
-        {
-          <div className='food-item-addtocart'>
-            <i class="fa-solid fa-cart-plus"></i>
-          </div>
-        }
+        <Link to={`/test-product-detail/${product.id}`}>
+          <img src={product.image} alt="" className="food-item-image" />
+        </Link>
+        <div className='food-item-addtocart' onClick={handleAddToCartClick}>
+          <i class="fa-solid fa-cart-plus"></i>
+        </div>
       </div>
       <div className="food-item-info">
         <div className="food-item-name-rating">
-          <p>{name}</p>
-          {/* <img src={assets.rating_starts} alt="" /> */}
+          <p>{product.name}</p>
         </div>
-        <p className="food-item-desc">{description}</p>
-        <p className="food-item-price">${price}</p>
+        {/* <p className="food-item-desc">{description}</p> */}
+        {/* <p className="food-item-price">${price}</p> */}
+        <div className="food-item-price-container">
+          <span className="price-discount">
+            {Number(product.price).toLocaleString('vi-VN')} đ
+          </span>
+          <span className="price-origin">
+            {(Number(product.price) * 0.9).toLocaleString('vi-VN')} đ
+          </span>
+        </div>
+        <button onClick={handleShowModalProduct}>MUA NGAY</button>
+        <ProductItemModal
+          showModalProduct={showModalProduct}
+          handleCloseModalProduct={handleCloseModalProduct}
+          product={product}
+          stores={stores}
+          isAddToCart={isAddToCart}
+        />
       </div>
     </div>
   )
