@@ -39,7 +39,7 @@ const AppRoutes = (props) => {
 
                 <Route path="/" element={<Home />} />
                 <Route path="/introduce" element={<Introduce />} />
-                <Route path="/category" element={<Category />} />
+                <Route path="/category/:id" element={<Category />} />
                 <Route path="/promotion" element={<Promotion />} />
                 <Route path="/store" element={<Store_Old />} />
                 <Route path="/cart" element={<Cart />} />

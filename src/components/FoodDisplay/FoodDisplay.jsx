@@ -1,4 +1,6 @@
-import React, { useContext } from 'react'
+// Sản phẩm bán chạy
+
+import React, { useState, useEffect } from "react";
 import './FoodDisplay.scss'
 import FoodItem from '../FoodItem/FoodItem'
 import top_1 from '../../assets/1.png'
@@ -10,40 +12,25 @@ import product2 from "../../assets/food-yummy/product2.jpg";
 import product3 from "../../assets/food-yummy/product3.jpg";
 import product4 from "../../assets/food-yummy/product4.jpg";
 
-const FoodDisplay = ({ category }) => {
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProductsBestSale } from "../../redux/actions/productActions";
 
-  const products = [
-    {
-      id: 1,
-      image: product1,
-      name: "Combo thơm phức",
-      price: "10000",
-    },
-    {
-      id: 2,
-      image: product2,
-      name: "Gà sốt cay",
-      price: "20000",
-    },
-    {
-      id: 3,
-      image: product3,
-      name: "Burger",
-      price: "30000",
-    },
 
-    {
-      id: 4,
-      image: product4,
-      name: "Tropical Sundae",
-      price: "40000",
-    }
-  ];
+const FoodDisplay = () => {
+  // fetch product best sale
+  const dispatch = useDispatch();
+  const listProductsBestSale = useSelector((state) => {
+    return state.product.listProductsBestSale;
+  })
+
+  useEffect(() => {
+    dispatch(fetchProductsBestSale());
+  }, []);
 
   return (
     <div className='food-display' id='food-display'>
       <div className="food-display-list">
-        {products.map((product, index) => {
+        {listProductsBestSale.map((product, index) => {
           // if (category === "All" || category === item.category) {
           return <FoodItem key={index} product={product} />
           // }

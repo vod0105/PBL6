@@ -2,11 +2,15 @@
   width: 100%;
   margin: auto;
   border-radius: 15px;
-  box-shadow: 0px 0px 15px #00000015;
-  transition: 0.3s;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15); /* Sử dụng rgba để dễ điều chỉnh độ trong suốt */
+  transition: box-shadow 0.3s; /* Chuyển đổi mượt mà cho box-shadow */
   animation: fadeIn 1s;
   text-align: center;
   border: 1px solid rgb(240, 226, 226);
+  /* Optional: Thay đổi box-shadow khi hover */
+  &:hover {
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.25); /* Thay đổi box-shadow khi hover để tạo hiệu ứng */
+  }
   .food-item-img-container{
     position: relative;
     .food-item-image {

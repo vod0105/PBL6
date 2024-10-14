@@ -57,8 +57,8 @@ const FoodItem = ({ product }) => {
   return (
     <div className='food-item'>
       <div className="food-item-img-container">
-        <Link to={`/test-product-detail/${product.id}`}>
-          <img src={product.image} alt="" className="food-item-image" />
+        <Link to={`/test-product-detail/${product.productId}`}>
+          <img src={'data:image/png;base64,' + product.image} alt="" className="food-item-image" />
         </Link>
         <div className='food-item-addtocart' onClick={handleAddToCartClick}>
           <i class="fa-solid fa-cart-plus"></i>
@@ -66,7 +66,7 @@ const FoodItem = ({ product }) => {
       </div>
       <div className="food-item-info">
         <div className="food-item-name-rating">
-          <p>{product.name}</p>
+          <p>{product.productName}</p>
         </div>
         {/* <p className="food-item-desc">{description}</p> */}
         {/* <p className="food-item-price">${price}</p> */}
@@ -75,7 +75,7 @@ const FoodItem = ({ product }) => {
             {Number(product.price).toLocaleString('vi-VN')} đ
           </span>
           <span className="price-origin">
-            {(Number(product.price) * 0.9).toLocaleString('vi-VN')} đ
+            {Number(product.discountedPrice).toLocaleString('vi-VN')} đ
           </span>
         </div>
         <button onClick={handleShowModalProduct}>MUA NGAY</button>

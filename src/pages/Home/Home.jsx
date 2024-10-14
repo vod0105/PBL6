@@ -16,7 +16,7 @@ const Home = () => {
       <BannerWelcome />
       <Service />
       <h2>SẢN PHẨM BÁN CHẠY</h2>
-      <FoodDisplay category={category} />
+      <FoodDisplay />
       <AppDownload />
     </div>
   )

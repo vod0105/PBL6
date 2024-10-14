@@ -1,15 +1,10 @@
-// store.js
-import { createStore, combineReducers } from 'redux';
-import modalReducer from '../reducers/modalReducer';
-import authenticationReducer from '../reducers/authenticationReducer';
-import categoryReducer from '../reducers/categoryReducer';
+import { createStore, applyMiddleware } from 'redux';
+import { thunk } from 'redux-thunk';
+import rootReducer from '../reducers/rootReducer';
 
-const rootReducer = combineReducers({
-    modal: modalReducer,
-    authentication: authenticationReducer,
-    category: categoryReducer
-});
-
-const store = createStore(rootReducer);
+const store = createStore(
+    rootReducer,
+    applyMiddleware(thunk)
+);
 
 export default store;

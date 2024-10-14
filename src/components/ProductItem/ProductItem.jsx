@@ -60,14 +60,14 @@ const ProductItem = ({ product, index }) => {
   return (
     <div className={(index + 1) % 4 !== 0 ? "category-product-item" : "category-product-item product-no-border-right"} key={index}>
       <div className="product-item-img-container">
-        <Link to={`/test-product-detail/${product.id}`}>
-          <img src={product.image} alt="" className="product-item-image" />
+        <Link to={`/test-product-detail/${product.productId}`}>
+          <img src={'data:image/png;base64,' + product.image} alt="" className="product-item-image" />
         </Link>
         <div className='product-item-addtocart' onClick={handleAddToCartClick}>
           <i class="fa-solid fa-cart-plus"></i>
         </div>
       </div>
-      <h4>{product.name}</h4>
+      <h4>{product.productName}</h4>
       <div className="product-item-price-container">
         <span className="product-item-price-discount">
           {Number(product.price).toLocaleString('vi-VN')} đ

@@ -1,10 +1,10 @@
-import React, { useContext, useState } from "react";
-import "./Navbar.css";
+import React, { useState, useEffect } from "react";
+import "./Navbar.scss";
 import { assets } from "../../assets/assets";
-import { Link, useNavigate, NavLink } from "react-router-dom";
-import { StoreContext } from "../../context/StoreContext";
+import { Link, NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { showLoginModal, showRegisterModal } from "../../redux/actions/modalActions";
+import { fetchAllCategories } from "../../redux/actions/categoryActions";
 
 import cate_1 from "../../assets/navbar/cate_1.png";
 import cate_2 from "../../assets/navbar/cate_2.png";
@@ -29,19 +29,19 @@ const Navbar = () => {
     dispatch(showRegisterModal());
   };
 
-  const [menu, setMenu] = useState("home");
-  const { getTotalCartAmount, setToken, token, setFoodList } = useContext(StoreContext);
-  const navigate = useNavigate();
-  // const logOut = () => {
-  //   localStorage.removeItem("token");
-  //   console.log("log out");
-  //   setToken("");
+  // fetch category
+  const listCategories = useSelector((state) => {
+    return state.category.listCategories;
+  })
+  const isLoading = useSelector(state => state.category.isLoading);
+  const isError = useSelector(state => state.category.isError);
+  useEffect(() => {
+    // console.log("Fetching categories...");
+    dispatch(fetchAllCategories());
+  }, []);
 
-  //   navigate("/");
-
-  //   // Đăng xuất thành công
-  //   console.log("Logged out successfully");
-  // };
+  // useEffect(() => {
+  // }, [listCategories]);
 
 
   return (
@@ -68,47 +68,31 @@ const Navbar = () => {
           Giới thiệu
         </NavLink>
         <NavLink
-          to="/category"
+          to={listCategories.length > 0 ? `/category/${listCategories[0].categoryId}` : "/category"}
           className={({ isActive }) => (isActive ? "active navbar-category" : "navbar-category")}
-          onClick={() => setMenu("category")}
         >
           Thực đơn
           <ul className="navbar-category-dropdown">
-            <li>
+            {/* <li>
               <img src={cate_1} alt="" />
               <p>MÓN NGON PHẢI THỬ</p>
             </li>
+            */}
+            {
+              listCategories && listCategories.length > 0
+              &&
+              listCategories.map((category, index) => {
+                return (
+                  <Link to={`/category/${category.categoryId}`} key={index}>
+                    <li >
+                      <img src={'data:image/png;base64,' + category.image} alt="" />
+                      <p>{category.categoryName}</p>
+                    </li>
+                  </Link>
 
-            <li>
-              <img src={cate_2} alt="" />
-              <p >GÀ GIÒN VUI VẺ</p>
-            </li>
-            <li>
-              <img src={cate_3} alt="" />
-              <p>MỲ Ý</p>
-            </li>
-
-            <li>
-              <img src={cate_4} alt="" />
-              <p >GÀ SỐT CAY</p>
-            </li>
-            <li>
-              <img src={cate_5} alt="" />
-              <p>BURGER</p>
-            </li>
-
-            <li>
-              <img src={cate_6} alt="" />
-              <p >PHẦN ĂN PHỤ</p>
-            </li>
-            <li>
-              <img src={cate_7} alt="" />
-              <p>MÓN TRÁNG MIỆNG</p>
-            </li>
-            <li>
-              <img src={cate_8} alt="" />
-              <p >THỨC UỐNG</p>
-            </li>
+                )
+              })
+            }
           </ul>
         </NavLink>
 
@@ -125,13 +109,6 @@ const Navbar = () => {
           Liên hệ
         </NavLink>
 
-        {/* <NavLink
-          to="/store"
-          className={({ isActive }) => (isActive ? 'active' : '')}
-        >
-          Cửa hàng
-        </NavLink> */}
-
         <NavLink
           to="/test-store"
           className={({ isActive }) => (isActive ? 'active' : '')}
@@ -146,7 +123,7 @@ const Navbar = () => {
           className="navbar-search-icon"
         >
           <img src={assets.basket_icon} alt="" />
-          <div className={getTotalCartAmount() > 0 ? "dot" : ""}></div>
+          <div className='dot'></div>
         </Link>
         <Link
           to="/account"
