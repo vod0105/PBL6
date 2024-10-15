@@ -19,8 +19,6 @@ const AddPromotion = ({ url }) => {
   const [bestSale, setbestSale] = useState("");
   const token = localStorage.getItem("access_token");
 
-  
-
   const onChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -46,7 +44,7 @@ const AddPromotion = ({ url }) => {
     formData.append("description", data.description);
     formData.append("startDate", data.startDate);
     formData.append("endDate", data.endDate);
-
+    formData.append("image", image);
     try {
       const response = await axios.post(
         `${url}/api/v1/admin/promotions/add`,
@@ -92,6 +90,27 @@ const AddPromotion = ({ url }) => {
         <form className="flex-col" onSubmit={onSubmitHandler}>
           <table className="form-table">
             <tbody>
+              <tr>
+                <td className="td-text">Upload Image</td>
+                <td>
+                  <label htmlFor="image">
+                    <img
+                      className="img-uploa  d"
+                      src={
+                        image ? URL.createObjectURL(image) : assets.upload_area
+                      }
+                      alt=""
+                    />
+                  </label>
+                  <input
+                    onChange={(e) => setImage(e.target.files[0])}
+                    type="file"
+                    id="image"
+                    hidden
+                    required
+                  />
+                </td>
+              </tr>
               <tr>
                 <td>Promotion Name</td>
                 <td>

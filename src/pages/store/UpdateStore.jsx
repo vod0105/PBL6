@@ -10,7 +10,6 @@ const UpdateStore = ({ url }) => {
   const [error, setError] = useState(null);
   const [dataUpdate, setDataUpdate] = useState([]);
   const { id } = useParams();
-
   const [data, setData] = useState({
     storeName: "",
     PhoneNumber: "",
@@ -19,6 +18,7 @@ const UpdateStore = ({ url }) => {
     Open: "",
     Close: "",
     longitude: "",
+    apiimg: "",
   });
 
   //get user
@@ -48,6 +48,21 @@ const UpdateStore = ({ url }) => {
     }
   }, []);
 
+  const base64ToFile = (base64String, fileName) => {
+    const [metadata, base64] = base64String.split(",");
+    const mimeString = metadata.match(/:(.*?);/)[1]; // Lấy loại MIME
+
+    const byteCharacters = atob(base64);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+
+    const blob = new Blob([byteArray], { type: mimeString });
+    return new File([blob], fileName, { type: mimeString });
+  };
+
   // Get store
   useEffect(() => {
     const fetchData = async () => {
@@ -64,7 +79,21 @@ const UpdateStore = ({ url }) => {
           Open: response.data.data.openingTime,
           Close: response.data.data.closingTime,
           longitude: response.data.data.longitude,
+          apiimg: response.data.data.image,
+          
         });
+        console.log("vao1");
+        // console.log("image",response.data.data.image)
+        if (response.data.data.image) {
+          const file = base64ToFile(
+            response.data.data.image,
+            "store-image.png"
+          );
+          
+          setImage(file);
+        }
+        
+        
       } catch (err) {
         setError(err);
       } finally {
@@ -76,8 +105,8 @@ const UpdateStore = ({ url }) => {
   }, []);
 
   useEffect(() => {
-    console.log("DAta update", dataUpdate);
-    console.log("DAta", data);
+    // console.log("DAta update", dataUpdate);
+    // console.log("image", image);
   }, [data]);
 
   const onChangeHandler = (event) => {
@@ -154,7 +183,12 @@ const UpdateStore = ({ url }) => {
             <label htmlFor="image">
               <img
                 className="img-upload"
-                src={image ? URL.createObjectURL(image) : assets.upload_area}
+                src={
+                  image
+                    ? URL.createObjectURL(image)
+                    : `data:image/jpeg;base64,${data.apiimg}`
+                }
+                // src={`data:image/jpeg;base64,${store.image}`}
                 alt=""
               />
             </label>
@@ -275,9 +309,9 @@ const UpdateStore = ({ url }) => {
           </button>
         </form>
       </div>
-      <div className="cover-right">
-        <img src={assets.store} alt="" />
-      </div>
+      {/* <div className="cover-right">
+        <img src={data.image} alt="" />
+      </div> */}
       <ToastContainer />
     </div>
   );

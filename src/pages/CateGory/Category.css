@@ -18,18 +18,24 @@ h1 {
 .img-cate {
   width: 155px;
 } */
- .category .heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 25px;
- }
+.category .heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 25px;
+}
 .category table thead tr th {
   color: #f10660;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
 .category .content h1 {
-    background: linear-gradient(to bottom right, #83026d, #06b9eb);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
+  background: linear-gradient(to bottom right, #83026d, #06b9eb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+ .pagination.pd{
+  border: none;
+  padding-left: 8px;
+  padding-right: 8px;
+} 

@@ -50,18 +50,24 @@
   left: 0px;
   bottom: 50px;
   align-items: center;
+  justify-content: space-between;
 }
 /* .content-body .chart-right {
   margin-left: 200px;
 
   border: 2px solid rgb(233, 228, 228);
-}
-.content-body .chart-left {
-  border: 2px solid rgb(233, 228, 228);
-  padding: 20px 10px;
 } */
+.content-body .chart-left {
+  padding: 20px 10px;
+  /* background-color: red; */
+  width: 100%;
+  flex: 1;
+}
 .content-body .chart-right {
   margin-left: 50px;
-  
- 
+  padding: 20px 10px;
+  /* background-color: red; */
+  width: 100%;
+  /* margin-left: auto; */
+  flex: 1;
 }

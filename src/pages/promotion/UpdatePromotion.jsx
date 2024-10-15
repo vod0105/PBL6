@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from "react";
-import "./AddProduct.css";
 import { assets } from "../../assets/assets.js";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 
-const AddProduct = ({ url }) => {
+const UpdatePromotion = ({ url }) => {
   const [image, setImage] = useState(false);
   const [data, setData] = useState({
-    categoryName: "",
+    promotionName: "",
+    discount: "",
     description: "",
-    productName: "",
-    price: "",
-    description: "",
-    categoryId: "",
-    stockQuantity: "",
-    bestSale: "",
+    startDate: "",
+    endDate: "",
   });
 
   //get user
@@ -23,25 +20,31 @@ const AddProduct = ({ url }) => {
   const [bestSale, setbestSale] = useState("");
   const token = localStorage.getItem("access_token");
 
+  const { id } = useParams();
   useEffect(() => {
-    if (token) {
-      const headers = {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      };
-      axios
-        .get(`${url}/api/v1/public/categories/all`)
-        .then((response) => {
-          setCate(response.data.data);
-        })
-        .catch((error) => {
-          console.error("There was an error fetching users!", error);
+    const fetchData = async () => {
+      try {
+        //   const token = localStorage.getItem("access_token");
+        const response = await axios.get(
+          `${url}/api/v1/public/promotions/${id}`
+        );
+
+        // truyen du lieu qua data
+        setData({
+          promotionName: response.data.data.name,
+          discount: response.data.data.discountPercentage,
+          description: response.data.data.description,
+          startDate: response.data.data.startDate,
+          endDate: response.data.data.endDate,
+          image: response.data.data.image,
         });
-    } else {
-      console.error("Access token is missing");
-    }
+      } catch (err) {
+      } finally {
+      }
+    };
+
+    fetchData();
   }, []);
-  //
 
   const onChangeHandler = (event) => {
     const name = event.target.name;
@@ -63,33 +66,28 @@ const AddProduct = ({ url }) => {
     };
 
     const formData = new FormData();
-    formData.append("productName", data.productName);
-    formData.append("price", data.price);
+    formData.append("promotionName", data.promotionName);
+    formData.append("discount", data.discount);
     formData.append("description", data.description);
-    formData.append("categoryId", selectedUserId);
-    formData.append("stockQuantity", data.stockQuantity);
+    formData.append("startDate", data.startDate);
+    formData.append("endDate", data.endDate);
     formData.append("image", image);
-    formData.append("bestSale", bestSale);
-
     try {
-      const response = await axios.post(
-        `${url}/api/v1/admin/products/add`,
+      const response = await axios.put(
+        `${url}/api/v1/admin/promotions/update/${id}`,
         formData,
         { headers }
       );
       if (response.data.status) {
         setData({
-          categoryName: "",
+          promotionName: "",
+          discount: "",
           description: "",
-          productName: "",
-          price: "",
-          description: "",
-          categoryId: "",
-          stockQuantity: "",
-          bestSale: "",
+          startDate: "",
+          endDate: "",
         });
         setImage(null);
-        toast.success("Added Product Success");
+        toast.success("Added Promotion");
       } else {
         toast.error(response.data.message);
       }
@@ -105,17 +103,13 @@ const AddProduct = ({ url }) => {
     }
   };
   useEffect(() => {
-    console.log("data", data);
-
-    console.log("selectedUserId", selectedUserId);
-    console.log("bestSale", bestSale);
-    console.log("data.stockQuantity", data.stockQuantity);
+    console.log("id", id);
   });
 
   return (
     <div className="add add-product">
       <div className="cover-left1">
-        <h2 className="">Add Product</h2>
+        <h2 className="">Update Promotion</h2>
         <form className="flex-col" onSubmit={onSubmitHandler}>
           <table className="form-table">
             <tbody>
@@ -124,9 +118,11 @@ const AddProduct = ({ url }) => {
                 <td>
                   <label htmlFor="image">
                     <img
-                      className="img-uploa  d"
+                      className="img-upload"
                       src={
-                        image ? URL.createObjectURL(image) : assets.upload_area
+                        image
+                          ? URL.createObjectURL(image)
+                          : `data:image/png;base64,${data.image}`
                       }
                       alt=""
                     />
@@ -136,31 +132,30 @@ const AddProduct = ({ url }) => {
                     type="file"
                     id="image"
                     hidden
-                    required
                   />
                 </td>
               </tr>
               <tr>
-                <td>Product Name</td>
+                <td>Promotion Name</td>
                 <td>
                   <input
                     onChange={onChangeHandler}
-                    value={data.productName}
+                    value={data.promotionName}
                     type="text"
-                    name="productName"
+                    name="promotionName"
                     placeholder="Type here"
                   />
                 </td>
               </tr>
               <tr>
-                <td>Price</td>
+                <td>Discount</td>
                 <td>
                   <input
-                    name="price"
+                    name="discount"
                     type="text"
                     placeholder="Write content here"
                     onChange={onChangeHandler}
-                    value={data.price}
+                    value={data.discount}
                   />
                 </td>
               </tr>
@@ -176,73 +171,50 @@ const AddProduct = ({ url }) => {
                   />
                 </td>
               </tr>
-
               <tr>
-                <td>Stock Quantity</td>
+                <td>
+                  <p>Start Day</p>
+                </td>
                 <td>
                   <input
-                    name="stockQuantity"
-                    type="text"
-                    placeholder="Write content here"
+                    type="datetime-local"
+                    name="startDate"
                     onChange={onChangeHandler}
-                    value={data.stockQuantity}
+                    value={data.startDate}
                   />
                 </td>
               </tr>
               <tr>
-                <td>Category Id</td>
                 <td>
-                  <select
-                    className="ip"
-                    onChange={(e) => setSelectedUserId(e.target.value)}
-                    name="Manager"
-                  >
-                    <option value="">-- Select Category --</option>
-                    {cate.map((cate) => (
-                      <option key={cate.categoryId} value={cate.categoryId}>
-                        {cate.categoryName}
-                      </option>
-                    ))}
-                  </select>
+                  <p>End Day</p>
                 </td>
-              </tr>
-              <tr>
-                <td>Best sale</td>
                 <td>
-                  <select
-                    className="ip"
-                    onChange={(e) => setbestSale(e.target.value)}
-                    name="bestSale"
-                  >
-                    <option value="">-- Select --</option>
-
-                    <option key={true} value={true}>
-                      true
-                    </option>
-                    <option key={false} value={false}>
-                      false
-                    </option>
-                  </select>
+                  <input
+                    type="datetime-local"
+                    name="endDate"
+                    onChange={onChangeHandler}
+                    value={data.endDate}
+                  />
                 </td>
               </tr>
             </tbody>
           </table>
 
           <button className="add-btn" type="submit">
-            Add
+            Update
           </button>
         </form>
       </div>
-      <div className="cover-right">
+      {/* <div className="cover-right">
         <img
           className="img-uploa  d"
           src={image ? URL.createObjectURL(image) : assets.upload_area}
           alt=""
         />
-      </div>
+      </div> */}
       <ToastContainer />
     </div>
   );
 };
 
-export default AddProduct;
+export default UpdatePromotion;

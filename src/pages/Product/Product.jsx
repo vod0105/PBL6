@@ -6,6 +6,11 @@ import ModalComponent from "../../components/ModalComponent.js";
 import Example from "../../components/ModalComponent.js";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBackward } from "@fortawesome/free-solid-svg-icons";
+import { faForward } from "@fortawesome/free-solid-svg-icons";
+
 const Product = ({ url }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -42,7 +47,7 @@ const Product = ({ url }) => {
         headers,
       });
       setData(data.filter((cat) => cat.productId !== productId));
-      toast.success("Deleted Category Successful");
+      toast.success("Deleted Product Successful");
     } catch (error) {
       if (error.response) {
         console.error("Error Response Data:", error.response.data);
@@ -196,12 +201,12 @@ const Product = ({ url }) => {
             )}
           </tbody>
         </table>
-        <div className="pagination pagenigate-pd" style={{ marginTop: "80px" }}>
+        <div className="pagination pagenigate-pd pd" style={{ marginTop: "80px" }}>
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
           >
-            Previous
+            <FontAwesomeIcon icon={faBackward} />
           </button>
           {Array.from({ length: totalPages }, (_, index) => (
             <button
@@ -218,7 +223,7 @@ const Product = ({ url }) => {
             }
             disabled={currentPage === totalPages}
           >
-            Next
+            <FontAwesomeIcon icon={faForward} />
           </button>
           <ToastContainer />
         </div>

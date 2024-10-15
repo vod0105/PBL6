@@ -1,26 +1,3 @@
-// import React from "react";
-// import Sidebar from "./components/Sidebar";
-// import Content from "./components/Content";
-// import Profile from "./components/Profile";
-// import { Route, Routes } from "react-router-dom";
-// import "./App.css";
-// import Home from "./pages/Home";
-// const App = () => {
-//   return (
-// <div className="dashboard">
-//   <Sidebar />
-//   <div className="dashboard-content">
-//     <Routes>
-//       <Route path="/" element={<Content />} />
-//       <Route path="/home" element={<Home />} />
-//     </Routes>
-//   </div>
-// </div>
-//   );
-// };
-
-// export default App;
-// src/App.js
 import React, { useContext, useEffect, useState } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
@@ -30,6 +7,7 @@ import Login from "./pages/Login/Login";
 import "./App.css";
 import Register from "./pages/Register/Register";
 import { StoreContext } from "./context/StoreContext";
+
 import Store from "./pages/store/Store";
 
 import Add from "./pages/store/Add";
@@ -43,290 +21,494 @@ import UpdateCategory from "./pages/CateGory/UpdateCategory";
 import Product from "./pages/Product/Product";
 import AddProduct from "./pages/Product/AddProduct";
 import AddProducToStore from "./pages/Product/AddproductToStore";
-import AddProducToAllStore from "./pages/Product/AddproductToAllStore";
 import Promotion from "./pages/promotion/Promotion";
 import AddPromotion from "./pages/promotion/AddPromotion";
+import AutoLogout from "./context/AutoLogout";
+import UpdateProduct from "./pages/Product/UpdateProduct";
+import UpdatePromotion from "./pages/promotion/UpdatePromotion";
+import Combo from "./pages/Combo/Combo";
+import AddCombo from "./pages/Combo/AddCombo";
+import AddProducToComBo from "./pages/Combo/AddProductToCombo";
+import CalendarPage from "./components/Calender/CalendarPage";
+import OwnerDasboard from "./pages/Dashboard/OwnerDasboard";
+import OwnerProduct from "./PagesOwner/Product/OwnerProduct";
+import OwnerAddProducToStore from "./PagesOwner/Product/OwnerAddproductToStore";
+import AddPromotionToStore from "./pages/promotion/AddPromotionToStore";
+import UpdateCombo from "./pages/Combo/UpdateCombo";
 
 const App = () => {
   // const isAuthenticated = !!localStorage.getItem("access_token"); // Kiểm tra nếu có token
   const { isAuthenticated, setIsAuthenticated, url, setUrl } =
     useContext(StoreContext);
-
+  const userRole = localStorage.getItem("role");
   useEffect(() => {
     // Kiểm tra token trong localStorage khi component mount
     const checkLogin = localStorage.getItem("access_token");
-    console.log("Token from localStorage:", checkLogin);
+    // console.log("Token from localStorage:", checkLogin);
 
     if (checkLogin == null) {
       setIsAuthenticated(false);
     } else {
       setIsAuthenticated(true);
-      console.log("Vao true");
     }
   }, []);
 
   return (
     <div className="app">
+      <AutoLogout />
       <Routes>
+        {userRole === "ROLE_ADMIN" && (
+          <>
+            <Route
+              path="/"
+              element={
+                isAuthenticated && userRole === "ROLE_ADMIN" ? (
+                  <Navigate to="/admin/dashboard" />
+                ) : (
+                  <Login url={url} />
+                )
+              }
+            />
+
+            <Route
+              path="/admin/dashboard"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      {/* <div className="side-bar collapse"><Sidebar /></div> */}
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <Dashboard />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+            <Route
+              path="/register"
+              element={!isAuthenticated ? <Register /> : <Navigate to="/" />}
+            />
+
+            {/* Store  */}
+            <Route
+              path="/Liststore"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <Store url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+
+            <Route
+              path="/AddStore"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <Add url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+            <Route
+              path="/UpdateStore/:id"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <UpdateStore url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+            {/* end store  */}
+            <Route
+              path="/admin/Category"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <Category url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+            <Route
+              path="/admin/addCategory"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <AddCate url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+            <Route
+              path="/admin/UpdateCategory/:id"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <UpdateCategory url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+            {/* end Category */}
+            <Route
+              path="/admin/product"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <Product url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+            <Route
+              path="/admin/AddProduct"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <AddProduct url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+            <Route
+              path="/admin/AddProductToStore"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <AddProducToStore url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+            <Route
+              path="/admin/UpdateProduct/:id"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <UpdateProduct url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+
+            {/* end product */}
+            <Route
+              path="/admin/promotion"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <Promotion url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+            <Route
+              path="/admin/Addpromotion"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <AddPromotion url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+            <Route
+              path="/admin/UpdatePromotion/:id"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <UpdatePromotion url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+            <Route
+              path="/admin/addPromotionToStore"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <AddPromotionToStore url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+            {/* endupdate PRomotion */}
+            <Route
+              path="/admin/Combo"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <Combo url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+            <Route
+              path="/admin/AddCombo"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <AddCombo url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+            <Route
+              path="/admin/addProductToCombo"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <AddProducToComBo url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+              <Route
+              path="/admin/UpdateCombo/:id"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <UpdateCombo url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+            <Route
+              path="/admin/calender"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <CalendarPage url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+          </>
+        )}
         <Route
           path="/"
           element={
-            !isAuthenticated ? (
+            isAuthenticated && userRole === "ROLE_OWNER" ? (
+              <Navigate to="/owner/dashboard" />
+            ) : (
               <Login url={url} />
-            ) : (
-              <Navigate to="/admin/dashboard" />
             )
           }
         />
-        <Route
-          path="/register"
-          element={!isAuthenticated ? <Register /> : <Navigate to="/" />}
-        />
+        {userRole === "ROLE_OWNER" && (
+          <>
+            <Route
+              path="/owner/dashboard"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      {/* <div className="side-bar collapse"><Sidebar /></div> */}
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <OwnerDasboard />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
 
-        <Route
-          path="/admin/dashboard"
-          element={
-            !isAuthenticated ? (
-              <Navigate to="/" />
-            ) : (
-              <>
-                <div className="dashboard">
-                  {/* <div className="side-bar collapse"><Sidebar /></div> */}
-                  <Sidebar />
-                  <div className="dashboard-content">
-                    <Dashboard />
-                  </div>
-                </div>
-              </>
-            )
-          }
-        />
-        <Route
-          path="/home"
-          element={
-            !isAuthenticated ? (
-              <Navigate to="/" />
-            ) : (
-              <>
-                <div className="dashboard">
-                  <Sidebar />
-                  <div className="dashboard-content">
-                    <Home />
-                  </div>
-                </div>
-              </>
-            )
-          }
-        />
-        {/* Store  */}
-        <Route
-          path="/Liststore"
-          element={
-            !isAuthenticated ? (
-              <Navigate to="/" />
-            ) : (
-              <>
-                <div className="dashboard">
-                  <Sidebar />
-                  <div className="dashboard-content">
-                    <Store url={url} />
-                  </div>
-                </div>
-              </>
-            )
-          }
-        />
-
-        <Route
-          path="/AddStore"
-          element={
-            !isAuthenticated ? (
-              <Navigate to="/" />
-            ) : (
-              <>
-                <div className="dashboard">
-                  <Sidebar />
-                  <div className="dashboard-content">
-                    <Add url={url} />
-                  </div>
-                </div>
-              </>
-            )
-          }
-        />
-        <Route
-          path="/UpdateStore/:id"
-          element={
-            !isAuthenticated ? (
-              <Navigate to="/" />
-            ) : (
-              <>
-                <div className="dashboard">
-                  <Sidebar />
-                  <div className="dashboard-content">
-                    <UpdateStore url={url} />
-                  </div>
-                </div>
-              </>
-            )
-          }
-        />
-        {/* end store  */}
-        <Route
-          path="/admin/Category"
-          element={
-            !isAuthenticated ? (
-              <Navigate to="/" />
-            ) : (
-              <>
-                <div className="dashboard">
-                  <Sidebar />
-                  <div className="dashboard-content">
-                    <Category url={url} />
-                  </div>
-                </div>
-              </>
-            )
-          }
-        />
-        <Route
-          path="/admin/addCategory"
-          element={
-            !isAuthenticated ? (
-              <Navigate to="/" />
-            ) : (
-              <>
-                <div className="dashboard">
-                  <Sidebar />
-                  <div className="dashboard-content">
-                    <AddCate url={url} />
-                  </div>
-                </div>
-              </>
-            )
-          }
-        />
-        <Route
-          path="/admin/UpdateCategory/:id"
-          element={
-            !isAuthenticated ? (
-              <Navigate to="/" />
-            ) : (
-              <>
-                <div className="dashboard">
-                  <Sidebar />
-                  <div className="dashboard-content">
-                    <UpdateCategory url={url} />
-                  </div>
-                </div>
-              </>
-            )
-          }
-        />
-        {/* end Category */}
-        <Route
-          path="/admin/product"
-          element={
-            !isAuthenticated ? (
-              <Navigate to="/" />
-            ) : (
-              <>
-                <div className="dashboard">
-                  <Sidebar />
-                  <div className="dashboard-content">
-                    <Product url={url} />
-                  </div>
-                </div>
-              </>
-            )
-          }
-        />
-        <Route
-          path="/admin/AddProduct"
-          element={
-            !isAuthenticated ? (
-              <Navigate to="/" />
-            ) : (
-              <>
-                <div className="dashboard">
-                  <Sidebar />
-                  <div className="dashboard-content">
-                    <AddProduct url={url} />
-                  </div>
-                </div>
-              </>
-            )
-          }
-        />
-        <Route
-          path="/admin/AddProductToStore"
-          element={
-            !isAuthenticated ? (
-              <Navigate to="/" />
-            ) : (
-              <>
-                <div className="dashboard">
-                  <Sidebar />
-                  <div className="dashboard-content">
-                    <AddProducToStore url={url} />
-                  </div>
-                </div>
-              </>
-            )
-          }
-        />
-        <Route
-          path="/admin/AddProductToAllStore"
-          element={
-            !isAuthenticated ? (
-              <Navigate to="/" />
-            ) : (
-              <>
-                <div className="dashboard">
-                  <Sidebar />
-                  <div className="dashboard-content">
-                    <AddProducToAllStore url={url} />
-                  </div>
-                </div>
-              </>
-            )
-          }
-        />
-        {/* end product */}
-        <Route
-          path="/admin/promotion"
-          element={
-            !isAuthenticated ? (
-              <Navigate to="/" />
-            ) : (
-              <>
-                <div className="dashboard">
-                  <Sidebar />
-                  <div className="dashboard-content">
-                    <Promotion url={url} />
-                  </div>
-                </div>
-              </>
-            )
-          }
-        />
-        <Route
-          path="/admin/Addpromotion"
-          element={
-            !isAuthenticated ? (
-              <Navigate to="/" />
-            ) : (
-              <>
-                <div className="dashboard">
-                  <Sidebar />
-                  <div className="dashboard-content">
-                    <AddPromotion url={url} />
-                  </div>
-                </div>
-              </>
-            )
-          }
-        />
+            <Route
+              path="/owner/product"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <OwnerProduct url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+            <Route
+              path="/onwer/addProductToStore"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <OwnerAddProducToStore url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+              <Route
+              path="/owner/calender"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <CalendarPage url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+          </>
+        )}
       </Routes>
     </div>
   );

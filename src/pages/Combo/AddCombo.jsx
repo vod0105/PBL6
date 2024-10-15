@@ -1,20 +1,27 @@
+// import React from 'react'
+
+// const AddCombo = () => {
+//   return (
+//     <div>
+
+//     </div>
+//   )
+// }
+
+// export default AddCombo;
+
 import React, { useState, useEffect } from "react";
-import "./AddProduct.css";
+import "./AddCombo.css";
 import { assets } from "../../assets/assets.js";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 
-const AddProduct = ({ url }) => {
+const AddCombo = ({ url }) => {
   const [image, setImage] = useState(false);
   const [data, setData] = useState({
-    categoryName: "",
-    description: "",
-    productName: "",
+    comboName: "",
     price: "",
     description: "",
-    categoryId: "",
-    stockQuantity: "",
-    bestSale: "",
   });
 
   //get user
@@ -23,24 +30,6 @@ const AddProduct = ({ url }) => {
   const [bestSale, setbestSale] = useState("");
   const token = localStorage.getItem("access_token");
 
-  useEffect(() => {
-    if (token) {
-      const headers = {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      };
-      axios
-        .get(`${url}/api/v1/public/categories/all`)
-        .then((response) => {
-          setCate(response.data.data);
-        })
-        .catch((error) => {
-          console.error("There was an error fetching users!", error);
-        });
-    } else {
-      console.error("Access token is missing");
-    }
-  }, []);
   //
 
   const onChangeHandler = (event) => {
@@ -63,33 +52,25 @@ const AddProduct = ({ url }) => {
     };
 
     const formData = new FormData();
-    formData.append("productName", data.productName);
+    formData.append("comboName", data.comboName);
     formData.append("price", data.price);
     formData.append("description", data.description);
-    formData.append("categoryId", selectedUserId);
-    formData.append("stockQuantity", data.stockQuantity);
     formData.append("image", image);
-    formData.append("bestSale", bestSale);
 
     try {
       const response = await axios.post(
-        `${url}/api/v1/admin/products/add`,
+        `${url}/api/v1/admin/combo/add`,
         formData,
         { headers }
       );
       if (response.data.status) {
         setData({
-          categoryName: "",
-          description: "",
-          productName: "",
+          comboName: "",
           price: "",
           description: "",
-          categoryId: "",
-          stockQuantity: "",
-          bestSale: "",
         });
         setImage(null);
-        toast.success("Added Product Success");
+        toast.success("Added Combo Success");
       } else {
         toast.error(response.data.message);
       }
@@ -108,14 +89,15 @@ const AddProduct = ({ url }) => {
     console.log("data", data);
 
     console.log("selectedUserId", selectedUserId);
-    console.log("bestSale", bestSale);
-    console.log("data.stockQuantity", data.stockQuantity);
+    console.log("data.price", data.price);
+    console.log("data.comboName", data.comboName);
+    console.log("data.description", data.description);
   });
 
   return (
     <div className="add add-product">
       <div className="cover-left1">
-        <h2 className="">Add Product</h2>
+        <h2 className="">Add Combo</h2>
         <form className="flex-col" onSubmit={onSubmitHandler}>
           <table className="form-table">
             <tbody>
@@ -141,13 +123,13 @@ const AddProduct = ({ url }) => {
                 </td>
               </tr>
               <tr>
-                <td>Product Name</td>
+                <td>Combo Name</td>
                 <td>
                   <input
                     onChange={onChangeHandler}
-                    value={data.productName}
+                    value={data.comboName}
                     type="text"
-                    name="productName"
+                    name="comboName"
                     placeholder="Type here"
                   />
                 </td>
@@ -176,55 +158,6 @@ const AddProduct = ({ url }) => {
                   />
                 </td>
               </tr>
-
-              <tr>
-                <td>Stock Quantity</td>
-                <td>
-                  <input
-                    name="stockQuantity"
-                    type="text"
-                    placeholder="Write content here"
-                    onChange={onChangeHandler}
-                    value={data.stockQuantity}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>Category Id</td>
-                <td>
-                  <select
-                    className="ip"
-                    onChange={(e) => setSelectedUserId(e.target.value)}
-                    name="Manager"
-                  >
-                    <option value="">-- Select Category --</option>
-                    {cate.map((cate) => (
-                      <option key={cate.categoryId} value={cate.categoryId}>
-                        {cate.categoryName}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>Best sale</td>
-                <td>
-                  <select
-                    className="ip"
-                    onChange={(e) => setbestSale(e.target.value)}
-                    name="bestSale"
-                  >
-                    <option value="">-- Select --</option>
-
-                    <option key={true} value={true}>
-                      true
-                    </option>
-                    <option key={false} value={false}>
-                      false
-                    </option>
-                  </select>
-                </td>
-              </tr>
             </tbody>
           </table>
 
@@ -245,4 +178,4 @@ const AddProduct = ({ url }) => {
   );
 };
 
-export default AddProduct;
+export default AddCombo;

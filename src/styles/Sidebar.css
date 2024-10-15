@@ -175,10 +175,11 @@ h3.admin {
   display: inline-block;
   margin-left: 10px;
 }
-.sub-item{
+.sub-item {
   margin-left: 15px;
   min-width: 150px;
 }
-.linkitem{
+.linkitem {
   margin-top: -5px;
 }
+

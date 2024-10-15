@@ -8,6 +8,8 @@ import {
   BiCart,
   BiCategory,
   BiSolidDashboard,
+  BiFoodMenu,
+  BiCoin,
 } from "react-icons/bi";
 import "../styles/Sidebar.css";
 import { StoreContext } from "../context/StoreContext";
@@ -34,6 +36,7 @@ const Sidebar = () => {
   };
 
   const toggleSubMenu = (menu) => {
+    if (!menu) return;
     setOpenSubMenus((prev) => ({
       ...prev,
       [menu]: !prev[menu],
@@ -59,162 +62,237 @@ const Sidebar = () => {
           </p>
         </div>
         <div className="menu-list">
-          {/* <Link className="item" to="/">
-            <BiHome className="icon" />
-            <p>Info</p>
-          </Link>
-          <Link className="item" to="/trangchu">
-            <BiHome className="icon" />
-            <p>Dashboard</p>
-          </Link> */}
-          <Link className="item" to="/admin/dashboard">
-            <BiSolidDashboard className="icon" />
-            <p>Dashboard</p>
-          </Link>
-          <div className="item" onClick={() => toggleSubMenu("user")}>
-            <Link to="/Liststore" className="linkitem">
-              <BiHome className="icon" />
-            </Link>
-            <p>
-              Store
-              <div
-                className={
-                  openSubMenus["user"]
-                    ? "sub-menu active-sub"
-                    : "sub-menu hidden"
-                }
-              >
-                <ul>
-                  <li>
-                    <Link to="/Liststore">List Store</Link>
-                  </li>
-                  <li>
-                    <Link to="/AddStore">Add Store</Link>
-                  </li>
-                </ul>
+          {userRole === "ROLE_ADMIN" && (
+            <>
+              <Link className="item" to="/admin/dashboard">
+                <BiSolidDashboard className="icon" />
+                <p>Dashboard</p>
+              </Link>
+              <div className="item" onClick={() => toggleSubMenu("store")}>
+                <Link to="/Liststore" className="linkitem">
+                  <BiHome className="icon" />
+                </Link>
+                <p>
+                  Store
+                  <div
+                    className={
+                      openSubMenus["store"]
+                        ? "sub-menu active-sub"
+                        : "sub-menu hidden"
+                    }
+                  >
+                    <ul>
+                      <li onClick={(e) => e.stopPropagation()}>
+                        <Link to="/Liststore">List Store</Link>
+                      </li>
+                      <li onClick={(e) => e.stopPropagation()}>
+                        <Link to="/AddStore">Add Store</Link>
+                      </li>
+                    </ul>
+                  </div>
+                </p>
+                <p className="dropdownn">
+                  <FontAwesomeIcon icon={faChevronDown} />
+                </p>
               </div>
-            </p>
-            <p className="dropdownn">
-              <FontAwesomeIcon icon={faChevronDown} />
-            </p>
-          </div>
+              <div className="item" onClick={() => toggleSubMenu("category")}>
+                {/* <BiCategory className="icon icon-item" /> */}
+                <Link to="/admin/Category" className="linkitem">
+                  <BiCategory className="icon icon-item" />
+                </Link>
+                <p>
+                  Category
+                  <div
+                    className={
+                      openSubMenus["category"]
+                        ? "sub-menu active-sub"
+                        : "sub-menu hidden"
+                    }
+                  >
+                    <ul className="sub-item">
+                      <li onClick={(e) => e.stopPropagation()}>
+                        <Link to="/admin/Category">List CateGory</Link>
+                      </li>
+                      <li onClick={(e) => e.stopPropagation()}>
+                        <Link to="/admin/addCategory">Add CateGory</Link>
+                      </li>
+                    </ul>
+                  </div>
+                </p>
+                <p className="dropdownn">
+                  <FontAwesomeIcon icon={faChevronDown} />
+                </p>
+              </div>
+              <div className="item" onClick={() => toggleSubMenu("product")}>
+                {/* <BiLogoProductHunt className="icon icon-item" /> */}
+                <Link to="/admin/product" className="linkitem">
+                  <BiLogoProductHunt className="icon icon-item" />
+                </Link>
+                <p>
+                  Product
+                  <div
+                    className={
+                      openSubMenus["product"]
+                        ? "sub-menu active-sub"
+                        : "sub-menu hidden"
+                    }
+                  >
+                    <ul className="sub-item">
+                      <li onClick={(e) => e.stopPropagation()}>
+                        {" "}
+                        <Link to="/admin/product">List Product</Link>
+                      </li>
+                      <li onClick={(e) => e.stopPropagation()}>
+                        <Link to="/admin/addProduct">Add Product</Link>
+                      </li>
+                      <li onClick={(e) => e.stopPropagation()}>
+                        <Link to="/admin/addProductToStore">
+                          Add Product To Store
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </p>
+                <p className="dropdownn">
+                  <FontAwesomeIcon icon={faChevronDown} />
+                </p>
+              </div>
+              <div className="item" onClick={() => toggleSubMenu("promotion")}>
+                {/* <BiLogoProductHunt className="icon icon-item" /> */}
+                <Link to="/admin/promotion" className="linkitem">
+                  <BiCoin className="icon icon-item" />
+                </Link>
+                <p>
+                  Promotion
+                  <div
+                    className={
+                      openSubMenus["promotion"]
+                        ? "sub-menu active-sub"
+                        : "sub-menu hidden"
+                    }
+                  >
+                    <ul className="sub-item">
+                      <li onClick={(e) => e.stopPropagation()}>
+                        {" "}
+                        <Link to="/admin/promotion">List Promotion</Link>
+                      </li>
+                      <li onClick={(e) => e.stopPropagation()}>
+                        <Link to="/admin/addPromotion">Add Promotion</Link>
+                      </li>
+                      <li onClick={(e) => e.stopPropagation()}>
+                        <Link to="/admin/addPromotionToStore">
+                          Add Promotion To Store
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </p>
+                <p className="dropdownn">
+                  <FontAwesomeIcon icon={faChevronDown} />
+                </p>
+              </div>
+              <div className="item" onClick={() => toggleSubMenu("combo")}>
+                {/* <BiLogoProductHunt className="icon icon-item" /> */}
+                <Link to="/admin/promotion" className="linkitem">
+                  <BiFoodMenu className="icon icon-item" />
+                </Link>
+                <p>
+                  ComBo
+                  <div
+                    className={
+                      openSubMenus["combo"]
+                        ? "sub-menu active-sub"
+                        : "sub-menu hidden"
+                    }
+                  >
+                    <ul className="sub-item">
+                      <li onClick={(e) => e.stopPropagation()}>
+                        {" "}
+                        <Link to="/admin/Combo">List ComBo</Link>
+                      </li>
+                      <li onClick={(e) => e.stopPropagation()}>
+                        {" "}
+                        <Link to="/admin/AddCombo">Add ComBo</Link>
+                      </li>
+                      <li onClick={(e) => e.stopPropagation()}>
+                        <Link to="/admin/addProductToCombo">
+                          Add Product To Combo
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </p>
+                <p className="dropdownn">
+                  <FontAwesomeIcon icon={faChevronDown} />
+                </p>
+              </div>
+            </>
+          )}
 
-          <div className="item" onClick={() => toggleSubMenu("category")}>
-            {/* <BiCategory className="icon icon-item" /> */}
-            <Link to="/admin/Category" className="linkitem">
-              <BiCategory className="icon icon-item" />
-            </Link>
-            <p>
-              Category
-              <div
-                className={
-                  openSubMenus["category"]
-                    ? "sub-menu active-sub"
-                    : "sub-menu hidden"
-                }
-              >
-                <ul className="sub-item">
-                  <li>
-                    {" "}
-                    <Link to="/admin/Category">List CateGory</Link>
-                  </li>
-                  <li>
-                    <Link to="/admin/addCategory">Add CateGory</Link>
-                  </li>
-                </ul>
-              </div>
-            </p>
-            <p className="dropdownn">
-              <FontAwesomeIcon icon={faChevronDown} />
-            </p>
-          </div>
+          {userRole === "ROLE_OWNER" && (
+            <>
+              {" "}
+              <div className="item" onClick={() => toggleSubMenu("oproduct")}>
+                {/* <BiLogoProductHunt className="icon icon-item" /> */}
+                <Link to="/admin/product" className="linkitem">
+                  <BiLogoProductHunt className="icon icon-item" />
+                </Link>
+                <p>
+                  Product
+                  <div
+                    className={
+                      openSubMenus["oproduct"]
+                        ? "sub-menu active-sub"
+                        : "sub-menu hidden"
+                    }
+                  >
+                    <ul className="sub-item">
+                      <li onClick={(e) => e.stopPropagation()}>
+                        {" "}
+                        <Link to="/owner/product">List Product</Link>
+                      </li>
 
-          <div className="item" onClick={() => toggleSubMenu("product")}>
-            {/* <BiLogoProductHunt className="icon icon-item" /> */}
-            <Link to="/admin/product" className="linkitem">
-              <BiLogoProductHunt className="icon icon-item" />
-            </Link>
-            <p>
-              Product
-              <div
-                className={
-                  openSubMenus["product"]
-                    ? "sub-menu active-sub"
-                    : "sub-menu hidden"
-                }
-              >
-                <ul className="sub-item">
-                  <li>
-                    {" "}
-                    <Link to="/admin/product">List Product</Link>
-                  </li>
-                  <li>
-                    <Link to="/admin/addProduct">Add Product</Link>
-                  </li>
-                  <li>
-                    <Link to="/admin/addProductToStore">
-                      Add Product To Store
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/admin/addProductToAllStore">
-                      Add Product To All Store
-                    </Link>
-                  </li>
-                </ul>
+                      <li onClick={(e) => e.stopPropagation()}>
+                        <Link to="/onwer/addProductToStore">
+                          Add Product To Store
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </p>
+                <p className="dropdownn">
+                  <FontAwesomeIcon icon={faChevronDown} />
+                </p>
               </div>
-            </p>
-            <p className="dropdownn">
-              <FontAwesomeIcon icon={faChevronDown} />
-            </p>
-          </div>
-          <div className="item" onClick={() => toggleSubMenu("promotion")}>
-            {/* <BiLogoProductHunt className="icon icon-item" /> */}
-            <Link to="/admin/promotion" className="linkitem">
-              <BiLogoProductHunt className="icon icon-item" />
-            </Link>
-            <p>
-              Promotion
-              <div
-                className={
-                  openSubMenus["promotion"]
-                    ? "sub-menu active-sub"
-                    : "sub-menu hidden"
-                }
-              >
-                <ul className="sub-item">
-                  <li>
-                    {" "}
-                    <Link to="/admin/promotion">List Promotion</Link>
-                  </li>
-                  <li>
-                    <Link to="/admin/addPromotion">Add Promotion</Link>
-                  </li>
-                  <li>
-                    <Link to="/admin/addPromotionToStore">
-                      Add Promotion To Store
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/admin/addPromotionToAllStore">
-                      Add Promotion To All Store
-                    </Link>
-                  </li>
-                </ul>
+              <div className="item" onClick={() => toggleSubMenu("ocalendar")}>
+                {/* <BiLogoProductHunt className="icon icon-item" /> */}
+                <Link to="/admin/calender" className="linkitem">
+                  <BiLogoProductHunt className="icon icon-item" />
+                </Link>
+                <p>
+                  Calendar
+                  <div
+                    className={
+                      openSubMenus["ocalendar"]
+                        ? "sub-menu active-sub"
+                        : "sub-menu hidden"
+                    }
+                  >
+                    <ul className="sub-item">
+                      <li onClick={(e) => e.stopPropagation()}>
+                        {" "}
+                        <Link to="/owner/calender">Calendar</Link>
+                      </li>
+                    </ul>
+                  </div>
+                </p>
+                <p className="dropdownn">
+                  <FontAwesomeIcon icon={faChevronDown} />
+                </p>
               </div>
-            </p>
-            <p className="dropdownn">
-              <FontAwesomeIcon icon={faChevronDown} />
-            </p>
-          </div>
-          <Link className="item" to="/orders">
-            <BiMessage className="icon" />
-            <p>Orders</p>
-          </Link>
-          <Link className="item" to="/cart">
-            <BiCart className="icon" />
-            <p>Cart</p>
-          </Link>
+            </>
+          )}
+
           <button className="logout" onClick={handleLogout}>
             Logout
           </button>

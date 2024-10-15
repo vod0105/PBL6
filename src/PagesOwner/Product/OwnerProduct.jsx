@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../CateGory/Category.css";
+import "../Product/OwnerProduct.css";
 import axios from "axios";
 import LoadingSpinner from "../../Action/LoadingSpiner.js";
 import ModalComponent from "../../components/ModalComponent.js";
@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBackward } from "@fortawesome/free-solid-svg-icons";
 import { faForward } from "@fortawesome/free-solid-svg-icons";
 
-const Category = ({ url }) => {
+const OwnerProduct = ({ url }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -21,9 +21,18 @@ const Category = ({ url }) => {
   const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
+      const tk = localStorage.getItem("access_token");
       try {
-        const token = localStorage.getItem("access_token");
-        const response = await axios.get(`${url}/api/v1/public/categories/all`);
+        const headers = {
+          Authorization: `Bearer ${tk}`,
+        };
+        // const token = localStorage.getItem("access_token");
+        const response = await axios.get(
+          `${url}/api/v1/owner/products/get-all-products?storeId=33`,
+          {
+            headers,
+          }
+        );
         setData(response.data.data);
       } catch (err) {
         setError(err);
@@ -36,18 +45,18 @@ const Category = ({ url }) => {
   }, []);
 
   // delete store
-  const deleteStore = async (storeId) => {
+  const deleteProduct = async (productId) => {
     try {
       const tk = localStorage.getItem("access_token");
       const headers = {
         Authorization: `Bearer ${tk}`,
         "Content-Type": "application/json",
       };
-      await axios.delete(`${url}/api/v1/admin/categories/delete/${storeId}`, {
+      await axios.delete(`${url}/api/v1/admin/products/delete/${productId}`, {
         headers,
       });
-      setData(data.filter((cat) => cat.categoryId !== storeId));
-      toast.success("Deleted Category Successful");
+      setData(data.filter((cat) => cat.productId !== productId));
+      toast.success("Deleted Product Successful");
     } catch (error) {
       if (error.response) {
         console.error("Error Response Data:", error.response.data);
@@ -59,9 +68,9 @@ const Category = ({ url }) => {
     }
   };
   // chuyen huong update store
-  const handleUpdateClick = (cateId) => {
+  const handleUpdateClick = (productId) => {
     // navigate(`admin/UpdateCategory/${cateId}`);
-    navigate(`/admin/UpdateCategory/${cateId}`);
+    navigate(`/admin/UpdateProduct/${productId}`);
   };
   //
 
@@ -79,7 +88,7 @@ const Category = ({ url }) => {
 
   // Xử lý từ khóa tìm kiếm
   const filteredData = data.filter((item) =>
-    item.categoryName.toLowerCase().includes(searchTerm.toLowerCase())
+    item.productName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Xác định các phần tử cần hiển thị trên trang hiện tại
@@ -91,20 +100,30 @@ const Category = ({ url }) => {
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   return (
-    <div className="category">
+    <div className="product">
       <div className="content">
-        <div className="heading">
-          <h1>List Category</h1>
+        <div
+          className="heading"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <h1 className="h-product">List Product</h1>
           <div className="store-search">
             <input
               type="text"
-              placeholder="Search by store name"
+              placeholder="Search Name Product"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              style={{
+                padding: "5px 15px",
+                outlineColor: "tomato",
+              }}
             />
           </div>
         </div>
-
         <table
           className="table table-hover text-center align-items-center tb-product"
           style={{
@@ -124,10 +143,14 @@ const Category = ({ url }) => {
             }}
           >
             <tr>
-              <th scope="col">CategoryId</th>
+              <th scope="col">Product Id</th>
               <th scope="col">Image</th>
-              <th scope="col">Category Name</th>
+              <th scope="col">Name</th>
               <th scope="col">Description</th>
+              <th scope="col">Price</th>
+              <th scope="col">Category Name</th>
+              <th scope="col">Stock Quantity</th>
+              <th scope="col">Best Sale</th>
               <th scope="col">Sửa</th>
               <th scope="col">Xóa</th>
             </tr>
@@ -136,40 +159,46 @@ const Category = ({ url }) => {
             {currentItems.length > 0 ? (
               currentItems.map((data) => (
                 <tr
-                  key={data.categoryId}
+                  key={data.productId}
                   style={{ borderBottom: "2px solid rgb(228, 223, 223)" }}
                 >
-                  <td>{data.categoryId}</td>
+                  <td>{data.productId}</td>
                   <td>
                     <img
                       src={`data:image/jpeg;base64,${data.image}`}
-                      className="img-cate"
+                      className="img-product"
                       alt="Image cate"
                       style={{
-                        width: "75px",
-                        height: "75px",
+                        height: "100px",
+                        width: "100px",
                         objectFit: "contain",
                       }}
                     />
                   </td>
-                  <td>{data.categoryName}</td>
+                  <td>{data.productName}</td>
                   <td>{data.description}</td>
+
+                  <td>{data.price}</td>
+                  <td>{data.category.categoryName}</td>
+                  <td>{data.stockQuantity}</td>
+                  <td>{data.bestSale ? "Best sales" : "Normal"}</td>
+
                   <td>
                     <button
                       type="button"
                       className="btn btn-primary"
-                      onClick={() => handleUpdateClick(data.categoryId)}
+                      onClick={() => handleUpdateClick(data.productId)}
                     >
-                      Update
+                      UPDATE
                     </button>
                   </td>
                   <td>
                     <button
                       type="button"
                       className="btn btn-danger"
-                      onClick={() => deleteStore(data.categoryId)}
+                      onClick={() => deleteProduct(data.productId)}
                     >
-                      Delete
+                      DELETE
                     </button>
                   </td>
                 </tr>
@@ -181,7 +210,10 @@ const Category = ({ url }) => {
             )}
           </tbody>
         </table>
-        <div className="pagination pd">
+        <div
+          className="pagination pagenigate-pd pd"
+          style={{ marginTop: "80px" }}
+        >
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
@@ -212,4 +244,4 @@ const Category = ({ url }) => {
   );
 };
 
-export default Category;
+export default OwnerProduct;

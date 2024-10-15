@@ -54,9 +54,9 @@ const Promotion = ({ url }) => {
     }
   };
   // chuyen huong update store
-  const handleUpdateClick = (productId) => {
+  const handleUpdateClick = (promotionID) => {
     // navigate(`admin/UpdateCategory/${cateId}`);
-    navigate(`/admin/UpdateProduct/${productId}`);
+    navigate(`/admin/UpdatePromotion/${promotionID}`);
   };
   //
 
@@ -128,7 +128,7 @@ const Promotion = ({ url }) => {
           >
             <tr>
               <th scope="col">Id</th>
-
+              <th scope="col">Image</th>
               <th scope="col">Promotion Name</th>
               <th scope="col">Description</th>
               <th scope="col">Discount Percentage</th>
@@ -137,6 +137,7 @@ const Promotion = ({ url }) => {
               <th scope="col">Sửa</th>
               <th scope="col">Xóa</th>
             </tr>
+          
           </thead>
           <tbody className="align-middle">
             {currentItems.length > 0 ? (
@@ -146,6 +147,18 @@ const Promotion = ({ url }) => {
                   style={{ borderBottom: "2px solid rgb(228, 223, 223)" }}
                 >
                   <td>{data.id}</td>
+                    <td>
+                    <img
+                      src={`data:image/jpeg;base64,${data.image}`}
+                      className="img-product"
+                      alt="Image cate"
+                      style={{
+                        height: "100px",
+                        width: "100px",
+                        objectFit: "contain",
+                      }}
+                    />
+                  </td>
                   <td>{data.name}</td>
                   <td>{data.description}</td>
                   <td>{data.discountPercentage}</td>

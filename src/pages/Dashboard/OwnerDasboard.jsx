@@ -1,6 +1,6 @@
 import React from "react";
 import { Line, Bar, Pie } from "react-chartjs-2";
-import "./Dashboard.css";
+import "./OwnerDasboard.css";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -28,7 +28,7 @@ ChartJS.register(
   Legend
 );
 
-const Dashboard = () => {
+const OwnerDasboard = () => {
   // Dữ liệu cho biểu đồ đường
   const lineData = {
     labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6"],
@@ -45,29 +45,21 @@ const Dashboard = () => {
 
   // Dữ liệu cho biểu đồ cột
   const barData = {
-    labels: [
-      "Sản phẩm A",
-      "Sản phẩm B",
-      "Sản phẩm C",
-      "Sản phẩm D",
-      "Sản phẩm E",
-    ],
+    labels: ["Sản phẩm A", "Sản phẩm B", "Sản phẩm C", "Sản phẩm D"],
     datasets: [
       {
         label: "Số lượng bán ra",
-        data: [400, 300, 500, 200, 350],
+        data: [400, 300, 500, 200],
         backgroundColor: [
           "rgba(255,99,132,0.2)",
           "rgba(54,162,235,0.2)",
           "rgba(255,206,86,0.2)",
-          "rgba(75,192,192,0.2)",
           "rgba(75,192,192,0.2)",
         ],
         borderColor: [
           "rgba(255,99,132,1)",
           "rgba(54,162,235,1)",
           "rgba(255,206,86,1)",
-          "rgba(75,192,192,1)",
           "rgba(75,192,192,1)",
         ],
         borderWidth: 1,
@@ -92,7 +84,7 @@ const Dashboard = () => {
       <div className="content-header">
         <div className="list">
           <div className="item">
-            <p>BudGet</p>
+            <p>OWNER</p>
             <img src={assets.dola} alt="" className="img-item" />
 
             <h2>$24k</h2>
@@ -135,4 +127,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default OwnerDasboard;
