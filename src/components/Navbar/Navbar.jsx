@@ -40,8 +40,6 @@ const Navbar = () => {
     dispatch(fetchAllCategories());
   }, []);
 
-  // useEffect(() => {
-  // }, [listCategories]);
 
 
   return (
@@ -110,7 +108,7 @@ const Navbar = () => {
         </NavLink>
 
         <NavLink
-          to="/test-store"
+          to="/store"
           className={({ isActive }) => (isActive ? 'active' : '')}
         >
           Cửa hàng

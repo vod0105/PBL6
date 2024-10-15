@@ -5,18 +5,13 @@ import { menu_list } from '../../assets/assets'
 import { useDispatch, useSelector } from 'react-redux';
 import { showLoginModal, showRegisterModal } from "../../redux/actions/modalActions";
 import { fetchAllCategories } from "../../redux/actions/categoryActions";
+import { NavLink } from "react-router-dom";
 
-const ExploreMenu = ({ category, setCategory }) => {
+const ExploreMenu = () => {
   // fetch category
-  const dispatch = useDispatch();
   const listCategories = useSelector((state) => {
     return state.category.listCategories;
   })
-  const isLoading = useSelector(state => state.category.isLoading);
-  const isError = useSelector(state => state.category.isError);
-  // useEffect(() => {
-  //   // dispatch(fetchAllCategories());
-  // }, [listCategories])
   return (
     <div className='explore-menu' id='explore-menu'>
       <h1>Ăn gì hôm nay</h1>
@@ -26,10 +21,12 @@ const ExploreMenu = ({ category, setCategory }) => {
           &&
           listCategories.map((category, index) => {
             return (
-              <div key={index} className='explore-menu-list-item'>
-                <img className='active' src={'data:image/png;base64,' + category.image} alt="alt-category" />
-                <p>{category.categoryName}</p>
-              </div>
+              <NavLink to={`/category/${category.categoryId}`} key={index}>
+                <div key={index} className='explore-menu-list-item'>
+                  <img className='active' src={'data:image/png;base64,' + category.image} alt="alt-category" />
+                  <p>{category.categoryName}</p>
+                </div>
+              </NavLink>
             )
           })}
       </div>

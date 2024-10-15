@@ -1,6 +1,6 @@
 // Sản phẩm bán chạy
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import './FoodDisplay.scss'
 import FoodItem from '../FoodItem/FoodItem'
 import top_1 from '../../assets/1.png'
@@ -12,29 +12,22 @@ import product2 from "../../assets/food-yummy/product2.jpg";
 import product3 from "../../assets/food-yummy/product3.jpg";
 import product4 from "../../assets/food-yummy/product4.jpg";
 
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchProductsBestSale } from "../../redux/actions/productActions";
 
-
-const FoodDisplay = () => {
-  // fetch product best sale
-  const dispatch = useDispatch();
-  const listProductsBestSale = useSelector((state) => {
-    return state.product.listProductsBestSale;
-  })
-
-  useEffect(() => {
-    dispatch(fetchProductsBestSale());
-  }, []);
-
+const FoodDisplay = ({ listProducts }) => {
   return (
     <div className='food-display' id='food-display'>
       <div className="food-display-list">
-        {listProductsBestSale.map((product, index) => {
-          // if (category === "All" || category === item.category) {
-          return <FoodItem key={index} product={product} />
-          // }
-        })}
+        {
+          listProducts && listProducts.length > 0 ? (
+            listProducts.map((product, index) => {
+              return <FoodItem key={index} product={product} />
+              // }
+            })
+          )
+            : (
+              <div className="no-product">Không có sản phẩm</div>
+            )
+        }
       </div>
     </div>
   )

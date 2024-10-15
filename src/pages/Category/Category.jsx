@@ -17,12 +17,15 @@ export default function Category() {
     return state.product.listProductsByIdCategory;
   })
   useEffect(() => {
+    window.scrollTo(0, 0);
     dispatch(fetchProductsByIdCategory(id));
   }, [id]); // Thêm 'id' vào mảng phụ thuộc
 
 
   return (
-    <div className="page-category">
+    <div
+      className={`page-category ${listProducts && listProducts.length > 0 ? 'has-products' : ''}`}
+    >
       <div className="category-list-products">
         {
           listProducts && listProducts.length > 0 ? (
@@ -37,7 +40,7 @@ export default function Category() {
               );
             })
           ) : (
-            <div>Không có sản phẩm</div>
+            <div className="no-product">Không có sản phẩm</div>
           )
         }
 

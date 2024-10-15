@@ -13,7 +13,7 @@
             .infor-left-img-container {            
                 img {
                     width: 100%;
-                    height: auto;
+                    height: 300px;
                     border-radius: 15px; /* Bo tròn góc ảnh */
                     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ cho hình ảnh */
                     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Hiệu ứng chuyển động mượt khi hover */
@@ -79,7 +79,7 @@
                 // height: 100%; /* Đặt chiều cao là 100% để chiếm hết div cha */
                 // width: 100%; /* Đặt chiều rộng là 100% để chiếm hết div cha */          
                 img {
-                  height: 100%; /* Đảm bảo hình ảnh chiếm hết chiều cao */
+                  height: 80vh; /* Đảm bảo hình ảnh chiếm hết chiều cao */
                   width: 100%; /* Đảm bảo hình ảnh chiếm hết chiều rộng */
                 //   object-fit: contain; /* Đảm bảo tỉ lệ hình ảnh không bị biến dạng */
                 //   object-position: left; /* Đặt hình ảnh nằm bên trái */

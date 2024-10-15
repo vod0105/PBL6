@@ -1,6 +1,11 @@
 import types from "../types";
 import axios from '../../setup/axios'
-import { fetchProductsBestSaleService, fetchProductsByIdCategoryService } from "../../services/productService";
+import {
+    fetchProductsBestSaleService,
+    fetchProductsByIdCategoryService,
+    fetchProductByIdService,
+    fetchProductsByIdStoreService
+} from "../../services/productService";
 
 // Best sale
 const fetchProductsBestSaleSuccess = (data) => {
@@ -41,9 +46,50 @@ const fetchProductsByIdCategory = (id) => {
     }
 };
 
+// by idProduct => Product Detail
+const fetchProductByIdSuccess = (data) => {
+    return {
+        type: types.FETCH_PRODUCT_BY_ID_SUCCESS,
+        productDetail: data
+    };
+};
+const fetchProductById = (id) => {
+    return async (dispatch, getState) => {
+        try {
+            const res = await fetchProductByIdService(id);
+            const data = res && res.data ? res.data.data[0] : {};
+            dispatch(fetchProductByIdSuccess(data)); // // Chạy ở đây (2)
+            console.log(data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+};
+// by ID Store
+const fetchProductsByIdStoreSuccess = (data) => {
+    return {
+        type: types.FETCH_PRODUCTS_BY_ID_STORE_SUCCESS,
+        dataProducts: data
+    };
+};
+const fetchProductsByIdStore = (id) => {
+    return async (dispatch, getState) => {
+        try {
+            const res = await fetchProductsByIdStoreService(id);
+            const data = res && res.data ? res.data.data : [];
+            dispatch(fetchProductsByIdStoreSuccess(data)); // // Chạy ở đây (2)
+            // console.log(data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+};
+
 
 export {
     fetchProductsBestSale,
-    fetchProductsByIdCategory
+    fetchProductsByIdCategory,
+    fetchProductById,
+    fetchProductsByIdStore,
 
 }

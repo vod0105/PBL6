@@ -26,38 +26,11 @@ const FoodItem = ({ product }) => {
     setIsAddToCart(true); // Kích hoạt chế độ "Thêm vào giỏ hàng"
     handleShowModalProduct(); // Hiển thị modal
   };
-  // List stores
-  const stores = [
-    {
-      image: store1,
-      name: 'Cửa hàng 1',
-      address: 'Địa chỉ cửa hàng 1',
-    },
-    {
-      image: store2,
-      name: 'Cửa hàng 2',
-      address: 'Địa chỉ cửa hàng 2',
-    },
-    {
-      image: store3,
-      name: 'Cửa hàng 3',
-      address: 'Địa chỉ cửa hàng 3',
-    },
-    {
-      image: store4,
-      name: 'Cửa hàng 4',
-      address: 'Địa chỉ cửa hàng 4',
-    },
-    {
-      image: store5,
-      name: 'Cửa hàng 5',
-      address: 'Địa chỉ cửa hàng 5',
-    },
-  ];
+
   return (
     <div className='food-item'>
       <div className="food-item-img-container">
-        <Link to={`/test-product-detail/${product.productId}`}>
+        <Link to={`/product-detail/${product.productId}`}>
           <img src={'data:image/png;base64,' + product.image} alt="" className="food-item-image" />
         </Link>
         <div className='food-item-addtocart' onClick={handleAddToCartClick}>
@@ -68,14 +41,12 @@ const FoodItem = ({ product }) => {
         <div className="food-item-name-rating">
           <p>{product.productName}</p>
         </div>
-        {/* <p className="food-item-desc">{description}</p> */}
-        {/* <p className="food-item-price">${price}</p> */}
         <div className="food-item-price-container">
           <span className="price-discount">
-            {Number(product.price).toLocaleString('vi-VN')} đ
+            {Number(product.price - product.discountedPrice).toLocaleString('vi-VN')} đ
           </span>
           <span className="price-origin">
-            {Number(product.discountedPrice).toLocaleString('vi-VN')} đ
+            {Number(product.price).toLocaleString('vi-VN')} đ
           </span>
         </div>
         <button onClick={handleShowModalProduct}>MUA NGAY</button>
@@ -83,7 +54,7 @@ const FoodItem = ({ product }) => {
           showModalProduct={showModalProduct}
           handleCloseModalProduct={handleCloseModalProduct}
           product={product}
-          stores={stores}
+          stores={product.stores}
           isAddToCart={isAddToCart}
         />
       </div>

@@ -12,9 +12,23 @@ const fetchProductsByIdCategoryService = (id) => {
         url: `/api/v1/public/products/category/${id}`,
     });
 }
+const fetchProductByIdService = (id) => {
+    return axios({
+        method: 'get',
+        url: `/api/v1/public/products/${id}`,
+    });
+}
+const fetchProductsByIdStoreService = (id) => {
+    return axios({
+        method: 'get',
+        url: `/api/v1/public/products/store/${id}`,
+    });
+}
 
 export {
     fetchProductsBestSaleService,
     fetchProductsByIdCategoryService,
+    fetchProductByIdService,
+    fetchProductsByIdStoreService,
 
 }

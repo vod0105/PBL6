@@ -32,9 +32,13 @@
   .store-name {
     font-weight: bold;
     margin: 0; /* Xóa margin mặc định */
+    font-size: 20px;
   }
   
   .store-address {
     margin: 0; /* Xóa margin mặc định */
+    i{
+      padding-right: 5px;
+    }
   }
   

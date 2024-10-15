@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './StoreDetail.scss'
 import test_product from "../../assets/food-yummy/product1.jpg";
 import { assets } from '../../assets/assets'
@@ -11,47 +11,27 @@ import store9 from "../../assets/image_gg/introduce_9.png";
 import store10 from "../../assets/image_gg/introduce_10.png";
 
 import { useParams } from 'react-router-dom';
-const StoreDetail = () => {
-  const { id } = useParams(); // Lấy giá trị từ URL
-  const [category, setCategory] = useState("All")
-  const stores = [
-    {
-      id: 7,
-      image: store7,
-      name: 'JBVN065 - Trường Chinh',
-      address: '360 Truong Chinh st, ward 13, Dis Tan Binh, HCM City',
-      phonenumber: '(028) 3812-5053 / (028) 3812-5063',
-      time: '8:30 AM - 9:15 PM (Thứ 2 - Chủ Nhật)'
-    },
-    {
-      id: 8,
-      image: store8,
-      name: 'JBVN115 - EC Âu Cơ',
-      address: '650 Au cơ, Ward 10, Tan Binh Distric, HCMC',
-      phonenumber: '(028) 3861-6848',
-      time: ' 8:30 AM - 9:00 PM (Thứ 2 - Chủ Nhật)'
-    },
-    {
-      id: 9,
-      image: store9,
-      name: 'JBVN018 - Vincom Cộng Hòa',
-      address: 'Ground Flr. Maximark Cong Hoa, 15-17 Cong Hoa, Tan Binh Dist. HCMC',
-      phonenumber: ' (028) 3811-7000 / (028) 3811-5039',
-      time: '7:30 AM - 10:30 PM (Thứ 2 - Chủ Nhật)'
-    },
-    {
-      id: 10,
-      image: store10,
-      name: 'JBVN184 - EC Tân Hương',
-      address: '131 Tân Hương, Tân Quý Ward, Tân Phú District, HCM City',
-      phonenumber: ' 02822066027',
-      time: '9:30 AM - 9:00 PM (Thứ 2 - Chủ Nhật)'
-    }
-  ];
-  // find store
-  const store = stores.find(store => store.id === +id);
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchStoreById } from "../../redux/actions/storeActions";
+import { fetchProductsByIdStore } from '../../redux/actions/productActions';
 
-  if (!store) {
+const StoreDetail = () => {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const storeDetail = useSelector((state) => {
+    return state.store.storeDetail;
+  })
+  const listProductsByIdStore = useSelector((state) => {
+    return state.product.listProductsByIdStore;
+  })
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    dispatch(fetchStoreById(id));
+    dispatch(fetchProductsByIdStore(id));
+  }, [id]);
+
+  if (!storeDetail) {
     return <div>Không có thông tin cửa hàng.</div>;
   }
   else return (
@@ -60,22 +40,22 @@ const StoreDetail = () => {
         <div className="store-detail-infor">
           <div className="infor-left">
             <div className="infor-left-img-container">
-              <img src={store.image} alt="" />
+              <img src={'data:image/png;base64,' + storeDetail.image} alt="" />
             </div>
             <div className="infor-left-infor-container">
-              <div className="infor-left-name">{store.name}</div>
+              <div className="infor-left-name">{storeDetail.storeName}</div>
               <div className="infor-left-contact-container">
                 <span className="contact-location">
                   <i class="fa-solid fa-compass"></i>
-                  {store.address}
+                  {storeDetail.location}
                 </span>
                 <span className="contact-phone">
                   <i class="fa-solid fa-phone"></i>
-                  {store.phonenumber}
+                  {storeDetail.numberPhone}
                 </span>
                 <span className="contact-time">
                   <i class="fa-solid fa-clock"></i>
-                  {store.time}
+                  {storeDetail.openingTime} - {storeDetail.closingTime}
                 </span>
               </div>
             </div>
@@ -85,16 +65,9 @@ const StoreDetail = () => {
               <img src={DownloadImage} alt="" />
             </div>
           </div>
-          {/* <ProductItemModal
-            showModalProduct={showModalProduct}
-            handleCloseModalProduct={handleCloseModalProduct}
-            // product={stores}
-            // stores={stores}
-          /> */}
         </div>
         <div className="list-products">
-          {/* <h2>SẢN PHẨM HIỆN CÓ</h2> */}
-          <FoodDisplay category={category} />
+          <FoodDisplay listProducts={listProductsByIdStore} />
         </div>
       </div>
     </div>

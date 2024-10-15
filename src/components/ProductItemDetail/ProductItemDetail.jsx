@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './ProductItemDetail.scss'
 import test_product from "../../assets/food-yummy/product3.jpg";
 import { assets } from '../../assets/assets'
@@ -16,35 +16,11 @@ import StoreList from '../StoreList/StoreList';
 import ProductItemModal from '../ProductItemModal/ProductItemModal';
 
 import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProductById } from "../../redux/actions/productActions";
+
 
 const ProductItemDetail = () => {
-  const stores = [
-    {
-      image: store1,
-      name: 'Cửa hàng 1',
-      address: 'Địa chỉ cửa hàng 1',
-    },
-    {
-      image: store2,
-      name: 'Cửa hàng 2',
-      address: 'Địa chỉ cửa hàng 2',
-    },
-    {
-      image: store3,
-      name: 'Cửa hàng 3',
-      address: 'Địa chỉ cửa hàng 3',
-    },
-    {
-      image: store4,
-      name: 'Cửa hàng 4',
-      address: 'Địa chỉ cửa hàng 4',
-    },
-    {
-      image: store5,
-      name: 'Cửa hàng 5',
-      address: 'Địa chỉ cửa hàng 5',
-    },
-  ];
   // Modal
   const [showModalProduct, setShowModalProduct] = useState(false);
   const [isAddToCart, setIsAddToCart] = useState(false);
@@ -63,75 +39,18 @@ const ProductItemDetail = () => {
     handleShowModalProduct(); // Hiển thị modal
   };
 
-  // product detail
-  const products = [
-    {
-      id: 1,
-      image: product1,
-      name: "Combo thơm phức",
-      price: "10000",
-    },
-    {
-      id: 2,
-      image: product2,
-      name: "Gà sốt cay",
-      price: "20000",
-    },
-    {
-      id: 3,
-      image: product3,
-      name: "Burger",
-      price: "30000",
-    },
-
-    {
-      id: 4,
-      image: product4,
-      name: "Tropical Sundae",
-      price: "40000",
-    },
-    {
-      id: 5,
-      image: product1,
-      name: "Combo thơm phức",
-      price: "10000",
-    },
-    {
-      id: 6,
-      image: product2,
-      name: "Gà sốt cay",
-      price: "20000",
-    },
-    {
-      id: 7,
-      image: product3,
-      name: "Burger",
-      price: "30000",
-    },
-
-    {
-      id: 8,
-      image: product4,
-      name: "Tropical Sundae",
-      price: "40000",
-    },
-    {
-      id: 9,
-      image: product1,
-      name: "Combo thơm phức",
-      price: "10000",
-    },
-    {
-      id: 10,
-      image: product2,
-      name: "Gà sốt cay",
-      price: "20000",
-    },
-  ];
+  // API
   const { id } = useParams();
-  const product = products.find(product => product.id === +id);
+  const dispatch = useDispatch();
+  const productDetail = useSelector((state) => {
+    return state.product.productDetail;
+  })
+  useEffect(() => {
+    console.log('>>> check pd', productDetail);
+    dispatch(fetchProductById(id));
+  }, [id]);
 
-  if (!product) {
+  if (!productDetail) {
     return <div>Không có thông tin sản phẩm.</div>;
   }
   else return (
@@ -140,28 +59,29 @@ const ProductItemDetail = () => {
         <div className="product-detail-infor">
           <div className="infor-left">
             <div className="infor-left-img-container">
-              <img src={product.image} alt="" />
+              <img src={'data:image/png;base64,' + productDetail.image} alt="" />
             </div>
           </div>
           <div className="infor-right">
             <div className="infor-right-category">
-              <span>GÀ RÁN</span>
+              <span>{productDetail?.category?.categoryName || 'Danh mục không xác định'}</span>
             </div>
-            <div className="infor-right-name">Gà sốt cay</div>
+
+            <div className="infor-right-name">{productDetail.productName}</div>
             <div className="infor-right-review">
               <img src={assets.rating_starts} alt="" />
             </div>
             <hr />
             <div className="infor-right-price-container">
               <span className="infor-right-price-discount">
-                {Number(10000).toLocaleString('vi-VN')} đ
+                {Number(productDetail.price - productDetail.discountedPrice).toLocaleString('vi-VN')} đ
               </span>
               <span className="infor-right-price-origin">
-                {Number(90000).toLocaleString('vi-VN')} đ
+                {Number(productDetail.price).toLocaleString('vi-VN')} đ
               </span>
             </div>
             <div className="infor-right-description">
-              <span>Mô tả: Ngon ơi là ngon phải thử đi</span>
+              <span>Mô tả: {productDetail.description}</span>
             </div>
             <hr />
             <div className="infor-right-btn-container">
@@ -181,15 +101,15 @@ const ProductItemDetail = () => {
             <div className="infor-right-store">
               <hr />
               <div className="infor-right-store-title">
-                <span>Danh sách cửa hàng hiện có</span>
+                <span>* Danh sách cửa hàng hiện có</span>
               </div>
-              <StoreList stores={stores} />
+              <StoreList stores={productDetail.stores} />
             </div>
             <ProductItemModal
               showModalProduct={showModalProduct}
               handleCloseModalProduct={handleCloseModalProduct}
-              product={product}
-              stores={stores}
+              product={productDetail}
+              stores={productDetail.stores}
               isAddToCart={isAddToCart}
             />
           </div>

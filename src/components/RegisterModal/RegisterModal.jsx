@@ -36,40 +36,40 @@ const RegisterModal = () => {
     setObjCheckInput(defaultValidInput);
   }
 
-  const checkValidInputs = () => {
-    let objCheckValidInput = { ...defaultValidInput };
-    if (!fullname) {
-      toast.error("Vui lòng nhập họ tên của bạn!");
-      objCheckValidInput.isValidFullname = false;
-    }
-    if (!phonenumber) {
-      toast.error("Vui lòng nhập số điện thoại của bạn!");
-      objCheckValidInput.isValidPhonenumber = false;
-    }
-    if (!address) {
-      toast.error("Vui lòng nhập địa chỉ của bạn!");
-      objCheckValidInput.isValidAddress = false;
-    }
-    if (!email) {
-      toast.error("Vui lòng nhập email của bạn!");
-      objCheckValidInput.isValidEmail = false;
-    }
-    if (!password) {
-      toast.error("Vui lòng nhập mật khẩu của bạn!");
-      objCheckValidInput.isValidPassword = false;
-    }
-    if (!confirmPassword) {
-      toast.error("Vui lòng nhập mật khẩu xác nhận của bạn!");
-      objCheckValidInput.isValidConfirmPassword = false;
-    }
-    setObjCheckInput({ ...objCheckValidInput });
+  // const checkValidInputs = () => {
+  //   let objCheckValidInput = { ...defaultValidInput };
+  //   if (!fullname) {
+  //     toast.error("Vui lòng nhập họ tên của bạn!");
+  //     objCheckValidInput.isValidFullname = false;
+  //   }
+  //   if (!phonenumber) {
+  //     toast.error("Vui lòng nhập số điện thoại của bạn!");
+  //     objCheckValidInput.isValidPhonenumber = false;
+  //   }
+  //   if (!address) {
+  //     toast.error("Vui lòng nhập địa chỉ của bạn!");
+  //     objCheckValidInput.isValidAddress = false;
+  //   }
+  //   if (!email) {
+  //     toast.error("Vui lòng nhập email của bạn!");
+  //     objCheckValidInput.isValidEmail = false;
+  //   }
+  //   if (!password) {
+  //     toast.error("Vui lòng nhập mật khẩu của bạn!");
+  //     objCheckValidInput.isValidPassword = false;
+  //   }
+  //   if (!confirmPassword) {
+  //     toast.error("Vui lòng nhập mật khẩu xác nhận của bạn!");
+  //     objCheckValidInput.isValidConfirmPassword = false;
+  //   }
+  //   setObjCheckInput({ ...objCheckValidInput });
 
-    const hasInvalidInput = Object.values(objCheckValidInput).some(value => value === false);
-    return !hasInvalidInput;
-  }
+  //   const hasInvalidInput = Object.values(objCheckValidInput).some(value => value === false);
+  //   return !hasInvalidInput;
+  // }
 
   const handleRegister = async () => {
-    let isValidInputs = checkValidInputs();
+    // let isValidInputs = checkValidInputs();
     if (isValidInputs) {
       // Gọi API để đăng ký người dùng mới
       toast.success("Đăng ký thành công!");

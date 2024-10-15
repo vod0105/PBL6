@@ -8,13 +8,9 @@ const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, 
   // Size
   const sizes = ['S', 'M', 'L', 'XL']; // Danh sách kích cỡ
   const [selectedSize, setSelectedSize] = useState('S'); // Chỉ chọn 1 kích cỡ
-  // const handleSizeChange = (event) => {
-  //   setSelectedSize(event.target.value); // Cập nhật kích cỡ được chọn
-  // };
   const handleSizeChange = (size) => {
     setSelectedSize(size); // Cập nhật kích thước được chọn khi click vào
   };
-
 
   // Quantity + Total Price
   const [quantity, setQuantity] = useState(1); // Giá trị số lượng ban đầu
@@ -47,11 +43,11 @@ const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, 
                 <div className="product-detail-infor">
                   <div className="infor-left">
                     <div className="img-container">
-                      <img src={product.image} alt="" />
+                      <img src={'data:image/png;base64,' + product.image} alt="" />
                     </div>
                   </div>
                   <div className="infor-right">
-                    <div className="name">{product.name}</div>
+                    <div className="name">{product.productName}</div>
                     <div className="size-container">
                       <span className='title'>Kích cỡ</span>
                       <div className="list-size">
@@ -84,7 +80,7 @@ const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, 
                         </button>
                       </div>
                       <div className="totalprice-container">
-                        <span>{(100000 * quantity).toLocaleString()} đ</span>
+                        <span>{((product.price - product.discountedPrice) * quantity).toLocaleString()} đ</span>
                       </div>
                     </div>
                     <div className="store">

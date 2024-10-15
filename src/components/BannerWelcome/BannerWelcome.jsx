@@ -4,7 +4,8 @@ import React from "react";
 import './BannerWelcome.scss'
 
 import { Container, Row, Col, Carousel } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
 import StoreIOS from "../../assets/shop/appstore.png";
 import StoreGoogle from "../../assets/shop/googleplay.png";
 import DownloadImage from "../../assets/shop/e-shop.png";
@@ -18,6 +19,10 @@ import Brand7 from "../../assets/brands/brand-17.png";
 import Brand8 from "../../assets/brands/brand-18.png";
 
 function BannerWelcome() {
+  // fetch category
+  const listCategories = useSelector((state) => {
+    return state.category.listCategories;
+  })
   return (
     <>
       <section className="shop_section">
@@ -30,9 +35,12 @@ function BannerWelcome() {
                 Chúng tôi cam kết cung cấp những món ăn ngon, chất lượng vượt trội, dịch vụ tận tâm và giá cả hợp lý.
                 Hãy ghé thăm chúng tôi và tận hưởng những khoảnh khắc ẩm thực đáng nhớ!
               </p>
-              <Link to="/" className="btn order_now btn_red">
-                Đặt hàng
-              </Link>
+              <NavLink
+                to={listCategories.length > 0 ? `/category/${listCategories[0].categoryId}` : "/category"}
+                className={({ isActive }) => (isActive ? "active btn order_now btn_red" : "btn order_now btn_red")}
+              >
+                ĐẶT HÀNG
+              </NavLink>
             </Col>
             <Col lg={6}>
               <img src={DownloadImage} alt="e-shop" className="img-fluid" />

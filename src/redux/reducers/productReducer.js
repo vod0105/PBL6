@@ -3,7 +3,8 @@ import types from "../types";
 const INITIAL_STATE = {
     listProductsBestSale: [],
     listProductsByIdCategory: [],
-
+    productDetail: {},
+    listProductsByIdStore: [],
 };
 
 const productReducer = (state = INITIAL_STATE, action) => {
@@ -17,6 +18,16 @@ const productReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 listProductsByIdCategory: action.dataProducts,
+            };
+        case types.FETCH_PRODUCT_BY_ID_SUCCESS:
+            return {
+                ...state,
+                productDetail: action.productDetail,
+            };
+        case types.FETCH_PRODUCTS_BY_ID_STORE_SUCCESS:
+            return {
+                ...state,
+                listProductsByIdStore: action.dataProducts,
             };
 
         default: return state;

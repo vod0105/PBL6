@@ -29,38 +29,10 @@ const ProductItem = ({ product, index }) => {
     handleShowModalProduct(); // Hiển thị modal
   };
 
-  // List stores
-  const stores = [
-    {
-      image: store1,
-      name: 'Cửa hàng 1',
-      address: 'Địa chỉ cửa hàng 1',
-    },
-    {
-      image: store2,
-      name: 'Cửa hàng 2',
-      address: 'Địa chỉ cửa hàng 2',
-    },
-    {
-      image: store3,
-      name: 'Cửa hàng 3',
-      address: 'Địa chỉ cửa hàng 3',
-    },
-    {
-      image: store4,
-      name: 'Cửa hàng 4',
-      address: 'Địa chỉ cửa hàng 4',
-    },
-    {
-      image: store5,
-      name: 'Cửa hàng 5',
-      address: 'Địa chỉ cửa hàng 5',
-    },
-  ];
   return (
     <div className={(index + 1) % 4 !== 0 ? "category-product-item" : "category-product-item product-no-border-right"} key={index}>
       <div className="product-item-img-container">
-        <Link to={`/test-product-detail/${product.productId}`}>
+        <Link to={`/product-detail/${product.productId}`}>
           <img src={'data:image/png;base64,' + product.image} alt="" className="product-item-image" />
         </Link>
         <div className='product-item-addtocart' onClick={handleAddToCartClick}>
@@ -70,10 +42,10 @@ const ProductItem = ({ product, index }) => {
       <h4>{product.productName}</h4>
       <div className="product-item-price-container">
         <span className="product-item-price-discount">
-          {Number(product.price).toLocaleString('vi-VN')} đ
+          {Number(product.price - product.discountedPrice).toLocaleString('vi-VN')} đ
         </span>
         <span className="product-item-price-origin">
-          {(Number(product.price) * 0.9).toLocaleString('vi-VN')} đ
+          {Number(product.price).toLocaleString('vi-VN')} đ
         </span>
       </div>
       <button onClick={handleShowModalProduct}>MUA NGAY</button>
@@ -81,7 +53,7 @@ const ProductItem = ({ product, index }) => {
         showModalProduct={showModalProduct}
         handleCloseModalProduct={handleCloseModalProduct}
         product={product}
-        stores={stores}
+        stores={product.stores}
         isAddToCart={isAddToCart}
       />
     </div>
