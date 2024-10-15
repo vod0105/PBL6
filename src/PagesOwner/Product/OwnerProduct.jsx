@@ -151,7 +151,7 @@ const OwnerProduct = ({ url }) => {
               <th scope="col">Category Name</th>
               <th scope="col">Stock Quantity</th>
               <th scope="col">Best Sale</th>
-              <th scope="col">Sửa</th>
+
               <th scope="col">Xóa</th>
             </tr>
           </thead>
@@ -183,15 +183,6 @@ const OwnerProduct = ({ url }) => {
                   <td>{data.stockQuantity}</td>
                   <td>{data.bestSale ? "Best sales" : "Normal"}</td>
 
-                  <td>
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      onClick={() => handleUpdateClick(data.productId)}
-                    >
-                      UPDATE
-                    </button>
-                  </td>
                   <td>
                     <button
                       type="button"
