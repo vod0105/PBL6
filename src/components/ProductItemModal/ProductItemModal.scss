@@ -1,5 +1,19 @@
 .custom-modal-productitem{
     min-width: 60% !important;
+    // .modal-header {
+    //   text-align: center;
+    //   font-weight: bold;
+    //   text-transform: uppercase;
+    //   position: relative; /* Helps center the title */
+    // }
+    
+    // .modal-title {
+    //   margin: 0 auto; /* Centers the title horizontally */
+    // }
+    // .modal-header .btn-close {
+    //   position: absolute;
+    //   right: 10px; /* Keeps the close button at the right edge */
+    // }
     .modal-product-item{
         display: flex;
         flex-direction: column;
@@ -30,7 +44,7 @@
                     color: grey;
                 }
                 .name{
-                    font-size: 30px;
+                    font-size: 25px;
                     font-weight: 600;
                     color: rgb(32, 32, 32);
                     text-transform: uppercase;
@@ -78,7 +92,7 @@
                     border: 1px solid #ccc;
                     border-radius: 8px;
                     // max-width: 300px;
-                    margin: 20px 0;
+                    margin: 10px 0;
                   
                     .quantity-container {
                       display: flex;
@@ -152,7 +166,13 @@
                         font-size: 15px;
                         margin-bottom: 10px;
                         font-weight: bold;
+                        max-height: 35px;
                     }
+                }
+                .stock-quantity{
+                  font-size: 15px;
+                        margin-top: 10px;
+                        font-weight: bold;
                 }
             }
         }

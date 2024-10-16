@@ -46,7 +46,6 @@ const ProductItemDetail = () => {
     return state.product.productDetail;
   })
   useEffect(() => {
-    console.log('>>> check pd', productDetail);
     dispatch(fetchProductById(id));
   }, [id]);
 

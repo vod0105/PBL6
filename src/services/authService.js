@@ -1,25 +1,25 @@
 import axios from "../setup/axios";
 
-const registerNewUser = (email, phone, username, password) => {
+const registerNewUserService = (fullName, password, phoneNumber, email, address) => {
     return axios({ // return response: Object
         method: 'post',
-        url: '/api/v1/register',
+        url: '/api/v1/auth/register-user',
         data: {
-            email, phone, username, password
+            fullName, password, phoneNumber, email, address
         }
     });
 }
-const loginUser = (valueLogin, password) => {
+const loginUserService = (numberPhone, password) => {
     return axios({ // return response: Object
         method: 'post',
-        url: '/api/v1/login',
+        url: '/api/v1/auth/login',
         data: {
-            valueLogin, password
+            numberPhone, password
         }
     });
 }
 
 export {
-    registerNewUser,
-    loginUser,
+    registerNewUserService,
+    loginUserService,
 }

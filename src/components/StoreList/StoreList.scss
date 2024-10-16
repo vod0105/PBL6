@@ -1,44 +1,50 @@
 .infor-right-store-display {
-    max-height: 200px; /* Đặt chiều cao tối đa cho vùng cuộn */
-    overflow-y: auto; /* Cho phép cuộn dọc */
-    border: 1px solid #ddd; /* Viền để phân biệt vùng chứa */
-    padding: 10px;
-    // background-color: #f9f9f9; /* Màu nền cho vùng chứa */
-    outline: 1px solid #ffc522;
-    border-radius: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  padding: 10px;
+  outline: 1px solid #ffc522;
+  border-radius: 10px;
+}
+
+.store-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  background-color: #ffc522;
+  padding: 10px;
+  border-radius: 10px;
+  &:hover {
+    cursor: pointer;
   }
-  
-  .store-item {
-    display: flex; /* Để hình ảnh và thông tin nằm ngang */
-    align-items: center; /* Căn giữa dọc */
-    margin-bottom: 10px; /* Khoảng cách giữa các mục */
-    background-color: #ffc522;
-    padding: 10px;
-    border-radius: 10px;
+}
+
+.selected-store-item {
+  border: 2px solid red; /* Viền đỏ cho cửa hàng được chọn */
+}
+
+.store-image {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.store-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.store-name {
+  font-weight: bold;
+  margin: 0;
+  font-size: 16px;
+}
+
+.store-address {
+  margin: 0;
+  font-size: 14px;
+  i {
+    padding-right: 5px;
   }
-  
-  .store-image {
-    width: 50px; /* Chiều rộng hình ảnh */
-    height: 50px; /* Chiều cao hình ảnh */
-    object-fit: cover; /* Đảm bảo hình ảnh không bị méo */
-    margin-right: 10px; /* Khoảng cách bên phải của hình ảnh */
-  }
-  
-  .store-info {
-    display: flex;
-    flex-direction: column; /* Để tên và địa chỉ xếp chồng lên nhau */
-  }
-  
-  .store-name {
-    font-weight: bold;
-    margin: 0; /* Xóa margin mặc định */
-    font-size: 20px;
-  }
-  
-  .store-address {
-    margin: 0; /* Xóa margin mặc định */
-    i{
-      padding-right: 5px;
-    }
-  }
-  
+}

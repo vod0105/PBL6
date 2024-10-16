@@ -34,7 +34,7 @@ const FoodItem = ({ product }) => {
           <img src={'data:image/png;base64,' + product.image} alt="" className="food-item-image" />
         </Link>
         <div className='food-item-addtocart' onClick={handleAddToCartClick}>
-          <i class="fa-solid fa-cart-plus"></i>
+          <i className="fa-solid fa-cart-plus"></i>
         </div>
       </div>
       <div className="food-item-info">

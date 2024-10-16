@@ -1,27 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import './LoginModal.scss';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideLoginModal, showRegisterModal } from '../../redux/actions/modalActions';
-import { loginSuccess, loginError } from '../../redux/actions/authenticationActions';
+import { loginUser } from '../../redux/actions/authActions';
 
 const LoginModal = () => {
   const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state) => {
+    return state.auth.isAuthenticated;
+  })
   const showModalLogin = useSelector((state) => state.modal.isLoginModalVisible); // Lấy trạng thái từ Redux
   // Kiểm tra giá trị showModalLogin
-  const [email, setEmail] = useState("");
+  const [phonenumber, setPhonenumber] = useState("");
   const [password, setPassword] = useState("");
 
   const defaultValidInput = {
-    isValidEmail: true,
+    isValidPhonenumber: true,
     isValidPassword: true,
   }
   const [objCheckInput, setObjCheckInput] = useState(defaultValidInput);
 
   // Hàm để reset lại dữ liệu input
   const resetInputs = () => {
-    setEmail("");
+    setPhonenumber("");
     setPassword("");
     setObjCheckInput(defaultValidInput);
   }
@@ -34,11 +37,11 @@ const LoginModal = () => {
 
   const handleLogin = async () => {
     let objCheckValidInput = {
-      isValidEmail: true,
+      isValidPhonenumber: true,
       isValidPassword: true,
     }
-    if (!email) {
-      objCheckValidInput.isValidEmail = false;
+    if (!phonenumber) {
+      objCheckValidInput.isValidPhonenumber = false;
     }
     if (!password) {
       objCheckValidInput.isValidPassword = false;
@@ -47,22 +50,17 @@ const LoginModal = () => {
     const hasInvalidInput = Object.values(objCheckValidInput).some(value => value === false);
 
     if (hasInvalidInput) {
-      toast.error("Chưa điền hết input em ơi!");
+      toast.error("Vui lòng điền đầy đủ thông tin");
     }
     else {
-      // Check login
-      if (email == 'hoahoe' && password == 'hoala') { // Success
-        dispatch(loginSuccess());
-        dispatch(hideLoginModal());
-        toast.success('Ngon luôn! Đăng nhập OK đó!')
-      }
-      else { // Fail
-        dispatch(loginError());
-        toast.error('Sai email hoặc mật khẩu vô Web anh rồi đó em!')
-      }
+      dispatch(loginUser(phonenumber, password));
     }
   }
-
+  useEffect(() => {
+    if (isAuthenticated) {
+      dispatch(hideLoginModal());
+    }
+  }, [isAuthenticated, dispatch]);
   return (
     <Modal
       show={showModalLogin}
@@ -82,15 +80,15 @@ const LoginModal = () => {
           <div className="container">
             <div className="form-login-input">
               <input
-                type="email"
-                placeholder='Email'
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                className={objCheckInput.isValidEmail ? 'form-control' : 'form-control is-invalid'}
+                type="text"
+                placeholder='Số điện thoại'
+                value={phonenumber}
+                onChange={(event) => setPhonenumber(event.target.value)}
+                className={objCheckInput.isValidPhonenumber ? 'form-control' : 'form-control is-invalid'}
               />
               <input
                 type="password"
-                placeholder='Password'
+                placeholder='Mật khẩu'
                 value={password}
                 className={objCheckInput.isValidPassword ? 'form-control' : 'form-control is-invalid'}
                 onChange={(event) => setPassword(event.target.value)}

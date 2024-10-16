@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import './RegisterModal.scss';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideRegisterModal, showLoginModal } from '../../redux/actions/modalActions';
-
+import { registerNewUser } from '../../redux/actions/authActions';
 const RegisterModal = () => {
   const dispatch = useDispatch();
+  const registerNewUserSuccess = useSelector((state) => {
+    return state.auth.registerNewUserSuccess;
+  })
   const showModalRegister = useSelector((state) => state.modal.isRegisterModalVisible); // Lấy trạng thái từ Redux
 
   const [fullname, setFullname] = useState("");
@@ -36,47 +39,51 @@ const RegisterModal = () => {
     setObjCheckInput(defaultValidInput);
   }
 
-  // const checkValidInputs = () => {
-  //   let objCheckValidInput = { ...defaultValidInput };
-  //   if (!fullname) {
-  //     toast.error("Vui lòng nhập họ tên của bạn!");
-  //     objCheckValidInput.isValidFullname = false;
-  //   }
-  //   if (!phonenumber) {
-  //     toast.error("Vui lòng nhập số điện thoại của bạn!");
-  //     objCheckValidInput.isValidPhonenumber = false;
-  //   }
-  //   if (!address) {
-  //     toast.error("Vui lòng nhập địa chỉ của bạn!");
-  //     objCheckValidInput.isValidAddress = false;
-  //   }
-  //   if (!email) {
-  //     toast.error("Vui lòng nhập email của bạn!");
-  //     objCheckValidInput.isValidEmail = false;
-  //   }
-  //   if (!password) {
-  //     toast.error("Vui lòng nhập mật khẩu của bạn!");
-  //     objCheckValidInput.isValidPassword = false;
-  //   }
-  //   if (!confirmPassword) {
-  //     toast.error("Vui lòng nhập mật khẩu xác nhận của bạn!");
-  //     objCheckValidInput.isValidConfirmPassword = false;
-  //   }
-  //   setObjCheckInput({ ...objCheckValidInput });
+  const checkValidInputs = () => {
+    let objCheckValidInput = { ...defaultValidInput };
+    if (!fullname) {
+      objCheckValidInput.isValidFullname = false;
+    }
+    if (!phonenumber) {
+      objCheckValidInput.isValidPhonenumber = false;
+    }
+    if (!address) {
+      objCheckValidInput.isValidAddress = false;
+    }
+    if (!email) {
+      objCheckValidInput.isValidEmail = false;
+    }
+    if (!password) {
+      objCheckValidInput.isValidPassword = false;
+    }
+    if (!confirmPassword) {
+      objCheckValidInput.isValidConfirmPassword = false;
+    }
+    setObjCheckInput({ ...objCheckValidInput });
+    const hasInvalidInput = Object.values(objCheckValidInput).some(value => value === false);
+    return !hasInvalidInput;
+  }
 
-  //   const hasInvalidInput = Object.values(objCheckValidInput).some(value => value === false);
-  //   return !hasInvalidInput;
-  // }
-
-  const handleRegister = async () => {
-    // let isValidInputs = checkValidInputs();
+  const handleRegister = () => {
+    let isValidInputs = checkValidInputs();
     if (isValidInputs) {
-      // Gọi API để đăng ký người dùng mới
-      toast.success("Đăng ký thành công!");
-      dispatch(hideRegisterModal()); // Đóng modal sau khi đăng ký thành công
-      dispatch(showLoginModal());
+      if (password !== confirmPassword) {
+        toast.error("Vui lòng nhập đúng mật khẩu xác nhận!");
+      } else {
+        dispatch(registerNewUser(fullname, password, phonenumber, email, address));
+      }
+    } else {
+      toast.error("Vui lòng điền đầy đủ thông tin!");
     }
   }
+
+  // Theo dõi sự thay đổi của registerNewUserSuccess
+  useEffect(() => {
+    if (registerNewUserSuccess) {
+      dispatch(hideRegisterModal());
+      dispatch(showLoginModal());
+    }
+  }, [registerNewUserSuccess, dispatch]);
 
   return (
     <Modal

@@ -23,6 +23,7 @@ const productReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 productDetail: action.productDetail,
+
             };
         case types.FETCH_PRODUCTS_BY_ID_STORE_SUCCESS:
             return {

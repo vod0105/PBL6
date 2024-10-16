@@ -19,7 +19,9 @@ import cate_8 from "../../assets/navbar/cate_8.png";
 const Navbar = () => {
   // redux modal
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.authentication.user);
+  const user = useSelector((state) => state.auth.user);
+  const account = useSelector((state) => state.auth.account);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   const handleShowLogin = () => {
     dispatch(showLoginModal());
@@ -33,8 +35,8 @@ const Navbar = () => {
   const listCategories = useSelector((state) => {
     return state.category.listCategories;
   })
-  const isLoading = useSelector(state => state.category.isLoading);
-  const isError = useSelector(state => state.category.isError);
+  // const isLoading = useSelector(state => state.category.isLoading);
+  // const isError = useSelector(state => state.category.isError);
   useEffect(() => {
     // console.log("Fetching categories...");
     dispatch(fetchAllCategories());
@@ -116,30 +118,15 @@ const Navbar = () => {
 
       </ul>
       <div className="navbar-right">
-        <Link
-          to="/cart"
-          className="navbar-search-icon"
-        >
-          <img src={assets.basket_icon} alt="" />
-          <div className='dot'></div>
-        </Link>
-        <Link
-          to="/account"
-          className="navbar-profile"
-        >
-          <img src={assets.profile_icon} alt="" />
-        </Link>
-        <button onClick={handleShowLogin}>Đăng nhập</button>
-        <button onClick={handleShowRegister}>Đăng ký</button>
-        {/* {
-          user && user.isAuthenticated === true
+        {
+          isAuthenticated === true
             ? <>
               <Link
                 to="/cart"
                 className="navbar-search-icon"
               >
                 <img src={assets.basket_icon} alt="" />
-                <div className={getTotalCartAmount() > 0 ? "dot" : ""}></div>
+                <div className='dot'></div>
               </Link>
               <Link
                 to="/account"
@@ -153,7 +140,7 @@ const Navbar = () => {
               <button onClick={handleShowRegister}>Đăng ký</button>
             </>
 
-        } */}
+        }
       </div>
     </div>
   );

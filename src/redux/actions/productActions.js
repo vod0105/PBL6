@@ -1,5 +1,4 @@
 import types from "../types";
-import axios from '../../setup/axios'
 import {
     fetchProductsBestSaleService,
     fetchProductsByIdCategoryService,

@@ -1,19 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 import './AccountInfo.scss'; // Nếu có CSS custom, kiểm tra lại phần này
+import { useDispatch, useSelector } from 'react-redux';
+import { updateProfile } from "../../redux/actions/userActions";
+import { updateAccountAuth } from "../../redux/actions/authActions";
 
 const AccountInfo = () => {
+  // redux
+  const dispatch = useDispatch();
+  const accountInfo = useSelector((state) => {
+    return state.auth.account;
+  })
   // State để kiểm soát việc disable/enable các input
   const [isEditing, setIsEditing] = useState(false);
-
-  // Hàm xử lý khi nhấn nút "Cập nhật" hoặc "Lưu thay đổi"
-  const handleEditClick = () => {
-    setIsEditing(!isEditing); // Đảo ngược trạng thái giữa edit và view
+  const handleSaveChangeClick = () => {
+    setIsEditing(false); // update
+    dispatch(updateProfile(phonenumber, fullname, '', email, address));
+    dispatch(updateAccountAuth(phonenumber, fullname, '', email, address));
   };
-
-  // Hàm xử lý khi nhấn nút "Hủy"
   const handleCancelClick = () => {
-    setIsEditing(false); // Chuyển về trạng thái không chỉnh sửa (disabled input)
+    setIsEditing(false); // update
   };
+  const handleEditClick = () => {
+    setIsEditing(true); // => disabled
+  };
+
+  const [fullname, setFullname] = useState(accountInfo.fullName);
+  const [phonenumber, setPhonenumber] = useState(accountInfo.phoneNumber);
+  const [address, setAddress] = useState(accountInfo.address);
+  const [email, setEmail] = useState(accountInfo.email);
+
 
   return (
     <div className="account-infor">
@@ -31,7 +46,8 @@ const AccountInfo = () => {
                 type="text"
                 className="form-control"
                 id="fullname"
-                placeholder="Nhập họ tên"
+                value={fullname}
+                onChange={(event) => setFullname(event.target.value)}
                 disabled={!isEditing} // Input chỉ được enable khi isEditing = true
               />
             </div>
@@ -43,7 +59,8 @@ const AccountInfo = () => {
                 type="text"
                 className="form-control"
                 id="address"
-                placeholder="Nhập địa chỉ"
+                value={address}
+                onChange={(event) => setAddress(event.target.value)}
                 disabled={!isEditing}
               />
             </div>
@@ -57,62 +74,44 @@ const AccountInfo = () => {
                 type="email"
                 className="form-control"
                 id="exampleInputEmail1"
-                placeholder="Nhập email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
                 disabled={!isEditing}
               />
             </div>
 
-            {/* Mật khẩu */}
-            <div className="form-group col-md-6">
-              <label htmlFor="exampleInputPassword1">Mật khẩu</label>
-              <input
-                type="password"
-                className="form-control"
-                id="exampleInputPassword1"
-                placeholder="Nhập mật khẩu"
-                disabled={!isEditing}
-              />
-            </div>
-          </div>
-
-          <div className="row py-3">
-            {/* Số điện thoại */}
             <div className="form-group col-md-6">
               <label htmlFor="phonenumber">Số điện thoại</label>
               <input
                 type="text"
                 className="form-control"
                 id="phonenumber"
-                placeholder="Nhập số điện thoại"
-                disabled={!isEditing}
-              />
-            </div>
-
-            {/* Giới tính */}
-            <div className="form-group col-md-6">
-              <label htmlFor="gender">Giới tính</label>
-              <input
-                type="text"
-                className="form-control"
-                id="gender"
-                placeholder="Chọn giới tính"
+                value={phonenumber}
+                onChange={(event) => setPhonenumber(event.target.value)}
                 disabled={!isEditing}
               />
             </div>
           </div>
+
         </div>
         <div className="account-infor-btn">
-          {/* Nút Cập nhật hoặc Lưu thay đổi */}
-          <button className="btn btn-dark me-3" onClick={handleEditClick}>
-            {isEditing ? 'Lưu thay đổi' : 'Cập nhật'} {/* Đổi nhãn nút theo trạng thái */}
-          </button>
+          {
+            isEditing ? (
+              <>
+                <button className="btn btn-dark me-3" onClick={handleSaveChangeClick}>
+                  Lưu thay đổi
+                </button>
+                <button className="btn btn-danger" onClick={handleCancelClick}>
+                  Hủy
+                </button>
+              </>
+            ) : (
+              <button className="btn btn-dark me-3" onClick={handleEditClick}>
+                Cập nhật
+              </button>
+            )
+          }
 
-          {/* Nút Hủy chỉ hiển thị khi đang chỉnh sửa */}
-          {isEditing && (
-            <button className="btn btn-danger" onClick={handleCancelClick}>
-              Hủy
-            </button>
-          )}
         </div>
       </div>
     </div>

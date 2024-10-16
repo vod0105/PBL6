@@ -5,6 +5,8 @@ const instance = axios.create({
     // withCredentials: true, // Đảm bảo gửi cookie khi request
 });
 
+instance.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem("token")}`;
+
 // Add a request interceptor (giữ nguyên nếu cần thay đổi config trước khi gửi request)
 instance.interceptors.request.use(function (config) {
     return config;
