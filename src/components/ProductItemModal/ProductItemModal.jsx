@@ -16,7 +16,7 @@ const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, 
   const [selectedStore, setSelectedStore] = useState(null);
 
   const handleSizeChange = (size) => {
-    setSelectedSize(size); // Cập nhật kích thước được chọn khi click vào
+    setSelectedSize(size); // Cập nhật kích thước được chọn 
   };
 
   const handleStoreSelect = (store) => {
@@ -34,12 +34,12 @@ const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, 
     }
   };
 
-  // Fetch sizes when component mounts
+  // Fetch all sizes 
   useEffect(() => {
     dispatch(fetchAllSizes());
   }, [dispatch]);
 
-  // Update selected size when sizes list changes
+  // list sizes thay đổi -> Chọn size đầu tiên
   useEffect(() => {
     if (listSizes.length > 0) {
       setSelectedSize(listSizes[0].name);
@@ -93,10 +93,10 @@ const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, 
 
   // Reset tất cả state khi đóng modal
   const handleModalClose = () => {
-    setQuantity(1); // Reset số lượng về 1
-    setSelectedStore(null); // Reset cửa hàng về null
+    setQuantity(1); 
+    setSelectedStore(null); // Reset cửa hàng về null -> Ko chọn cửa hàng nào
     setSelectedSize(listSizes.length > 0 ? listSizes[0].name : ""); // Reset kích thước về kích thước đầu tiên
-    handleCloseModalProduct(); // Gọi hàm đóng modal truyền từ props
+    handleCloseModalProduct(); 
   };
   return (
     <Modal

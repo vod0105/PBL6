@@ -1,5 +1,5 @@
 import React from 'react'
-import './Header.css'
+import './Header.scss'
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -20,7 +20,6 @@ const Header = () => {
           Xem thêm
         </NavLink>
       </div>
-
     </div>
   )
 }

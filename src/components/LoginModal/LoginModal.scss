@@ -12,10 +12,9 @@
                 border: 1px solid #E7E7E7;
                 padding: 10px 15px;
                 margin: 10px 0;
-                // Thêm style khi input được focus
                 &:focus {
-                    outline: none; // Bỏ viền mặc định
-                    border: 1px solid red; // Viền màu đỏ
+                    outline: none; 
+                    border: 1px solid red; 
                 }
             }
             .btn-forgot-password {
@@ -28,11 +27,11 @@
                     opacity: 0.5;
                 }
             }
-            
+           
         }
 
         .btn {
-            width: 100%; // Đảm bảo nút đăng nhập chiếm toàn bộ chiều rộng
+            width: 100%;
         }
 
         .click-register {

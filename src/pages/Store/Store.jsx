@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react'
 import './Store.scss'
 import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
-
 import store7 from "../../assets/image_gg/introduce_7.png";
 import store8 from "../../assets/image_gg/introduce_8.png";
 import store9 from "../../assets/image_gg/introduce_9.png";
@@ -10,18 +9,13 @@ import store10 from "../../assets/image_gg/introduce_10.png";
 import store11 from "../../assets/image_gg/introduce_11.png";
 import store12 from "../../assets/image_gg/introduce_12.png";
 
-
 import zigzag from "../../assets/svg/zigzag.png";
 import heart from "../../assets/svg/heart.png";
-
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllStores } from "../../redux/actions/storeActions";
 
-
 const Store = () => {
-  // Section 3: Code4Education
   const contentRef = useRef(null); // Tạo ref để tham chiếu đến nội dung
-
   const scrollToContent = () => {
     if (contentRef.current) {
       contentRef.current.scrollIntoView({ behavior: 'smooth' }); // Cuộn đến nội dung
@@ -38,12 +32,11 @@ const Store = () => {
   }, []);
 
   // Reset contentRef khi component unmounts
-  // useEffect(() => {
-  //   return () => {
-  //     contentRef.current = null;
-  //   };
-  // }, []);
-
+  useEffect(() => {
+    return () => {
+      contentRef.current = null;
+    };
+  }, []);
 
   return (
     <section className="page-store">
@@ -93,7 +86,6 @@ const Store = () => {
                 </div>
               </div>
             ))}
-
           </>
             :
             <div>Không có chi cả</div>

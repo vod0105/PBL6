@@ -1,14 +1,9 @@
-// Section 5
-
 import React from "react";
 import './BannerWelcome.scss'
-
 import { Container, Row, Col, Carousel } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import homeImage1 from '../../assets/image_gg/home_image_1.png'
-import DownloadImage from "../../assets/shop/e-shop.png";
-import Brand1 from "../../assets/brands/brand-11.png";
 import store7 from "../../assets/image_gg/introduce_7.png";
 import store8 from "../../assets/image_gg/introduce_8.png";
 import store9 from "../../assets/image_gg/introduce_9.png";

@@ -27,7 +27,6 @@ const ProductItemDetail = () => {
   const handleShowModalProduct = () => {
     setShowModalProduct(true); // Hiển thị modal
   };
-  // Sửa lỗi đổi state nhanh quá => Chưa kịp đóng Modal mà đổi nút rồi
   const handleCloseModalProduct = () => {
     setShowModalProduct(false); // Đóng modal
     setTimeout(() => {
@@ -35,8 +34,8 @@ const ProductItemDetail = () => {
     }, 200);
   };
   const handleAddToCartClick = () => {
-    setIsAddToCart(true); // Kích hoạt chế độ "Thêm vào giỏ hàng"
-    handleShowModalProduct(); // Hiển thị modal
+    setIsAddToCart(true); 
+    handleShowModalProduct(); 
   };
 
   // API

@@ -4,7 +4,6 @@ import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const Promotion = () => {
-  // Section 3: Code4Education
   return (
     <section className="page-promotion">
       <Row>

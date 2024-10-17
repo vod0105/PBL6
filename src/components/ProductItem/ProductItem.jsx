@@ -15,18 +15,18 @@ const ProductItem = ({ product, index }) => {
   const [showModalProduct, setShowModalProduct] = useState(false);
   const [isAddToCart, setIsAddToCart] = useState(false);
   const handleShowModalProduct = () => {
-    setShowModalProduct(true); // Hiển thị modal
+    setShowModalProduct(true);
   };
-  // Sửa lỗi đổi state nhanh quá => Chưa kịp đóng Modal mà đổi nút rồi
+  // Sửa lỗi đổi state nhanh quá => Chưa kịp đóng Modal mà đổi nút 
   const handleCloseModalProduct = () => {
-    setShowModalProduct(false); // Đóng modal
+    setShowModalProduct(false);
     setTimeout(() => {
-      setIsAddToCart(false);
+      setIsAddToCart(false); // btn 'Mua ngay' trong Modal'
     }, 200);
   };
   const handleAddToCartClick = () => {
-    setIsAddToCart(true); // Kích hoạt chế độ "Thêm vào giỏ hàng"
-    handleShowModalProduct(); // Hiển thị modal
+    setIsAddToCart(true); // btn 'Thêm vào giỏ hàng' trong Modal'
+    handleShowModalProduct();
   };
 
   return (

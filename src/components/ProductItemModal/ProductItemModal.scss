@@ -1,36 +1,17 @@
 .custom-modal-productitem{
     min-width: 60% !important;
-    // .modal-header {
-    //   text-align: center;
-    //   font-weight: bold;
-    //   text-transform: uppercase;
-    //   position: relative; /* Helps center the title */
-    // }
-    
-    // .modal-title {
-    //   margin: 0 auto; /* Centers the title horizontally */
-    // }
-    // .modal-header .btn-close {
-    //   position: absolute;
-    //   right: 10px; /* Keeps the close button at the right edge */
-    // }
     .modal-product-item{
         display: flex;
         flex-direction: column;
         .product-detail-infor{
             display: flex;
-            // min-width: 600px;
-            // height: 80vh;
             .infor-left{
                 flex: 1;
                 .img-container {
-                    // height: 100%; /* Đặt chiều cao là 100% để chiếm hết div cha */
-                    // width: 100%; /* Đặt chiều rộng là 100% để chiếm hết div cha */          
                     img {
-                      height: 100%; /* Đảm bảo hình ảnh chiếm hết chiều cao */
-                      width: 100%; /* Đảm bảo hình ảnh chiếm hết chiều rộng */
+                      height: 100%;
+                      width: 100%; 
                       object-fit: contain; /* Đảm bảo tỉ lệ hình ảnh không bị biến dạng */
-                      // object-position: left; /* Đặt hình ảnh nằm bên trái */
                     }
                   }
             }
@@ -58,11 +39,11 @@
                       margin-top: 10px;
                       font-size: 15px;
                       display: flex;
-                      flex-wrap: wrap; // Tự động xuống dòng khi có nhiều phần tử
-                      gap: 30px; // Khoảng cách giữa các phần tử
+                      flex-wrap: wrap; 
+                      gap: 30px; 
                     
                       .size-item {
-                        padding: 5px 30px; // Căn chỉnh padding để dễ nhìn hơn
+                        padding: 5px 30px; 
                         border: 1px solid #ccc;
                         cursor: pointer;
                         border-radius: 20px;
@@ -70,15 +51,15 @@
                         transition: background-color 0.3s, border-color 0.3s, color 0.3s; // Hiệu ứng khi hover hoặc chọn
                     
                         &:hover {
-                          background-color: #eee; // Thêm hiệu ứng hover để tăng UX
+                          background-color: #eee; 
                         }
                       }
                     
                       .size-item.selected {
-                        background-color: #ffc522; // Màu nền khi được chọn
+                        background-color: #ffc522; 
                         // color: #fff;
                         font-weight: bold;
-                        border-color: #ffc522; // Màu viền khi được chọn
+                        border-color: #ffc522; 
                       }
                     }
                     

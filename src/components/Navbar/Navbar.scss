@@ -5,7 +5,6 @@
   align-items: center;
   margin: 0 50px;
   position: relative;
-
   .logo {
     display: flex;
     align-items: flex-end;
@@ -14,7 +13,6 @@
       width: 60px;
     }
   }
-
   .navbar-menu {
     display: flex;
     list-style: none;
@@ -24,7 +22,6 @@
     padding-top: 20px;
     text-transform: uppercase;
     font-weight: 700;
-
     a {
       &:hover {
         color: red;
@@ -36,12 +33,10 @@
       border-bottom: 3px solid #d64747;
     }
   }
-
   .navbar-right {
     display: flex;
     align-items: center;
     gap: 20px;
-
     button {
       background: transparent;
       font-size: 16px;
@@ -58,7 +53,6 @@
         color: white;
       }
     }
-
     .navbar-cart-icon {
       position: relative;
       img{

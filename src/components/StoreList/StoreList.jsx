@@ -1,7 +1,6 @@
 // Scroll danh sách cửa hàng có sản phẩm trong page Product Detail
-
 import React from 'react';
-import './StoreList.scss'; // Nhớ import CSS nếu cần
+import './StoreList.scss'; 
 
 const StoreList = ({ stores, onSelectStore, selectedStore }) => {
   return (

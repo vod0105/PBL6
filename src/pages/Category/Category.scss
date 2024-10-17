@@ -1,9 +1,8 @@
 
-// $TitleStyles
 .page-category {
   margin-top: 50px;
   &.has-products {
-    background: url('../../assets/category/jollibee.png') no-repeat; /* Apply background if products exist */
+    background: url('../../assets/category/jollibee.png') no-repeat;
     background-size: contain;
     background-position: center;
   }
@@ -47,11 +46,10 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 1rem;
-      // margin: 3rem 0 100px 100px; 
       margin: 0 200px;
       .hr-separate {
-        grid-column: 1 / -1; /* Đặt hr để nó trải dài hết chiều rộng của grid */
-        border: 2px dashed red; /* Tùy chỉnh kiểu đường ngăn cách */
+        grid-column: 1 / -1; 
+        border: 2px dashed red; 
         margin: 1rem 0;
         width: 100%;
       }
@@ -60,7 +58,6 @@
         text-align: center;
         font-weight: bold;
         color: red;
-        /* Căn giữa theo chiều ngang và chiều dọc */
         display: flex;
         align-items: center;
         justify-content: center;

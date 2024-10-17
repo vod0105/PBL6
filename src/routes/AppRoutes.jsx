@@ -1,10 +1,4 @@
 import React from 'react';
-// import Users from '../components/ManageUsers/Users';
-// import PrivateRoutes from './PrivateRoutes';
-// import Role from '../components/Role/Role';
-// import GroupRole from '../components/GroupRole/GroupRole';
-// import Home from '../components/Home_About/Home';
-
 import { Route, Routes } from "react-router-dom";
 import PrivateRoutes from './PrivateRoutes';
 import Home from '../pages/Home/Home';
@@ -16,7 +10,7 @@ import PlaceOrder from '../pages/PlaceOrder/PlaceOrder';
 import Contact from '../pages/Contact/Contact';
 import Account from '../pages/Account/Account';
 import ProductItemDetail from '../components/ProductItemDetail/ProductItemDetail';
-import Store_Old from '../pages/Store_Old/Store_Old';
+// import Store_Old from '../pages/Store_Old/Store_Old';
 import Store from '../pages/Store/Store';
 import StoreDetail from '../pages/StoreDetail/StoreDetail';
 

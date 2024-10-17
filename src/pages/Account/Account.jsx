@@ -4,15 +4,13 @@ import './Account.scss';
 import AccountInfo from '../../components/AccountInfo/AccountInfo';
 import ChangePassword from '../../components/ChangePassword/ChangePassword';
 import Orders from '../../components/Orders/Orders';
-// Import Logout nếu cần
-// import Logout from '../../components/Logout/Logout';
 
 const Account = () => {
   const menuOptions = [
-    { name: "Thông tin tài khoản", path: "info" }, // Bỏ dấu /
-    { name: "Đổi mật khẩu", path: "change-password" }, // Bỏ dấu /
-    { name: "Đơn hàng của bạn", path: "orders" }, // Bỏ dấu /
-    { name: "Đăng xuất", path: "logout" } // Bỏ dấu /
+    { name: "Thông tin tài khoản", path: "info" }, 
+    { name: "Đổi mật khẩu", path: "change-password" }, 
+    { name: "Đơn hàng của bạn", path: "orders" }, 
+    { name: "Đăng xuất", path: "logout" } 
   ];
 
   return (
@@ -34,7 +32,7 @@ const Account = () => {
             {menuOptions.map((option) => (
               <li key={option.path}>
                 <NavLink
-                  to={option.path} // Sử dụng đường dẫn tương đối
+                  to={option.path} // Đường dẫn tương đối
                   className={({ isActive }) => (isActive ? 'active' : '')}
                 >
                   {option.name}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import './AccountInfo.scss'; // Nếu có CSS custom, kiểm tra lại phần này
+import './AccountInfo.scss'; 
 import { useDispatch, useSelector } from 'react-redux';
 import { updateProfile } from "../../redux/actions/userActions";
 import { updateAccountAuth } from "../../redux/actions/authActions";
@@ -10,7 +10,7 @@ const AccountInfo = () => {
   const accountInfo = useSelector((state) => {
     return state.auth.account;
   })
-  // State để kiểm soát việc disable/enable các input
+  // disable/enable các input
   const [isEditing, setIsEditing] = useState(false);
   const handleSaveChangeClick = () => {
     setIsEditing(false); // update
@@ -23,12 +23,11 @@ const AccountInfo = () => {
   const handleEditClick = () => {
     setIsEditing(true); // => disabled
   };
-
+  // state input
   const [fullname, setFullname] = useState(accountInfo.fullName);
   const [phonenumber, setPhonenumber] = useState(accountInfo.phoneNumber);
   const [address, setAddress] = useState(accountInfo.address);
   const [email, setEmail] = useState(accountInfo.email);
-
 
   return (
     <div className="account-infor">
@@ -51,7 +50,6 @@ const AccountInfo = () => {
                 disabled={!isEditing} // Input chỉ được enable khi isEditing = true
               />
             </div>
-
             {/* Địa chỉ */}
             <div className="form-group col-md-6">
               <label htmlFor="address">Địa chỉ</label>
@@ -65,7 +63,6 @@ const AccountInfo = () => {
               />
             </div>
           </div>
-
           <div className="row py-3">
             {/* Email */}
             <div className="form-group col-md-6">
@@ -79,7 +76,7 @@ const AccountInfo = () => {
                 disabled={!isEditing}
               />
             </div>
-
+            {/* Sđt */}
             <div className="form-group col-md-6">
               <label htmlFor="phonenumber">Số điện thoại</label>
               <input
@@ -92,7 +89,6 @@ const AccountInfo = () => {
               />
             </div>
           </div>
-
         </div>
         <div className="account-infor-btn">
           {
@@ -111,7 +107,6 @@ const AccountInfo = () => {
               </button>
             )
           }
-
         </div>
       </div>
     </div>

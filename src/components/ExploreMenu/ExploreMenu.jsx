@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import './ExploreMenu.scss'
-import { menu_list } from '../../assets/assets'
-
 import { useDispatch, useSelector } from 'react-redux';
-import { showLoginModal, showRegisterModal } from "../../redux/actions/modalActions";
 import { fetchAllCategories } from "../../redux/actions/categoryActions";
 import { NavLink } from "react-router-dom";
 
@@ -34,5 +31,4 @@ const ExploreMenu = () => {
     </div>
   )
 }
-
 export default ExploreMenu

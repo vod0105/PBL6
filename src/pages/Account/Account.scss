@@ -2,15 +2,13 @@
     width: 100%;
     height: 100vh;
   }
-  
-  /* Header Styling */
   .header-account {
     background-color: #f8f8f8;
-    display: flex;                   /* Sử dụng Flexbox */
-    flex-direction: column;         /* Căn giữa theo chiều dọc */
-    align-items: center;            /* Căn giữa theo chiều ngang */
-    text-align: center;             /* Căn giữa văn bản */
-    padding: 20px;                  /* Thêm khoảng cách bên trong */
+    display: flex;                   
+    flex-direction: column;        
+    align-items: center;           
+    text-align: center;             
+    padding: 20px;                  
     border-bottom: 1px solid #ddd;
     background-color: #F4F4F4;
   }
@@ -46,7 +44,6 @@
   /* Sidebar */
   .sidebar {
     width: 20%;
-    // background-color: #f9f9f9;
     border-right: 1px solid #ddd;
     padding: 20px;
   }
@@ -63,25 +60,23 @@
     margin-left: 6px;
     position: relative;
   }
-  // Thẻ <a> chiếm toàn không gian của <li>
   .sidebar ul li a {
-    display: block; /* Make the a take up the full width and height of the li */
-    padding: 10px; /* Add some padding */
-    color: #333; /* Default color */
-    text-decoration: none; /* Remove underline */
+    display: block; 
+    padding: 10px;
+    color: #333; 
+    text-decoration: none; 
   }
   
   .sidebar ul li a.active {
-    background-color: #e3000e; /* Apply red background for active links */
-    color: white; /* Ensure active links have white text */
+    background-color: #e3000e; 
+    color: white; 
   }
   
   .sidebar ul li a:hover {
-    background-color: #e3000e; /* On hover, same background as active */
-    color: white; /* Ensure hover color is white */
+    background-color: #e3000e;
+    color: white; 
   }
   
-  /* Content Area */
   .content {
     width: 80%;
     padding: 20px;

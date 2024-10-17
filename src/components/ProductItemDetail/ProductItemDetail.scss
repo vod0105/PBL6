@@ -9,13 +9,13 @@
         .infor-left{
             flex: 6;
             .infor-left-img-container {
-                height: 100%; /* Đặt chiều cao là 100% để chiếm hết div cha */
-                width: 100%; /* Đặt chiều rộng là 100% để chiếm hết div cha */          
+                height: 100%; 
+                width: 100%;        
                 img {
-                  height: 100%; /* Đảm bảo hình ảnh chiếm hết chiều cao */
-                  width: 100%; /* Đảm bảo hình ảnh chiếm hết chiều rộng */
+                  height: 100%; 
+                  width: 100%; 
                 //   object-fit: contain; /* Đảm bảo tỉ lệ hình ảnh không bị biến dạng */
-                //   object-position: left; /* Đặt hình ảnh nằm bên trái */
+                //   object-position: left; 
                 }
               }
         }

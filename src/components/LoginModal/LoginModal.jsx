@@ -12,7 +12,6 @@ const LoginModal = () => {
     return state.auth.isAuthenticated;
   })
   const showModalLogin = useSelector((state) => state.modal.isLoginModalVisible); // Lấy trạng thái từ Redux
-  // Kiểm tra giá trị showModalLogin
   const [phonenumber, setPhonenumber] = useState("");
   const [password, setPassword] = useState("");
 
@@ -22,7 +21,7 @@ const LoginModal = () => {
   }
   const [objCheckInput, setObjCheckInput] = useState(defaultValidInput);
 
-  // Hàm để reset lại dữ liệu input
+  //Reset lại dữ liệu input
   const resetInputs = () => {
     setPhonenumber("");
     setPassword("");
@@ -31,7 +30,7 @@ const LoginModal = () => {
 
   const switchToRegister = () => {
     resetInputs();
-    dispatch(hideLoginModal()); // Đóng LoginModal => Need to clear all infor
+    dispatch(hideLoginModal()); // Đóng LoginModal => Xóa all infor
     dispatch(showRegisterModal());
   };
 
@@ -46,18 +45,17 @@ const LoginModal = () => {
     if (!password) {
       objCheckValidInput.isValidPassword = false;
     }
-    setObjCheckInput({ ...objCheckValidInput });
+    setObjCheckInput({ ...objCheckValidInput }); // Hiển thị class 'is-invalid'
     const hasInvalidInput = Object.values(objCheckValidInput).some(value => value === false);
-
     if (hasInvalidInput) {
       toast.error("Vui lòng điền đầy đủ thông tin");
     }
-    else {
+    else { // Hết lỗi giao diện
       dispatch(loginUser(phonenumber, password));
     }
   }
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated) { // Login successfully -> Ẩn modal
       dispatch(hideLoginModal());
     }
   }, [isAuthenticated, dispatch]);

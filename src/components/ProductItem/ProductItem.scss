@@ -6,7 +6,6 @@
     align-items: center;
     border-right: 3px dashed rgb(230, 114, 114);
     h4 {
-      // color: #fc4958;
       font-size: 22px;
     }
     .product-item-price-container{
@@ -32,7 +31,7 @@
       line-height: 2rem;
       letter-spacing: 0.1rem;
     }  
-      img { // Tương đương biến trên
+      img { 
           transition: 0.8s ease-in-out;
           &:hover {
           transform: scale(1.2);
@@ -43,17 +42,14 @@
       max-height: 20rem;
       overflow: hidden;
       border-radius: 1rem;
-    //   display: flex;
-    //   justify-content: center; /* Căn giữa ảnh theo chiều ngang */
-    //   align-items: center; /* Căn giữa ảnh theo chiều dọc */
       position: relative;
       &:hover{
         cursor: pointer;
       }
       .product-item-image {
-        height: auto; /* Đảm bảo tỉ lệ gốc của ảnh */
-        width: 100%; /* Để ảnh chiếm hết chiều ngang nhưng vẫn giữ tỉ lệ */
-        object-fit: contain; /* Đảm bảo toàn bộ ảnh hiển thị mà không bị cắt */
+        height: auto; 
+        width: 100%; 
+        object-fit: contain; 
       }
       .product-item-addtocart{
             position: absolute;
@@ -83,7 +79,7 @@
       border-radius: 4rem;
       transition: 0.5s ease-in-out;
       cursor: pointer;
-      background: linear-gradient(to right, #e74d5a, #df5151); /* Đặt màu đỏ đậm */
+      background: linear-gradient(to right, #e74d5a, #df5151); 
       text-transform: uppercase;
       &:hover {
         background: linear-gradient(to right, #ec7171, #e25863); 

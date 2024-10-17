@@ -19,7 +19,7 @@ export default function Category() {
   useEffect(() => {
     window.scrollTo(0, 0);
     dispatch(fetchProductsByIdCategory(id));
-  }, [id]); // Thêm 'id' vào mảng phụ thuộc
+  }, [id]); // 'id' category thay đổi -> lấy lại list products
 
 
   return (

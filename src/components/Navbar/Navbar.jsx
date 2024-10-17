@@ -37,8 +37,6 @@ const Navbar = () => {
   const listCategories = useSelector((state) => {
     return state.category.listCategories;
   })
-  // const isLoading = useSelector(state => state.category.isLoading);
-  // const isError = useSelector(state => state.category.isError);
   useEffect(() => {
     // console.log("Fetching categories...");
     dispatch(fetchAllCategories());
@@ -50,7 +48,7 @@ const Navbar = () => {
     <div className="navbar">
       <NavLink
         to="/" className="logo"
-        end // 'end' đảm bảo rằng chỉ '/' (Trang Chủ) được kích hoạt, không phải các trang khác chứa '/' như '/about'
+        end // 'end' đảm bảo rằng chỉ '/' (Trang Chủ) được kích hoạt
       >
         <img src={assets.logo} alt="" className="logo-image" />
         {/* <p className="logo-name">LILI</p> */}
@@ -75,11 +73,6 @@ const Navbar = () => {
         >
           Thực đơn
           <ul className="navbar-category-dropdown">
-            {/* <li>
-              <img src={cate_1} alt="" />
-              <p>MÓN NGON PHẢI THỬ</p>
-            </li>
-            */}
             {
               listCategories && listCategories.length > 0
               &&
@@ -141,7 +134,6 @@ const Navbar = () => {
               <button onClick={handleShowLogin}>Đăng nhập</button>
               <button onClick={handleShowRegister}>Đăng ký</button>
             </>
-
         }
       </div>
     </div>

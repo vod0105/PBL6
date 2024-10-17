@@ -1,5 +1,4 @@
 import types from "../types";
-import axios from '../../setup/axios'
 import { fetchAllStoresService, fetchStoreByIdService } from "../../services/storeService";
 
 // Thunk: fetching data
@@ -15,7 +14,7 @@ const fetchAllStores = () => {
         try {
             const res = await fetchAllStoresService();
             const data = res && res.data ? res.data.data : [];
-            dispatch(fetchStoresSuccess(data)); // // Chạy ở đây (2)
+            dispatch(fetchStoresSuccess(data));// Chạy ở đây (2)
         } catch (error) {
             console.log(error);
         }

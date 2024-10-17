@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 // import { toast } from "react-toastify";
-import "./PlaceOrder.css";
+import "./PlaceOrder.scss";
 
 const PlaceOrder = () => {
   const [data, setData] = useState({
@@ -20,36 +20,8 @@ const PlaceOrder = () => {
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
+    const token = localStorage.getItem("token");
 
-    try {
-      // Lấy token từ localStorage hoặc nơi bạn đã lưu trữ
-      const token =
-        localStorage.getItem("token") ||
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YzJmYjg0ZGNiZDNhODQ5MWQ0ZWQ4MCIsImlhdCI6MTcyNDI5MzA0MX0.K0rHEANSximZif9YMlbcMvF_9gDs6Um82F-OCSx8L4E";
-
-      const response = await axios.post(
-        `http://localhost:4000/api/order/place`,
-        data, // Gửi dữ liệu dưới dạng JSON
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.data.success) {
-        setOrderResponse(response.data);
-        console.log("Order placed successfully");
-        // toast.success(response.data.message);
-      } else {
-        console.log("Error placing order:", response.data.message);
-        // toast.error(response.data.message);
-      }
-    } catch (error) {
-      console.error("Error placing order:", error);
-      // toast.error("Error placing order");
-    }
   };
 
   return (

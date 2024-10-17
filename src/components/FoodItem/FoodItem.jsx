@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react'
 import './FoodItem.scss'
 import { Link } from "react-router-dom";
-
 import store1 from "../../assets/image_gg/introduce_1.png";
 import store2 from "../../assets/image_gg/introduce_2.png";
 import store3 from "../../assets/image_gg/introduce_3.png";
@@ -23,7 +22,7 @@ const FoodItem = ({ product }) => {
     }, 200);
   };
   const handleAddToCartClick = () => {
-    setIsAddToCart(true); // Kích hoạt chế độ "Thêm vào giỏ hàng"
+    setIsAddToCart(true); // "Thêm vào giỏ hàng"
     handleShowModalProduct(); // Hiển thị modal
   };
 

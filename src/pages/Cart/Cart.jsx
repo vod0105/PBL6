@@ -83,7 +83,6 @@ const Cart = () => {
           <div>
             <div className="cart-total-details">
               <p>Tổng đơn hàng</p>
-              {/* <p>{getTotalCartAmount()}</p> */}
               <p>
                 {Number(getTotalPriceInCart()).toLocaleString('vi-VN')} đ
               </p>

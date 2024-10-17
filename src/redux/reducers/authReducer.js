@@ -1,6 +1,6 @@
 // reducers/authReducer.js
 const initialState = {
-    isAuthenticated: false, // Đã đăng nhập chưa em
+    isAuthenticated: false, // Đã đăng nhập chưa 
     registerNewUserSuccess: false,
     account: {}, // Thông tin account
 

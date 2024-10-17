@@ -73,5 +73,4 @@ const StoreDetail = () => {
     </div>
   )
 }
-
 export default StoreDetail

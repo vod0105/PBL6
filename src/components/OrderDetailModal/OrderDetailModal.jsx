@@ -1,9 +1,8 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import './OrderDetailModal.scss'; // Custom CSS
+import './OrderDetailModal.scss'; 
 import imageProduct from '../../assets/3.png'
 const OrderDetailModal = ({ showModal, handleClose, orderDetails }) => {
-  // Giả sử orderDetails đã được cung cấp từ bên ngoài
   const listProducts = [
     {
       image: imageProduct,

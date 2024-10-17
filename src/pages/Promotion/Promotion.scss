@@ -1,13 +1,13 @@
 body {
-  overflow-x: hidden; /* Ngăn không cho thanh cuộn ngang hiển thị */
+  overflow-x: hidden; /* Ko hiển thị scroll ngang */
   .page-promotion {
       .header {
-          width: 100%; /* Chiều rộng dài toàn màn hình */
-          height: 40vw; /* Chiều cao dựa trên chiều rộng của viewport */
-          background: url('/header_img4.png') no-repeat; /* Đặt hình nền và không lặp lại */
-          background-size: cover; /* Đảm bảo hình nền bao phủ toàn bộ phần tử */
-          background-position: center; /* Canh giữa hình nền */
-          position: relative; /* Đặt vị trí tương đối để có thể sử dụng các thuộc tính vị trí khác nếu cần */
+          width: 100%; 
+          height: 40vw; 
+          background: url('/header_img4.png') no-repeat; 
+          background-size: cover; 
+          background-position: center; 
+          position: relative; 
       }
     .ads_box {
       text-align: right;
@@ -32,5 +32,5 @@ body {
       margin-top: 15px;
       font-size: 18px;
     }
-}
+  }
 }

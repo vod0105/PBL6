@@ -1,9 +1,6 @@
 import React from 'react'
 import './Introduce.scss'
 import { Container, Row, Col, Carousel } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import StoreIOS from "../../assets/shop/appstore.png";
-import StoreGoogle from "../../assets/shop/googleplay.png";
 import Introduce_1 from "../../assets/image_gg/introduce_1.png";
 import Introduce_2 from "../../assets/image_gg/introduce_2.png";
 import Introduce_3 from "../../assets/image_gg/introduce_3.png";
@@ -85,13 +82,6 @@ const Introduce = () => {
                 <p>
                   "Tất cả những gì mà chúng tôi phải làm là mang đến những hương vị tuyệt vời trong từng món ăn, mang lại niềm vui ẩm thực cho tất cả mọi người."
                 </p>
-                <div className="item_rating mb-2">
-                  <i className="bi bi-star-fill"></i>
-                  <i className="bi bi-star-fill"></i>
-                  <i className="bi bi-star-fill"></i>
-                  <i className="bi bi-star-fill"></i>
-                  <i className="bi bi-star-fill"></i>
-                </div>
                 <h5>SỨ MỆNH</h5>
               </Carousel.Caption>
             </Carousel.Item>
@@ -104,13 +94,6 @@ const Introduce = () => {
                 <p>
                   " Tinh thần tập thể là sức mạnh của sự đoàn kết, nơi mọi người cùng hợp tác, hỗ trợ lẫn nhau để đạt được mục tiêu chung. Khi cùng nhau cố gắng, chúng ta không chỉ thành công mà còn tạo ra môi trường làm việc tích cực và gắn kết. "
                 </p>
-                <div className="item_rating mb-2">
-                  <i className="bi bi-star-fill"></i>
-                  <i className="bi bi-star-fill"></i>
-                  <i className="bi bi-star-fill"></i>
-                  <i className="bi bi-star-fill"></i>
-                  <i className="bi bi-star-fill"></i>
-                </div>
                 <h5>TINH THẦN TẬP THỂ</h5>
               </Carousel.Caption>
             </Carousel.Item>
@@ -123,13 +106,6 @@ const Introduce = () => {
                 <p>
                   " Cam kết của chúng tôi là mang đến những sản phẩm chất lượng cao nhất, được chế biến từ nguyên liệu tươi ngon và đảm bảo an toàn vệ sinh. Chúng tôi cam kết không ngừng cải tiến để mỗi món ăn đều đạt tiêu chuẩn chất lượng, mang lại sự hài lòng tối đa cho khách hàng. "
                 </p>
-                <div className="item_rating mb-2">
-                  <i className="bi bi-star-fill"></i>
-                  <i className="bi bi-star-fill"></i>
-                  <i className="bi bi-star-fill"></i>
-                  <i className="bi bi-star-fill"></i>
-                  <i className="bi bi-star-fill"></i>
-                </div>
                 <h5>CHẤT LƯỢNG SẢN PHẨM</h5>
               </Carousel.Caption>
             </Carousel.Item>
@@ -142,13 +118,6 @@ const Introduce = () => {
                 <p>
                   " Chúng tôi luôn hướng tới việc tiết kiệm tối đa mà không ảnh hưởng đến chất lượng sản phẩm. Bằng cách tối ưu hóa quy trình và lựa chọn nguyên liệu hiệu quả, chúng tôi giúp bạn thưởng thức những món ăn ngon với mức giá hợp lý. "
                 </p>
-                <div className="item_rating mb-2">
-                  <i className="bi bi-star-fill"></i>
-                  <i className="bi bi-star-fill"></i>
-                  <i className="bi bi-star-fill"></i>
-                  <i className="bi bi-star-fill"></i>
-                  <i className="bi bi-star-fill"></i>
-                </div>
                 <h5>TIẾT KIỆM</h5>
               </Carousel.Caption>
             </Carousel.Item>

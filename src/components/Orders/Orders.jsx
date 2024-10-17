@@ -8,12 +8,12 @@ const Orders = () => {
 
   const handleShowDetails = (order) => {
     setOrderDetails(order); // Lưu trữ thông tin đơn hàng
-    setShowModal(true); // Hiển thị modal
+    setShowModal(true);
   };
 
   const handleClose = () => {
-    setShowModal(false); // Đóng modal
-    setOrderDetails(null); // Reset thông tin đơn hàng
+    setShowModal(false);
+    // setOrderDetails(null); // Reset thông tin đơn hàng
   };
 
   const orders = [
@@ -73,8 +73,6 @@ const Orders = () => {
         </table>
 
         <button className="btn btn-dark btn-return-homepage">TRỞ LẠI TRANG CHỦ</button>
-
-        {/* Sử dụng OrderDetailsModal component */}
         <OrderDetailModal
           showModal={showModal}
           handleClose={handleClose}

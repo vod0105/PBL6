@@ -1,5 +1,5 @@
 import React from "react";
-import "./Footer.css";
+import "./Footer.scss";
 import { assets } from "../../assets/assets";
 const Footer = () => {
   return (
@@ -32,12 +32,8 @@ const Footer = () => {
           </ul>
         </div>
 
-
       </div>
       <hr />
-      {/* <p className="footer-copyright">
-        Copy Right @2024 - All Reserved.
-      </p> */}
     </div>
   );
 };
