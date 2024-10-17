@@ -1,40 +1,36 @@
-.page-promotion {
-    .header {
-        width: 100%; /* Chiều rộng dài toàn màn hình */
-        height: 45vw; /* Chiều cao dựa trên chiều rộng của viewport */
-        background: url('/header_img4.png') no-repeat; /* Đặt hình nền và không lặp lại */
-        background-size: cover; /* Đảm bảo hình nền bao phủ toàn bộ phần tử */
-        background-position: center; /* Canh giữa hình nền */
-        position: relative; /* Đặt vị trí tương đối để có thể sử dụng các thuộc tính vị trí khác nếu cần */
-    }
-    
+body {
+  overflow-x: hidden; /* Ngăn không cho thanh cuộn ngang hiển thị */
+  .page-promotion {
+      .header {
+          width: 100%; /* Chiều rộng dài toàn màn hình */
+          height: 40vw; /* Chiều cao dựa trên chiều rộng của viewport */
+          background: url('/header_img4.png') no-repeat; /* Đặt hình nền và không lặp lại */
+          background-size: cover; /* Đảm bảo hình nền bao phủ toàn bộ phần tử */
+          background-position: center; /* Canh giữa hình nền */
+          position: relative; /* Đặt vị trí tương đối để có thể sử dụng các thuộc tính vị trí khác nếu cần */
+      }
     .ads_box {
-        text-align: right;
-        padding: 80px 35px 50px;
-        border-radius: 15px;
-      }
-      .ads_img1 {
-        background: url("../../assets/menu/ads-1.jpg") no-repeat center center;
-        background-size: cover;
-      }
-      .ads_img2 {
-        background: url("../../assets/menu/ads-2.jpg") no-repeat center center;
-        background-size: cover;
-      }
-      .ads_box h4 {
-        font-size: 2rem;
-        font-weight: 600;
-        // color: var(--brown);
-        color: rgb(255, 255, 255);
-      }
-      .ads_box h5 {
-        font-size: 2.375rem;
-        // color: var(--brown);
-        font-weight: 700;
-        color: rgb(247, 59, 59);
-      }
-      .ads_box a {
-        margin-top: 15px;
-        font-size: 18px;
-      }
+      text-align: right;
+      padding: 80px 35px 50px;
+      border-radius: 15px;
+    }
+    .ads_img1 {
+      background: url("../../assets/menu/ads-1.jpg") no-repeat center center;
+      background-size: cover;
+    }
+    .ads_box h4 {
+      font-size: 30px;
+      font-weight: 600;
+      color: rgb(255, 255, 255);
+    }
+    .ads_box h5 {
+      font-size: 35px;
+      font-weight: 700;
+      color: rgb(247, 59, 59);
+    }
+    .ads_box a {
+      margin-top: 15px;
+      font-size: 18px;
+    }
+}
 }

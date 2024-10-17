@@ -9,7 +9,7 @@ import {
 // Best sale
 const fetchProductsBestSaleSuccess = (data) => {
     return {
-        type: types.FETCH_PRODUCTS_BEST_SALE_SUCCESS,
+        type: types.FETCH_PRODUCT_BEST_SALE_SUCCESS,
         dataProducts: data
     };
 };
@@ -28,7 +28,7 @@ const fetchProductsBestSale = () => {
 // by idCategory
 const fetchProductsByIdCategorySuccess = (data) => {
     return {
-        type: types.FETCH_PRODUCTS_BY_ID_CATEGORY_SUCCESS,
+        type: types.FETCH_PRODUCT_BY_ID_CATEGORY_SUCCESS,
         dataProducts: data
     };
 };
@@ -67,7 +67,7 @@ const fetchProductById = (id) => {
 // by ID Store
 const fetchProductsByIdStoreSuccess = (data) => {
     return {
-        type: types.FETCH_PRODUCTS_BY_ID_STORE_SUCCESS,
+        type: types.FETCH_PRODUCT_BY_ID_STORE_SUCCESS,
         dataProducts: data
     };
 };

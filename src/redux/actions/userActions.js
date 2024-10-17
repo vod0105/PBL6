@@ -1,5 +1,5 @@
 import types from "../types";
-import { updateProfileService } from "../../services/userService";
+import { updateProfileService, addProductToCartService, fetchProductsInCartService } from "../../services/userService";
 import { toast } from "react-toastify";
 
 // Register New User
@@ -37,7 +37,63 @@ const updateProfile = (phoneNumber, fullName, avatar, email, address) => {
     };
 };
 
+// Add product to cart
+const addToCartSuccess = () => {
+    return {
+        type: types.ADD_TO_CART_SUCCESS,
+    };
+};
+const addToCartError = () => {
+    return {
+        type: types.ADD_TO_CART_ERROR,
+    };
+};
+
+
+const addToCart = (productId, quantity, storeId, size, status) => {
+    return async (dispatch) => {
+        try {
+            const res = await addProductToCartService(productId, quantity, storeId, size, status);
+            const isSuccess = res && res.data ? res.data.success : false;
+            if (isSuccess) {
+                dispatch(addToCartSuccess());
+                toast.success(res.data.message);
+            } else {
+                dispatch(addToCartError());
+                toast.error(res.data.message || "Thêm vào giỏ hàng không thành công!");
+            }
+        } catch (error) {
+            console.log(error);
+            const errorMessage = error.response && error.response.data ? error.response.data.message : "An error occurred.";
+            dispatch(addToCartError());
+            toast.error(errorMessage);
+        }
+    };
+}
+// fetch list products in cart
+const fetchProductsInCartSuccess = (data) => {
+    return {
+        type: types.FETCH_PRODUCT_CART_SUCCESS,
+        dataProducts: data
+    };
+};
+const fetchProductsInCart = () => {
+    return async (dispatch, getState) => {
+        try {
+            const res = await fetchProductsInCartService();
+            const data = res && res.data ? res.data.data : [];
+            dispatch(fetchProductsInCartSuccess(data)); // // Chạy ở đây (2)
+            // console.log(data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+};
+
+
 export {
     updateProfile,
+    addToCart,
+    fetchProductsInCart,
 
 };

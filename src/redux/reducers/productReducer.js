@@ -9,12 +9,12 @@ const INITIAL_STATE = {
 
 const productReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
-        case types.FETCH_PRODUCTS_BEST_SALE_SUCCESS:
+        case types.FETCH_PRODUCT_BEST_SALE_SUCCESS:
             return {
                 ...state,
                 listProductsBestSale: action.dataProducts,
             };
-        case types.FETCH_PRODUCTS_BY_ID_CATEGORY_SUCCESS:
+        case types.FETCH_PRODUCT_BY_ID_CATEGORY_SUCCESS:
             return {
                 ...state,
                 listProductsByIdCategory: action.dataProducts,
@@ -25,7 +25,7 @@ const productReducer = (state = INITIAL_STATE, action) => {
                 productDetail: action.productDetail,
 
             };
-        case types.FETCH_PRODUCTS_BY_ID_STORE_SUCCESS:
+        case types.FETCH_PRODUCT_BY_ID_STORE_SUCCESS:
             return {
                 ...state,
                 listProductsByIdStore: action.dataProducts,

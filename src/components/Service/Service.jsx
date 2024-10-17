@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import Phone from "../../assets/about/smartphone.png";
 import Salad from "../../assets/about/salad.png";
 import Delivery from "../../assets/about/delivery-bike.png";
+import './Service.scss'
 
 // Mock Data Cards
 const mockData = [
@@ -24,7 +25,6 @@ const mockData = [
     title: "Giao hàng nhanh chóng",
     paragraph: `Với dịch vụ giao hàng nhanh chóng, chúng tôi đảm bảo món ăn luôn được giao đến tận nơi một cách nhanh nhất, giữ trọn hương vị thơm ngon và độ nóng hổi, mang lại trải nghiệm tuyệt vời cho khách hàng ở mọi lúc, mọi nơi.`,
   },
-  // Add more mock data objects as needed
 ];
 
 function Service() {
@@ -40,9 +40,6 @@ function Service() {
                 Với cam kết mang đến cho bạn những bữa ăn ngon, chất lượng và phục vụ nhanh chóng, chúng tôi luôn sẵn sàng đáp ứng mọi nhu cầu của bạn.
                 Đặt hàng ngay để thưởng thức hương vị tuyệt vời!
               </p>
-              {/* <Link to="/" className="btn order_now btn_red">
-                Explore Full Menu
-              </Link> */}
             </Col>
           </Row>
         </Container>

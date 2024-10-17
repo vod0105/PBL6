@@ -1,19 +1,48 @@
-import React, { useContext } from "react";
-import "./Cart.css";
-import { StoreContext } from "../../context/StoreContext";
+import React, { useState, useEffect } from "react";
+import "./Cart.scss";
 import { assets } from "../../assets/assets";
 import { useNavigate } from "react-router-dom";
-const Cart = () => {
-  const { cartItems, food_list, removeFromCart, getTotalCartAmount, url } =
-    useContext(StoreContext);
-  const navigate = useNavigate();
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProductsInCart } from "../../redux/actions/userActions";
 
+const Cart = () => {
+
+  const dispatch = useDispatch();
+  const listProducts = useSelector((state) => {
+    return state.user.listProductsInCart;
+  })
+  useEffect(() => {
+    dispatch(fetchProductsInCart());
+  }, []);
+
+  // Tăng/giảm slsp
+  const handleIncreaseQuantity = (item) => {
+    if (item.product.quantity < item.product.stockQuantity) {
+      // dispatch(updateProductQuantityInCart(item, item.product.quantity + 1));
+    }
+  };
+  const handleDecreaseQuantity = (item) => {
+    if (item.product.quantity > 1) {
+      // dispatch(updateProductQuantityInCart(item, item.product.quantity - 1));
+    }
+  };
+  const removeProductInCart = (item) => {
+
+  };
+  const getTotalPriceInCart = () => {
+    let total = 0;
+    for (let i = 0; i < listProducts.length; i++) {
+      total += listProducts[i].product.totalPrice;
+    }
+    return total;
+  }
   return (
     <div className="cart">
       <div className="cart-items">
         <div className="cart-items-title">
           <p>Sản phẩm</p>
           <p>Tên</p>
+          <p>Kích cỡ</p>
           <p>Giá</p>
           <p>Số lượng</p>
           <p>Tổng tiền</p>
@@ -21,29 +50,31 @@ const Cart = () => {
         </div>
         <br />
         <hr />
-        {food_list.map((item, index) => {
-          if (cartItems[item._id] > 0) {
-            return (
-              <div>
-                <div className="cart-items-title cart-items-item">
-                  <img src={item.image} alt="" />
-                  <p>{item.name}</p>
-                  <p>${item.price}</p>
-                  <p>{cartItems[item._id]}</p>
-                  <p>${cartItems[item._id] * item.price}</p>
-                  <p
-                    onClick={() => {
-                      removeFromCart(item._id);
-                    }}
-
-                  >
-                    <i className="fa-solid fa-trash action-delete" ></i>
-                  </p>
+        {listProducts && listProducts.length > 0 && listProducts.map((item, index) => {
+          return (
+            <div>
+              <div className="cart-items-title cart-items-item">
+                <img src={'data:image/png;base64,' + item.product.image} alt="" />
+                <p>{item.product.productName}</p>
+                <p>{item.product.size}</p>
+                <p>{Number(item.product.unitPrice).toLocaleString('vi-VN')} đ</p>
+                <div className="quantity-controls">
+                  <button onClick={() => handleDecreaseQuantity(item)}> <i className="fa-solid fa-minus"></i></button>
+                  <p>{item.product.quantity}</p>
+                  <button onClick={() => handleIncreaseQuantity(item)}><i className="fa-solid fa-plus"></i></button>
                 </div>
-                <hr />
+                <p>{Number(item.product.totalPrice).toLocaleString('vi-VN')} đ</p>
+                <p
+                  onClick={() => {
+                    removeProductInCart(item);
+                  }}
+                >
+                  <i className="fa-solid fa-trash action-delete" ></i>
+                </p>
               </div>
-            );
-          }
+              <hr />
+            </div>
+          );
         })}
       </div>
       <div className="cart-bottom">
@@ -52,22 +83,22 @@ const Cart = () => {
           <div>
             <div className="cart-total-details">
               <p>Tổng đơn hàng</p>
-              <p>{getTotalCartAmount()}</p>
+              {/* <p>{getTotalCartAmount()}</p> */}
+              <p>
+                {Number(getTotalPriceInCart()).toLocaleString('vi-VN')} đ
+              </p>
             </div>
             <div className="cart-total-details">
               <p>Phí giao hàng</p>
-              <p>{getTotalCartAmount() === 0 ? 0 : 10}</p>
+              <p>0 đ</p>
             </div>
             <hr />
             <div className="cart-total-details">
               <p>Tổng cộng</p>
-              <b>{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 10}</b>
+              <b>{Number(getTotalPriceInCart()).toLocaleString('vi-VN')} đ</b>
             </div>
           </div>
           <button
-          // onClick={() => {
-          //   navigate("/order");
-          // }}
           >
             Thanh toán
           </button>

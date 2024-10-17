@@ -3,7 +3,6 @@ import './Home.scss'
 import Header from '../../components/Header/Header'
 import ExploreMenu from '../../components/ExploreMenu/ExploreMenu'
 import FoodDisplay from '../../components/FoodDisplay/FoodDisplay'
-import AppDownload from '../../components/AppDownLoad/AppDownload'
 import Service from '../../components/Service/Service'
 import BannerWelcome from '../../components/BannerWelcome/BannerWelcome'
 
@@ -29,7 +28,6 @@ const Home = () => {
       <Service />
       <h2>SẢN PHẨM BÁN CHẠY</h2>
       <FoodDisplay listProducts={listProductsBestSale} />
-      <AppDownload />
     </div>
   )
 }

@@ -5,6 +5,7 @@ import StoreList from '../StoreList/StoreList';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllSizes } from "../../redux/actions/sizeActions";
 import { toast } from "react-toastify";
+import { addToCart } from "../../redux/actions/userActions";
 
 const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, stores, isAddToCart }) => {
   const dispatch = useDispatch();
@@ -49,8 +50,7 @@ const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, 
   const finalPrice = (product?.price != null && product?.discountedPrice != null)
     ? (product.price - product.discountedPrice)
     : 0;
-  // onClick btn
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!stores) {
       toast.error('Sản phẩm không có ở cửa hàng nào!');
     }
@@ -59,7 +59,13 @@ const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, 
         toast.error('Vui lòng chọn cửa hàng');
       }
       else {
-
+        if (quantity > product.stockQuantity) {
+          toast.error("Số lượng sản phẩm vượt quy định!")
+        }
+        else { // Giả sử thêm vào thành công (Chưa xủ lý các điều kiện -> BE chưa làm)
+          dispatch(addToCart(product.productId, quantity, selectedStore.storeId, selectedSize, 'Pending'));
+          handleModalClose();
+        }
       }
     }
   }

@@ -5,6 +5,8 @@ import { Link, NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { showLoginModal, showRegisterModal } from "../../redux/actions/modalActions";
 import { fetchAllCategories } from "../../redux/actions/categoryActions";
+import logoCart from '../../assets/logo/cart.png'
+import logoUser from '../../assets/logo/user.png'
 
 import cate_1 from "../../assets/navbar/cate_1.png";
 import cate_2 from "../../assets/navbar/cate_2.png";
@@ -123,16 +125,16 @@ const Navbar = () => {
             ? <>
               <Link
                 to="/cart"
-                className="navbar-search-icon"
+                className="navbar-cart-icon"
               >
-                <img src={assets.basket_icon} alt="" />
+                <img src={logoCart} alt="" />
                 <div className='dot'></div>
               </Link>
               <Link
                 to="/account"
                 className="navbar-profile"
               >
-                <img src={assets.profile_icon} alt="" />
+                <img src={logoUser} alt="" />
               </Link>
             </>
             : <>
