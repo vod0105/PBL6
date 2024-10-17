@@ -14,18 +14,21 @@ class CartRepo {
   Future<Response> getall() async {
     return await apiClient.getData(Appconstant.CART_URL);
   }
-
-  Future<Response> orderproduct(Cartdto cart) async {
-    return await apiClient.postData(
-        Appconstant.ORDER_PRODUCT_URL, cart.toJson());
+  Future<Response> getbyid(int cartid) async {
+    return await apiClient.getData(Appconstant.CART_BYID_URL.replaceFirst("{cartid}", cartid.toString()));
   }
 
-  Future<Response> ordercombo(Cartdto cart) async {
-    return await apiClient.postData(Appconstant.ORDER_COMBO_URL, cart.toJson());
-  }
 
-  Future<Response> orderproductMOMO(Cartdto cart) async {
+  Future<Response> orderproductintcart(Cartdto cart) async {
     return await apiClient.postData(
-        Appconstant.ORDER_PRODUCT_MOMO_URL, cart.toJson());
+        Appconstant.ORDER_PRODUCT_INCART_URL, cart.toJson());
+  }
+  Future<Response> getallstoreincart() async {
+    return await apiClient.getData(
+        Appconstant.CART_STORE_URL);
+  }
+  Future<Response> getlistcartbystore(int storeid) async {
+    return await apiClient.getData(
+        Appconstant.CART_STORE_LISTPRODUCT_URL.replaceFirst("{storeid}", storeid.toString()));
   }
 }

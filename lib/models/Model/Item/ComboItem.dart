@@ -4,6 +4,7 @@ class Comboitem {
   int? comboId;
   String? comboName;
   double? price;
+  double? averageRate;
   String? image;
   String? description;
   List<Productitem>? products;
@@ -12,6 +13,7 @@ class Comboitem {
       {this.comboId,
       this.comboName,
       this.price,
+      this.averageRate,
       this.image,
       this.description,
       this.products});
@@ -20,6 +22,7 @@ class Comboitem {
     comboId = json['comboId'];
     comboName = json['comboName'];
     price = json['price'];
+    averageRate = json['averageRate'];
     image = json['image'];
     description = json['description'];
     if (json['products'] != null) {
@@ -33,6 +36,7 @@ class Comboitem {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['comboId'] = this.comboId;
     data['comboName'] = this.comboName;
+    data['averageRate'] = this.averageRate;
     data['price'] = this.price;
     data['image'] = this.image;
     data['description'] = this.description;

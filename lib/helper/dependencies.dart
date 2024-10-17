@@ -1,4 +1,5 @@
 import 'package:android_project/data/api/ApiClient.dart';
+import 'package:android_project/data/api/ApiClientAI.dart';
 import 'package:android_project/data/api/AppConstant.dart';
 import 'package:android_project/data/controller/Auth_controller.dart';
 import 'package:android_project/data/controller/Cart_controller.dart';
@@ -29,6 +30,7 @@ Future<void> init() async {
   Get.lazyPut(() => sharedPreferences);
   // api client
   Get.lazyPut(() => ApiClient(appBaseUrl: Appconstant.BASE_URL));
+  Get.lazyPut(() => Apiclientai(appBaseUrl: Appconstant.BASE_AI_URL));
 
   Get.lazyPut(
       () => AuthRepo(apiClient: Get.find(), sharedPreferences: Get.find()));
@@ -37,7 +39,7 @@ Future<void> init() async {
   Get.lazyPut(() => ComboRepo(apiClient: Get.find()));
   Get.lazyPut(() => ComboController(comboRepo: Get.find()));
 
-  Get.lazyPut(() => ProductRepo(apiClient: Get.find()));
+  Get.lazyPut(() => ProductRepo(apiClient: Get.find(),apiClientAI: Get.find()));
   Get.lazyPut(() => ProductController(productRepo: Get.find()));
 
   Get.lazyPut(() => StoreRepo(apiClient: Get.find()));

@@ -1,4 +1,6 @@
 import 'package:android_project/data/api/ApiClient.dart';
+import 'package:android_project/models/Dto/AnnouceDto.dart';
+import 'package:android_project/models/Dto/RegisterShipperDto.dart';
 import 'package:android_project/models/Dto/UserUpdateDto.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
 
@@ -12,6 +14,19 @@ class UserRepo {
   }
 
   Future<Response> updateprofile(Userupdatedto updatedto) async {
-    return await apiClient.postData(Appconstant.USER_PROFILE_URL, updatedto);
+    return await apiClient.putData(Appconstant.USER_UPDATE_PROFILE_URL, updatedto.toJson());
   }
+
+  Future<Response> registershipper(Registershipperdto dto) async {
+    return await apiClient.postData(Appconstant.REGISTER_SHIPPER_URL, dto.toJson());
+  }
+  Future<Response> getannounce() async{
+    return await apiClient.getData(Appconstant.ANNOUNCE_URL);
+  }
+  Future<Response> addannouce(Annoucedto dto) async{
+    return await apiClient.postData(Appconstant.ANNOUNCE_ADD_URL,dto.toJson());
+  }
+
+
+  
 }

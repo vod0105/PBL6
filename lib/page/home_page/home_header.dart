@@ -1,3 +1,4 @@
+import 'package:android_project/data/controller/Auth_controller.dart';
 import 'package:android_project/data/controller/Cart_controller.dart';
 import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_color.dart';
@@ -16,7 +17,13 @@ class HomeHeader extends StatefulWidget {
 
 class _HomeHeaderState extends State<HomeHeader> {
   final TextEditingController searchController = TextEditingController();
-
+  final authController = Get.find<AuthController>();
+  late int lenghtcart = 0 ;
+  @override
+  void initState() {
+    super.initState();
+    lenghtcart = Get.find<CartController>().cartlist.length;
+  }
   @override
   void dispose() {
     searchController.dispose();
@@ -68,54 +75,61 @@ class _HomeHeaderState extends State<HomeHeader> {
           SizedBox(
             width: AppDimention.size5,
           ),
-          Container(
-            width: 40,
-            height: 40,
-            child: Stack(
-              children: [
-                Positioned(
-                  bottom: 0,
-                  child: GestureDetector(
-                    onTap: () {
-                      Get.toNamed(AppRoute.CART_PAGE);
-                    },
-                    child: Icon(
-                      Icons.shopping_cart_outlined,
-                      color: Colors.black,
-                      size: AppDimention.size30,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  width: 20,
-                  height: 20,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20),
-                      ),
-                      border: Border.all(color: Colors.white, width: 2),
-                      color: AppColor.mainColor,
-                    ),
-                    child: Container(
-                        width: AppDimention.size10,
-                        height: AppDimention.size10,
-                        child: Center(
-                          child: Text(
-                            Get.find<CartController>()
-                                .cartlist
-                                .length
-                                .toString(),
-                            style: TextStyle(color: Colors.white, fontSize: 12),
+          Obx(() {
+            if (!authController.IsLogin.value) {
+              return Container(
+              );
+            } else {
+              return Container(
+                  width: 40,
+                  height: 40,
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        bottom: 0,
+                        child: GestureDetector(
+                          onTap: () {
+                            Get.toNamed(AppRoute.CART_PAGE);
+                          },
+                          child: Icon(
+                            Icons.shopping_cart_outlined,
+                            color: Colors.black,
+                            size: AppDimention.size30,
                           ),
-                        )),
+                        ),
+                      ),
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        width: 20,
+                        height: 20,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                            border: Border.all(color: Colors.white, width: 2),
+                            color: AppColor.mainColor,
+                          ),
+                          child: Container(
+                              width: AppDimention.size10,
+                              height: AppDimention.size10,
+                              child: Center(
+                                child: Text(
+                                 lenghtcart.toString(),
+                                  style: TextStyle(color: Colors.white, fontSize: 12),
+                                ),
+                              )),
+                        ),
+                      )
+                    ],
                   ),
-                )
-              ],
-            ),
+                );
+              }
+            }
           ),
+
+          
         ],
       ),
     );

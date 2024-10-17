@@ -1,4 +1,5 @@
 import 'package:android_project/data/repository/Store_repo.dart';
+import 'package:android_project/models/Model/Item/StoresItem.dart';
 import 'package:android_project/models/Model/StoreModel.dart';
 import 'package:get/get.dart';
 
@@ -10,11 +11,11 @@ class Storecontroller extends GetxController {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  List<dynamic> _storeList = [];
-  List<dynamic> get storeList => _storeList;
+  List<Storesitem> _storeList = [];
+  List<Storesitem> get storeList => _storeList;
 
   Future<void> getall() async {
-    _isLoading = false;
+    _isLoading = true;
     Response response = await storeRepo.getall();
 
     if (response.statusCode == 200) {
@@ -26,7 +27,35 @@ class Storecontroller extends GetxController {
       print("Lỗi không lấy được danh sách cửa hàng : " +
           response.statusCode.toString());
     }
-    _isLoading = true;
+    _isLoading = false;
+    update();
+  }
+
+  String addressOfStore(int storeid){
+    for(Storesitem item in _storeList){
+      if(item.storeId == storeid){
+        return item.location!;
+      }
+    }
+    return "";
+  }
+
+  Storesitem? _storeItem ;
+  Storesitem? get storeItem => _storeItem;
+  bool _isLoadingItem = false;
+  bool get isLoadingItem => _isLoadingItem;
+
+  Future<void> getbyid(int id) async {
+    _isLoadingItem = true;
+    Response response = await storeRepo.getbyid(id);
+    if (response.statusCode == 200) {
+      var data = response.body;
+      _storeItem = Storesitem.fromJson(data["data"]);
+      print("Lấy chi tiết cửa hàng thành công");
+    } else {
+      print("Lỗi không lấy được cửa hàng"+ response.statusCode.toString());
+    }
+    _isLoadingItem = false;
     update();
   }
 

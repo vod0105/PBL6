@@ -1,5 +1,6 @@
 import 'package:android_project/data/repository/Category_repo.dart';
 import 'package:android_project/models/Model/CategoryModel.dart';
+import 'package:android_project/models/Model/Item/CategoryItem.dart';
 import 'package:get/get.dart';
 
 class CategoryController extends GetxController {
@@ -7,27 +8,59 @@ class CategoryController extends GetxController {
   CategoryController({
     required this.categoryRepo,
   });
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
 
-  List<dynamic> _categoryList = [];
-  List<dynamic> get categoryList => _categoryList;
+  // **************************************************************************** Khai báo biến
 
+  // * load dữ liệu danh mục
+  bool? _isLoading;
+  bool? get isLoading => _isLoading;
+
+  // * load dữ liệu danh mục trong cửa hàng
+  bool _isLoadingStore = false;
+  bool get isLoadingStore => _isLoadingStore;
+
+  // * danh sách danh mục sản phẩm
+  List<Categoryitem> _categoryList = [];
+  List<Categoryitem> get categoryList => _categoryList;
+
+  // * danh sách danh mục trong một cửa hàng
+  List<Categoryitem> _categoryListStoreId = [];
+  List<Categoryitem> get categoryListStoreId => _categoryListStoreId;
+
+  // * Hết khai báo biến ------------------------------------------------------------------------
+
+
+  // **************************************************************************** Khai báo hàm
+
+  // * Hàm lấy danh sách danh mục
   Future<void> getall() async {
-    _isLoading = false;
+    _isLoading = true;
     Response response = await categoryRepo.getall();
-
     if (response.statusCode == 200) {
-      print("Lấy dữ liệu danh sách danh mục sản phẩm thành công");
       var data = response.body;
       _categoryList = [];
       _categoryList.addAll(Categorymodel.fromJson(data).get_listCategory ?? []);
     } else {
-      print("Lỗi không lấy được danh sách danh mục sản phẩm" +
-          response.statusCode.toString());
       _categoryList = [];
     }
-    _isLoading = true;
+    _isLoading = false;
     update();
   }
+
+  // * Hàm lấy danh mục của cửa hàng
+  Future<void> getbystoreid(int id) async {
+    _isLoadingStore = true;
+    Response response = await categoryRepo.getbystoreid(id);
+
+    if (response.statusCode == 200) {
+      var data = response.body;
+      _categoryListStoreId = [];
+      _categoryListStoreId.addAll(Categorymodel.fromJson(data).get_listCategory ?? []);
+    } else {
+      _categoryListStoreId = [];
+    }
+    _isLoadingStore = false;
+    update();
+  }
+  
 }

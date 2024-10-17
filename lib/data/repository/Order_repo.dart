@@ -20,4 +20,12 @@ class OrderRepo {
     return await apiClient.getData(
         Appconstant.ORDER_BY_ORDERSTATUS_URL.replaceFirst("{status}", status));
   }
+   Future<Response> updatefeedback(int orderId) async {
+    return await apiClient.postData(
+        Appconstant.ORDER_UPDATE_FEEDBACK_URL.replaceFirst("{orderid}", orderId.toString()),null);
+  }
+  Future<Response> cancelorder(String ordercode) async {
+    return await apiClient.postData(
+        Appconstant.ORDERT_CANCEL_URL.replaceFirst("{ordercode}",ordercode),null);
+  }
 }

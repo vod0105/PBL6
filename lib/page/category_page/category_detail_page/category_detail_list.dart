@@ -47,7 +47,7 @@ class _CategoryDetailListState extends State<CategoryDetailList> {
                 child: GestureDetector(
                   onTap: () {
                     Get.toNamed(AppRoute.get_product_detail(productController
-                        .productListBycategory[index].productId));
+                        .productListBycategory[index].productId!));
                   },
                   child: Row(
                     children: [
@@ -78,7 +78,7 @@ class _CategoryDetailListState extends State<CategoryDetailList> {
                                   child: Text(
                                     productController
                                         .productListBycategory[index]
-                                        .productName,
+                                        .productName!,
                                     style: TextStyle(
                                         fontSize: AppDimention.size25,
                                         fontWeight: FontWeight.w500),

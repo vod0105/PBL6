@@ -1,7 +1,12 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:android_project/data/controller/Combo_controller.dart';
 import 'package:android_project/data/controller/Order_controller.dart';
+import 'package:android_project/data/controller/Store_Controller.dart';
+import 'package:android_project/models/Model/Item/ComboItem.dart';
+import 'package:android_project/models/Model/Item/StoresItem.dart';
+import 'package:android_project/models/Model/OrderModel.dart';
 import 'package:android_project/page/order_page/order_footer.dart';
 import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_color.dart';
@@ -28,6 +33,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     return GetBuilder<OrderController>(builder: (orderController) {
       return !orderController.isLoading
           ? Scaffold(
+              backgroundColor: Colors.grey[200],
               resizeToAvoidBottomInset: false,
               body: Column(
                 children: [
@@ -55,34 +61,37 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
-                              childAspectRatio: 0.7,
+                              childAspectRatio: 0.6,
                             ),
                             itemCount: orderController
                                 .orderdetail?.orderDetails?.length,
                             itemBuilder: (context, index) {
-                              var productOrder = orderController.orderdetail
-                                  ?.orderDetails?[index].productDetail;
-                              var comboOrder = orderController.orderdetail
-                                  ?.orderDetails?[index].comboDetail;
+                              OrderDetails detail = orderController
+                                  .orderdetail!.orderDetails![index];
+
+                              ProductDetail? productOrder;
+                              ComboDetail? comboOrder;
+                              Comboitem? comboitem;
+                              if (detail.type == "product")
+                                productOrder = detail.productDetail != null
+                                    ? detail.productDetail
+                                    : null;
+                              else {
+                                comboOrder = detail.comboDetail != null
+                                    ? detail.comboDetail
+                                    : null;
+                                comboitem = Get.find<ComboController>()
+                                    .getcombobyId(comboOrder!.comboId!);
+                              }
+
                               bool key = productOrder != null;
 
                               Uint8List decodeImage() {
-                                if (productOrder != null) {
-                                  try {
-                                    return base64Decode(
-                                        productOrder.productImage!);
-                                  } catch (e) {
-                                    print("Error decoding product image: $e");
-                                    return Uint8List(0);
-                                  }
+                                if (key) {
+                                  return base64Decode(
+                                      productOrder!.productImage!);
                                 } else {
-                                  try {
-                                    return base64Decode(
-                                        comboOrder?.combo?.image ?? '');
-                                  } catch (e) {
-                                    print("Error decoding combo image: $e");
-                                    return Uint8List(0);
-                                  }
+                                  return base64Decode(comboitem!.image!);
                                 }
                               }
 
@@ -91,11 +100,12 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                     key
                                         ? Get.toNamed(
                                             AppRoute.get_product_detail(
-                                                productOrder.productId!))
+                                                productOrder!.productId!))
                                         : Get.toNamed(
                                             AppRoute.get_combo_detail(index));
                                   },
                                   child: Container(
+                                    padding: EdgeInsets.all(AppDimention.size10),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       border: Border.all(
@@ -127,13 +137,13 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                                 height: AppDimention.size5,
                                               ),
                                               Text(
-                                                "[ ${index + 1} ] ${key ? productOrder?.productName ?? "No name" : comboOrder?.combo?.comboName ?? "No name"}",
+                                                "[ ${index + 1} ] ${key ? productOrder.productName : comboitem!.comboName!}",
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     color: AppColor.mainColor),
                                               ),
                                               Text(
-                                                "${key ? productOrder?.unitPrice : comboOrder?.unitPrice} vnđ",
+                                                "${key ? productOrder.unitPrice : comboOrder!.unitPrice} vnđ",
                                                 style: TextStyle(fontSize: 13),
                                               ),
                                               Row(
@@ -202,23 +212,79 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                     ),
                                   ));
                             }),
+                        GetBuilder<Storecontroller>(builder: (controller) {
+                          OrderDetails detail =
+                              orderController.orderdetail!.orderDetails![0];
+                          ProductDetail? productOrder;
+                          ComboDetail? comboOrder;
+                          Comboitem? comboitem;
+                          if (detail.type == "product")
+                            productOrder = detail.productDetail != null
+                                ? detail.productDetail
+                                : null;
+                          else {
+                            comboOrder = detail.comboDetail != null
+                                ? detail.comboDetail
+                                : null;
+                            comboitem = Get.find<ComboController>()
+                                .getcombobyId(comboOrder!.comboId!);
+                          }
+                          bool key = productOrder != null;
+
+                          return Container(
+                            width: AppDimention.screenWidth,
+                            padding: EdgeInsets.all(AppDimention.size10),
+                            margin: EdgeInsets.only(
+                                left: AppDimention.size10,
+                                right: AppDimention.size10,
+                                top: AppDimention.size20),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                    BorderRadius.circular(AppDimention.size5)),
+                            child: Text(
+                              "Địa chỉ cửa hàng : ${controller.addressOfStore(key ? productOrder.storeId! : comboOrder!.storeId!)}",
+                              textAlign: TextAlign.start,
+                            ),
+                          );
+                        }),
                         ListView.builder(
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: orderController
                                 .orderdetail?.orderDetails?.length,
                             itemBuilder: (context, index) {
-                              var productOrder = orderController.orderdetail
-                                  ?.orderDetails?[index].productDetail;
-                              var comboOrder = orderController.orderdetail
-                                  ?.orderDetails?[index].comboDetail;
+                              OrderDetails detail =  orderController
+                                  .orderdetail!.orderDetails![0];
+
+                              ProductDetail? productOrder;
+                                              ComboDetail? comboOrder;
+                                              Comboitem? comboitem;
+                                              if(detail.type== "product")
+                                                productOrder = detail.productDetail != null ? detail.productDetail : null;
+                                              else{
+                                                comboOrder = detail.comboDetail != null ? detail.comboDetail : null;
+                                                comboitem =Get.find<ComboController>().getcombobyId(comboOrder!.comboId!);
+                                              }
+
+                              
                               bool key = productOrder != null;
+                            
+
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
-                                      padding: EdgeInsets.only(
-                                          left: AppDimention.size20),
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(
+                                              AppDimention.size5)),
+                                      margin: EdgeInsets.only(
+                                          left: AppDimention.size10,
+                                          right: AppDimention.size10,
+                                          bottom: AppDimention.size10),
+                                      padding:
+                                          EdgeInsets.all(AppDimention.size10),
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -228,7 +294,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                               height: AppDimention.size20,
                                             ),
                                           Text(
-                                            "[ ${index + 1} ] ${key ? productOrder?.productName ?? "No name" : comboOrder?.combo?.comboName ?? "No name"}",
+                                            "[ ${index + 1} ] ${key ? productOrder.productName : comboitem!.comboName}",
                                             style: TextStyle(
                                                 fontSize: AppDimention.size20,
                                                 fontWeight: FontWeight.bold),
@@ -247,55 +313,33 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                                     bottom: BorderSide(
                                                         width: 1,
                                                         color:
-                                                            Colors.black26))),
+                                                            Colors.black12))),
                                             child: Text(
-                                                "Giá : ${key ? productOrder?.unitPrice : comboOrder?.unitPrice} vnđ"),
+                                                "Giá : ${key ? productOrder.unitPrice : comboOrder?.unitPrice} vnđ"),
                                           ),
                                           Container(
-                                            width: AppDimention.screenWidth -
-                                                AppDimention.size40,
-                                            height: AppDimention.size40,
-                                            padding: EdgeInsets.only(
-                                                top: AppDimention.size10),
-                                            decoration: BoxDecoration(
-                                                border: Border(
-                                                    bottom: BorderSide(
-                                                        width: 1,
-                                                        color:
-                                                            Colors.black26))),
-                                            child: Text(
-                                                "Số lượng : ${key ? productOrder?.quantity : comboOrder?.quantity} "),
-                                          ),
-                                          Container(
-                                            width: AppDimention.screenWidth -
-                                                AppDimention.size40,
-                                            height: AppDimention.size40,
-                                            padding: EdgeInsets.only(
-                                                top: AppDimention.size10),
-                                            decoration: BoxDecoration(
-                                                border: Border(
-                                                    bottom: BorderSide(
-                                                        width: 1,
-                                                        color:
-                                                            Colors.black26))),
-                                            child: Text(
-                                                "Tổng giá : ${key ? productOrder?.totalPrice : comboOrder?.totalPrice} vnđ "),
-                                          ),
-                                          Container(
-                                            width: AppDimention.screenWidth -
-                                                AppDimention.size40,
-                                            height: AppDimention.size40,
-                                            padding: EdgeInsets.only(
-                                                top: AppDimention.size10),
-                                            decoration: BoxDecoration(
-                                                border: Border(
-                                                    bottom: BorderSide(
-                                                        width: 1,
-                                                        color:
-                                                            Colors.black26))),
-                                            child: Text(
-                                                "Size : ${key ? productOrder?.size : comboOrder?.size} "),
-                                          ),
+                                              width: AppDimention.screenWidth -
+                                                  AppDimention.size40,
+                                              height: AppDimention.size40,
+                                              padding: EdgeInsets.only(
+                                                  top: AppDimention.size10),
+                                              decoration: BoxDecoration(
+                                                  border: Border(
+                                                      bottom: BorderSide(
+                                                          width: 1,
+                                                          color:
+                                                              Colors.black12))),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                      "Tổng giá : ${key ? productOrder.totalPrice : comboOrder!.totalPrice} vnđ "),
+                                                  Text(
+                                                      "Size : ${key ? productOrder.size : comboOrder!.size} "),
+                                                ],
+                                              )),
                                         ],
                                       )),
                                 ],
@@ -347,8 +391,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                     SizedBox(
                                       height: AppDimention.size10,
                                     ),
-                                    Text(
-                                        "Phương thức thanh toán : ${orderController.orderdetail?.paymentMethod}"),
                                     SizedBox(
                                       height: AppDimention.size10,
                                     ),

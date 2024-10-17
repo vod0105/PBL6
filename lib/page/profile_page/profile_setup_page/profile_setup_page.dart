@@ -1,4 +1,5 @@
 import 'package:android_project/page/profile_page/profile_footer.dart';
+import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                     child: Text(
                       "Cài đặt",
                       style: TextStyle(
-                          fontSize: AppDimention.size30, color: Colors.white),
+                          fontSize: AppDimention.size20, color: Colors.white),
                     ),
                   ),
                 )
@@ -136,6 +137,34 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                               size: 15,
                             )
                           ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Get.toNamed(AppRoute.REGISTER_SHIP_PAGE);
+                        },
+                        child: Container(
+                          width: AppDimention.screenWidth,
+                          height: AppDimention.size50,
+                          padding: EdgeInsets.only(
+                              left: AppDimention.size20,
+                              right: AppDimention.size10),
+                          decoration: BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(
+                                      width: 1,
+                                      color: const Color.fromARGB(
+                                          255, 194, 193, 193)))),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Đăng kí giao hàng"),
+                              Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                size: 15,
+                              )
+                            ],
+                          ),
                         ),
                       ),
                       Container(

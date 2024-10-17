@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:android_project/custom/input_text_custom.dart';
 import 'package:android_project/data/controller/User_controller.dart';
+import 'package:android_project/models/Dto/UserUpdateDto.dart';
 import 'package:android_project/page/profile_page/profile_setting_page/profile_setting_footer.dart';
 import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_color.dart';
@@ -10,6 +12,8 @@ import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:get/get_connect/http/src/multipart/multipart_file.dart'
+    as get_multipart;
 
 class ProfileSettingPage extends StatefulWidget {
   const ProfileSettingPage({
@@ -71,9 +75,17 @@ class _ProfileSettingPageState extends State<ProfileSettingPage> {
   }
 
   void _updateProfile() {
-    String avatar = Get.find<UserController>().userprofile?.avatar == null
-        ? defaultAvata
-        : Get.find<UserController>().userprofile!.avatar!;
+    String? avatar = Get.find<UserController>().base64Image != null &&
+            Get.find<UserController>().base64Image!.isNotEmpty
+        ? Get.find<UserController>().base64Image
+        : "";
+
+    String fullName = fullnamecontroller.text;
+    String address = addresscontroller.text;
+    String email = emailcontroller.text;
+    Userupdatedto userupdatedto = Userupdatedto(
+        fullName: fullName, avatar: avatar!, email: email, address: address);
+    Get.find<UserController>().updateprofile(userupdatedto);
   }
 
   void _showDropdown() {
@@ -127,6 +139,7 @@ class _ProfileSettingPageState extends State<ProfileSettingPage> {
       phonecontroller.text = userController.userprofile!.phoneNumber!;
 
       return Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Color.fromRGBO(243, 243, 243, 1),
         body: Column(
           children: [
@@ -156,13 +169,10 @@ class _ProfileSettingPageState extends State<ProfileSettingPage> {
                                           AppDimention.size100),
                                       image: DecorationImage(
                                           fit: BoxFit.cover,
-                                          image: MemoryImage(base64Decode(
-                                              userController.userprofile
-                                                          ?.avatar ==
-                                                      null
-                                                  ? defaultAvata
-                                                  : userController
-                                                      .userprofile!.avatar!)))),
+                                          image: MemoryImage(
+                                              userController.userprofile?.avatar == null ||  userController.userprofile?.avatar == ""
+                                                  ? base64Decode(defaultAvata)
+                                                  :base64Decode(userController.userprofile!.avatar!) ))),
                                 ),
                               )),
                               Positioned(

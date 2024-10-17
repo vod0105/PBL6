@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:android_project/data/controller/Product_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:camera/camera.dart';
@@ -20,6 +22,8 @@ class CameraPageState extends State<CameraPage>
   CameraController? cameraController;
   late AnimationController _animationController;
   late Animation<double> _rotationAnimation;
+
+  ProductController productController = Get.find<ProductController>();
 
   @override
   void initState() {
@@ -55,13 +59,30 @@ class CameraPageState extends State<CameraPage>
     }
   }
 
+  Future<void> _captureImage() async {
+    try {
+      if (cameraController != null && cameraController!.value.isInitialized) {
+        final XFile image = await cameraController!.takePicture();
+        final bytes = await image.readAsBytes();
+        final String base64Image = base64Encode(bytes);
+        productController.searchByImage(base64Image);
+
+        Get.back();
+        
+      }
+    } catch (e) {
+      print("Error capturing image: $e");
+    }
+  }
+
   void _onTap() {
     if (_animationController.status == AnimationStatus.completed) {
       _animationController.reverse();
     } else {
       _animationController.forward().then((_) {
-        Future.delayed(const Duration(microseconds: 100), () {
+        Future.delayed(const Duration(milliseconds: 100), () {
           _animationController.reverse();
+          _captureImage();
         });
       });
     }
@@ -111,7 +132,7 @@ class CameraPageState extends State<CameraPage>
                   left: 10,
                   child: GestureDetector(
                     onTap: () {
-                      Get.toNamed(AppRoute.HOME_PAGE);
+                      Get.back();
                     },
                     child: Icon(
                       Icons.arrow_circle_left,

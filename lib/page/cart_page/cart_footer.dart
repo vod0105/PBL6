@@ -1,4 +1,5 @@
 import 'package:android_project/data/controller/Cart_controller.dart';
+import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
@@ -16,13 +17,35 @@ class CartFooter extends StatefulWidget {
 class _CartFooterState extends State<CartFooter> {
   TextEditingController addressController = TextEditingController();
   String? selectedPaymentMethod;
+  CartController cartController = Get.find<CartController>();
+  void checkItem() {
+    if (cartController.IDSelectedItem.isEmpty &&
+        cartController.IDSelectedStore.isEmpty) {
+      Get.snackbar(
+        "Thông báo",
+        "Vui lòng chọn sản phẩm",
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.white,
+        colorText: Colors.black,
+        icon: Icon(Icons.warning, color: Colors.red),
+        borderRadius: 10,
+        margin: EdgeInsets.all(10),
+        duration: Duration(seconds: 1),
+        isDismissible: true,
+        
+      );
+    } else {
+      Get.toNamed(AppRoute.ORDER_CART_PAGE);
+    }
+  }
+
   void _order() async {
     String address = addressController.text.trim();
     String paymentMethod = selectedPaymentMethod!;
 
-    await Get.find<CartController>().orderall(address, paymentMethod);
+    await cartController.orderall(address, paymentMethod);
     if (paymentMethod == "MOMO") {
-      var payUrl = Get.find<CartController>().qrcode.payUrl;
+      var payUrl = cartController.qrcode.payUrl;
       final Uri _url = Uri.parse(payUrl!);
       if (!await launchUrl(_url)) {
         throw Exception('Could not launch $_url');
@@ -155,7 +178,7 @@ class _CartFooterState extends State<CartFooter> {
             ),
             GestureDetector(
               onTap: () {
-                _showDropdown();
+                checkItem();
               },
               child: Container(
                 width: AppDimention.size120,

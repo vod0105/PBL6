@@ -20,6 +20,22 @@ class AppRoute {
   static String PROMOTION_PAGE = "/promotion";
   static String ORDER_DETAIL_PAGE = "/order-detail";
   static String CHART_PAGE = "/chart";
+  static String STORE_DETAIL_PAGE = "/store-detail";
+  static String REGISTER_SHIP_PAGE = "/register-ship";
+  static String ORDER_COMBO_PAGE = "/order-combo";
+  static String ORDER_CART_PAGE = "/order-cart";
+  static String NOTIFICATION_PAGE = "/notification";
+  static String ORDER_PRODUCT_PAGE = "/product-order";
+  static String TRANSFER_POINT_PAGE = "/transfer-point";
+
+  static String order_combo(int comboid,int drinkid) =>
+      '$ORDER_COMBO_PAGE?comboid=$comboid&drinkid=$drinkid';
+
+  static String order_product(int product,String size,int quantity) =>
+      '$ORDER_PRODUCT_PAGE?product=$product&size=$size&quantity=$quantity';
+
+  static String get_store_detail(int storeid) =>
+      '$STORE_DETAIL_PAGE?storeid=$storeid';
 
   static String get_order_detail(String orderCode) =>
       '$ORDER_DETAIL_PAGE?orderCode=$orderCode';

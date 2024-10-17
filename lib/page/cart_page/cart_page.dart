@@ -18,6 +18,7 @@ class _CartPageState extends State<CartPage> {
   void initState() {
     super.initState();
     Get.find<CartController>().getall();
+    Get.find<CartController>().getListCartV2();
     Get.find<CartController>().resetIDSelected();
     Get.find<CartController>().getDistinctStoreId();
   }

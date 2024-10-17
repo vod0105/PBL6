@@ -1,6 +1,9 @@
 {
     "cSpell.words": [
         "Appconstant",
-        "Categorymodel"
+        "Categorymodel",
+        "Geolocator",
+        "Orderproductdto",
+        "Storecontroller"
     ]
 }

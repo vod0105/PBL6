@@ -1,4 +1,9 @@
+import 'dart:convert';
+
+import 'package:android_project/data/controller/Auth_controller.dart';
 import 'package:android_project/data/controller/Chart_controller.dart';
+import 'package:android_project/models/Dto/Message.dart';
+import 'package:android_project/models/Model/Messagemodel.dart';
 import 'package:android_project/page/chat_page/chart_header.dart';
 import 'package:android_project/page/profile_page/profile_footer.dart';
 import 'package:android_project/route/app_route.dart';
@@ -7,7 +12,10 @@ import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:web_socket_channel/io.dart';
 import 'dart:io';
+
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class ChartPage extends StatefulWidget {
   const ChartPage({Key? key}) : super(key: key);
@@ -18,27 +26,42 @@ class ChartPage extends StatefulWidget {
 
 class _ChartPageState extends State<ChartPage>
     with SingleTickerProviderStateMixin {
+  // khai báo biến
   TextEditingController searchController = TextEditingController();
   TextEditingController sendController = TextEditingController();
-  File? _image;
-  bool trans = false;
   FocusNode focusNode = FocusNode();
+  late IOWebSocketChannel _channel;
+  List<Usermessage> listchart = [];
+  bool trans = false;
+  File? _image;
+  String imagebase64 = "";
+  int idme = 0;
+  int idyou = 0;
 
-  Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
-    }
-  }
-
+  ChartController chartController = Get.find<ChartController>();
+  AuthController authController = Get.find<AuthController>();
   @override
   void initState() {
     super.initState();
 
+    chartController.getall();
+    idme = authController.getiduser;
+    HttpClient client = HttpClient()
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+    _channel = IOWebSocketChannel.connect(
+      Uri.parse('ws://192.168.1.39:8080/ws/chat'),
+      customClient: client,
+    );
+    startSessionSocket();
+
+    _channel.stream.listen((message) {
+      setState(() {
+        var decodedMessage = jsonDecode(message);
+        listchart.add(Usermessage.fromJson(decodedMessage));
+      });
+      print("Tin nhắn nhận được: $message");
+    });
     focusNode.addListener(() {
       setState(() {
         trans = !focusNode.hasFocus;
@@ -46,9 +69,125 @@ class _ChartPageState extends State<ChartPage>
     });
   }
 
+  bool isPicking = false;
+
+  Future<void> _pickImage() async {
+    if (isPicking) return;
+
+    setState(() {
+      isPicking = true;
+    });
+
+    try {
+      final picker = ImagePicker();
+      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+      if (pickedFile != null) {
+        File imageFile = File(pickedFile.path);
+
+        List<int> imageBytes = await imageFile.readAsBytes();
+        String base64Image = base64Encode(imageBytes);
+
+        setState(() {
+          _image = imageFile;
+          imagebase64 = base64Image;
+        });
+      }
+    } catch (e) {
+      print('Error picking image: $e');
+    } finally {
+      setState(() {
+        isPicking = false;
+      });
+    }
+  }
+
+  void _reconnect() {
+    Future.delayed(Duration(seconds: 5), () {
+      HttpClient client = HttpClient()
+        ..badCertificateCallback =
+            (X509Certificate cert, String host, int port) => true;
+      _channel = IOWebSocketChannel.connect(
+        Uri.parse('ws://192.168.1.39:8080/ws/chat'),
+        customClient: client,
+      );
+      startSessionSocket();
+      _channel.stream.listen(
+        (message) {
+          setState(() {
+            try {
+              var decodedMessage = jsonDecode(message);
+              setState(() {
+                listchart.add(Usermessage.fromJson(decodedMessage));
+              });
+            } catch (e) {
+              print("Lỗi khi giải mã tin nhắn: $e");
+            }
+          });
+          print("Tin nhắn nhận được: $message");
+        },
+        onError: (error) {
+          print("Lỗi WebSocket: $error");
+        },
+        onDone: () {
+          print("Kết nối WebSocket đã đóng");
+          _reconnect();
+        },
+      );
+    });
+  }
+
+  void startSessionSocket() {
+    final data = {
+      "type": "identify",
+      "userId": idme,
+    };
+    _channel.sink.add(jsonEncode(data));
+  }
+
+  void _sendMessage() {
+    String message = sendController.text.trim();
+    if (message.isNotEmpty) {
+      final data = {
+        "sender": idme,
+        "receiver": idyou,
+        "message": message,
+        "localTime": "",
+        "image": "",
+      };
+
+      _channel.sink.add(jsonEncode(data));
+      sendController.clear();
+    }
+    if (!imagebase64.isEmpty) {
+      chartController.senImage(idme, idyou, imagebase64);
+      updateData(idyou);
+    }
+  }
+
+  Future<void> updateData(int idreceiver) async {
+    listchart.clear();
+
+    await chartController.getlistmessage(idreceiver);
+
+    while (chartController.getisLoadingMessage == true) {
+      await Future.delayed(Duration(milliseconds: 500));
+    }
+
+    setState(() {
+      listchart = chartController.getlistusermesage;
+    });
+    setState(() {
+      _image = null;
+      imagebase64 = "";
+    });
+  }
+
   @override
   void dispose() {
+    _channel.sink.close();
     focusNode.dispose();
+    sendController.dispose();
     super.dispose();
   }
 
@@ -57,7 +196,8 @@ class _ChartPageState extends State<ChartPage>
     return GetBuilder<ChartController>(builder: (chartController) {
       bool status = chartController.isShow;
       return Scaffold(
-        resizeToAvoidBottomInset: trans,
+        // resizeToAvoidBottomInset: trans,
+        resizeToAvoidBottomInset: true,
         body: Column(
           children: [
             ChartHeader(),
@@ -79,44 +219,102 @@ class _ChartPageState extends State<ChartPage>
                           children: [
                             Expanded(
                               child: SingleChildScrollView(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(height: AppDimention.size10),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Container(
-                                        padding: EdgeInsets.all(15),
-                                        margin: EdgeInsets.only(
-                                            left: AppDimention.size10),
-                                        decoration: BoxDecoration(
-                                          color: Colors.blue[400],
-                                          borderRadius: BorderRadius.circular(
-                                              AppDimention.size10),
-                                        ),
-                                        child: Text("Chào bạn "),
+                                child: listchart.isEmpty
+                                    ? Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(height: AppDimention.size10),
+                                          Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Container(
+                                              padding: EdgeInsets.all(15),
+                                              margin: EdgeInsets.only(
+                                                  left: AppDimention.size10),
+                                              decoration: BoxDecoration(
+                                                color: Colors.blue[400],
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        AppDimention.size10),
+                                              ),
+                                              child: Text("Chào bạn "),
+                                            ),
+                                          ),
+                                          SizedBox(height: AppDimention.size20),
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Container(
+                                              padding: EdgeInsets.all(15),
+                                              margin: EdgeInsets.only(
+                                                  right: AppDimention.size10),
+                                              decoration: BoxDecoration(
+                                                color: Colors.blue[400],
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        AppDimention.size10),
+                                              ),
+                                              child: Text("Chào bạn "),
+                                            ),
+                                          ),
+                                          SizedBox(height: AppDimention.size10),
+                                        ],
+                                      )
+                                    : Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(height: AppDimention.size10),
+                                          ...listchart.map((item) {
+                                            // DecorationImage? imageDecoration;
+                                            // if (item.image != null) {
+                                            //   imageDecoration = DecorationImage(
+                                            //     fit: BoxFit.cover,
+                                            //     image: MemoryImage(
+                                            //         base64Decode(item.image!)),
+                                            //   );
+                                            // }
+
+                                            return Align(
+                                                    alignment: item.sender ==
+                                                            idyou
+                                                        ? Alignment.centerLeft
+                                                        : Alignment.centerRight,
+                                                    child: Container(
+                                                      padding: EdgeInsets.only(
+                                                          left: 15,
+                                                          right: 15,
+                                                          bottom: 10,
+                                                          top: 10),
+                                                      margin: EdgeInsets.only(
+                                                          top: 10),
+                                                      decoration: BoxDecoration(
+                                                          color: item.sender ==
+                                                                  idyou
+                                                              ? const Color
+                                                                  .fromARGB(66,
+                                                                  48, 40, 15)
+                                                              : AppColor
+                                                                  .mainColor,
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  AppDimention
+                                                                      .size40),
+                                                         ),
+                                                      child: Text(
+                                                        item.message.toString(),
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                    ),
+                                                  );
+                                                
+                                          }).toList(),
+                                          SizedBox(height: AppDimention.size20),
+                                        ],
                                       ),
-                                    ),
-                                    SizedBox(height: AppDimention.size20),
-                                    Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Container(
-                                        padding: EdgeInsets.all(15),
-                                        margin: EdgeInsets.only(
-                                            right: AppDimention.size10),
-                                        decoration: BoxDecoration(
-                                          color: Colors.blue[400],
-                                          borderRadius: BorderRadius.circular(
-                                              AppDimention.size10),
-                                        ),
-                                        child: Text("Chào bạn "),
-                                      ),
-                                    ),
-                                    SizedBox(height: AppDimention.size10),
-                                  ],
-                                ),
                               ),
-                            ),
+                            )
                           ],
                         ),
                       )),
@@ -228,54 +426,83 @@ class _ChartPageState extends State<ChartPage>
                                 ),
                               ),
                             ),
-                            Container(
-                              width: AppDimention.size100 * 2.9,
-                              height: AppDimention.size60,
-                              margin: EdgeInsets.only(top: AppDimention.size10),
-                              padding:
-                                  EdgeInsets.only(left: AppDimention.size10),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius:
-                                    BorderRadius.circular(AppDimention.size100),
-                              ),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: AppDimention.size40,
-                                    height: AppDimention.size40,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(
-                                          AppDimention.size100),
-                                      image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: NetworkImage(
-                                            "https://wallpaperaccess.com/full/6790132.png"),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(width: AppDimention.size10),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(height: AppDimention.size5),
-                                      Text("Nguyễn Văn Nhật",
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold)),
-                                      Container(
-                                        width: AppDimention.size100 * 1.8,
-                                        child: Text(
-                                          "Cảm ơn shop nhiều hi hi hiahsdlkash",
-                                          overflow: TextOverflow.ellipsis,
+                            GetBuilder<ChartController>(
+                              builder: (listusercontroller) {
+                                return Column(
+                                  children:
+                                      listusercontroller.listUser.map((item) {
+                                    return GestureDetector(
+                                      onTap: () async {
+                                        await listusercontroller
+                                            .getlistmessage(item.id!);
+                                        listchart = listusercontroller
+                                            .getlistusermesage;
+                                        listusercontroller
+                                            .updatechartname(item.fullName!);
+
+                                        idyou = Get.find<ChartController>()
+                                            .getidreceiver;
+                                      },
+                                      child: Container(
+                                        width: AppDimention.size100 * 2.9,
+                                        height: AppDimention.size60,
+                                        margin: EdgeInsets.only(
+                                            top: AppDimention.size10),
+                                        padding: EdgeInsets.only(
+                                            left: AppDimention.size10),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(
+                                              AppDimention.size100),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              width: AppDimention.size40,
+                                              height: AppDimention.size40,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          AppDimention.size100),
+                                                  image: DecorationImage(
+                                                      fit: BoxFit.cover,
+                                                      image: AssetImage(
+                                                          "assets/image/logo.png"))),
+                                            ),
+                                            SizedBox(
+                                                width: AppDimention.size10),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                SizedBox(
+                                                    height: AppDimention.size5),
+                                                Text(
+                                                  item.fullName.toString(),
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                Container(
+                                                  width: AppDimention.size100 *
+                                                      1.8,
+                                                  child: Text(
+                                                    "Cảm ơn shop nhiều hi hi hiahsdlkash",
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          ],
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
+                                    );
+                                  }).toList(),
+                                );
+                              },
+                            )
                           ],
                         ),
                       ),
@@ -377,21 +604,20 @@ class _ChartPageState extends State<ChartPage>
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      _sendMessage();
+                    },
                     child: Container(
                       width: AppDimention.size70,
                       height: AppDimention.size70,
                       child: Center(
                         child: Transform.rotate(
-                          angle: 0 * 3.1415927 / 180,
-                          child:Icon(
-                              Icons.notifications,  
+                            angle: 0 * 3.1415927 / 180,
+                            child: Icon(
+                              Icons.send,
                               color: Colors.white,
                               size: AppDimention.size40,
-                            )
-
-
-                        ),
+                            )),
                       ),
                     ),
                   ),

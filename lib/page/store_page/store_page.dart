@@ -1,3 +1,4 @@
+import 'package:android_project/page/store_page/store_footer.dart';
 import 'package:android_project/page/store_page/store_header.dart';
 import 'package:android_project/page/store_page/store_list.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ class _StorePageState extends State<StorePage> {
               ],
             ),
           )),
+          StoreFooter()
         ],
       ),
     );

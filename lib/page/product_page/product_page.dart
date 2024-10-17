@@ -1,10 +1,15 @@
 import 'dart:convert';
 
+import 'package:android_project/caculator/function.dart';
+import 'package:android_project/data/controller/Auth_controller.dart';
 import 'package:android_project/data/controller/Cart_controller.dart';
 import 'package:android_project/data/controller/Product_controller.dart';
 import 'package:android_project/data/controller/Size_controller.dart';
+import 'package:android_project/data/controller/User_controller.dart';
 import 'package:android_project/models/Dto/CartDto.dart';
+import 'package:android_project/models/Model/Item/ProductItem.dart';
 import 'package:android_project/models/Model/Item/StoresItem.dart';
+import 'package:android_project/models/Model/RateModel.dart';
 import 'package:android_project/models/Model/StoreModel.dart';
 import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_color.dart';
@@ -23,19 +28,33 @@ class ProductPage extends StatefulWidget {
 
 class _ProductPageState extends State<ProductPage> {
   late ProductController productController;
+  Productitem? productitem;
+
   int quantity = 1;
   int productid = 0;
   int idstore = 0;
   bool showDescription = true;
   int selectSize = 1;
-
+  AuthController authController = Get.find<AuthController>();
+  FunctionMap functionmap = FunctionMap();
+  Point? currentPoint ;
+  bool? isLoadPoint = false;
   @override
   void initState() {
     super.initState();
     productController = Get.find();
     productid = widget.productId;
-    productController.getProductById(widget.productId);
+    productitem = productController.getproductbyid(widget.productId);
+    productController.getcomment(widget.productId);
+    
+    getCurrentPosition();
   }
+  Future<void> getCurrentPosition() async {
+  currentPoint = await functionmap.getCurrentLocation();
+  setState(() {
+    isLoadPoint = true;
+  });
+}
 
   void _toggleContent(bool isDescription) {
     setState(() {
@@ -43,21 +62,70 @@ class _ProductPageState extends State<ProductPage> {
     });
   }
 
-  void _showDropdown(List<String> items, Function(String) onItemSelected) {
+  String _formatNumber(int number) {
+    return number.toString().replaceAllMapped(
+          RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
+          (Match match) => '${match[1]}.',
+        );
+  }
+
+  String selectSizeString = "M";
+  void _order(int productId,String selectSizeStr,int quantity){
+    Get.toNamed(AppRoute.order_product(productId, selectSizeStr, quantity));
+  }
+
+  void _showDropdown(List<Storesitem> items, Function(String) onItemSelected) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: 200,
+          color: Colors.grey.withOpacity(0.2),
+          height: 400,
           child: ListView.builder(
             itemCount: items.length,
             itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(items[index]),
+              return GestureDetector(
                 onTap: () {
-                  onItemSelected(items[index]);
+                  onItemSelected(items[index].storeName!);
                   Navigator.pop(context);
                 },
+                child: Container(
+                  width: AppDimention.screenWidth,
+                  padding: EdgeInsets.only(left: AppDimention.size10,right: AppDimention.size10,top: AppDimention.size20,bottom: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border(bottom: BorderSide(width: 1,color: Colors.black26))
+                  ),
+                  child: Row(
+                    children: [
+                      Column(
+                        children: [
+                          Icon(Icons.location_on_outlined,color: Colors.blue,),
+                          Text("${(functionmap.calculateDistance(items[index].latitude!, items[index].longitude!,isLoadPoint! ? currentPoint!.latitude! : 0, isLoadPoint! ? currentPoint!.longtitude! : 0)/1000).toInt() } ",style: TextStyle(color: Colors.blue),),
+                          Text("( km )",style: TextStyle(color: Colors.blue),)
+                        ],
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: AppDimention.size10),
+                        width: AppDimention.screenWidth * 0.8,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(items[index].storeName!,textAlign: TextAlign.justify,style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),),
+                            SizedBox(height: AppDimention.size5,),
+                            Text(
+                              items[index].location!,
+                              textAlign: TextAlign.justify,
+                              style: TextStyle(
+                                color: Colors.black45
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
               );
             },
           ),
@@ -75,16 +143,11 @@ class _ProductPageState extends State<ProductPage> {
 
   @override
   Widget build(BuildContext context) {
+    final authController = Get.find<AuthController>();
     return GetBuilder<ProductController>(builder: (productController) {
-      if (productController.productListDetail.isEmpty) {
-        return Scaffold(
-          backgroundColor: Colors.white,
-          body: Center(child: CircularProgressIndicator()),
-        );
-      }
-      var product = productController.productListDetail[0];
+     
       if (productController.productListBycategory.isEmpty) {
-        productController.getProductByCategoryId(product.category.categoryId);
+        productController.getProductByCategoryId(productitem!.category!.categoryId!);
       }
       return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -117,51 +180,63 @@ class _ProductPageState extends State<ProductPage> {
                   Container(
                     width: 40,
                     height: 40,
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          bottom: 0,
-                          child: GestureDetector(
-                            onTap: () {
-                              Get.toNamed(AppRoute.CART_PAGE);
-                            },
-                            child: Icon(
-                              Icons.shopping_cart_outlined,
-                              color: Colors.white,
-                              size: AppDimention.size30,
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          right: 0,
-                          top: 0,
-                          width: 20,
-                          height: 20,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(20),
-                              ),
-                              border: Border.all(color: Colors.white, width: 2),
-                              color: AppColor.mainColor,
-                            ),
-                            child: Container(
-                                width: AppDimention.size10,
-                                height: AppDimention.size10,
-                                child: Center(
-                                  child: Text(
-                                    Get.find<CartController>()
-                                        .cartlist
-                                        .length
-                                        .toString(),
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 12),
+                    child: Obx(() {
+                      if (!authController.IsLogin.value) {
+                        return Container();
+                      } else {
+                        return Container(
+                          width: 40,
+                          height: 40,
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                bottom: 0,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Get.toNamed(AppRoute.CART_PAGE);
+                                  },
+                                  child: Icon(
+                                    Icons.shopping_cart_outlined,
+                                    color: Colors.white,
+                                    size: AppDimention.size30,
                                   ),
-                                )),
+                                ),
+                              ),
+                              Positioned(
+                                right: 0,
+                                top: 0,
+                                width: 20,
+                                height: 20,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(20),
+                                    ),
+                                    border: Border.all(
+                                        color: Colors.white, width: 2),
+                                    color: AppColor.mainColor,
+                                  ),
+                                  child: Container(
+                                      width: AppDimention.size10,
+                                      height: AppDimention.size10,
+                                      child: Center(
+                                        child: Text(
+                                          Get.find<CartController>()
+                                              .cartlist
+                                              .length
+                                              .toString(),
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12),
+                                        ),
+                                      )),
+                                ),
+                              )
+                            ],
                           ),
-                        )
-                      ],
-                    ),
+                        );
+                      }
+                    }),
                   ),
                 ],
               ),
@@ -170,29 +245,31 @@ class _ProductPageState extends State<ProductPage> {
               bottom: PreferredSize(
                 preferredSize: Size.fromHeight(AppDimention.size20),
                 child: Container(
-                  child: Center(
-                      child: Text(
-                    product.productName!,
-                    style: TextStyle(
-                        fontSize: AppDimention.size30,
-                        fontWeight: FontWeight.bold),
-                  )),
-                  width: double.maxFinite,
-                  padding: EdgeInsets.only(
-                      top: AppDimention.size10, bottom: AppDimention.size10),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(AppDimention.size20),
-                      topRight: Radius.circular(AppDimention.size20),
+                    width: double.maxFinite,
+                    padding: EdgeInsets.all(AppDimention.size10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(AppDimention.size20),
+                        topRight: Radius.circular(AppDimention.size20),
+                      ),
                     ),
-                  ),
-                ),
+                    child: Column(
+                      children: [
+                        Text(
+                          productitem!.productName!,
+                          style: TextStyle(
+                              fontSize: AppDimention.size30,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Text("( ${productitem!.category!.categoryName!} )")
+                      ],
+                    )),
               ),
               expandedHeight: 250,
               flexibleSpace: FlexibleSpaceBar(
                 background: Image.memory(
-                  base64Decode(product.image!),
+                  base64Decode(productitem!.image!),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -208,15 +285,28 @@ class _ProductPageState extends State<ProductPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        margin: EdgeInsets.only(
-                            left: AppDimention.size20,
-                            right: AppDimention.size20),
-                        child: Text(
-                          product.price.toString() + " vnđ ",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                      ),
+                          margin: EdgeInsets.only(
+                              left: AppDimention.size20,
+                              right: AppDimention.size20),
+                          child: Row(
+                            children: [
+                              Text(
+                                "đ${productitem!.discountedPrice!.toInt() != 0 ? _formatNumber(productitem!.discountedPrice!.toInt()) : _formatNumber(productitem!.price!.toInt())}",
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                width: AppDimention.size10,
+                              ),
+                              Text(
+                                "đ${productitem!.discountedPrice!.toInt() == 0 ? "" : _formatNumber(productitem!.price!.toInt())}",
+                                style: TextStyle(
+                                    decoration: TextDecoration.lineThrough,
+                                    fontSize: 10,
+                                    color: Colors.red),
+                              )
+                            ],
+                          )),
                       Container(
                           margin: EdgeInsets.only(
                               left: AppDimention.size20,
@@ -228,7 +318,7 @@ class _ProductPageState extends State<ProductPage> {
                                     5,
                                     (index) => Icon(Icons.star,
                                         color: AppColor.mainColor,
-                                        size: AppDimention.size15)),
+                                        size: AppDimention.size10)),
                               ),
                               Text(
                                 "( 5 )",
@@ -245,135 +335,72 @@ class _ProductPageState extends State<ProductPage> {
                     height: AppDimention.size10,
                   ),
                   Container(
-                    margin: EdgeInsets.only(
-                        left: AppDimention.size20, right: AppDimention.size20),
-                    child: Text(
-                      "Giá khuyến mãi : " +
-                          product.discountedPrice.toString() +
-                          " vnđ",
-                    ),
+                      margin: EdgeInsets.only(
+                          left: AppDimention.size20,
+                          right: AppDimention.size20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GetBuilder<SizeController>(builder: (sizecontroller) {
+                            return Row(
+                              children: sizecontroller.sizelist.map((item) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      selectSize = item.id!;
+                                      selectSizeString = item.name!;
+                                    });
+                                  },
+                                  child: Container(
+                                    width: AppDimention.size30,
+                                    height: AppDimention.size30,
+                                    margin: EdgeInsets.only(right: 10),
+                                    decoration: BoxDecoration(
+                                      color: item.id == selectSize
+                                          ? Colors.greenAccent
+                                          : Colors.grey[200],
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Center(
+                                      child: Text(item.name!),
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            );
+                          }),
+                          Text(
+                            "SL : ${productitem!.stockQuantity.toString()}",
+                          )
+                        ],
+                      )),
+                  SizedBox(
+                    height: AppDimention.size20,
                   ),
                   Container(
-                    margin: EdgeInsets.only(
+                    width: AppDimention.screenWidth,
+                    padding: EdgeInsets.only(
                         left: AppDimention.size20, right: AppDimention.size20),
-                    child: Text(
-                      "Số lượng còn lại : " + product.stockQuantity.toString(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Chi tiết sản phẩm",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w500),
+                        ),
+                        SizedBox(
+                          height: AppDimention.size10,
+                        ),
+                        Text(
+                          productitem!.description!,
+                          style: TextStyle(color: Colors.black45),
+                          textAlign: TextAlign.justify,
+                        )
+                      ],
                     ),
-                  ),
-                  SizedBox(
-                    height: AppDimention.size10,
-                  ),
-                  GetBuilder<SizeController>(builder: (sizecontroller) {
-                    return Row(
-                      children: sizecontroller.sizelist.map((item) {
-                        return GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              selectSize = item.id!;
-                            });
-                          },
-                          child: Container(
-                            width: AppDimention.size30,
-                            height: AppDimention.size30,
-                            margin: EdgeInsets.only(left: 20),
-                            decoration: BoxDecoration(
-                              color: item.id == selectSize
-                                  ? const Color.fromARGB(255, 114, 255, 118)
-                                  : Colors.grey[200],
-                              borderRadius:
-                                  BorderRadius.circular(AppDimention.size30),
-                            ),
-                            child: Center(
-                              child: Text(item.name!),
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    );
-                  }),
-                  SizedBox(
-                    height: AppDimention.size10,
-                  ),
+                  )
                 ],
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Container(
-                width: AppDimention.screenWidth,
-                height: 300,
-                decoration: BoxDecoration(
-                  border: Border(
-                    top: BorderSide(width: 1, color: Colors.black26),
-                    bottom: BorderSide(width: 1, color: Colors.black26),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 80,
-                      height: 300,
-                      child: Center(
-                        child: Icon(
-                          Icons.location_on,
-                          size: 60,
-                          color: AppColor.mainColor,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        padding: EdgeInsets.only(bottom: 30),
-                        height: 300,
-                        child: SingleChildScrollView(
-                          child: ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: product.stores.length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                margin: EdgeInsets.only(bottom: 10),
-                                padding: EdgeInsets.all(10),
-                                width: double.infinity,
-                                height: AppDimention.size120,
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    bottom: BorderSide(
-                                        width: 1, color: Colors.black26),
-                                    left: BorderSide(
-                                        width: 1, color: Colors.black26),
-                                  ),
-                                  borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(10)),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Cửa hàng số " +
-                                          product.stores[index].storeId
-                                              .toString() +
-                                          " : " +
-                                          product.stores[index].storeName,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      "Địa chỉ : " +
-                                          product.stores[index].location,
-                                      style: TextStyle(fontSize: 12),
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 2,
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
               ),
             ),
             SliverToBoxAdapter(
@@ -391,17 +418,20 @@ class _ProductPageState extends State<ProductPage> {
                                 width: AppDimention.screenWidth / 2,
                                 height: 50,
                                 decoration: BoxDecoration(
-                                    color: showDescription
-                                        ? AppColor.mainColor
-                                        : Colors.white),
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            width: 1,
+                                            color: showDescription
+                                                ? AppColor.mainColor
+                                                : Colors.white))),
                                 child: Center(
                                   child: Text(
-                                    "Mô tả",
+                                    "Sản phẩm ",
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                       color: showDescription
-                                          ? Colors.white
+                                          ? AppColor.mainColor
                                           : Colors.black,
                                     ),
                                   ),
@@ -413,9 +443,12 @@ class _ProductPageState extends State<ProductPage> {
                             width: AppDimention.screenWidth / 2,
                             height: 50,
                             decoration: BoxDecoration(
-                                color: !showDescription
-                                    ? AppColor.mainColor
-                                    : Colors.white),
+                                border: Border(
+                                    bottom: BorderSide(
+                                        width: 1,
+                                        color: !showDescription
+                                            ? AppColor.mainColor
+                                            : Colors.white))),
                             child: Center(
                               child: Text(
                                 "Đánh giá",
@@ -423,7 +456,7 @@ class _ProductPageState extends State<ProductPage> {
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                   color: !showDescription
-                                      ? Colors.white
+                                      ? AppColor.mainColor
                                       : Colors.black,
                                 ),
                               ),
@@ -437,26 +470,16 @@ class _ProductPageState extends State<ProductPage> {
                         ? Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SizedBox(height: 10),
-                              Text("Mô tả : " + product.description),
-                              SizedBox(height: 10),
-                              Text("Danh mục  : " +
-                                  product.category.categoryName),
-                              SizedBox(
-                                height: 50,
-                              ),
                               Container(
-                                margin: EdgeInsets.only(right: 8),
+                                margin: EdgeInsets.only(
+                                    right: 8, top: AppDimention.size10),
                                 width: AppDimention.screenWidth,
-                                height: 60,
-                                decoration:
-                                    BoxDecoration(color: Colors.grey[200]),
-                                child: Center(
-                                  child: Text(
-                                    "Có thể bạn sẽ thích",
-                                    style: TextStyle(
-                                        fontSize: 20, color: Colors.blue),
-                                  ),
+                                padding:
+                                    EdgeInsets.only(left: AppDimention.size10),
+                                child: Text(
+                                  "Có thể bạn sẽ thích",
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.black38),
                                 ),
                               ),
                               GridView.builder(
@@ -479,8 +502,8 @@ class _ProductPageState extends State<ProductPage> {
                                           Get.toNamed(
                                               AppRoute.get_product_detail(
                                                   productController
-                                                      .productList[index]
-                                                      .productId));
+                                                      .productList![index]
+                                                      .productId!));
                                         },
                                         child: Container(
                                           decoration: BoxDecoration(
@@ -521,8 +544,8 @@ class _ProductPageState extends State<ProductPage> {
                                                     ),
                                                     Text(
                                                       productController
-                                                          .productList[index]
-                                                          .productName,
+                                                          .productList![index]
+                                                          .productName!,
                                                       style: TextStyle(
                                                           fontWeight:
                                                               FontWeight.bold,
@@ -530,7 +553,7 @@ class _ProductPageState extends State<ProductPage> {
                                                               .mainColor),
                                                     ),
                                                     Text(
-                                                      "${productController.productList[index].price} vnđ",
+                                                      "đ${_formatNumber(productController.productList[index].price!.toInt())}",
                                                       style: TextStyle(
                                                           fontSize: 13),
                                                     ),
@@ -604,107 +627,85 @@ class _ProductPageState extends State<ProductPage> {
                                   })
                             ],
                           )
-                        : ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: 10,
-                            itemBuilder: (context, index) {
-                              return Container(
+                        : GetBuilder<ProductController>(builder: (controller){
+                          return controller.loadingComment! ? CircularProgressIndicator():
+
+                              controller.listcomment.length == 0 ? 
+                              Container(
                                 width: AppDimention.screenWidth,
-                                height: 160,
-                                margin: EdgeInsets.only(top: 25),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                        width: 100,
-                                        height: 160,
-                                        padding: EdgeInsets.only(left: 10),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              width: 50,
-                                              height: 50,
-                                              margin: EdgeInsets.only(top: 10),
-                                              decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                      fit: BoxFit.cover,
-                                                      image: NetworkImage(
-                                                          "https://wallpaperaccess.com/full/6790132.png")),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          50)),
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Text("Nguyễn Văn Nhật")
-                                          ],
-                                        )),
-                                    Container(
-                                      width: AppDimention.screenWidth - 100,
-                                      height: AppDimention.size150 +
-                                          AppDimention.size20,
-                                      decoration: BoxDecoration(
-                                          border: Border(
-                                              left: BorderSide(
-                                                  width: 1,
-                                                  color: Colors.black26))),
-                                      padding: EdgeInsets.only(left: 10),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Bánh sandwich loại lớn lớn",
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text("Tổng giá : \$100"),
-                                          Row(
-                                            children: [
-                                              Wrap(
-                                                children: List.generate(
-                                                    5,
-                                                    (index) => Icon(Icons.star,
-                                                        color:
-                                                            AppColor.mainColor,
-                                                        size: AppDimention
-                                                            .size15)),
-                                              ),
-                                              Text(
-                                                "( 5 )",
-                                                style: TextStyle(
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: AppColor.mainColor),
-                                              ),
-                                            ],
-                                          ),
-                                          Text(
-                                            "Bình luận : ",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Container(
-                                            width:
-                                                AppDimention.screenWidth - 160,
-                                            height: 62,
-                                            child: Text(
-                                              "Bánh này dở nha mn , giá thì đắt lòi mà nhân thì không có cái vẹo gì , lần sau đách mua nữa lần sau đách mua nữa lần sau đách mua nữa lần sau đách mua nữa ",
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 3,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    )
-                                  ],
+                                height: AppDimention.size50,
+                                child: Center(
+                                  child: Text(
+                                    "Sản phẩm chưa có đánh giá"
+                                  ),
                                 ),
-                              );
-                            }),
+                              )
+                              :
+                              ListView.builder(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: controller.listcomment.length,
+                                itemBuilder: (context, index) {
+                                  RateData item = controller.listcomment[index];
+                                  return Container(
+                                    width: AppDimention.screenWidth,
+                                    padding: EdgeInsets.all(AppDimention.size20),
+                                    margin: EdgeInsets.only(
+                                        left: AppDimention.size10,
+                                        right: AppDimention.size10,
+                                        bottom: AppDimention.size10),
+                                    decoration: BoxDecoration(
+                                        color: Colors.grey.withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(
+                                            AppDimention.size10)),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("${item.userName}"),
+                                            Row(
+                                              children: [
+                                                Wrap(
+                                                  children: List.generate(
+                                                      item.rate!,
+                                                      (index) => Icon(Icons.star,
+                                                          color: AppColor.mainColor,
+                                                          size:
+                                                              AppDimention.size15)),
+                                                ),
+                                                SizedBox(
+                                                  width: AppDimention.size5,
+                                                ),
+                                                Text(
+                                                  "(${item.rate})",
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: AppColor.mainColor),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: AppDimention.size10,
+                                        ),
+                                        Container(
+                                            width: AppDimention.screenWidth,
+                                            color: Colors.white,
+                                            padding:
+                                                EdgeInsets.all(AppDimention.size10),
+                                            child: Text(
+                                                "${item.comment}",
+                                                textAlign: TextAlign.justify,
+                                                style: TextStyle()))
+                                      ],
+                                    ),
+                                  );
+                                });
+                        })
                   )
                 ],
               ),
@@ -716,123 +717,143 @@ class _ProductPageState extends State<ProductPage> {
           children: [
             Container(
               padding: EdgeInsets.only(
-                  left: AppDimention.size20 * 2.5,
-                  right: AppDimention.size20 * 2.5,
                   top: AppDimention.size10,
-                  bottom: AppDimention.size10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if (quantity > 1) quantity--;
-                      });
-                    },
-                    child: Icon(Icons.remove),
-                  ),
-                  Text(
-                    quantity.toString(),
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if (quantity < 20) quantity++;
-                      });
-                    },
-                    child: Icon(Icons.add),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.only(
-                  top: AppDimention.size20,
-                  bottom: AppDimention.size20,
-                  left: AppDimention.size20,
-                  right: AppDimention.size20),
+                  bottom: AppDimention.size10,
+                  left: AppDimention.size10,
+                  right: AppDimention.size10),
               decoration: BoxDecoration(
                 color: AppColor.mainColor,
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(AppDimention.size20 * 2),
-                  topRight: Radius.circular(AppDimention.size20 * 2),
+                  topLeft: Radius.circular(AppDimention.size10),
+                  topRight: Radius.circular(AppDimention.size10),
                 ),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(
-                        top: AppDimention.size20,
-                        bottom: AppDimention.size20,
-                        left: AppDimention.size20,
-                        right: AppDimention.size20),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(AppDimention.size20),
-                      color: Colors.white,
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.favorite_border_rounded,
-                          color: AppColor.mainColor,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(
-                        top: AppDimention.size20,
-                        bottom: AppDimention.size20,
-                        left: AppDimention.size50,
-                        right: AppDimention.size50),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(AppDimention.size20),
-                      color: Colors.white,
-                    ),
-                    child: Row(
-                      children: [Text("Mua ngay")],
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () => _showDropdown(
-                      (product.stores as List<Storesitem>)
-                          .map<String>((store) => store.storeName ?? '')
-                          .toList(),
-                      (selectedStoreName) {
-                        setState(() {
-                          idstore = (product.stores as List<Storesitem>)
-                              .firstWhere((store) =>
-                                  store.storeName == selectedStoreName)
-                              .storeId!;
-                          addtocart();
-                        });
+              child: Obx(() {
+                if (!authController.IsLogin.value) {
+                  return Container(
+                    width: AppDimention.screenWidth,
+                    height: AppDimention.size30,
+                    child: Center(
+                        child: GestureDetector(
+                      onTap: () {
+                        Get.toNamed(AppRoute.LOGIN_PAGE);
                       },
-                    ),
-                    child: Container(
-                      padding: EdgeInsets.only(
-                          top: AppDimention.size20,
-                          bottom: AppDimention.size20,
-                          left: AppDimention.size20,
-                          right: AppDimention.size20),
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(AppDimention.size20),
-                        color: Colors.white,
+                      child: Center(
+                        child: Text(
+                          "Vui lòng đăng nhập",
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.shopping_cart_outlined,
-                            color: AppColor.mainColor,
+                    )),
+                  );
+                } else {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        width: AppDimention.size100,
+                        padding: EdgeInsets.all(AppDimention.size5),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius:
+                                BorderRadius.circular(AppDimention.size5)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  if (quantity > 1) quantity--;
+                                });
+                              },
+                              child: Icon(
+                                Icons.remove_circle_outline_rounded,
+                                color: AppColor.mainColor,
+                              ),
+                            ),
+                            Text(
+                              quantity.toString(),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: AppColor.mainColor,
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  if (quantity < 20) quantity++;
+                                });
+                              },
+                              child: Icon(
+                                Icons.add_circle_outline_sharp,
+                                color: AppColor.mainColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                            _order(productitem!.productId!,selectSizeString,quantity);
+                        },
+                        child: Container(
+                        padding: EdgeInsets.only(
+                            top: AppDimention.size20,
+                            bottom: AppDimention.size20,
+                            left: AppDimention.size70,
+                            right: AppDimention.size70),
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.circular(AppDimention.size10),
+                          color: Colors.white,
+                        ),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Mua ngay",
+                              style: TextStyle(
+                                color: AppColor.mainColor,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      ),
+                      GestureDetector(
+                        onTap: () => _showDropdown(
+                          productitem!.stores!,
+                          (selectedStoreName) {
+                            setState(() {
+                              idstore = (productitem!.stores as List<Storesitem>)
+                                  .firstWhere((store) =>
+                                      store.storeName == selectedStoreName)
+                                  .storeId!;
+                              addtocart();
+                            });
+                          },
+                        ),
+                        child: Container(
+                          padding: EdgeInsets.all(AppDimention.size10),
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.circular(AppDimention.size10),
+                            color: Colors.white,
                           ),
-                        ],
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.shopping_cart_outlined,
+                                color: AppColor.mainColor,
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ],
-              ),
+                    ],
+                  );
+                }
+              }),
             ),
           ],
         ),

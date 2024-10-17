@@ -26,6 +26,7 @@ class _SearchHeaderState extends State<SearchHeader> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ProductController>(builder: (productController) {
+      searchController.text = productController.textSearch;
       return Container(
         margin: EdgeInsets.only(
             top: AppDimention.size40, bottom: AppDimention.size20),

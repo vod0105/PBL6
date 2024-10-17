@@ -18,10 +18,10 @@ class HomeBanner extends StatefulWidget {
 }
 
 class _HomeBannerState extends State<HomeBanner> {
-  PageController pageController = PageController(viewportFraction: 0.85);
+  PageController pageController = PageController(viewportFraction: 1);
   double currentPageValue = 0.0;
   final double _scaleFactor = 0.8;
-  final double _height = AppDimention.pageView;
+  final double _height = AppDimention.size100 * 3;
 
   @override
   void initState() {
@@ -43,42 +43,39 @@ class _HomeBannerState extends State<HomeBanner> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ComboController>(builder: (comboController) {
-      return comboController.isLoading
-          ? Container(
-              height: _height,
-              width: double.maxFinite,
-              child: Column(
-                children: [
-                  Expanded(
-                    child: PageView.builder(
-                      controller: pageController,
-                      itemCount: comboController.comboList.length,
-                      itemBuilder: (context, position) {
-                        return _buildView(
-                            comboController.comboList[position], position);
-                      },
-                    ),
-                  ),
-                  DotsIndicator(
-                    dotsCount: comboController.comboList.length,
-                    position: currentPageValue,
-                    decorator: DotsDecorator(
-                      activeColor: AppColor.mainColor,
-                      size: const Size.square(9.0),
-                      activeSize: const Size(18.0, 9.0),
-                      activeShape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0)),
-                    ),
-                  )
-                ],
-              ),
-            )
-          : CircularProgressIndicator();
-    });
+    return Container(
+      height: _height,
+      width: double.maxFinite,
+      child: Column(
+        children: [
+          Container(
+            height: AppDimention.size100 * 2.5,
+           
+            child: PageView.builder(
+              controller: pageController,
+              itemCount: 3,
+              itemBuilder: (context, position) {
+                return _buildView(position);
+              },
+            ),
+          ),
+          DotsIndicator(
+            dotsCount: 3,
+            position: currentPageValue,
+            decorator: DotsDecorator(
+              activeColor: AppColor.mainColor,
+              size: const Size.square(9.0),
+              activeSize: const Size(18.0, 9.0),
+              activeShape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0)),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
-  Widget _buildView(Comboitem combomodel, int index) {
+  Widget _buildView(int index) {
     Matrix4 matrix = Matrix4.identity();
     if (index == currentPageValue.floor()) {
       var currentScale = 1 - (currentPageValue - index) * (1 - _scaleFactor);
@@ -110,64 +107,14 @@ class _HomeBannerState extends State<HomeBanner> {
               Get.toNamed(AppRoute.get_combo_detail(index));
             },
             child: Container(
-              height: AppDimention.pageViewContainer,
-              margin: EdgeInsets.symmetric(horizontal: AppDimention.size5),
+              height: AppDimention.size100 * 2.4,
+               margin: EdgeInsets.only(left: AppDimention.size10,right: AppDimention.size10),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(AppDimention.size30),
+                borderRadius: BorderRadius.circular(AppDimention.size10),
                 color: Color(0xFF69c5df),
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: MemoryImage(base64Decode(combomodel.image!)),
-                ),
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: AppDimention.pageViewTextContainer,
-              margin: EdgeInsets.only(
-                  left: AppDimention.size20,
-                  right: AppDimention.size20,
-                  bottom: AppDimention.size40),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(AppDimention.size20),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                      color: const Color(0xFFe8e8e8),
-                      blurRadius: 5.0,
-                      offset: const Offset(0, 5)),
-                  const BoxShadow(
-                    color: Colors.white,
-                    blurRadius: 5.0,
-                    offset: Offset(-5, 0),
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(AppDimention.size15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(combomodel.comboName!),
-                    SizedBox(height: AppDimention.size10),
-                    Row(
-                      children: [
-                        // Wrap(
-                        //   children: List.generate(
-                        //       5,
-                        //       (index) => Icon(
-                        //             Icons.star,
-                        //             color: AppColor.mainColor,
-                        //             size: AppDimention.size15,
-                        //           )),
-                        // ),
-                        Text("Giá :" + combomodel.price!.toString() + " vnđ"),
-                        SizedBox(width: AppDimention.size25),
-                      ],
-                    ),
-                  ],
+                  image: AssetImage("assets/image/banner_${index + 1}.jpg"),
                 ),
               ),
             ),

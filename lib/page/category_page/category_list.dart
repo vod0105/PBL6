@@ -34,8 +34,8 @@ class _CategoryListState extends State<CategoryList> {
           return GestureDetector(
             onTap: () {
               Get.toNamed(AppRoute.get_product_bycategoryid_detail(
-                  categoryController.categoryList[index].categoryId,
-                  categoryController.categoryList[index].categoryName));
+                  categoryController.categoryList[index].categoryId!,
+                  categoryController.categoryList[index].categoryName!));
             },
             child: Container(
               width: 150,
@@ -69,7 +69,7 @@ class _CategoryListState extends State<CategoryList> {
                           color: AppColor.mainColor),
                       child: Center(
                         child: Text(
-                          categoryController.categoryList[index].categoryName,
+                          categoryController.categoryList[index].categoryName!,
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,

@@ -31,6 +31,9 @@ class InputTextCustom extends StatelessWidget{
                   controller: controller,
                   decoration: InputDecoration(
                     hintText: hinttext,
+                    hintStyle: TextStyle(
+                              color: Colors.black26
+                            ),
                     prefixIcon: Icon(icon,color: AppColor.yellowColor,),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(AppDimention.size30),

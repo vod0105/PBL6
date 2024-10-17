@@ -1,5 +1,6 @@
 import 'package:android_project/data/api/ApiClient.dart';
 import 'package:android_project/data/api/AppConstant.dart';
+import 'package:android_project/models/Dto/OrderComboDto.dart';
 import 'package:get/get.dart';
 
 class ComboRepo {
@@ -15,5 +16,8 @@ class ComboRepo {
     String url =
         Appconstant.COMBO_BY_COMBOID_URL.replaceFirst("{id}", id.toString());
     return await apiClient.getData(url);
+  }
+  Future<Response> order(Ordercombodto dto) async {
+    return await apiClient.postData(Appconstant.ORDER_COMBO_2_URL,dto.toJson());
   }
 }

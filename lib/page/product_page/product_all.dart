@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:android_project/data/controller/Product_controller.dart';
+import 'package:android_project/models/Model/Item/ProductItem.dart';
 import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
@@ -29,9 +30,10 @@ class _ProductAllState extends State<ProductAll>{
             shrinkWrap: true,
             itemCount: productController.productList.length ,
             itemBuilder: (context , index){
+              Productitem item = productController.productList[index];
                 return GestureDetector(
                     onTap: (){
-                      Get.toNamed(AppRoute.get_product_detail(productController.productList[index].productId));
+                      Get.toNamed(AppRoute.get_product_detail(item.productId!));
                     },
                     child: Container(
                             margin: EdgeInsets.only(left: AppDimention.size20, right:  AppDimention.size20,bottom: AppDimention.size20),

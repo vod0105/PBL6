@@ -28,6 +28,8 @@ class User {
   String? phoneNumber;
   String? fullName;
   String? avatar;
+  double? longitude;
+  double? latitude;
   String? email;
   String? address;
   String? createdAt;
@@ -42,6 +44,8 @@ class User {
       this.avatar,
       this.email,
       this.address,
+      this.longitude,
+      this.latitude,
       this.createdAt,
       this.updatedAt,
       this.accountLocked,
@@ -52,6 +56,8 @@ class User {
     phoneNumber = json['phoneNumber'];
     fullName = json['fullName'];
     avatar = json['avatar'];
+    longitude = json['longitude'];
+    latitude = json['latitude'];
     email = json['email'];
     address = json['address'];
     createdAt = json['createdAt'];
@@ -66,6 +72,8 @@ class User {
     data['phoneNumber'] = this.phoneNumber;
     data['fullName'] = this.fullName;
     data['avatar'] = this.avatar;
+    data['longitude'] = this.longitude;
+    data['latitude'] = this.latitude;
     data['email'] = this.email;
     data['address'] = this.address;
     data['createdAt'] = this.createdAt;

@@ -24,9 +24,10 @@ class _ProfileSettingFooterState extends State<ProfileSettingFooter> {
       } else if (index == 1) {
         Get.toNamed(AppRoute.SEARCH_PAGE);
       } else if (index == 2) {
-        Get.find<OrderController>().updateShow(0);
+
         Get.toNamed(AppRoute.ORDER_PAGE);
       } else if (index == 3) {
+        Get.toNamed(AppRoute.STORE_PAGE);
       } else if (index == 4) {
         Get.toNamed(AppRoute.PROFILE_PAGE);
       }
@@ -52,8 +53,8 @@ class _ProfileSettingFooterState extends State<ProfileSettingFooter> {
           label: 'Order',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.favorite),
-          label: 'Favorite',
+          icon: Icon(Icons.store),
+          label: 'Store',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person),

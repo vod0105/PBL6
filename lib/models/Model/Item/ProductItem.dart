@@ -8,6 +8,7 @@ class Productitem {
   String? description;
   double? price;
   double? discountedPrice;
+  double? averageRate;
   Categoryitem? category;
   List<Storesitem>? stores;
   int? stockQuantity;
@@ -22,6 +23,7 @@ class Productitem {
       this.description,
       this.price,
       this.discountedPrice,
+      this.averageRate,
       this.category,
       this.stores,
       this.stockQuantity,
@@ -36,6 +38,7 @@ class Productitem {
     description = json['description'];
     price = json['price'];
     discountedPrice = json['discountedPrice'];
+    averageRate = json['averageRate'];
     category = json['category'] != null
         ? new Categoryitem.fromJson(json['category'])
         : null;

@@ -12,7 +12,6 @@ class SelectSettingCustom extends StatelessWidget{
    @override
    Widget build(BuildContext context) {
        return Container(
-        margin: EdgeInsets.only(top:AppDimention.size10),
           child: Row(
             children: [
               SizedBox(width: AppDimention.size10,),

@@ -13,24 +13,16 @@ class OrderHeader extends StatefulWidget {
 class _OrderHeaderState extends State<OrderHeader> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Stack(
-          children: [
-            Container(
-                width: AppDimention.screenWidth,
-                height: 60,
-                decoration: BoxDecoration(color: AppColor.mainColor),
-                child: Center(
-                  child: Text(
-                    "Đơn hàng của bạn",
-                    style: TextStyle(color: Colors.white, fontSize: 30),
-                  ),
-                )),
-          ],
-        )
-      ],
-    );
+    return Container(
+        
+      width: AppDimention.screenWidth,
+      margin: EdgeInsets.only(top: AppDimention.size20),
+      height: AppDimention.size60,
+        child: Center(
+          child: Text(
+            "Đơn hàng của bạn",
+            style: TextStyle(color: AppColor.mainColor, fontSize: 20),
+          ),
+        ));
   }
 }

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 class ApiClient extends GetConnect implements GetxService {
   late String token;
+  String get gettoken => token;
   final String appBaseUrl;
   late Map<String, String> _mainHeaders;
 

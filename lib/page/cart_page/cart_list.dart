@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:android_project/custom/big_text.dart';
 import 'package:android_project/data/controller/Cart_controller.dart';
 import 'package:android_project/data/controller/Store_Controller.dart';
+import 'package:android_project/models/Model/CartModel.dart';
+import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
@@ -16,15 +18,25 @@ class CartList extends StatefulWidget {
 
 class _CartListState extends State<CartList> {
   List<bool> isSelected = [];
+  List<List<bool>> isProductSelected = [];
+  List<int> storeSelected = [];
+  List<int> cartSelected = [];
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CartController>(builder: (cartController) {
-      if (isSelected.length != cartController.cartlist.length) {
-        isSelected = List<bool>.filled(cartController.cartlist.length, false);
+      if (isSelected.length != cartController.listcart.length) {
+        isSelected = List<bool>.filled(cartController.listcart.length, false);
       }
 
-      if (cartController.cartlist.length < 1) {
+      if (isProductSelected.length != cartController.listcart.length) {
+        isProductSelected = List.generate(
+            cartController.listcart.length,
+            (index) => List<bool>.filled(
+                cartController.listcart[index].cartdata!.length, false));
+      }
+
+      if (cartController.listcart.isEmpty) {
         return Container(
           width: AppDimention.screenWidth,
           height: AppDimention.size170 + AppDimention.size5,
@@ -36,231 +48,320 @@ class _CartListState extends State<CartList> {
         return ListView.builder(
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: cartController.cartlist.length,
+          itemCount: cartController.listcart.length,
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {},
               child: Container(
-                width: AppDimention.screenWidth - AppDimention.size100,
-                height: AppDimention.size170 + AppDimention.size10,
+                width: AppDimention.screenWidth,
                 margin: EdgeInsets.only(
                   bottom: AppDimention.size10,
+                ),
+                padding: EdgeInsets.only(
                   left: AppDimention.size10,
                   right: AppDimention.size10,
                 ),
-                child: Row(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Checkbox(
-                      value: isSelected[index],
-                      onChanged: (bool? value) {
-                        setState(() {
-                          isSelected[index] = value!;
-                          var id = cartController.cartlist[index].cartId;
-                          cartController.cartlist[index].product != null
-                              ? cartController.updateIDSelectedProduct(
-                                  id, value)
-                              : cartController.updateIDSelectedCombo(id, value);
-                        });
-                      },
-                    ),
                     Container(
-                      width: AppDimention.screenWidth - AppDimention.size100,
-                      decoration: BoxDecoration(
-                        border: Border(bottom: BorderSide(width: 1)),
-                      ),
+                      width: AppDimention.screenWidth,
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(
-                            height: AppDimention.size10,
-                          ),
-                          BigText(
-                            text: cartController.cartlist[index].product != null
-                                ? cartController
-                                    .cartlist[index].product.productName
-                                : cartController.cartlist[index].combo.comboName
-                                    .toString(),
-                          ),
-                          SizedBox(height: 10),
-                          Row(
-                            children: [
-                              Container(
-                                width: AppDimention.size60,
-                                height: AppDimention.size60,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: MemoryImage(base64Decode(
-                                      cartController.cartlist[index].product !=
-                                              null
-                                          ? cartController
-                                              .cartlist[index].product.image!
-                                          : cartController
-                                              .cartlist[index].combo.image!,
-                                    )),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: AppDimention.size10),
-                              Container(
-                                width:
-                                    AppDimention.size220 - AppDimention.size20,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Giá : " +
-                                          (cartController.cartlist[index]
-                                                      .product !=
-                                                  null
-                                              ? cartController.cartlist[index]
-                                                  .product!.unitPrice
-                                                  .toString()
-                                              : cartController.cartlist[index]
-                                                  .combo!.unitPrice
-                                                  .toString()),
-                                      style:
-                                          TextStyle(color: AppColor.mainColor),
-                                    ),
-                                    Text(
-                                      "Size : " +
-                                          (cartController.cartlist[index]
-                                                      .product !=
-                                                  null
-                                              ? cartController
-                                                  .cartlist[index].product.size
-                                                  .toString()
-                                              : cartController
-                                                  .cartlist[index].combo.size
-                                                  .toString()),
-                                      style: TextStyle(color: Colors.blue[300]),
-                                    ),
-                                    // FutureBuilder to load store name
-                                    FutureBuilder<String>(
-                                      future: Get.find<Storecontroller>()
-                                          .getnamestoreByid(
-                                        cartController
-                                                    .cartlist[index].product !=
-                                                null
-                                            ? cartController
-                                                .cartlist[index].product.storeId
-                                            : cartController
-                                                .cartlist[index].combo.storeId,
-                                      ),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                          return Text("Loading...");
-                                        } else if (snapshot.hasError) {
-                                          return Text(
-                                              "Error loading store name");
-                                        } else {
-                                          return Text(
-                                            snapshot.data ?? "No store name",
-                                            overflow: TextOverflow.ellipsis,
-                                          );
+                          Container(
+                            width: AppDimention.screenWidth,
+                            decoration:
+                                BoxDecoration(color: AppColor.mainColor),
+                            child: Row(
+                              children: [
+                                Checkbox(
+                                  value: isSelected[index],
+                                  onChanged: (bool? value) {
+                                    setState(() {
+                                      isSelected[index] = value!;
+
+                                      if (value) {
+                                        storeSelected.add(cartController
+                                            .listcart[index]
+                                            .storeitem!
+                                            .storeId!);
+
+                                        for (int i = 0;
+                                            i <
+                                                cartController.listcart[index]
+                                                    .cartdata!.length;
+                                            i++) {
+                                          isProductSelected[index][i] = true;
+                                          if (cartController.listcart[index]
+                                                  .cartdata![i].type ==
+                                              "product") {
+                                            cartSelected.add(cartController
+                                                .listcart[index]
+                                                .cartdata![i]
+                                                .product!
+                                                .productId!);
+                                           
+                                          } else {
+                                            cartSelected.add(cartController
+                                                .listcart[index]
+                                                .cartdata![i]
+                                                .combo!
+                                                .comboId!);
+                                           
+                                          }
+                                           cartController
+                                                .updateIDSelectedItem(
+                                                    cartController
+                                                        .listcart[index]
+                                                        .cartdata![i]
+                                                        .cartId!,
+                                                    true);
                                         }
-                                      },
-                                    ),
-                                  ],
+                                        cartController.updateIDSelectedStore(
+                                            cartController.listcart[index]
+                                                .storeitem!.storeId!,
+                                            true);
+                                      } else {
+                                        storeSelected.remove(cartController
+                                            .listcart[index]
+                                            .storeitem!
+                                            .storeId!);
+
+                                        for (int i = 0;
+                                            i <
+                                                cartController.listcart[index]
+                                                    .cartdata!.length;
+                                            i++) {
+                                          isProductSelected[index][i] = false;
+
+                                          if (cartController.listcart[index]
+                                                  .cartdata![i].type ==
+                                              "product") {
+                                            cartSelected.remove(cartController
+                                                .listcart[index]
+                                                .cartdata![i]
+                                                .product!
+                                                .productId!);
+                                          } else {
+                                            cartSelected.remove(cartController
+                                                .listcart[index]
+                                                .cartdata![i]
+                                                .combo!
+                                                .comboId!);
+                                          }
+                                          cartController
+                                              .updateIDSelectedItem(
+                                                  cartController.listcart[index]
+                                                      .cartdata![i].cartId!,
+                                                  false);
+                                        }
+                                        cartController.updateIDSelectedStore(
+                                            cartController.listcart[index]
+                                                .storeitem!.storeId!,
+                                            false);
+                                      }
+                                    });
+                                  },
                                 ),
-                              ),
-                            ],
+                                Container(
+                                  width: AppDimention.size100 * 3,
+                                  child: Text(
+                                  cartController
+                                      .listcart[index].storeitem!.storeName!,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                )
+                              ],
+                            ),
                           ),
-                          SizedBox(
-                            height: AppDimention.size20,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {},
-                                    child: Container(
-                                      width: AppDimention.size30,
-                                      height: AppDimention.size30,
-                                      decoration: BoxDecoration(
-                                          color: AppColor.mainColor,
-                                          borderRadius:
-                                              BorderRadius.circular(5)),
-                                      child: Center(
-                                        child: Icon(
-                                          Icons.remove,
-                                          color: Colors.white,
+                          Container(
+                            width: AppDimention.screenWidth,
+                            decoration: BoxDecoration(color: Colors.grey[200]),
+                            child: Column(
+                              children: cartController.listcart[index].cartdata!
+                                  .asMap()
+                                  .entries
+                                  .map((entry) {
+                                int itemIndex = entry.key;
+                                var item = entry.value;
+                                ProductInCart? productInCart;
+                                ComboInCart? comboInCart;
+                                bool? key;
+                                if (item.type == "product") {
+                                  productInCart = item.product;
+                                  key = true;
+                                } else {
+                                  comboInCart = item.combo;
+                                  key = false;
+                                }
+                                return Container(
+                                  width: AppDimention.screenWidth,
+                                  padding: EdgeInsets.only(
+                                      top: AppDimention.size10,
+                                      bottom: AppDimention.size10),
+                                  child: Row(
+                                    children: [
+                                      Checkbox(
+                                        value: isProductSelected[index]
+                                            [itemIndex],
+                                        onChanged: (bool? value) {
+                                          setState(() {
+                                            isProductSelected[index]
+                                                [itemIndex] = value!;
+                                            if (value) {
+                                              cartSelected.add(key!
+                                                  ? productInCart!.productId!
+                                                  : comboInCart!.comboId!);
+                                              cartController
+                                                  .updateIDSelectedItem(
+                                                      item.cartId!, true);
+                                            } else {
+                                              cartSelected.remove(key!
+                                                  ? productInCart!.productId!
+                                                  : comboInCart!.comboId!);
+                                              cartController
+                                                  .updateIDSelectedItem(
+                                                      item.cartId!, false);
+                                            }
+                                          });
+                                        },
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.toNamed(key!
+                                              ? AppRoute.get_product_detail(
+                                                  productInCart!.productId!)
+                                              : AppRoute.get_combo_detail(
+                                                  comboInCart!.comboId!));
+                                        },
+                                        child: Container(
+                                          width: AppDimention.size60,
+                                          height: AppDimention.size60,
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  width: 1,
+                                                  color: Colors.black26),
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      AppDimention.size5),
+                                              image: DecorationImage(
+                                                  fit: BoxFit.cover,
+                                                  image: MemoryImage(
+                                                      base64Decode(key!
+                                                          ? productInCart!
+                                                              .image!
+                                                          : comboInCart!
+                                                              .image!)))),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                  SizedBox(width: 5),
-                                  Container(
-                                    width: 2 * AppDimention.size30,
-                                    height: AppDimention.size30,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(width: 1),
-                                        borderRadius: BorderRadius.circular(5)),
-                                    child: Center(
-                                      child: Text(
-                                        cartController
-                                                    .cartlist[index].product !=
-                                                null
-                                            ? cartController.cartlist[index]
-                                                .product.quantity
-                                                .toString()
-                                            : cartController
-                                                .cartlist[index].combo.quantity
-                                                .toString(),
+                                      SizedBox(
+                                        width: AppDimention.size20,
                                       ),
-                                    ),
-                                  ),
-                                  SizedBox(width: 5),
-                                  GestureDetector(
-                                    onTap: () {},
-                                    child: Container(
-                                      width: AppDimention.size30,
-                                      height: AppDimention.size30,
-                                      decoration: BoxDecoration(
-                                          color: AppColor.mainColor,
-                                          borderRadius:
-                                              BorderRadius.circular(5)),
-                                      child: Center(
-                                        child: Icon(
-                                          Icons.add,
-                                          color: Colors.white,
+                                      Container(
+                                        width: AppDimention.size100 * 2.2,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(key
+                                                ? productInCart!.productName!
+                                                : comboInCart!.comboName!),
+                                            Text(
+                                                "Size : ${key ? productInCart!.size! : comboInCart!.size!}"),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  " ${key ? productInCart!.unitPrice! : comboInCart!.unitPrice} vnđ",
+                                                  style: TextStyle(
+                                                      color: Colors.red,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    GestureDetector(
+                                                      onTap: () {},
+                                                      child: Container(
+                                                        width:
+                                                            AppDimention.size20,
+                                                        height:
+                                                            AppDimention.size20,
+                                                        decoration: BoxDecoration(
+                                                            border: Border.all(
+                                                                width: 1,
+                                                                color: Colors
+                                                                    .black26)),
+                                                        child: Center(
+                                                          child: Icon(
+                                                              Icons.remove,
+                                                              size: 15),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () {},
+                                                      child: Container(
+                                                        width:
+                                                            AppDimention.size20,
+                                                        height:
+                                                            AppDimention.size20,
+                                                        decoration: BoxDecoration(
+                                                            border: Border(
+                                                                bottom: BorderSide(
+                                                                    width: 1,
+                                                                    color: Colors
+                                                                        .black26),
+                                                                top: BorderSide(
+                                                                    width: 1,
+                                                                    color: Colors
+                                                                        .black26))),
+                                                        child: Center(
+                                                          child: Text(
+                                                            "${key ? productInCart!.quantity : comboInCart!.quantity}",
+                                                            style: TextStyle(
+                                                                fontSize: 12),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () {},
+                                                      child: Container(
+                                                        width:
+                                                            AppDimention.size20,
+                                                        height:
+                                                            AppDimention.size20,
+                                                        decoration: BoxDecoration(
+                                                            border: Border.all(
+                                                                width: 1,
+                                                                color: Colors
+                                                                    .black26)),
+                                                        child: Center(
+                                                          child: Icon(Icons.add,
+                                                              size: 13),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                )
+                                              ],
+                                            )
+                                          ],
                                         ),
-                                      ),
-                                    ),
+                                      )
+                                    ],
                                   ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    child: Center(
-                                      child: Icon(
-                                        Icons.border_color,
-                                        color: Colors.green[400],
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(width: AppDimention.size30),
-                                  Container(
-                                    child: Center(
-                                      child: Icon(
-                                        Icons.delete_outline,
-                                        color: AppColor.mainColor,
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
+                                );
+                              }).toList(),
+                            ),
+                          )
                         ],
                       ),
-                    ),
+                    )
                   ],
                 ),
               ),

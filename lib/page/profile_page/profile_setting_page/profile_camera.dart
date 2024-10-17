@@ -8,6 +8,8 @@ import 'package:camera/camera.dart';
 import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
+import 'package:get/get_connect/http/src/multipart/multipart_file.dart' as get_multipart;
+
 import 'package:http/http.dart' as http;
 
 class ProfileCamera extends StatefulWidget {
@@ -61,34 +63,34 @@ class ProfileCameraState extends State<ProfileCamera>
   }
 
   Future<void> _onTap() async {
-    if (_animationController.status == AnimationStatus.completed) {
-      _animationController.reverse();
-    } else {
-      _animationController.forward().then((_) async {
-        await Future.delayed(const Duration(microseconds: 100));
+  if (_animationController.status == AnimationStatus.completed) {
+    _animationController.reverse();
+  } else {
+    _animationController.forward().then((_) async {
+      await Future.delayed(const Duration(microseconds: 100));
 
-        try {
-          final image = await cameraController?.takePicture();
+      try {
+        final image = await cameraController?.takePicture();
 
-          if (image != null) {
-            final imagePath = image.path;
-            final imageFile = File(imagePath);
-            final imageBytes = await imageFile.readAsBytes();
+         if (image != null) {
+          final imagePath = image.path; 
+          final imageFile = File(imagePath); 
 
-            final multipartFile = http.MultipartFile.fromBytes(
-                'file', imageBytes,
-                filename: 'image.jpg');
-            final userController = Get.find<UserController>();
-            //  userController.updateAvatar(multipartFile);
-          }
-        } catch (e) {
-          print('Lỗi khi chụp ảnh: $e');
+          final bytes = await imageFile.readAsBytes();
+          final base64Image = base64Encode(bytes);
+
+          Get.find<UserController>().updateAvatar(base64Image);
+          Get.back();
         }
+      } catch (e) {
+        print('Lỗi khi chụp ảnh: $e');
+      }
 
-        _animationController.reverse();
-      });
-    }
+      _animationController.reverse();
+    });
   }
+}
+
 
   Widget _buildUI() {
     if (cameraController == null || !cameraController!.value.isInitialized) {

@@ -4,7 +4,7 @@ import 'package:android_project/page/home_page/home_combo.dart';
 import 'package:android_project/page/home_page/home_folder.dart';
 import 'package:android_project/page/home_page/home_footer.dart';
 import 'package:android_project/page/home_page/home_header.dart';
-import 'package:android_project/page/home_page/home_list_product.dart';
+import 'package:android_project/page/home_page/home_product.dart';
 import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
@@ -23,20 +23,29 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      backgroundColor:  Color(0xFFF4F4F4),
       body: Column(
         children: [
           HomeHeader(),
           Expanded(
               child: SingleChildScrollView(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 HomeBanner(),
                 HomeFolder(),
                 SizedBox(
                   height: AppDimention.size15,
                 ),
+           
+                 Row(
+                  children: [
+                    SizedBox(width: AppDimention.size10,),
+                    Text("Combo trong tuần",style: TextStyle(fontSize: 25,fontWeight: FontWeight.w600),),
+                  ],
+                ),
                 SizedBox(
-                  height: AppDimention.size15,
+                  height: AppDimention.size10,
                 ),
                 HomeCombo(),
                 SizedBox(
@@ -45,7 +54,8 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   height: AppDimention.size15,
                 ),
-                HomeListProduct(),
+                HomeProduct(),
+                
                 if (Get.find<ProductController>().productList.length > 10)
                   Container(
                     width: AppDimention.screenWidth,

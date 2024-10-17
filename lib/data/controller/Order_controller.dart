@@ -1,3 +1,4 @@
+import 'package:android_project/data/controller/User_controller.dart';
 import 'package:android_project/data/repository/Order_repo.dart';
 import 'package:android_project/models/Model/OrderModel.dart';
 import 'package:get/get.dart';
@@ -10,13 +11,7 @@ class OrderController extends GetxController {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  int _isShowAll = 0;
-  int get isShowAll => _isShowAll;
 
-  void updateShow(int newvalue) {
-    _isShowAll = newvalue;
-    update();
-  }
 
   List<OrderItem> _orderlist = [];
   List<OrderItem> get orderlist => _orderlist;
@@ -57,10 +52,6 @@ class OrderController extends GetxController {
   }
 
   Future<void> getorderWithStatus(String status) async {
-    if (status == "Đơn hàng đã được xác nhận") _isShowAll = 1;
-    if (status == "Đang lấy hàng") _isShowAll = 2;
-    if (status == "Đang giao") _isShowAll = 3;
-    if (status == "Đã hoàn thành") _isShowAll = 4;
     _isLoading = true;
     Response response = await orderRepo.getorderbyorderstatus(status);
     if (response.statusCode == 200) {
@@ -74,5 +65,22 @@ class OrderController extends GetxController {
     }
     _isLoading = false;
     update();
+  }
+  Future<void> updatefeedback(int orderid)async{
+    Response response = await orderRepo.updatefeedback(orderid);
+    if(response.statusCode != 200){
+      print("Lỗi feedback");
+    }
+  }
+  Future<void> cancelorder(String ordercode)async{
+    Response response = await orderRepo.cancelorder(ordercode);
+    if(response.statusCode != 200){
+      print("Lỗi hủy đơn");
+    }
+    else{
+      Get.find<UserController>().addannouce("Thông báo đơn hàng", "Bạn vừa đặt hủy thành công một đơn hàng !"); 
+     
+      
+    }
   }
 }

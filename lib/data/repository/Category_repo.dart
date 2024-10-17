@@ -10,4 +10,7 @@ class CategoryRepo {
   Future<Response> getall() async {
     return await apiClient.getData(Appconstant.CATEGORY_URL);
   }
+  Future<Response> getbystoreid(int id) async {
+    return await apiClient.getData(Appconstant.CATEGORY_BYSTOREID_URL.replaceFirst("{storeid}", id.toString()));
+  }
 }

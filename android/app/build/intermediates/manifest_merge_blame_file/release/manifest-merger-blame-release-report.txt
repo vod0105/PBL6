@@ -1,0 +1,453 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.android_project"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+8-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml
+9        android:targetSdkVersion="34" />
+9-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:2:1-62
+11-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:2:18-60
+12    <uses-permission
+12-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:3:1-76
+13        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+13-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:3:18-74
+14        android:maxSdkVersion="28" />
+14-->[:camera_android_camerax] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\camera_android_camerax-0.6.8+3\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:16:9-35
+15    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+15-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:4:1-75
+15-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:4:18-73
+16    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+16-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:5:1-75
+16-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:5:18-72
+17    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+17-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:6:1-77
+17-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:6:18-74
+18    <!--
+19         Required to query activities that can process text, see:
+20         https://developer.android.com/training/package-visibility and
+21         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
+22
+23         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin.
+24    -->
+25    <queries>
+25-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:51:5-59:15
+26        <intent>
+26-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:52:9-55:18
+27            <action android:name="android.intent.action.PROCESS_TEXT" />
+27-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:53:13-72
+27-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:53:21-70
+28
+29            <data android:mimeType="text/plain" />
+29-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:54:13-50
+29-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:54:19-48
+30        </intent>
+31        <intent>
+31-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:56:10-58:18
+32            <action android:name="android.support.customtabs.action.CustomTabsService" />
+32-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:57:13-90
+32-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:57:21-87
+33        </intent>
+34        <!-- Needs to be explicitly declared on Android R+ -->
+35        <package android:name="com.google.android.apps.maps" />
+35-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\nhata\.gradle\caches\transforms-3\dc0e4c4f587a77319feafe84c0a59fba\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:33:9-64
+35-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\nhata\.gradle\caches\transforms-3\dc0e4c4f587a77319feafe84c0a59fba\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:33:18-61
+36        <package android:name="com.facebook.katana" />
+36-->[com.facebook.android:facebook-common:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\ec5223c6cd6f9015a4c271a9eabd8359\transformed\jetified-facebook-common-17.0.1\AndroidManifest.xml:18:9-55
+36-->[com.facebook.android:facebook-common:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\ec5223c6cd6f9015a4c271a9eabd8359\transformed\jetified-facebook-common-17.0.1\AndroidManifest.xml:18:18-52
+37    </queries>
+38
+39    <uses-feature android:name="android.hardware.camera.any" />
+39-->[:camera_android_camerax] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\camera_android_camerax-0.6.8+3\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:10:5-64
+39-->[:camera_android_camerax] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\camera_android_camerax-0.6.8+3\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:10:19-61
+40
+41    <uses-permission android:name="android.permission.CAMERA" />
+41-->[:camera_android_camerax] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\camera_android_camerax-0.6.8+3\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:12:5-65
+41-->[:camera_android_camerax] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\camera_android_camerax-0.6.8+3\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:12:22-62
+42    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- Include required permissions for Google Maps API to run. -->
+42-->[:camera_android_camerax] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\camera_android_camerax-0.6.8+3\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:13:5-71
+42-->[:camera_android_camerax] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\camera_android_camerax-0.6.8+3\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:13:22-68
+43    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+43-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\nhata\.gradle\caches\transforms-3\dc0e4c4f587a77319feafe84c0a59fba\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:23:5-79
+43-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\nhata\.gradle\caches\transforms-3\dc0e4c4f587a77319feafe84c0a59fba\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:23:22-76
+44
+45    <uses-feature
+45-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\nhata\.gradle\caches\transforms-3\dc0e4c4f587a77319feafe84c0a59fba\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:26:5-28:35
+46        android:glEsVersion="0x00020000"
+46-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\nhata\.gradle\caches\transforms-3\dc0e4c4f587a77319feafe84c0a59fba\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:27:9-41
+47        android:required="true" />
+47-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\nhata\.gradle\caches\transforms-3\dc0e4c4f587a77319feafe84c0a59fba\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:28:9-32
+48
+49    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
+49-->[com.facebook.android:facebook-core:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\4b9c187744246775382f347766bb4d82\transformed\jetified-facebook-core-17.0.1\AndroidManifest.xml:16:5-79
+49-->[com.facebook.android:facebook-core:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\4b9c187744246775382f347766bb4d82\transformed\jetified-facebook-core-17.0.1\AndroidManifest.xml:16:22-76
+50
+51    <permission
+51-->[androidx.core:core:1.13.1] C:\Users\nhata\.gradle\caches\transforms-3\757b1161e28c95e61dd9537337d0defd\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
+52        android:name="com.example.android_project.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+52-->[androidx.core:core:1.13.1] C:\Users\nhata\.gradle\caches\transforms-3\757b1161e28c95e61dd9537337d0defd\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
+53        android:protectionLevel="signature" />
+53-->[androidx.core:core:1.13.1] C:\Users\nhata\.gradle\caches\transforms-3\757b1161e28c95e61dd9537337d0defd\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
+54
+55    <uses-permission android:name="com.example.android_project.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+55-->[androidx.core:core:1.13.1] C:\Users\nhata\.gradle\caches\transforms-3\757b1161e28c95e61dd9537337d0defd\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
+55-->[androidx.core:core:1.13.1] C:\Users\nhata\.gradle\caches\transforms-3\757b1161e28c95e61dd9537337d0defd\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
+56    <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
+56-->[com.android.installreferrer:installreferrer:1.0] C:\Users\nhata\.gradle\caches\transforms-3\804ab30f3a46c0805a869ef6b77eaad2\transformed\jetified-installreferrer-1.0\AndroidManifest.xml:9:5-110
+56-->[com.android.installreferrer:installreferrer:1.0] C:\Users\nhata\.gradle\caches\transforms-3\804ab30f3a46c0805a869ef6b77eaad2\transformed\jetified-installreferrer-1.0\AndroidManifest.xml:9:22-107
+57
+58    <application
+59        android:name="android.app.Application"
+59-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:11:5-38
+60        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+60-->[androidx.core:core:1.13.1] C:\Users\nhata\.gradle\caches\transforms-3\757b1161e28c95e61dd9537337d0defd\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
+61        android:icon="@mipmap/ic_launcher"
+61-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:12:5-39
+62        android:label="android_project"
+62-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:10:5-36
+63        android:requestLegacyExternalStorage="true"
+63-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:13:5-48
+64        android:supportsRtl="true" >
+64-->[com.facebook.android:facebook-login:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\b5d64c16ed062f368a9c35d3ac38bac4\transformed\jetified-facebook-login-17.0.1\AndroidManifest.xml:16:18-44
+65        <activity
+65-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:15:9-37:20
+66            android:name="com.example.android_project.MainActivity"
+66-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:16:13-41
+67            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+67-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:21:13-163
+68            android:exported="true"
+68-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:17:13-36
+69            android:hardwareAccelerated="true"
+69-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:22:13-47
+70            android:launchMode="singleTop"
+70-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:18:13-43
+71            android:taskAffinity=""
+71-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:19:13-36
+72            android:theme="@style/LaunchTheme"
+72-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:20:13-47
+73            android:windowSoftInputMode="adjustResize" >
+73-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:23:13-55
+74
+75            <!--
+76                 Specifies an Android theme to apply to this Activity as soon as
+77                 the Android process has started. This theme is visible to the user
+78                 while the Flutter UI initializes. After that, this theme continues
+79                 to determine the Window background behind the Flutter UI.
+80            -->
+81            <meta-data
+81-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:28:13-31:17
+82                android:name="io.flutter.embedding.android.NormalTheme"
+82-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:29:15-70
+83                android:resource="@style/NormalTheme" />
+83-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:30:15-52
+84
+85            <intent-filter>
+85-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:33:13-36:29
+86                <action android:name="android.intent.action.MAIN" />
+86-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:34:17-68
+86-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:34:25-66
+87
+88                <category android:name="android.intent.category.LAUNCHER" />
+88-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:35:17-76
+88-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:35:27-74
+89            </intent-filter>
+90        </activity>
+91        <!--
+92             Don't delete the meta-data below.
+93             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+94        -->
+95        <meta-data
+95-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:40:9-42:33
+96            android:name="flutterEmbedding"
+96-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:41:13-44
+97            android:value="2" />
+97-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:42:13-30
+98        <meta-data
+98-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:43:9-44:73
+99            android:name="com.google.android.geo.API_KEY"
+99-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:43:20-65
+100            android:value="AIzaSyB0v5y--WqWtewMXl3aLVsVBLLm-kG4Fao" />
+100-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:44:16-71
+101
+102        <provider
+102-->[:image_picker_android] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+13\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:11:9-19:20
+103            android:name="io.flutter.plugins.imagepicker.ImagePickerFileProvider"
+103-->[:image_picker_android] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+13\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:12:13-82
+104            android:authorities="com.example.android_project.flutter.image_provider"
+104-->[:image_picker_android] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+13\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:13:13-74
+105            android:exported="false"
+105-->[:image_picker_android] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+13\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:14:13-37
+106            android:grantUriPermissions="true" >
+106-->[:image_picker_android] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+13\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:15:13-47
+107            <meta-data
+107-->[:image_picker_android] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+13\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:16:13-18:75
+108                android:name="android.support.FILE_PROVIDER_PATHS"
+108-->[:image_picker_android] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+13\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:17:17-67
+109                android:resource="@xml/flutter_image_picker_file_paths" />
+109-->[:image_picker_android] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+13\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:18:17-72
+110        </provider> <!-- Trigger Google Play services to install the backported photo picker module. -->
+111        <service
+111-->[:image_picker_android] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+13\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:21:9-33:19
+112            android:name="com.google.android.gms.metadata.ModuleDependencies"
+112-->[:image_picker_android] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+13\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:22:13-78
+113            android:enabled="false"
+113-->[:image_picker_android] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+13\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:23:13-36
+114            android:exported="false" >
+114-->[:image_picker_android] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+13\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:24:13-37
+115            <intent-filter>
+115-->[:image_picker_android] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+13\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:26:13-28:29
+116                <action android:name="com.google.android.gms.metadata.MODULE_DEPENDENCIES" />
+116-->[:image_picker_android] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+13\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:27:17-94
+116-->[:image_picker_android] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+13\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:27:25-91
+117            </intent-filter>
+118
+119            <meta-data
+119-->[:image_picker_android] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+13\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:30:13-32:36
+120                android:name="photopicker_activity:0:required"
+120-->[:image_picker_android] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+13\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:31:17-63
+121                android:value="" />
+121-->[:image_picker_android] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+13\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:32:17-33
+122        </service>
+123        <service
+123-->[:geolocator_android] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\geolocator_android-4.6.1\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:10:9-14:56
+124            android:name="com.baseflow.geolocator.GeolocatorLocationService"
+124-->[:geolocator_android] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\geolocator_android-4.6.1\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:11:13-77
+125            android:enabled="true"
+125-->[:geolocator_android] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\geolocator_android-4.6.1\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:12:13-35
+126            android:exported="false"
+126-->[:geolocator_android] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\geolocator_android-4.6.1\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:13:13-37
+127            android:foregroundServiceType="location" />
+127-->[:geolocator_android] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\geolocator_android-4.6.1\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:14:13-53
+128
+129        <activity
+129-->[:url_launcher_android] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.10\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:10:9-13:74
+130            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
+130-->[:url_launcher_android] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.10\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:11:13-74
+131            android:exported="false"
+131-->[:url_launcher_android] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.10\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:12:13-37
+132            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+132-->[:url_launcher_android] C:\Users\nhata\AppData\Local\Pub\Cache\hosted\pub.dev\url_launcher_android-6.3.10\android\build\intermediates\merged_manifest\release\AndroidManifest.xml:13:13-71
+133
+134        <service
+134-->[androidx.camera:camera-camera2:1.3.4] C:\Users\nhata\.gradle\caches\transforms-3\76d616dc538934fa217a565fa1d7ed18\transformed\jetified-camera-camera2-1.3.4\AndroidManifest.xml:24:9-33:19
+135            android:name="androidx.camera.core.impl.MetadataHolderService"
+135-->[androidx.camera:camera-camera2:1.3.4] C:\Users\nhata\.gradle\caches\transforms-3\76d616dc538934fa217a565fa1d7ed18\transformed\jetified-camera-camera2-1.3.4\AndroidManifest.xml:25:13-75
+136            android:enabled="false"
+136-->[androidx.camera:camera-camera2:1.3.4] C:\Users\nhata\.gradle\caches\transforms-3\76d616dc538934fa217a565fa1d7ed18\transformed\jetified-camera-camera2-1.3.4\AndroidManifest.xml:26:13-36
+137            android:exported="false" >
+137-->[androidx.camera:camera-camera2:1.3.4] C:\Users\nhata\.gradle\caches\transforms-3\76d616dc538934fa217a565fa1d7ed18\transformed\jetified-camera-camera2-1.3.4\AndroidManifest.xml:27:13-37
+138            <meta-data
+138-->[androidx.camera:camera-camera2:1.3.4] C:\Users\nhata\.gradle\caches\transforms-3\76d616dc538934fa217a565fa1d7ed18\transformed\jetified-camera-camera2-1.3.4\AndroidManifest.xml:30:13-32:89
+139                android:name="androidx.camera.core.impl.MetadataHolderService.DEFAULT_CONFIG_PROVIDER"
+139-->[androidx.camera:camera-camera2:1.3.4] C:\Users\nhata\.gradle\caches\transforms-3\76d616dc538934fa217a565fa1d7ed18\transformed\jetified-camera-camera2-1.3.4\AndroidManifest.xml:31:17-103
+140                android:value="androidx.camera.camera2.Camera2Config$DefaultProvider" />
+140-->[androidx.camera:camera-camera2:1.3.4] C:\Users\nhata\.gradle\caches\transforms-3\76d616dc538934fa217a565fa1d7ed18\transformed\jetified-camera-camera2-1.3.4\AndroidManifest.xml:32:17-86
+141        </service> <!-- Needs to be explicitly declared on P+ -->
+142        <uses-library
+142-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\nhata\.gradle\caches\transforms-3\dc0e4c4f587a77319feafe84c0a59fba\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:39:9-41:40
+143            android:name="org.apache.http.legacy"
+143-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\nhata\.gradle\caches\transforms-3\dc0e4c4f587a77319feafe84c0a59fba\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:40:13-50
+144            android:required="false" />
+144-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\nhata\.gradle\caches\transforms-3\dc0e4c4f587a77319feafe84c0a59fba\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:41:13-37
+145
+146        <activity
+146-->[com.google.android.gms:play-services-auth:21.0.0] C:\Users\nhata\.gradle\caches\transforms-3\352f267d4e255d87bf793c9c48c0a5fa\transformed\jetified-play-services-auth-21.0.0\AndroidManifest.xml:23:9-27:75
+147            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+147-->[com.google.android.gms:play-services-auth:21.0.0] C:\Users\nhata\.gradle\caches\transforms-3\352f267d4e255d87bf793c9c48c0a5fa\transformed\jetified-play-services-auth-21.0.0\AndroidManifest.xml:24:13-93
+148            android:excludeFromRecents="true"
+148-->[com.google.android.gms:play-services-auth:21.0.0] C:\Users\nhata\.gradle\caches\transforms-3\352f267d4e255d87bf793c9c48c0a5fa\transformed\jetified-play-services-auth-21.0.0\AndroidManifest.xml:25:13-46
+149            android:exported="false"
+149-->[com.google.android.gms:play-services-auth:21.0.0] C:\Users\nhata\.gradle\caches\transforms-3\352f267d4e255d87bf793c9c48c0a5fa\transformed\jetified-play-services-auth-21.0.0\AndroidManifest.xml:26:13-37
+150            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+150-->[com.google.android.gms:play-services-auth:21.0.0] C:\Users\nhata\.gradle\caches\transforms-3\352f267d4e255d87bf793c9c48c0a5fa\transformed\jetified-play-services-auth-21.0.0\AndroidManifest.xml:27:13-72
+151        <!--
+152            Service handling Google Sign-In user revocation. For apps that do not integrate with
+153            Google Sign-In, this service will never be started.
+154        -->
+155        <service
+155-->[com.google.android.gms:play-services-auth:21.0.0] C:\Users\nhata\.gradle\caches\transforms-3\352f267d4e255d87bf793c9c48c0a5fa\transformed\jetified-play-services-auth-21.0.0\AndroidManifest.xml:33:9-37:51
+156            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
+156-->[com.google.android.gms:play-services-auth:21.0.0] C:\Users\nhata\.gradle\caches\transforms-3\352f267d4e255d87bf793c9c48c0a5fa\transformed\jetified-play-services-auth-21.0.0\AndroidManifest.xml:34:13-89
+157            android:exported="true"
+157-->[com.google.android.gms:play-services-auth:21.0.0] C:\Users\nhata\.gradle\caches\transforms-3\352f267d4e255d87bf793c9c48c0a5fa\transformed\jetified-play-services-auth-21.0.0\AndroidManifest.xml:35:13-36
+158            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
+158-->[com.google.android.gms:play-services-auth:21.0.0] C:\Users\nhata\.gradle\caches\transforms-3\352f267d4e255d87bf793c9c48c0a5fa\transformed\jetified-play-services-auth-21.0.0\AndroidManifest.xml:36:13-107
+159            android:visibleToInstantApps="true" />
+159-->[com.google.android.gms:play-services-auth:21.0.0] C:\Users\nhata\.gradle\caches\transforms-3\352f267d4e255d87bf793c9c48c0a5fa\transformed\jetified-play-services-auth-21.0.0\AndroidManifest.xml:37:13-48
+160
+161        <activity
+161-->[com.facebook.android:facebook-common:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\ec5223c6cd6f9015a4c271a9eabd8359\transformed\jetified-facebook-common-17.0.1\AndroidManifest.xml:22:9-25:66
+162            android:name="com.facebook.FacebookActivity"
+162-->[com.facebook.android:facebook-common:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\ec5223c6cd6f9015a4c271a9eabd8359\transformed\jetified-facebook-common-17.0.1\AndroidManifest.xml:23:13-57
+163            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+163-->[com.facebook.android:facebook-common:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\ec5223c6cd6f9015a4c271a9eabd8359\transformed\jetified-facebook-common-17.0.1\AndroidManifest.xml:24:13-96
+164            android:theme="@style/com_facebook_activity_theme" />
+164-->[com.facebook.android:facebook-common:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\ec5223c6cd6f9015a4c271a9eabd8359\transformed\jetified-facebook-common-17.0.1\AndroidManifest.xml:25:13-63
+165        <activity android:name="com.facebook.CustomTabMainActivity" />
+165-->[com.facebook.android:facebook-common:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\ec5223c6cd6f9015a4c271a9eabd8359\transformed\jetified-facebook-common-17.0.1\AndroidManifest.xml:26:9-71
+165-->[com.facebook.android:facebook-common:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\ec5223c6cd6f9015a4c271a9eabd8359\transformed\jetified-facebook-common-17.0.1\AndroidManifest.xml:26:19-68
+166        <activity
+166-->[com.facebook.android:facebook-common:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\ec5223c6cd6f9015a4c271a9eabd8359\transformed\jetified-facebook-common-17.0.1\AndroidManifest.xml:27:9-41:20
+167            android:name="com.facebook.CustomTabActivity"
+167-->[com.facebook.android:facebook-common:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\ec5223c6cd6f9015a4c271a9eabd8359\transformed\jetified-facebook-common-17.0.1\AndroidManifest.xml:28:13-58
+168            android:exported="true" >
+168-->[com.facebook.android:facebook-common:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\ec5223c6cd6f9015a4c271a9eabd8359\transformed\jetified-facebook-common-17.0.1\AndroidManifest.xml:29:13-36
+169            <intent-filter>
+169-->[com.facebook.android:facebook-common:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\ec5223c6cd6f9015a4c271a9eabd8359\transformed\jetified-facebook-common-17.0.1\AndroidManifest.xml:31:13-40:29
+170                <action android:name="android.intent.action.VIEW" />
+170-->[com.facebook.android:facebook-common:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\ec5223c6cd6f9015a4c271a9eabd8359\transformed\jetified-facebook-common-17.0.1\AndroidManifest.xml:32:17-69
+170-->[com.facebook.android:facebook-common:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\ec5223c6cd6f9015a4c271a9eabd8359\transformed\jetified-facebook-common-17.0.1\AndroidManifest.xml:32:25-66
+171
+172                <category android:name="android.intent.category.DEFAULT" />
+172-->[com.facebook.android:facebook-common:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\ec5223c6cd6f9015a4c271a9eabd8359\transformed\jetified-facebook-common-17.0.1\AndroidManifest.xml:34:17-76
+172-->[com.facebook.android:facebook-common:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\ec5223c6cd6f9015a4c271a9eabd8359\transformed\jetified-facebook-common-17.0.1\AndroidManifest.xml:34:27-73
+173                <category android:name="android.intent.category.BROWSABLE" />
+173-->[com.facebook.android:facebook-common:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\ec5223c6cd6f9015a4c271a9eabd8359\transformed\jetified-facebook-common-17.0.1\AndroidManifest.xml:35:17-78
+173-->[com.facebook.android:facebook-common:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\ec5223c6cd6f9015a4c271a9eabd8359\transformed\jetified-facebook-common-17.0.1\AndroidManifest.xml:35:27-75
+174
+175                <data
+175-->C:\Users\nhata\OneDrive\Desktop\Documents\android_project\android\app\src\main\AndroidManifest.xml:54:13-50
+176                    android:host="cct.com.example.android_project"
+177                    android:scheme="fbconnect" />
+178            </intent-filter>
+179        </activity>
+180        <activity
+180-->[com.google.android.gms:play-services-base:18.3.0] C:\Users\nhata\.gradle\caches\transforms-3\76faffe7f340c838f64273fe9f31999a\transformed\jetified-play-services-base-18.3.0\AndroidManifest.xml:20:9-22:45
+181            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+181-->[com.google.android.gms:play-services-base:18.3.0] C:\Users\nhata\.gradle\caches\transforms-3\76faffe7f340c838f64273fe9f31999a\transformed\jetified-play-services-base-18.3.0\AndroidManifest.xml:20:19-85
+182            android:exported="false"
+182-->[com.google.android.gms:play-services-base:18.3.0] C:\Users\nhata\.gradle\caches\transforms-3\76faffe7f340c838f64273fe9f31999a\transformed\jetified-play-services-base-18.3.0\AndroidManifest.xml:22:19-43
+183            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+183-->[com.google.android.gms:play-services-base:18.3.0] C:\Users\nhata\.gradle\caches\transforms-3\76faffe7f340c838f64273fe9f31999a\transformed\jetified-play-services-base-18.3.0\AndroidManifest.xml:21:19-78
+184
+185        <meta-data
+185-->[com.google.android.gms:play-services-basement:18.3.0] C:\Users\nhata\.gradle\caches\transforms-3\40ec2b339ca20957d017d295851361bd\transformed\jetified-play-services-basement-18.3.0\AndroidManifest.xml:21:9-23:69
+186            android:name="com.google.android.gms.version"
+186-->[com.google.android.gms:play-services-basement:18.3.0] C:\Users\nhata\.gradle\caches\transforms-3\40ec2b339ca20957d017d295851361bd\transformed\jetified-play-services-basement-18.3.0\AndroidManifest.xml:22:13-58
+187            android:value="@integer/google_play_services_version" />
+187-->[com.google.android.gms:play-services-basement:18.3.0] C:\Users\nhata\.gradle\caches\transforms-3\40ec2b339ca20957d017d295851361bd\transformed\jetified-play-services-basement-18.3.0\AndroidManifest.xml:23:13-66
+188
+189        <uses-library
+189-->[androidx.window:window:1.2.0] C:\Users\nhata\.gradle\caches\transforms-3\e805ea4f4f8e2a12f38f3617930670eb\transformed\jetified-window-1.2.0\AndroidManifest.xml:23:9-25:40
+190            android:name="androidx.window.extensions"
+190-->[androidx.window:window:1.2.0] C:\Users\nhata\.gradle\caches\transforms-3\e805ea4f4f8e2a12f38f3617930670eb\transformed\jetified-window-1.2.0\AndroidManifest.xml:24:13-54
+191            android:required="false" />
+191-->[androidx.window:window:1.2.0] C:\Users\nhata\.gradle\caches\transforms-3\e805ea4f4f8e2a12f38f3617930670eb\transformed\jetified-window-1.2.0\AndroidManifest.xml:25:13-37
+192        <uses-library
+192-->[androidx.window:window:1.2.0] C:\Users\nhata\.gradle\caches\transforms-3\e805ea4f4f8e2a12f38f3617930670eb\transformed\jetified-window-1.2.0\AndroidManifest.xml:26:9-28:40
+193            android:name="androidx.window.sidecar"
+193-->[androidx.window:window:1.2.0] C:\Users\nhata\.gradle\caches\transforms-3\e805ea4f4f8e2a12f38f3617930670eb\transformed\jetified-window-1.2.0\AndroidManifest.xml:27:13-51
+194            android:required="false" />
+194-->[androidx.window:window:1.2.0] C:\Users\nhata\.gradle\caches\transforms-3\e805ea4f4f8e2a12f38f3617930670eb\transformed\jetified-window-1.2.0\AndroidManifest.xml:28:13-37
+195        <!--
+196         The initialization ContentProvider will call FacebookSdk.sdkInitialize automatically
+197         with the application context. This config is merged in with the host app's manifest,
+198         but there can only be one provider with the same authority activated at any given
+199         point; so if the end user has two or more different apps that use Facebook SDK, only the
+200         first one will be able to use the provider. To work around this problem, we use the
+201         following placeholder in the authority to identify each host application as if it was
+202         a completely different provider.
+203        -->
+204        <provider
+204-->[com.facebook.android:facebook-core:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\4b9c187744246775382f347766bb4d82\transformed\jetified-facebook-core-17.0.1\AndroidManifest.xml:29:9-32:40
+205            android:name="com.facebook.internal.FacebookInitProvider"
+205-->[com.facebook.android:facebook-core:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\4b9c187744246775382f347766bb4d82\transformed\jetified-facebook-core-17.0.1\AndroidManifest.xml:30:13-70
+206            android:authorities="com.example.android_project.FacebookInitProvider"
+206-->[com.facebook.android:facebook-core:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\4b9c187744246775382f347766bb4d82\transformed\jetified-facebook-core-17.0.1\AndroidManifest.xml:31:13-72
+207            android:exported="false" />
+207-->[com.facebook.android:facebook-core:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\4b9c187744246775382f347766bb4d82\transformed\jetified-facebook-core-17.0.1\AndroidManifest.xml:32:13-37
+208
+209        <receiver
+209-->[com.facebook.android:facebook-core:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\4b9c187744246775382f347766bb4d82\transformed\jetified-facebook-core-17.0.1\AndroidManifest.xml:34:9-40:20
+210            android:name="com.facebook.CurrentAccessTokenExpirationBroadcastReceiver"
+210-->[com.facebook.android:facebook-core:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\4b9c187744246775382f347766bb4d82\transformed\jetified-facebook-core-17.0.1\AndroidManifest.xml:35:13-86
+211            android:exported="false" >
+211-->[com.facebook.android:facebook-core:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\4b9c187744246775382f347766bb4d82\transformed\jetified-facebook-core-17.0.1\AndroidManifest.xml:36:13-37
+212            <intent-filter>
+212-->[com.facebook.android:facebook-core:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\4b9c187744246775382f347766bb4d82\transformed\jetified-facebook-core-17.0.1\AndroidManifest.xml:37:13-39:29
+213                <action android:name="com.facebook.sdk.ACTION_CURRENT_ACCESS_TOKEN_CHANGED" />
+213-->[com.facebook.android:facebook-core:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\4b9c187744246775382f347766bb4d82\transformed\jetified-facebook-core-17.0.1\AndroidManifest.xml:38:17-95
+213-->[com.facebook.android:facebook-core:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\4b9c187744246775382f347766bb4d82\transformed\jetified-facebook-core-17.0.1\AndroidManifest.xml:38:25-92
+214            </intent-filter>
+215        </receiver>
+216        <receiver
+216-->[com.facebook.android:facebook-core:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\4b9c187744246775382f347766bb4d82\transformed\jetified-facebook-core-17.0.1\AndroidManifest.xml:41:9-47:20
+217            android:name="com.facebook.AuthenticationTokenManager$CurrentAuthenticationTokenChangedBroadcastReceiver"
+217-->[com.facebook.android:facebook-core:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\4b9c187744246775382f347766bb4d82\transformed\jetified-facebook-core-17.0.1\AndroidManifest.xml:42:13-118
+218            android:exported="false" >
+218-->[com.facebook.android:facebook-core:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\4b9c187744246775382f347766bb4d82\transformed\jetified-facebook-core-17.0.1\AndroidManifest.xml:43:13-37
+219            <intent-filter>
+219-->[com.facebook.android:facebook-core:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\4b9c187744246775382f347766bb4d82\transformed\jetified-facebook-core-17.0.1\AndroidManifest.xml:44:13-46:29
+220                <action android:name="com.facebook.sdk.ACTION_CURRENT_AUTHENTICATION_TOKEN_CHANGED" />
+220-->[com.facebook.android:facebook-core:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\4b9c187744246775382f347766bb4d82\transformed\jetified-facebook-core-17.0.1\AndroidManifest.xml:45:17-103
+220-->[com.facebook.android:facebook-core:17.0.1] C:\Users\nhata\.gradle\caches\transforms-3\4b9c187744246775382f347766bb4d82\transformed\jetified-facebook-core-17.0.1\AndroidManifest.xml:45:25-100
+221            </intent-filter>
+222        </receiver>
+223
+224        <provider
+224-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\nhata\.gradle\caches\transforms-3\8b3a34b23b60b3a98b8272ead9e1283d\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:24:9-32:20
+225            android:name="androidx.startup.InitializationProvider"
+225-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\nhata\.gradle\caches\transforms-3\8b3a34b23b60b3a98b8272ead9e1283d\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:25:13-67
+226            android:authorities="com.example.android_project.androidx-startup"
+226-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\nhata\.gradle\caches\transforms-3\8b3a34b23b60b3a98b8272ead9e1283d\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:26:13-68
+227            android:exported="false" >
+227-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\nhata\.gradle\caches\transforms-3\8b3a34b23b60b3a98b8272ead9e1283d\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:27:13-37
+228            <meta-data
+228-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\nhata\.gradle\caches\transforms-3\8b3a34b23b60b3a98b8272ead9e1283d\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:29:13-31:52
+229                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+229-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\nhata\.gradle\caches\transforms-3\8b3a34b23b60b3a98b8272ead9e1283d\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:30:17-78
+230                android:value="androidx.startup" />
+230-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\nhata\.gradle\caches\transforms-3\8b3a34b23b60b3a98b8272ead9e1283d\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:31:17-49
+231            <meta-data
+231-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\nhata\.gradle\caches\transforms-3\60085485c1284f0f38b081fe362498b3\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
+232                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+232-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\nhata\.gradle\caches\transforms-3\60085485c1284f0f38b081fe362498b3\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
+233                android:value="androidx.startup" />
+233-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\nhata\.gradle\caches\transforms-3\60085485c1284f0f38b081fe362498b3\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
+234        </provider>
+235
+236        <receiver
+236-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\nhata\.gradle\caches\transforms-3\60085485c1284f0f38b081fe362498b3\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
+237            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+237-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\nhata\.gradle\caches\transforms-3\60085485c1284f0f38b081fe362498b3\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
+238            android:directBootAware="false"
+238-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\nhata\.gradle\caches\transforms-3\60085485c1284f0f38b081fe362498b3\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
+239            android:enabled="true"
+239-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\nhata\.gradle\caches\transforms-3\60085485c1284f0f38b081fe362498b3\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
+240            android:exported="true"
+240-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\nhata\.gradle\caches\transforms-3\60085485c1284f0f38b081fe362498b3\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
+241            android:permission="android.permission.DUMP" >
+241-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\nhata\.gradle\caches\transforms-3\60085485c1284f0f38b081fe362498b3\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
+242            <intent-filter>
+242-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\nhata\.gradle\caches\transforms-3\60085485c1284f0f38b081fe362498b3\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
+243                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+243-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\nhata\.gradle\caches\transforms-3\60085485c1284f0f38b081fe362498b3\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
+243-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\nhata\.gradle\caches\transforms-3\60085485c1284f0f38b081fe362498b3\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
+244            </intent-filter>
+245            <intent-filter>
+245-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\nhata\.gradle\caches\transforms-3\60085485c1284f0f38b081fe362498b3\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
+246                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+246-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\nhata\.gradle\caches\transforms-3\60085485c1284f0f38b081fe362498b3\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
+246-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\nhata\.gradle\caches\transforms-3\60085485c1284f0f38b081fe362498b3\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
+247            </intent-filter>
+248            <intent-filter>
+248-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\nhata\.gradle\caches\transforms-3\60085485c1284f0f38b081fe362498b3\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
+249                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+249-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\nhata\.gradle\caches\transforms-3\60085485c1284f0f38b081fe362498b3\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
+249-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\nhata\.gradle\caches\transforms-3\60085485c1284f0f38b081fe362498b3\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
+250            </intent-filter>
+251            <intent-filter>
+251-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\nhata\.gradle\caches\transforms-3\60085485c1284f0f38b081fe362498b3\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
+252                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+252-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\nhata\.gradle\caches\transforms-3\60085485c1284f0f38b081fe362498b3\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
+252-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\nhata\.gradle\caches\transforms-3\60085485c1284f0f38b081fe362498b3\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:25-92
+253            </intent-filter>
+254        </receiver>
+255    </application>
+256
+257</manifest>

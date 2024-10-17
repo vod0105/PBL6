@@ -37,7 +37,7 @@ class _ChartHeaderState extends State<ChartHeader> {
             SizedBox(
               width: AppDimention.size20,
             ),
-            Text("Nguyễn Văn Nhật",
+            Text(Get.find<ChartController>().getchartname,
                 style: TextStyle(
                     fontSize: AppDimention.size20, color: Colors.white))
           ],
