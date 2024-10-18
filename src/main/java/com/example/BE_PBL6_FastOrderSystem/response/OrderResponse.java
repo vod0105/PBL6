@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 @Data
 public class OrderResponse {
     private Long orderId;
+    private String comboName;
     private String orderCode;
     private Long userId;
     private LocalDateTime orderDate;
@@ -19,10 +20,13 @@ public class OrderResponse {
     private String deliveryAddress;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private boolean feedback;
+
     private List<OrderDetailResponse> orderDetails;
 
     public OrderResponse(Order order) {
         this.orderId = order.getOrderId();
+        this.feedback = order.isFeedback();
         this.orderCode = order.getOrderCode();
         this.userId = order.getUser().getId();
         this.orderDate = order.getOrderDate();

@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -153,6 +154,44 @@ public class CartServiceImpl implements ICartService {
             return ResponseEntity.badRequest().body(new APIRespone(false, "No cart items found for the user", ""));
         }
         List<CartResponse> cartResponses = CartResponse.convertListCartToCartResponse(cartItems);
+        return ResponseEntity.ok(new APIRespone(true, "Get history cart successfully", cartResponses));
+    }
+
+    @Override
+    public ResponseEntity<APIRespone> getAllStoreCart(Long userId){
+        List<Cart> cartItems = cartItemRepository.findByUserId(userId);
+        ArrayList<Long> storeIds = new ArrayList<>();
+        for (Cart cart : cartItems) {
+            if(!storeIds.contains(cart.getStoreId())) {
+                storeIds.add(cart.getStoreId());
+            }
+        }
+        return ResponseEntity.ok(new APIRespone(true, "Get liststore successfully", storeIds));
+    }
+    @Override
+    public ResponseEntity<APIRespone> getCartByStore(Long userId,Long storeId){
+        List<Cart> cartItems = cartItemRepository.findByUserId(userId);
+        List<Cart> cartByStoreId = new ArrayList<>();
+        for (Cart cart : cartItems) {
+            if(cart.getStoreId().equals(storeId)) {
+                cartByStoreId.add(cart);
+            }
+        }
+        List<CartResponse> cartResponses = CartResponse.convertListCartToCartResponse(cartByStoreId);
+        return ResponseEntity.ok(new APIRespone(true, "Get history cart successfully", cartResponses));
+    }
+
+    @Override
+    public ResponseEntity<APIRespone> getCartById(Long userId, Long cartid){
+        List<Cart> cartItems = cartItemRepository.findByUserId(userId);
+        List<Cart> cartList = new ArrayList<>();
+        for (Cart cart : cartItems) {
+            if(cart.getCartId().equals(cartid)) {
+                cartList.add(cart);
+                break;
+            }
+        }
+        List<CartResponse> cartResponses = CartResponse.convertListCartToCartResponse(cartList);
         return ResponseEntity.ok(new APIRespone(true, "Get history cart successfully", cartResponses));
     }
 }

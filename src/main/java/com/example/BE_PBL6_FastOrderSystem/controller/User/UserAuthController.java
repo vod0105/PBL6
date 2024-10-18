@@ -39,7 +39,7 @@ public class UserAuthController {
         UserRequest userResquest = new UserRequest(fullName, avatar, email, address);
         return userService.updateUser(userId, userResquest);
     }
-    @PutMapping("/profiles/update")
+    @PutMapping("/profiles/updates")
     public ResponseEntity<APIRespone> updateUsers(@RequestBody UserRequestV2 userRequest) {
         Long userId = FoodUserDetails.getCurrentUserId();
         return userService.updateUserV2(userId, userRequest);

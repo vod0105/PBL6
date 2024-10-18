@@ -5,6 +5,7 @@ import com.example.BE_PBL6_FastOrderSystem.model.User;
 import com.example.BE_PBL6_FastOrderSystem.repository.ChatRepository;
 import com.example.BE_PBL6_FastOrderSystem.repository.UserRepository;
 import com.example.BE_PBL6_FastOrderSystem.request.ChatRequest;
+import com.example.BE_PBL6_FastOrderSystem.request.ChatRequestBase64;
 import com.example.BE_PBL6_FastOrderSystem.response.ChatResponse;
 import com.example.BE_PBL6_FastOrderSystem.response.UserResponse;
 import com.example.BE_PBL6_FastOrderSystem.security.user.FoodUserDetails;
@@ -103,7 +104,29 @@ public class ChatServiceImpl implements IChatService {
         // Lưu tin nhắn vào cơ sở dữ liệu
         return chatRepository.save(chat);
     }
+    @Override
+    public Chat saveChatBase64(ChatRequestBase64 request){
+        User sender = userRepository.findById(request.getSender())
+                .orElseThrow(() -> new RuntimeException("Sender not found"));
 
+        // Tìm user nhận
+        User receiver = userRepository.findById(request.getReceiver())
+                .orElseThrow(() -> new RuntimeException("Receiver not found"));
+
+
+        // Tạo đối tượng Chat với ảnh nếu có
+        Chat chat = Chat.builder()
+                .sender(sender)
+                .receiver(receiver)
+                .local_time(LocalDateTime.now())
+                .message(request.getMessage())
+                .isRead(request.getIsRead())
+                .image(request.getImageBase64()) // Gán ảnh nếu có
+                .build();
+
+        // Lưu tin nhắn vào cơ sở dữ liệu
+        return chatRepository.save(chat);
+    }
 
     public void deleteChat(Long id) {
         chatRepository.deleteById(id);

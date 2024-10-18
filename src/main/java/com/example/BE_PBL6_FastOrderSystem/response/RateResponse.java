@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class RateResponse {
     private Long rateId;
-    private Long userId;
+    private String userName;
     private int rate;
     private String comment;
     private String createdAt;

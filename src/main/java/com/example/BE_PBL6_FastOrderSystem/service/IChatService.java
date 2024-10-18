@@ -3,6 +3,7 @@ package com.example.BE_PBL6_FastOrderSystem.service;
 import com.example.BE_PBL6_FastOrderSystem.model.Chat;
 import com.example.BE_PBL6_FastOrderSystem.model.User;
 import com.example.BE_PBL6_FastOrderSystem.request.ChatRequest;
+import com.example.BE_PBL6_FastOrderSystem.request.ChatRequestBase64;
 import com.example.BE_PBL6_FastOrderSystem.response.ChatResponse;
 import com.example.BE_PBL6_FastOrderSystem.response.UserResponse;
 
@@ -20,6 +21,7 @@ public interface IChatService {
     List<ChatResponse> getChatHistory(Long receiverId);
 
     Chat saveChat(ChatRequest chatRequest);
+    Chat saveChatBase64(ChatRequestBase64 request);
 
     Set<User> getUsersReceivedFrom(Long userId);
 

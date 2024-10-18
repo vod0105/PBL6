@@ -1,21 +1,22 @@
 server:
-  port: 8888
+  port: 8080
 #  connection-timeout: 20000
 spring:
   application:
     name: BE_PBL6_FastOrderSystem
   datasource:
-    url: jdbc:mysql://localhost:3306/web_thuc_an
+    url: jdbc:mysql://localhost:3306/db_pbl6
 #    driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password:
+
   servlet:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
 
   jpa:
-    show-sql: true
+#    show-sql: true
     hibernate:
       ddl-auto: update
       format_sql: true

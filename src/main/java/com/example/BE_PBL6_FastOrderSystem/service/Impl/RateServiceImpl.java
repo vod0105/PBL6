@@ -80,7 +80,7 @@ public class RateServiceImpl implements IRateService {
         List<RateResponse> rateResponses = rateRepository.findByProductId(productId).stream()
                 .map(rate -> new RateResponse(
                         rate.getRateId(),
-                        rate.getUserId(),
+                        userRepository.findByid(rate.getUserId()).getFullName() +"| ID : "+ userRepository.findByid(rate.getUserId()).getId(),
                         rate.getRate(),
                         rate.getComment(),
                         rate.getCreatedAt(),
@@ -100,7 +100,7 @@ public class RateServiceImpl implements IRateService {
         List<RateResponse> rateResponses = rateRepository.findByComboId(comboId).stream()
                 .map(rate -> new RateResponse(
                         rate.getRateId(),
-                        rate.getUserId(),
+                        userRepository.findByid(rate.getUserId()).getFullName()  +"| ID : "+ userRepository.findByid(rate.getUserId()).getId(),
                         rate.getRate(),
                         rate.getComment(),
                         rate.getCreatedAt(),

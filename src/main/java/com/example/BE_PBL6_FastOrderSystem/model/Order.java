@@ -33,6 +33,7 @@ public class Order {
     private Double latitude;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private boolean feedback;
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -44,8 +45,9 @@ public class Order {
         updatedAt = LocalDateTime.now();
     }
 
-
-
+    public boolean isFeedback() {
+        return feedback;
+    }
 
     @Override
     public String toString() {

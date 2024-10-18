@@ -3,6 +3,7 @@ package com.example.BE_PBL6_FastOrderSystem.controller.Chat;
 import com.example.BE_PBL6_FastOrderSystem.model.Chat;
 import com.example.BE_PBL6_FastOrderSystem.model.User;
 import com.example.BE_PBL6_FastOrderSystem.request.ChatRequest;
+import com.example.BE_PBL6_FastOrderSystem.request.ChatRequestBase64;
 import com.example.BE_PBL6_FastOrderSystem.response.APIResponseChat;
 import com.example.BE_PBL6_FastOrderSystem.response.ChatResponse;
 import com.example.BE_PBL6_FastOrderSystem.response.UserResponse;
@@ -105,6 +106,22 @@ public class ChatController {
 
         // Lưu thông tin chat bao gồm ảnh (nếu có)
         chatService.saveChat(chatRequest);
+        APIResponseChat<String> response = new APIResponseChat<>("", 0, "Success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @PostMapping("/saveImages")
+    public ResponseEntity<APIResponseChat<String>> saveChatImage(@RequestBody ChatRequestBase64 request) {
+
+        // Tạo ChatRequest từ dữ liệu nhận được
+        ChatRequestBase64 chatRequest = new ChatRequestBase64();
+        chatRequest.setSender(request.getSender());
+        chatRequest.setReceiver(request.getReceiver());
+        chatRequest.setMessage(null);
+        chatRequest.setIsRead(false);
+        chatRequest.setImageBase64(request.getImageBase64());
+
+        // Lưu thông tin chat bao gồm ảnh (nếu có)
+        chatService.saveChatBase64(chatRequest);
         APIResponseChat<String> response = new APIResponseChat<>("", 0, "Success");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

@@ -115,7 +115,7 @@ public class UserOrderController {
 
                             System.out.println("data: " + data);
                             paymentService.savePayment(orderRequest, data.getOrderId(), userId);
-                            orderService.updateOrderStatus(orderCode, "Đơn hàng đã được xác nhận");
+
                         }
                         scheduler.shutdown();
                     } else {
@@ -152,7 +152,7 @@ public class UserOrderController {
                             orderService.updateQuantityProduct(productId, comboId, storeId, quantity);
                             ResponseEntity<APIRespone> orderResponse = orderService.findOrderByOrderCode(orderCode);
                             OrderResponse data = (OrderResponse) orderResponse.getBody().getData();
-                            orderService.updateOrderStatus(orderCode, "Đơn hàng đã được xác nhận");
+
                             paymentService.savePayment(orderRequest, data.getOrderId(), userId);
                         }
                         scheduler.shutdown();
@@ -179,7 +179,7 @@ public class UserOrderController {
                 ResponseEntity<APIRespone> orderResponse = orderService.findOrderByOrderCode(orderCode);
                 OrderResponse data = (OrderResponse) orderResponse.getBody().getData();
                 paymentService.savePayment(orderRequest, data.getOrderId(), userId);
-                orderService.updateOrderStatus(orderCode, "Đơn hàng đã được xác nhận");
+
             }
             return response;
         } else {
@@ -253,7 +253,7 @@ public class UserOrderController {
                         OrderResponse data = (OrderResponse) orderResponse.getBody().getData();
                         System.out.println("data: " + data);
                         paymentService.savePayment(orderRequest, data.getOrderId(), userId);
-                        orderService.updateOrderStatus(orderCode, "Đơn hàng đã được xác nhận");
+
                         scheduler.shutdown();
                     } else {
                         System.out.println("Payment status is not OK. Retrying...");
@@ -308,7 +308,7 @@ public class UserOrderController {
                         ResponseEntity<APIRespone> orderResponse = orderService.findOrderByOrderCode(orderCode);
                         OrderResponse data = (OrderResponse) orderResponse.getBody().getData();
                         paymentService.savePayment(orderRequest, data.getOrderId(), userId);
-                        orderService.updateOrderStatus(orderCode, "Đơn hàng đã được xác nhận");
+
                         scheduler.shutdown();
                     } else {
                         System.out.println("Payment status is not OK. Retrying...");
@@ -346,7 +346,7 @@ public class UserOrderController {
                 ResponseEntity<APIRespone> orderResponse = orderService.findOrderByOrderCode(orderCode);
                 OrderResponse data = (OrderResponse) orderResponse.getBody().getData();
                 paymentService.savePayment(orderRequest, data.getOrderId(), userId);
-                orderService.updateOrderStatus(orderCode, "Đơn hàng đã được xác nhận");
+
             }
             return response;
         } else {
@@ -393,6 +393,9 @@ public class UserOrderController {
     public ResponseEntity<APIRespone> findOrderByOrderCode(@RequestParam String orderCode) {
         return orderService.findOrderByOrderCode(orderCode);
     }
-
+    @PostMapping("/update/feedback/{orderid}")
+    public ResponseEntity<APIRespone> updateFeedback(@PathVariable Long orderid) {
+        return  orderService.updateStatusFeedBack(orderid);
+    }
 
 }
