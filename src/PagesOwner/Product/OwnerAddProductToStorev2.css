@@ -18,16 +18,19 @@
   justify-content: space-between;
 }
 .pd-p-s {
-  position: absolute;
-  /* left: 50%; */
-  top: 80%;
-  transform: translateX(-50%);
+  /* position: absolute;
+
+  top: 90%;
+  transform: translateX(-50%); */
+  /* margin-top: 50px; */
+  /* margin-top: 50px; */
 }
 .pd-p-r {
   position: absolute;
   /* left: 50%; */
   top: 70%;
   transform: translateX(-50%);
+  margin-top: 50px;
 }
 .pd-p-s button {
   /* background-color: aquamarine; */
@@ -86,13 +89,13 @@ div.action {
   color: white;
   font-weight: 600;
 } */
-.action-btn button{
+.action-btn button {
   padding: 10px 15px;
   background-color: black;
   border: none;
   color: white;
   font-weight: 600;
 }
-.action-btn button:hover{
+.action-btn button:hover {
   transform: scale(1.05);
 }

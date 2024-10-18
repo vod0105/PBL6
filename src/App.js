@@ -35,6 +35,10 @@ import OwnerProduct from "./PagesOwner/Product/OwnerProduct";
 import OwnerAddProducToStore from "./PagesOwner/Product/OwnerAddproductToStore";
 import AddPromotionToStore from "./pages/promotion/AddPromotionToStore";
 import UpdateCombo from "./pages/Combo/UpdateCombo";
+import Order from "./PagesOwner/Order/Order";
+import AddStaff from "./PagesOwner/Staff/AddStaff";
+import UpdateStaff from "./PagesOwner/Staff/UpdateStaff";
+import StaffList from "./PagesOwner/Staff/Staff";
 
 const App = () => {
   // const isAuthenticated = !!localStorage.getItem("access_token"); // Kiểm tra nếu có token
@@ -389,7 +393,7 @@ const App = () => {
                 )
               }
             />
-              <Route
+            <Route
               path="/admin/UpdateCombo/:id"
               element={
                 !isAuthenticated ? (
@@ -490,7 +494,7 @@ const App = () => {
                 )
               }
             />
-              <Route
+            <Route
               path="/owner/calender"
               element={
                 !isAuthenticated ? (
@@ -501,6 +505,74 @@ const App = () => {
                       <Sidebar />
                       <div className="dashboard-content">
                         <CalendarPage url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+            <Route
+              path="/owner/order"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <Order url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+            <Route
+              path="/owner/AddStaff"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <AddStaff url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+            <Route
+              path="/owner/UpdateStaff/:id"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <UpdateStaff url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+            <Route
+              path="/owner/StaffList"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <StaffList url={url} />
                       </div>
                     </div>
                   </>

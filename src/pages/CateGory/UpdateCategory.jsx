@@ -27,6 +27,7 @@ const UpdateCategory = ({ url }) => {
 
         // truyen du lieu qua data
         setData({
+          image: response.data.data.image,
           categoryName: response.data.data.categoryName,
           description: response.data.data.description,
         });
@@ -70,7 +71,7 @@ const UpdateCategory = ({ url }) => {
     formData.append("categoryName", data.categoryName);
     formData.append("image", image);
     formData.append("description", data.description);
-
+    console.log(image);
     try {
       const response = await axios.put(
         `${url}/api/v1/admin/categories/update/${id}`,
@@ -122,7 +123,7 @@ const UpdateCategory = ({ url }) => {
               type="file"
               id="image"
               hidden
-              required
+              // required
             />
           </div>
           <div className="flex-ip">

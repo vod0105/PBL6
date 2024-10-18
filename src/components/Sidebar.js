@@ -280,8 +280,66 @@ const Sidebar = () => {
                   >
                     <ul className="sub-item">
                       <li onClick={(e) => e.stopPropagation()}>
-                        {" "}
                         <Link to="/owner/calender">Calendar</Link>
+                      </li>
+                      <li onClick={(e) => e.stopPropagation()}>
+                        <Link to="/owner/AddEmploy">Add Employee To Shift</Link>
+                      </li>
+                    </ul>
+                  </div>
+                </p>
+                <p className="dropdownn">
+                  <FontAwesomeIcon icon={faChevronDown} />
+                </p>
+              </div>
+              <div className="item" onClick={() => toggleSubMenu("Oorder")}>
+                {/* <BiLogoProductHunt className="icon icon-item" /> */}
+                <Link to="/admin/product" className="linkitem">
+                  <BiLogoProductHunt className="icon icon-item" />
+                </Link>
+                <p>
+                  Order
+                  <div
+                    className={
+                      openSubMenus["Oorder"]
+                        ? "sub-menu active-sub"
+                        : "sub-menu hidden"
+                    }
+                  >
+                    <ul className="sub-item">
+                      <li onClick={(e) => e.stopPropagation()}>
+                        {" "}
+                        <Link to="/owner/order">Order</Link>
+                      </li>
+                    </ul>
+                  </div>
+                </p>
+                <p className="dropdownn">
+                  <FontAwesomeIcon icon={faChevronDown} />
+                </p>
+              </div>
+              <div className="item" onClick={() => toggleSubMenu("OStaff")}>
+                {/* <BiLogoProductHunt className="icon icon-item" /> */}
+                <Link to="/owner/AddStaff" className="linkitem">
+                  <BiLogoProductHunt className="icon icon-item" />
+                </Link>
+                <p>
+                  Staff
+                  <div
+                    className={
+                      openSubMenus["OStaff"]
+                        ? "sub-menu active-sub"
+                        : "sub-menu hidden"
+                    }
+                  >
+                    <ul className="sub-item">
+                      <li onClick={(e) => e.stopPropagation()}>
+                        {" "}
+                        <Link to="/owner/StaffList">Staff List</Link>
+                      </li>
+                      <li onClick={(e) => e.stopPropagation()}>
+                        {" "}
+                        <Link to="/owner/AddStaff">Add Staff</Link>
                       </li>
                     </ul>
                   </div>

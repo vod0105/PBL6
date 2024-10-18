@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../Product/OwnerProduct.css";
+import "../Order/Order.css";
 import axios from "axios";
 import LoadingSpinner from "../../Action/LoadingSpiner.js";
 import ModalComponent from "../../components/ModalComponent.js";
@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBackward } from "@fortawesome/free-solid-svg-icons";
 import { faForward } from "@fortawesome/free-solid-svg-icons";
 
-const OwnerProduct = ({ url }) => {
+const Order = ({ url }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -21,18 +21,9 @@ const OwnerProduct = ({ url }) => {
   const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
-      const tk = localStorage.getItem("access_token");
       try {
-        const headers = {
-          Authorization: `Bearer ${tk}`,
-        };
-        // const token = localStorage.getItem("access_token");
-        const response = await axios.get(
-          `${url}/api/v1/owner/products/get-all-products?storeId=33`,
-          {
-            headers,
-          }
-        );
+        const token = localStorage.getItem("access_token");
+        const response = await axios.get(`${url}/api/v1/public/products/all`);
         setData(response.data.data);
       } catch (err) {
         setError(err);
@@ -52,13 +43,9 @@ const OwnerProduct = ({ url }) => {
         Authorization: `Bearer ${tk}`,
         "Content-Type": "application/json",
       };
-      await axios.post(
-        `${url}/api/v1/owner/products/remove-list-products-from-store?storeId=33&productIds=${productId}`,
-        {
-          // http://localhost:8082/api/v1/owner/products/remove-list-products-from-store?storeId=33&productIds=19
-          headers,
-        }
-      );
+      await axios.delete(`${url}/api/v1/admin/products/delete/${productId}`, {
+        headers,
+      });
       setData(data.filter((cat) => cat.productId !== productId));
       toast.success("Deleted Product Successful");
     } catch (error) {
@@ -72,7 +59,10 @@ const OwnerProduct = ({ url }) => {
     }
   };
   // chuyen huong update store
-
+  const handleUpdateClick = (productId) => {
+    // navigate(`admin/UpdateCategory/${cateId}`);
+    navigate(`/admin/UpdateProduct/${productId}`);
+  };
   //
 
   if (loading) {
@@ -111,7 +101,7 @@ const OwnerProduct = ({ url }) => {
             alignItems: "center",
           }}
         >
-          <h1 className="h-product">List Product</h1>
+          <h1 className="h-product">List Order</h1>
           <div className="store-search">
             <input
               type="text"
@@ -152,7 +142,7 @@ const OwnerProduct = ({ url }) => {
               <th scope="col">Category Name</th>
               <th scope="col">Stock Quantity</th>
               <th scope="col">Best Sale</th>
-
+              <th scope="col">Sửa</th>
               <th scope="col">Xóa</th>
             </tr>
           </thead>
@@ -184,6 +174,15 @@ const OwnerProduct = ({ url }) => {
                   <td>{data.stockQuantity}</td>
                   <td>{data.bestSale ? "Best sales" : "Normal"}</td>
 
+                  <td>
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={() => handleUpdateClick(data.productId)}
+                    >
+                      UPDATE
+                    </button>
+                  </td>
                   <td>
                     <button
                       type="button"
@@ -236,4 +235,4 @@ const OwnerProduct = ({ url }) => {
   );
 };
 
-export default OwnerProduct;
+export default Order;

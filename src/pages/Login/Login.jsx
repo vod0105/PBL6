@@ -20,6 +20,7 @@ const Login = ({ url }) => {
         numberPhone,
         password,
       });
+      console.log("REsponse OWNER:", response);
       const access_token = response.data.data.token;
       const role = response.data.data.roles[0];
       localStorage.setItem("access_token", access_token);
@@ -27,8 +28,8 @@ const Login = ({ url }) => {
       setIsAuthenticated(true);
       setUserData(response.data.data.roles[0]);
       // console.log("userData", userData);
-      if(role==="ROLE_ADMIN") navigate("/admin/dashboard");
-      else if(role==="ROLE_OWNER") navigate("/owner/dashboard");
+      if (role === "ROLE_ADMIN") navigate("/admin/dashboard");
+      else if (role === "ROLE_OWNER") navigate("/owner/dashboard");
     } catch (err) {
       setError(
         "Đăng nhập không thành công. Vui lòng kiểm tra lại tên người dùng và mật khẩu."

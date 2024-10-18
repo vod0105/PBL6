@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../Product/OwnerProduct.css";
+import "../Order/Order.css";
 import axios from "axios";
 import LoadingSpinner from "../../Action/LoadingSpiner.js";
 import ModalComponent from "../../components/ModalComponent.js";
@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBackward } from "@fortawesome/free-solid-svg-icons";
 import { faForward } from "@fortawesome/free-solid-svg-icons";
 
-const OwnerProduct = ({ url }) => {
+const StaffList = ({ url }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -21,18 +21,15 @@ const OwnerProduct = ({ url }) => {
   const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
-      const tk = localStorage.getItem("access_token");
       try {
+        const token = localStorage.getItem("access_token");
         const headers = {
-          Authorization: `Bearer ${tk}`,
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         };
-        // const token = localStorage.getItem("access_token");
-        const response = await axios.get(
-          `${url}/api/v1/owner/products/get-all-products?storeId=33`,
-          {
-            headers,
-          }
-        );
+        const response = await axios.get(`${url}/api/v1/owner/staff/all`, {
+          headers,
+        });
         setData(response.data.data);
       } catch (err) {
         setError(err);
@@ -52,14 +49,10 @@ const OwnerProduct = ({ url }) => {
         Authorization: `Bearer ${tk}`,
         "Content-Type": "application/json",
       };
-      await axios.post(
-        `${url}/api/v1/owner/products/remove-list-products-from-store?storeId=33&productIds=${productId}`,
-        {
-          // http://localhost:8082/api/v1/owner/products/remove-list-products-from-store?storeId=33&productIds=19
-          headers,
-        }
-      );
-      setData(data.filter((cat) => cat.productId !== productId));
+      await axios.delete(`${url}/api/v1/owner/staff/delete/${productId}`, {
+        headers,
+      });
+      setData(data.filter((cat) => cat.id !== productId));
       toast.success("Deleted Product Successful");
     } catch (error) {
       if (error.response) {
@@ -72,7 +65,10 @@ const OwnerProduct = ({ url }) => {
     }
   };
   // chuyen huong update store
-
+  const handleUpdateClick = (productId) => {
+    // navigate(`admin/UpdateCategory/${cateId}`);
+    navigate(`/owner/UpdateStaff/${productId}`);
+  };
   //
 
   if (loading) {
@@ -89,7 +85,7 @@ const OwnerProduct = ({ url }) => {
 
   // Xử lý từ khóa tìm kiếm
   const filteredData = data.filter((item) =>
-    item.productName.toLowerCase().includes(searchTerm.toLowerCase())
+    item.employeeName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Xác định các phần tử cần hiển thị trên trang hiện tại
@@ -111,7 +107,7 @@ const OwnerProduct = ({ url }) => {
             alignItems: "center",
           }}
         >
-          <h1 className="h-product">List Product</h1>
+          <h1 className="h-product">List Order</h1>
           <div className="store-search">
             <input
               type="text"
@@ -144,15 +140,13 @@ const OwnerProduct = ({ url }) => {
             }}
           >
             <tr>
-              <th scope="col">Product Id</th>
-              <th scope="col">Image</th>
-              <th scope="col">Name</th>
-              <th scope="col">Description</th>
-              <th scope="col">Price</th>
-              <th scope="col">Category Name</th>
-              <th scope="col">Stock Quantity</th>
-              <th scope="col">Best Sale</th>
+              <th scope="col">Id</th>
+              <th scope="col">Employee Name</th>
+              <th scope="col">Staff Code</th>
+              <th scope="col">Department</th>
+              <th scope="col">Store Id</th>
 
+              <th scope="col">Sửa</th>
               <th scope="col">Xóa</th>
             </tr>
           </thead>
@@ -160,11 +154,11 @@ const OwnerProduct = ({ url }) => {
             {currentItems.length > 0 ? (
               currentItems.map((data) => (
                 <tr
-                  key={data.productId}
+                  key={data.id}
                   style={{ borderBottom: "2px solid rgb(228, 223, 223)" }}
                 >
-                  <td>{data.productId}</td>
-                  <td>
+                  <td>{data.id}</td>
+                  {/* <td>
                     <img
                       src={`data:image/jpeg;base64,${data.image}`}
                       className="img-product"
@@ -175,20 +169,27 @@ const OwnerProduct = ({ url }) => {
                         objectFit: "contain",
                       }}
                     />
-                  </td>
-                  <td>{data.productName}</td>
-                  <td>{data.description}</td>
+                  </td> */}
+                  <td>{data.employeeName}</td>
+                  <td>{data.staff_code}</td>
 
-                  <td>{data.price}</td>
-                  <td>{data.category.categoryName}</td>
-                  <td>{data.stockQuantity}</td>
-                  <td>{data.bestSale ? "Best sales" : "Normal"}</td>
+                  <td>{data.department}</td>
+                  <td>{data.storeId}</td>
 
                   <td>
                     <button
                       type="button"
+                      className="btn btn-primary"
+                      onClick={() => handleUpdateClick(data.id)}
+                    >
+                      UPDATE
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      type="button"
                       className="btn btn-danger"
-                      onClick={() => deleteProduct(data.productId)}
+                      onClick={() => deleteProduct(data.id)}
                     >
                       DELETE
                     </button>
@@ -236,4 +237,4 @@ const OwnerProduct = ({ url }) => {
   );
 };
 
-export default OwnerProduct;
+export default StaffList;

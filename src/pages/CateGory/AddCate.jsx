@@ -126,6 +126,7 @@ const AddCate = ({ url }) => {
                 type="text"
                 name="categoryName"
                 placeholder="Type here"
+                required
               />
             </div>
             <div>
@@ -139,6 +140,7 @@ const AddCate = ({ url }) => {
                   onChange={onChangeHandler}
                   className="ipdes"
                   value={data.description}
+                  required
                 ></input>
               </div>
             </div>
