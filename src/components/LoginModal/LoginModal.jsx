@@ -4,7 +4,11 @@ import './LoginModal.scss';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideLoginModal, showRegisterModal } from '../../redux/actions/modalActions';
-import { loginUser } from '../../redux/actions/authActions';
+import { loginUser, loginGoogle } from '../../redux/actions/authActions';
+
+import { GoogleLogin } from '@react-oauth/google';
+import FacebookLogin from 'react-facebook-login';
+import fbIcon from '../../assets/logo/facebook.png'
 
 const LoginModal = () => {
   const dispatch = useDispatch();
@@ -54,8 +58,19 @@ const LoginModal = () => {
       dispatch(loginUser(phonenumber, password));
     }
   }
+
+  // GG + FB
+  const handleSuccessGoogle = async (credentialResponse) => {
+    dispatch(loginGoogle(credentialResponse.credential));
+  }
+  const handleErrorGoogle = () => {
+    alert('Lỗi tùm lum');
+  }
+
+
   useEffect(() => {
-    if (isAuthenticated) { // Login successfully -> Ẩn modal
+    if (isAuthenticated) { // Login successfully -> Ẩn modal + xóa dl
+      resetInputs();
       dispatch(hideLoginModal());
     }
   }, [isAuthenticated, dispatch]);
@@ -94,6 +109,24 @@ const LoginModal = () => {
               <button className='btn-forgot-password'>Quên mật khẩu</button>
             </div>
             <button className='btn btn-danger' onClick={handleLogin}>Đăng nhập</button>
+            <div className="google-facebook-container">
+              <p>Hoặc đăng nhập với </p>
+              <div className="gg-fb-icon">
+                <GoogleLogin
+                  onSuccess={handleSuccessGoogle}
+                  onError={handleErrorGoogle}
+                  type='icon'
+                  shape='circle'
+                />
+                <FacebookLogin
+                  appId=''
+                  autoLoad={true}
+                  fields='name,email,picture'
+                  textButton={<i className="fa-brands fa-facebook" />}
+                  cssClass='custom-facebook-button'
+                />
+              </div>
+            </div>
             <div className="click-register">
               <p>Bạn chưa có tài khoản?</p>
               <button onClick={switchToRegister}>Đăng ký ngay</button>

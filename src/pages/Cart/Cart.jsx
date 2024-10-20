@@ -3,11 +3,13 @@ import "./Cart.scss";
 import { assets } from "../../assets/assets";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProductsInCart } from "../../redux/actions/userActions";
+import { fetchProductsInCart, placeOrderUsingAddToCart } from "../../redux/actions/userActions";
 
 const Cart = () => {
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const listProducts = useSelector((state) => {
     return state.user.listProductsInCart;
   })
@@ -36,6 +38,11 @@ const Cart = () => {
     }
     return total;
   }
+  const handlePlaceOrder = () => {
+    dispatch(placeOrderUsingAddToCart());
+    navigate('/test-place-order');
+
+  }
   return (
     <div className="cart">
       <div className="cart-items">
@@ -53,7 +60,7 @@ const Cart = () => {
         {listProducts && listProducts.length > 0 && listProducts.map((item, index) => {
           return (
             <div>
-              <div className="cart-items-title cart-items-item">
+              <div className="cart-items-title cart-items-item" key={index}>
                 <img src={'data:image/png;base64,' + item.product.image} alt="" />
                 <p>{item.product.productName}</p>
                 <p>{item.product.size}</p>
@@ -97,7 +104,7 @@ const Cart = () => {
               <b>{Number(getTotalPriceInCart()).toLocaleString('vi-VN')} đ</b>
             </div>
           </div>
-          <button
+          <button onClick={handlePlaceOrder}
           >
             Thanh toán
           </button>

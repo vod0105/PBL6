@@ -111,6 +111,19 @@ const Navbar = () => {
           Cửa hàng
         </NavLink>
 
+        {/* <NavLink
+          to="/test-place-order"
+          className={({ isActive }) => (isActive ? 'active' : '')}
+        >
+          Test  place order
+        </NavLink>
+        <NavLink
+          to="/test-order-complete"
+          className={({ isActive }) => (isActive ? 'active' : '')}
+        >
+          Test  Order Complete
+        </NavLink> */}
+
       </ul>
       <div className="navbar-right">
         {

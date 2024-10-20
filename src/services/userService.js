@@ -11,7 +11,6 @@ const updateProfileService = (phoneNumber, fullName, avatar, email, address) => 
 }
 
 const addProductToCartService = (productId, quantity, storeId, size, status) => {
-    console.log(productId, quantity, storeId, size, status);
     return axios({
         method: 'post',
         url: '/api/v1/user/cart/add/product',
@@ -26,8 +25,13 @@ const fetchProductsInCartService = () => {
         url: `/api/v1/user/cart/history`,
     });
 }
+const placeOrderService = () => {
+    return axios({
+        // method: 'post',
+        // url: `/api/v1/user/`,
+    });
+}
 
-// Remove Session Storage
 // const getUserAccount = () => {
 //     return axios({
 //         method: 'get',
@@ -35,16 +39,10 @@ const fetchProductsInCartService = () => {
 //     });
 // }
 
-const logoutUser = () => {
-    return axios({
-        method: 'post',
-        url: `/api/v1/logout`,
-    });
-}
-
 export {
     updateProfileService,
     addProductToCartService,
     fetchProductsInCartService,
-    logoutUser,
+    placeOrderService,
+
 }

@@ -1,8 +1,8 @@
 // reducers/authReducer.js
 const initialState = {
-    listProductsInCart: {
-
-    }
+    listProductsInCart: {}, // fetch từ server
+    isBuyNow: false,
+    productDetailBuyNow: {}
 };
 
 const userReducer = (state = initialState, action) => {
@@ -20,6 +20,26 @@ const userReducer = (state = initialState, action) => {
                 ...state,
                 listProductsInCart: action.dataProducts,
             };
+        case 'BUY_NOW_OPTION': // Nhấn mua ngay
+            return {
+                ...state,
+                productDetailBuyNow: action.productDetail,
+                isBuyNow: true,
+            }
+        case 'ADD_TO_CART_OPTION': // Nhấn thanh toán trong Cart
+            return {
+                ...state,
+                isBuyNow: false,
+            }
+        case 'PLACE_ORDER_SUCCESS':
+            return {
+                ...state,
+                listProductsInCart: {},
+            }
+        case 'PLACE_ORDER_ERROR':
+            return {
+                ...state,
+            }
         default:
             return state;
     }

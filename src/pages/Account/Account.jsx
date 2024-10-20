@@ -1,18 +1,25 @@
 import React from 'react';
-import { Routes, Route, NavLink, Navigate } from 'react-router-dom';
+import { Routes, Route, NavLink, Navigate, useNavigate } from 'react-router-dom';
 import './Account.scss';
 import AccountInfo from '../../components/AccountInfo/AccountInfo';
 import ChangePassword from '../../components/ChangePassword/ChangePassword';
 import Orders from '../../components/Orders/Orders';
-
+import { logoutUser } from '../../redux/actions/authActions';
+import { useDispatch } from 'react-redux';
 const Account = () => {
   const menuOptions = [
-    { name: "Thông tin tài khoản", path: "info" }, 
-    { name: "Đổi mật khẩu", path: "change-password" }, 
-    { name: "Đơn hàng của bạn", path: "orders" }, 
-    { name: "Đăng xuất", path: "logout" } 
+    { name: "Thông tin tài khoản", path: "info" },
+    { name: "Đổi mật khẩu", path: "change-password" },
+    { name: "Đơn hàng của bạn", path: "orders" },
+    { name: "Đăng xuất", path: "logout" }
   ];
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    dispatch(logoutUser());
+    navigate('/');
+  };
   return (
     <div className="account-page">
       {/* Header */}
@@ -29,16 +36,35 @@ const Account = () => {
         < div className="sidebar" >
           <h6 className='ms-5'>Quản lý tài khoản</h6>
           <ul>
-            {menuOptions.map((option) => (
-              <li key={option.path}>
-                <NavLink
-                  to={option.path} // Đường dẫn tương đối
-                  className={({ isActive }) => (isActive ? 'active' : '')}
-                >
-                  {option.name}
-                </NavLink>
-              </li>
-            ))}
+            <li>
+              <NavLink
+                to='info' // Đường dẫn tương đối
+                className={({ isActive }) => (isActive ? 'active' : '')}
+              >
+                Thông tin tài khoản
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to='change-password'
+                className={({ isActive }) => (isActive ? 'active' : '')}
+              >
+                Đổi mật khẩu
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to='orders'
+                className={({ isActive }) => (isActive ? 'active' : '')}
+              >
+                Đơn hàng của bạn
+              </NavLink>
+            </li>
+            <li>
+              <button onClick={handleLogout} className="logout-button">
+                Đăng xuất
+              </button>
+            </li>
           </ul>
         </div >
 

@@ -1,5 +1,5 @@
 import types from "../types";
-import { registerNewUserService, loginUserService } from "../../services/authService";
+import { registerNewUserService, loginUserService, logoutUserService, loginGoogleService } from "../../services/authService";
 import { toast } from "react-toastify";
 
 // Register New User
@@ -93,11 +93,69 @@ const updateAccountAuth = (phoneNumber, fullName, avatar, email, address) => {
         dispatch(updateAccountAuthSuccess({ phoneNumber, fullName, avatar, email, address }));
     };
 };
+// logout user
+const logoutUserSuccess = () => {
+    return {
+        type: types.LOGOUT_USER,
+    };
+};
+const logoutUser = () => {
+    return async (dispatch) => {
+        // const res = await logoutUserService();
+        toast.success('Đăng xuất thành công!');
+        dispatch(logoutUserSuccess());
+    };
+};
+
+// login google
+const loginGoogleSuccess = () => {
+    return {
+        type: types.LOGIN_GOOGLE_SUCCESS,
+    };
+};
+
+const loginGoogleError = () => {
+    return {
+        type: types.LOGIN_GOOGLE_ERROR,
+    };
+};
+
+const loginGoogle = (tokenGoogle) => {
+    return async (dispatch) => {
+        try {
+            console.log('>>> check token: ', tokenGoogle);
+
+            // const res = await loginGoogleService(tokenGoogle);
+            // const isSuccess = res && res.data ? res.data.success : false;
+            // if (isSuccess) {
+            //     dispatch(loginGoogleSuccess());
+            //     localStorage.setItem("token", res.data.data.token);
+            //     toast.success(res.data.message);
+            // } else {
+            //     toast.error(res.data.message || "Đăng nhập thất bại.");
+            //     dispatch(loginGoogleError());
+            // }
+        } catch (error) {
+            console.log(error);
+            const errorMessage = error.response && error.response.data
+                ? error.response.data.message
+                : "Đã xảy ra lỗi khi đăng nhập.";
+
+            // Hiển thị thông báo lỗi
+            toast.error(errorMessage);
+            dispatch(loginGoogleError());
+        }
+    };
+};
+// click Buy now || Add to cart
+
 
 
 export {
     registerNewUser,
     loginUser,
     updateAccountAuth,
+    logoutUser,
+    loginGoogle,
 
 };

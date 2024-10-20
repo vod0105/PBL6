@@ -6,13 +6,15 @@ import Introduce from '../pages/Introduce/Introduce';
 import Category from '../pages/Category/Category';
 import Promotion from '../pages/Promotion/Promotion';
 import Cart from '../pages/Cart/Cart';
-import PlaceOrder from '../pages/PlaceOrder/PlaceOrder';
 import Contact from '../pages/Contact/Contact';
 import Account from '../pages/Account/Account';
 import ProductItemDetail from '../components/ProductItemDetail/ProductItemDetail';
 // import Store_Old from '../pages/Store_Old/Store_Old';
 import Store from '../pages/Store/Store';
 import StoreDetail from '../pages/StoreDetail/StoreDetail';
+import PlaceOrder from '../pages/PlaceOrder/PlaceOrder';
+import Checkout from '../pages/Checkout/Checkout';
+import OrderComplete from '../pages/OrderComplete/OrderComplete';
 
 const AppRoutes = (props) => {
     return (
@@ -38,6 +40,9 @@ const AppRoutes = (props) => {
                 <Route path="/product-detail/:id" element={<ProductItemDetail />} />
                 <Route path="/store" element={<Store />} />
                 <Route path="/store-detail/:id" element={<StoreDetail />} />
+
+                <Route path="/test-place-order" element={<Checkout />} />
+                <Route path="/test-order-complete" element={<OrderComplete />} />
 
                 <Route path="*" element={<div>404 Not Found!!!</div>} />
 

@@ -82,10 +82,10 @@
   .navbar-category {
     &:hover .navbar-category-dropdown {
       display: flex;  
-      gap: 20px;
+      gap: 40px;
       background-color: #fff2ef;
-      padding: 20px 30px;
-      border-radius: 4px;
+      padding: 15px 30px;
+      border-radius: 15px;
       border: 1px solid red;
       list-style: none;
       justify-content: space-around;

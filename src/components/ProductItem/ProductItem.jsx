@@ -42,7 +42,8 @@ const ProductItem = ({ product, index }) => {
       <h4>{product.productName}</h4>
       <div className="product-item-price-container">
         <span className="product-item-price-discount">
-          {Number(product.price - product.discountedPrice).toLocaleString('vi-VN')} đ
+          {/* {Number(product.price - product.discountedPrice).toLocaleString('vi-VN')} đ */}
+          {Number(product.price).toLocaleString('vi-VN')} đ
         </span>
         <span className="product-item-price-origin">
           {Number(product.price).toLocaleString('vi-VN')} đ

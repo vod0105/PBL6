@@ -18,8 +18,25 @@ const loginUserService = (numberPhone, password) => {
         }
     });
 }
+const logoutUserService = () => {
+    return axios({
+        method: 'post',
+        url: `/api/v1/auth/logout`,
+    });
+}
+const loginGoogleService = (tokenGoogle) => {
+    return axios({
+        method: 'post',
+        url: `/api/v1/auth/login/google`,
+        data: {
+            token: tokenGoogle
+        }
+    });
+}
 
 export {
     registerNewUserService,
     loginUserService,
+    logoutUserService,
+    loginGoogleService
 }

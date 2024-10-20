@@ -34,8 +34,8 @@ const ProductItemDetail = () => {
     }, 200);
   };
   const handleAddToCartClick = () => {
-    setIsAddToCart(true); 
-    handleShowModalProduct(); 
+    setIsAddToCart(true);
+    handleShowModalProduct();
   };
 
   // API
@@ -72,7 +72,8 @@ const ProductItemDetail = () => {
             <hr />
             <div className="infor-right-price-container">
               <span className="infor-right-price-discount">
-                {Number(productDetail.price - productDetail.discountedPrice).toLocaleString('vi-VN')} đ
+                {/* {Number(productDetail.price - productDetail.discountedPrice).toLocaleString('vi-VN')} đ */}
+                {Number(productDetail.price).toLocaleString('vi-VN')} đ
               </span>
               <span className="infor-right-price-origin">
                 {Number(productDetail.price).toLocaleString('vi-VN')} đ

@@ -76,6 +76,28 @@
     background-color: #e3000e;
     color: white; 
   }
+  .logout-button {
+    display: block;
+    padding: 10px;
+    color: #333;
+    text-decoration: none;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  
+    &:hover {
+      background-color: #e3000e;
+      color: white;
+    }
+  
+    &.active {
+      background-color: #e3000e;
+      color: white;
+    }
+  }
   
   .content {
     width: 80%;

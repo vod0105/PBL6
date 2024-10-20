@@ -80,6 +80,7 @@ const RegisterModal = () => {
   // Theo dõi sự thay đổi của registerNewUserSuccess
   useEffect(() => {
     if (registerNewUserSuccess) {
+      resetInputs();
       dispatch(hideRegisterModal());
       dispatch(showLoginModal());
     }

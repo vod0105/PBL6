@@ -1,5 +1,10 @@
 import types from "../types";
-import { updateProfileService, addProductToCartService, fetchProductsInCartService } from "../../services/userService";
+import {
+    updateProfileService,
+    addProductToCartService,
+    fetchProductsInCartService,
+    placeOrderService
+} from "../../services/userService";
 import { toast } from "react-toastify";
 
 // Register New User
@@ -83,17 +88,68 @@ const fetchProductsInCart = () => {
             const res = await fetchProductsInCartService();
             const data = res && res.data ? res.data.data : [];
             dispatch(fetchProductsInCartSuccess(data)); // // Chạy ở đây (2)
-            // console.log(data);
+            console.log(data);
         } catch (error) {
             console.log(error);
         }
     }
 };
 
+// Nhấn MUA NGAY trong Modal -> Chuyển đến Check out
+const placeOrderUsingBuyNow = (product, quantity, store, size) => {
+    return {
+        type: types.BUY_NOW_OPTION,
+        productDetail: { product, quantity, store, size }
+    };
+};
+// Nhấn THANH TOÁN trong Cart -> Chuyển đến Check out
+const placeOrderUsingAddToCart = () => {
+    return {
+        type: types.ADD_TO_CART_OPTION,
+    };
+};
+
+// Nhấn ĐẶT HÀNG trong Check out -> Chuyển đến Order Complete
+const placeOrderSuccess = () => {
+    return {
+        type: types.PLACE_ORDER_SUCCESS,
+    };
+};
+const placeOrderError = () => {
+    return {
+        type: types.PLACE_ORDER_ERROR,
+    };
+};
+
+const placeOrder = () => {
+    return async (dispatch) => {
+        try {
+            dispatch(placeOrderSuccess());
+
+            // const res = await placeOrderService();
+            // const isSuccess = res && res.data ? res.data.success : false;
+            // if (isSuccess) {
+            //     dispatch(placeOrderSuccess());
+            //     toast.success(res.data.message);
+            // } else {
+            //     dispatch(placeOrderError());
+            //     toast.error(res.data.message || "Đặt hàng không thành công!");
+            // }
+        } catch (error) {
+            console.log(error);
+            dispatch(placeOrderError());
+            toast.error('Có lỗi ở Server');
+        }
+    };
+}
+
+
 
 export {
     updateProfile,
     addToCart,
     fetchProductsInCart,
-
+    placeOrderUsingBuyNow,
+    placeOrderUsingAddToCart,
+    placeOrder
 };

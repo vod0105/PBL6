@@ -23,6 +23,12 @@ const authReducer = (state = initialState, action) => {
             let email = action.accountInfo.email;
             let address = action.accountInfo.address;
             return { ...state, account: { ...account, phoneNumber, fullName, avatar, email, address } };
+        case 'LOGOUT_USER':
+            return { ...state, isAuthenticated: false, account: {} };
+        case 'LOGIN_GOOGLE_SUCCESS':
+            return { ...state, isAuthenticated: true };
+        case 'LOGIN_GOOGLE_ERROR':
+            return { ...state, isAuthenticated: false };
         default:
             return state;
     }
