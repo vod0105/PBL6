@@ -21,9 +21,4 @@ public interface IAuthService {
     void invalidateToken(String refreshToken);
     ResponseEntity<APIRespone> SendOTP(String email);
     ResponseEntity<APIRespone> confirmOTP(String email, String otp, String newPassword);
-    ResponseEntity<APIRespone> loginGoogle(OAuth2User oauth2User) throws Exception;
-
-    ResponseEntity<APIRespone> loginFacebook(OAuth2User oauth2User) throws Exception;
-
-    ResponseEntity<APIRespone> loginSuccess(@AuthenticationPrincipal OAuth2User oAuth2User) throws Exception;
 }
