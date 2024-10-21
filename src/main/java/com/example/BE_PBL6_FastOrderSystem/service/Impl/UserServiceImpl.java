@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -189,4 +190,12 @@ public class UserServiceImpl implements IUserService {
         userRepository.save(user);
         return ResponseEntity.ok(new APIRespone(true, "Success", ""));
     }
+
+    @Override
+    public ResponseEntity<APIRespone> countOrderByMonth(){
+        LocalDateTime now = LocalDateTime.now();
+        Long result = userRepository.getAllPeopleRegisterByMonth(now.getMonthValue(),now.getYear());
+        return  ResponseEntity.ok(new APIRespone(true, "Success", result));
+    }
+
 }

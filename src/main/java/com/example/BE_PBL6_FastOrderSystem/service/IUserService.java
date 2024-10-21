@@ -32,4 +32,6 @@ public interface IUserService {
     ResponseEntity<APIRespone> getAllUsers();
 
     ResponseEntity<APIRespone> addPhone(Long userId, String phone);
+
+    ResponseEntity<APIRespone> countOrderByMonth();
 }

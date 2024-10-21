@@ -40,4 +40,15 @@ public interface IOrderService {
     ResponseEntity<APIRespone> getOrdersByStatusAndUserId(String status, Long userId);
     ResponseEntity<APIRespone>  findOrderByOrderCodeAndUserId(String orderCode, Long userId);
     ResponseEntity<APIRespone> getAllOrderByStatusOfStore(String statusName, Long OwnerId);
+
+
+    ResponseEntity<APIRespone> getAllTotalAmountOrder();
+
+    ResponseEntity<APIRespone> getCountOrderByMonth();
+
+    ResponseEntity<APIRespone> getTotalAmountByMonth(int year);
+
+    ResponseEntity<APIRespone> getTotalAmountByWeek();
+
+    ResponseEntity<APIRespone> getCountProductSole(String module);
 }

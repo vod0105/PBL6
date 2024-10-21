@@ -10,7 +10,6 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -589,6 +588,99 @@ public class OrderServiceImpl implements IOrderService {
             return ResponseEntity.badRequest().body(new APIRespone(false, "Store not found", ""));
         }
         return ResponseEntity.badRequest().body(new APIRespone(false, "Store not found", ""));
+
+    }
+
+    @Override
+    public ResponseEntity<APIRespone> getAllTotalAmountOrder(){
+        Long totalAmount = orderRepository.getTotalAmountForCompletedOrders();
+        return ResponseEntity.ok(new APIRespone(true, "Success", totalAmount));
+    }
+
+    @Override
+    public ResponseEntity<APIRespone> getCountOrderByMonth(){
+        LocalDateTime ldt = LocalDateTime.now();
+        Long totalAmount = orderRepository.countOrdersByMonth(ldt.getMonthValue(), ldt.getYear());
+        return ResponseEntity.ok(new APIRespone(true, "Success", totalAmount));
+
+    }
+
+    @Override
+    public ResponseEntity<APIRespone> getTotalAmountByMonth(int year) {
+        Map<String, Long> map = new LinkedHashMap<>();
+
+        for (int i = 0; i < 12; i++) {
+            // Lùi tháng
+            int month = i+1;
+            Long totalAmount = orderRepository.getTotalAmountByMonth(month, year);
+            map.put("Tháng " + month + " Năm " + year, totalAmount);
+        }
+
+        return ResponseEntity.ok(new APIRespone(true, "Success", map));
+        }
+
+        @Override
+        public ResponseEntity<APIRespone> getTotalAmountByWeek(){
+        LocalDateTime ldt = LocalDateTime.now();
+        int currentMonth = ldt.getMonthValue();
+        int currentYear = ldt.getYear();
+        int currentDay = ldt.getDayOfMonth();
+        Map<String, Long> map = new LinkedHashMap<>();
+
+        for (int i = 0; i < 7; i++) {
+            int day = currentDay - i;
+            int month = currentMonth;
+            int year = currentYear;
+            if (day < 1) {
+                day += 7;
+                month-=1;
+                if (month < 1) {
+                    month += 12;
+                    year -= 1;
+                }
+            }
+            Long totalAmount = orderRepository.getTotalAmountByWeek(day,month,year);
+            map.put("Ngày "+day+" Tháng " + month + " Năm " + year, totalAmount);
+        }
+        return ResponseEntity.ok(new APIRespone(true, "Success", map));
+        }
+
+        @Override
+    public ResponseEntity<APIRespone> getCountProductSole(String module){
+        LocalDateTime ldt = LocalDateTime.now();
+        int currentMonth = ldt.getMonthValue();
+        int currentYear = ldt.getYear();
+        int currentDay = ldt.getDayOfMonth();
+        List<Product> products = productRepository.findAll();
+        Map<String, Long> map = new LinkedHashMap<>();
+        if(module.equals("day")){
+            System.out.println("module: day");
+            for (Product product : products) {
+                Long q = orderDetailRepository.getCountProductSoldDay(currentDay,currentMonth,currentYear,product.getProductId());
+                if(q == null) q = Long.valueOf(0);
+                map.put(product.getProductName(), q);
+            }
+            return ResponseEntity.ok(new APIRespone(true, "Success", map));
+
+        } else if(module.equals("month")){
+            System.out.println("module: month");
+            for (Product product : products) {
+                    Long q = orderDetailRepository.getCountProductSoldMonth(currentMonth,currentYear,product.getProductId());
+                    if(q == null) q = Long.valueOf(0);
+                    map.put(product.getProductName(), q);
+                }
+                return ResponseEntity.ok(new APIRespone(true, "Success", map));
+
+            }else{
+            System.out.println("module: year");
+            for (Product product : products) {
+                Long q = orderDetailRepository.getCountProductSoldYear(currentYear,product.getProductId());
+                if(q == null) q = Long.valueOf(0);
+                map.put(product.getProductName(), q);
+            }
+            return ResponseEntity.ok(new APIRespone(true, "Success", map));
+        }
+
 
     }
 }
