@@ -14,9 +14,10 @@ public class PromotionResponse {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private List<Long> storeIds;
+    private List<String> storeNames;
 
 
-    public PromotionResponse(Long id, String name, String description, String image, double discountPercentage, LocalDateTime startDate, LocalDateTime endDate, List<Long> storeIds) {
+    public PromotionResponse(Long id, String name, String description, String image, double discountPercentage, LocalDateTime startDate, LocalDateTime endDate, List<Long> storeIds, List <String> storeNames) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -25,6 +26,7 @@ public class PromotionResponse {
         this.startDate = startDate;
         this.endDate = endDate;
         this.storeIds = storeIds;
+        this.storeNames = storeNames;
     }
 
 }

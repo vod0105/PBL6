@@ -147,7 +147,7 @@ public class CartServiceImpl implements ICartService {
     public ResponseEntity<APIRespone> getHistoryCart(Long userId) {
         List<Cart> cartItems = cartItemRepository.findByUserId(userId);
         if (cartItems.isEmpty()) {
-            return ResponseEntity.badRequest().body(new APIRespone(false, "No cart items found for the user", ""));
+            return ResponseEntity.badRequest().body(new APIRespone(true, "Cart item not found", ""));
         }
         List<CartResponse> cartResponses = CartResponse.convertListCartToCartResponse(cartItems);
         return ResponseEntity.ok(new APIRespone(true, "Get history cart successfully", cartResponses));
@@ -169,9 +169,6 @@ public class CartServiceImpl implements ICartService {
         if (cartItem == null) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "Cart item not found", ""));
         }
-        if (quantity <= 0) {
-            return ResponseEntity.badRequest().body(new APIRespone(false, "Quantity must be greater than 0", ""));
-        }
         if (cartItem.getProduct() != null) {
             if (cartItem.getProduct().getStockQuantity() < quantity) {
                 return ResponseEntity.badRequest().body(new APIRespone(false, "Product not enough", ""));
@@ -185,8 +182,11 @@ public class CartServiceImpl implements ICartService {
             }
         }
         Integer currentQuantity = cartItem.getQuantity();
+        if (currentQuantity + quantity <= 0) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "Quantity must be greater than 0", ""));
+        }
         cartItem.setQuantity(currentQuantity + quantity);
-        cartItem.setTotalPrice(cartItem.getUnitPrice() * quantity);
+        cartItem.setTotalPrice(cartItem.getUnitPrice() * cartItem.getQuantity());
         cartItemRepository.save(cartItem);
         return ResponseEntity.ok(new APIRespone(true, "Update cart item successfully", ""));
     }

@@ -45,7 +45,8 @@ public class PromotionServiceImpl implements IPromotionService {
                         promotion.getDiscountPercentage(),
                         promotion.getStartDate(),
                         promotion.getEndDate(),
-                        promotion.getStores().stream().map(store -> store.getStoreId()).collect(Collectors.toList())
+                        promotion.getStores().stream().map(store -> store.getStoreId()).collect(Collectors.toList()),
+                        promotion.getStores().stream().map(store -> store.getStoreName()).collect(Collectors.toList())
                 ))
                 .collect(Collectors.toList());
         return new ResponseEntity<>(new APIRespone(true, "Success", promotionResponses), HttpStatus.OK);
@@ -65,7 +66,8 @@ public class PromotionServiceImpl implements IPromotionService {
                 promotion.get().getDiscountPercentage(),
                 promotion.get().getStartDate(),
                 promotion.get().getEndDate(),
-                promotion.get().getStores().stream().map(store -> store.getStoreId()).collect(Collectors.toList())
+                promotion.get().getStores().stream().map(store -> store.getStoreId()).collect(Collectors.toList()),
+                promotion.get().getStores().stream().map(store -> store.getStoreName()).collect(Collectors.toList())
         );
         return new ResponseEntity<>(new APIRespone(true, "Success", promotionResponse), HttpStatus.OK);
 
@@ -88,7 +90,7 @@ public class PromotionServiceImpl implements IPromotionService {
                         promotion.getDiscountPercentage(),
                         promotion.getStartDate(),
                         promotion.getEndDate(),
-                        promotion.getStores().stream().map(store1 -> store1.getStoreId()).collect(Collectors.toList())
+                        promotion.getStores().stream().map(store1 -> store1.getStoreId()).collect(Collectors.toList()), promotion.getStores().stream().map(store1 -> store1.getStoreName()).collect(Collectors.toList())
                 ))
                 .collect(Collectors.toList());
         return new ResponseEntity<>(new APIRespone(true, "Success", promotionResponses), HttpStatus.OK);

@@ -232,7 +232,6 @@ public ResponseEntity<APIRespone> getUserInfoFacebook(@AuthenticationPrincipal O
         user.setRole(roleRepository.findByName("ROLE_USER").orElseThrow(() -> new RuntimeException("ROLE_USER not found")));
         userRepository.save(user);
     }
-
     // Convert User to FoodUserDetails
     FoodUserDetails userDetails = FoodUserDetails.buildUserDetails(user);
     Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
