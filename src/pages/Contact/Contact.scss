@@ -11,7 +11,8 @@
         font-weight: 700;
         text-transform: uppercase;
         color: red;
-        margin: 0;
+        // margin: 0;
+        margin-bottom: 50px;
     }
     input{
         margin-bottom: 15px;
@@ -30,5 +31,11 @@
             flex-direction: row;
             gap: 20px;
         }
+        margin-bottom: 30px;
+    }
+    button{
+        text-transform: uppercase;
+        padding: 10px 30px;
+        font-weight: bold;
     }
 }

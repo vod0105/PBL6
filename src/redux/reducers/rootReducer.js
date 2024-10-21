@@ -6,6 +6,7 @@ import productReducer from '../reducers/productReducer';
 import storeReducer from '../reducers/storeReducer';
 import userReducer from './userReducer';
 import sizeReducer from './sizeReducer';
+import promotionReducer from './promotionReducer';
 
 const rootReducer = combineReducers({
     modal: modalReducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
     store: storeReducer,
     user: userReducer,
     size: sizeReducer,
+    promotion: promotionReducer
 
 });
 export default rootReducer;

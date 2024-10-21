@@ -15,6 +15,7 @@ import StoreDetail from '../pages/StoreDetail/StoreDetail';
 import PlaceOrder from '../pages/PlaceOrder/PlaceOrder';
 import Checkout from '../pages/Checkout/Checkout';
 import OrderComplete from '../pages/OrderComplete/OrderComplete';
+import PromotionDetail from '../pages/PromotionDetail/PromotionDetail';
 
 const AppRoutes = (props) => {
     return (
@@ -42,7 +43,7 @@ const AppRoutes = (props) => {
                 <Route path="/store-detail/:id" element={<StoreDetail />} />
 
                 <Route path="/test-place-order" element={<Checkout />} />
-                <Route path="/test-order-complete" element={<OrderComplete />} />
+                <Route path="/promotion-detail/:id" element={<PromotionDetail />} />
 
                 <Route path="*" element={<div>404 Not Found!!!</div>} />
 
