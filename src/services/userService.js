@@ -51,12 +51,35 @@ const increaseOneQuantityService = (cartId) => {
     });
 }
 
-// const getUserAccount = () => {
-//     return axios({
-//         method: 'get',
-//         url: `/api/v1/account`,
-//     });
-// }
+const placeOrderBuyNowService = (paymentMethod, productDetailBuyNow, address, longitude, latitude) => {
+    return axios({
+        method: 'post',
+        url: `/api/v1/user/order/create/now`,
+        data: {
+            paymentMethod,
+            productId: productDetailBuyNow.product.productId,
+            storeId: productDetailBuyNow.store.storeId,
+            quantity: productDetailBuyNow.quantity,
+            size: productDetailBuyNow.size,
+            deliveryAddress: address,
+            longitude,
+            latitude
+        }
+    });
+}
+const placeOrderAddToCartService = (paymentMethod, cartIds, address, longitude, latitude) => {
+    return axios({
+        method: 'post',
+        url: `/api/v1/user/order/create`,
+        data: {
+            cartIds,
+            deliveryAddress: address,
+            longitude,
+            latitude,
+            paymentMethod
+        }
+    });
+}
 
 export {
     updateProfileService,
@@ -65,5 +88,7 @@ export {
     placeOrderService,
     removeProductInCartService,
     increaseOneQuantityService,
+    placeOrderBuyNowService,
+    placeOrderAddToCartService,
 
 }

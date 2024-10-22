@@ -3,7 +3,8 @@ import {
     updateProfileService,
     addProductToCartService,
     fetchProductsInCartService,
-    placeOrderService,
+    placeOrderBuyNowService,
+    placeOrderAddToCartService,
     removeProductInCartService,
     increaseOneQuantityService,
 
@@ -121,38 +122,73 @@ const placeOrderUsingAddToCart = () => {
 };
 
 // Nhấn ĐẶT HÀNG trong Check out -> Chuyển đến Order Complete
-const placeOrderSuccess = () => {
+const placeOrderBuyNowSuccess = () => {
     return {
-        type: types.PLACE_ORDER_SUCCESS,
+        type: types.PLACE_ORDER_BUY_NOW_SUCCESS,
     };
 };
-const placeOrderError = () => {
+const placeOrderBuyNowError = () => {
     return {
-        type: types.PLACE_ORDER_ERROR,
+        type: types.PLACE_ORDER_BUY_NOW_ERROR,
     };
 };
 
-const placeOrder = () => {
+const placeOrderBuyNow = (paymentMethod, productDetailBuyNow, address, longitude, latitude) => {
     return async (dispatch) => {
         try {
-            dispatch(placeOrderSuccess());
+            // dispatch(placeOrderBuyNowSuccess());
 
-            // const res = await placeOrderService();
-            // const isSuccess = res && res.data ? res.data.success : false;
-            // if (isSuccess) {
-            //     dispatch(placeOrderSuccess());
-            //     toast.success(res.data.message);
-            // } else {
-            //     dispatch(placeOrderError());
-            //     toast.error(res.data.message || "Đặt hàng không thành công!");
-            // }
+            const res = await placeOrderBuyNowService(paymentMethod, productDetailBuyNow, address, longitude, latitude);
+            const isSuccess = res && res.data ? res.data.success : false;
+            if (isSuccess) {
+                dispatch(placeOrderBuyNowSuccess());
+                toast.success(res.data.message);
+            } else {
+                dispatch(placeOrderBuyNowError());
+                toast.error(res.data.message || "Đặt hàng không thành công!");
+            }
         } catch (error) {
             console.log(error);
-            dispatch(placeOrderError());
+            dispatch(placeOrderBuyNowError());
             toast.error('Có lỗi ở Server');
         }
     };
 }
+
+// Check out = Add to cart
+const placeOrderAddToCartSuccess = () => {
+    return {
+        type: types.PLACE_ORDER_ADD_TO_CART_SUCCESS,
+    };
+};
+const placeOrderAddToCartError = () => {
+    return {
+        type: types.PLACE_ORDER_ADD_TO_CART_ERROR,
+    };
+};
+
+const placeOrderAddToCart = (paymentMethod, cartIds, address, longitude, latitude) => {
+    return async (dispatch) => {
+        try {
+
+            const res = await placeOrderAddToCartService(paymentMethod, cartIds, address, longitude, latitude);
+            const isSuccess = res && res.data ? res.data.success : false;
+            if (isSuccess) {
+                dispatch(placeOrderAddToCartSuccess());
+                toast.success(res.data.message);
+            } else {
+                dispatch(placeOrderAddToCartError());
+                toast.error(res.data.message || "Đặt hàng không thành công!");
+            }
+        } catch (error) {
+            console.log(error);
+            dispatch(placeOrderAddToCartError());
+            toast.error('Có lỗi ở Server');
+        }
+    };
+}
+
+//
 const resetAllUser = () => {
     return {
         type: types.RESET_ALL_USER,
@@ -215,7 +251,8 @@ export {
     fetchProductsInCart,
     placeOrderUsingBuyNow,
     placeOrderUsingAddToCart,
-    placeOrder,
+    placeOrderBuyNow,
+    placeOrderAddToCart,
     resetAllUser,
     removeProductInCart,
     increaseOneQuantity,

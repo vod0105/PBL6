@@ -2,91 +2,92 @@ import React, { useState } from "react";
 import "./Checkout.scss";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { placeOrder } from "../../redux/actions/userActions";
-
+import { placeOrderBuyNow, placeOrderAddToCart } from "../../redux/actions/userActions";
+import { toast } from "react-toastify";
 
 const Checkout = () => {
-    const [formData, setFormData] = useState({
-        fullname: "",
-        phonenumber: "",
-        companyName: "",
-        address: "",
-        note: "",
-        paymentMethod: "Thanh toán khi nhận hàng"
-    });
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
-
+    const [fullname, setFullname] = useState("");
+    const [phonenumber, setPhonenumber] = useState("");
+    const [address, setAddress] = useState("");
+    const [note, setNote] = useState("");
+    const [paymentMethod, setPaymentMethod] = useState("Thanh toán khi nhận hàng");
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const isBuyNow = useSelector((state) => {
-        return state.user.isBuyNow;
-    })
-    const productDetailBuyNow = useSelector((state) => {
-        return state.user.productDetailBuyNow;
-    })
-    const listProductsInCart = useSelector((state) => {
-        return state.user.listProductsInCart;
-    })
-    const getTotalPriceInCart = () => {
-        let total = 0;
-        for (let i = 0; i < listProductsInCart.length; i++) {
-            total += listProductsInCart[i].product.totalPrice;
-        }
-        return total;
-    }
-    const handlePlaceOrder = () => {
-        dispatch(placeOrder());
-        navigate('/test-order-complete')
+    const isBuyNow = useSelector((state) => state.user.isBuyNow);
+    const productDetailBuyNow = useSelector((state) => state.user.productDetailBuyNow);
+    const listProductsInCart = useSelector((state) => state.user.listProductsInCart);
 
+    const getTotalPriceInCart = () => {
+        return listProductsInCart.reduce((total, item) => total + (item.product.unitPrice * item.product.quantity), 0);
+    }
+
+    const handlePlaceOrder = () => {
+        if (!fullname || !phonenumber || !address) {
+            toast.error('Vui lòng điền đầy đủ thông tin đơn hàng!');
+        }
+        else {
+            let method = 'CASH';
+            switch (paymentMethod) {
+                case 'Thanh toán khi nhận hàng':
+                    method = 'CASH';
+                    break;
+                case 'Momo':
+                    method = 'MOMO';
+                    break;
+                case 'Zalopay':
+                    method = 'ZALOPAY';
+                    break;
+                default:
+                    // Giữ nguyên hoặc xử lý nếu không khớp với trường hợp nào
+                    break;
+            }
+            let longitude = '111';
+            let latitude = '222';
+            if (isBuyNow) { // Mua ngay
+                dispatch(placeOrderBuyNow(method, productDetailBuyNow, address, longitude, latitude));
+                navigate('/test-order-complete');
+            }
+            else { // Mua ở giỏ hàng
+                const cartIds = listProductsInCart.map(item => item.cartId);
+                dispatch(placeOrderAddToCart(method, cartIds, address, longitude, latitude));
+                navigate('/test-order-complete');
+            }
+        }
     };
+
     return (
         <div className="checkout-page">
             <div className="container">
-                {/* <div className="breadcrumb">
-                    <p>Giỏ hàng  &gt; </p>
-                    <p>Thông tin đơn hàng </p>
-                    <p>&gt; Đặt hàng thành công </p>
-                </div> */}
                 <div className="checkout-container">
                     <div className="billing-details">
                         <h2>THÔNG TIN NHẬN HÀNG</h2>
                         <input
                             type="text"
-                            name="fullname"
                             placeholder="Họ tên người nhận"
-                            value={formData.fullname}
-                            onChange={handleChange}
+                            value={fullname}
+                            onChange={(e) => setFullname(e.target.value)}
                             required
                         />
-
                         <input
                             type="text"
-                            name="phonenumber"
                             placeholder="Số điện thoại"
-                            value={formData.phonenumber}
-                            onChange={handleChange}
+                            value={phonenumber}
+                            onChange={(e) => setPhonenumber(e.target.value)}
                             required
                         />
-
                         <input
                             type="text"
-                            name="address"
                             placeholder="Địa chỉ nhận hàng"
-                            value={formData.address}
-                            onChange={handleChange}
+                            value={address}
+                            onChange={(e) => setAddress(e.target.value)}
                             required
                         />
-
                         <textarea
                             name="note"
-                            placeholder="Ghi chú"
-                            value={formData.note}
-                            onChange={handleChange}
+                            placeholder="Ghi chú (tùy chọn)"
+                            value={note}
+                            onChange={(e) => setNote(e.target.value)}
                         />
                     </div>
 
@@ -98,8 +99,8 @@ const Checkout = () => {
                         </div>
                         <div className="order-detail-product">
                             {
-                                isBuyNow === false ? (listProductsInCart && listProductsInCart.length > 0 && listProductsInCart.map((item, index) => {
-                                    return (
+                                isBuyNow === false ? (
+                                    listProductsInCart && listProductsInCart.length > 0 && listProductsInCart.map((item, index) => (
                                         <div className="order-detail-product-item" key={index}>
                                             <div className="product-item-infor">
                                                 <div className="product-item-image">
@@ -111,14 +112,9 @@ const Checkout = () => {
                                                         <p className="infor-price">
                                                             {Number(item.product.unitPrice).toLocaleString('vi-VN')} đ
                                                         </p>
-                                                        <p className="px-2">
-                                                            x
-                                                        </p>
-                                                        <p className="infor-quantity">
-                                                            {item.product.quantity}
-                                                        </p>
+                                                        <p className="px-2">x</p>
+                                                        <p className="infor-quantity">{item.product.quantity}</p>
                                                     </div>
-                                                    {/* Note: BE phải trả về storeName của mỗi sản phẩm trong giỏ hàng -> Hiển thị storeName như mua ngay */}
                                                     <p className="infor-store">Cửa hàng: {item.product.storeId}</p>
                                                 </div>
                                             </div>
@@ -126,46 +122,38 @@ const Checkout = () => {
                                                 <span>{Number(item.product.unitPrice * item.product.quantity).toLocaleString('vi-VN')} đ</span>
                                             </div>
                                         </div>
-                                    )
-                                }))
-                                    : (
-                                        <div className="order-detail-product-item">
-                                            <div className="product-item-infor">
-                                                <div className="product-item-image">
-                                                    <img src={'data:image/png;base64,' + productDetailBuyNow.product.image} alt="" />
-                                                </div>
-                                                <div className="product-item-infor">
-                                                    <p className="infor-name">{productDetailBuyNow.product.productName} ({productDetailBuyNow.size})</p>
-                                                    <div className="infor-price-quantity">
-                                                        <p className="infor-price">
-                                                            {Number(productDetailBuyNow.product.price).toLocaleString('vi-VN')} đ
-                                                        </p>
-                                                        <p className="px-2">
-                                                            x
-                                                        </p>
-                                                        <p className="infor-quantity">
-                                                            {productDetailBuyNow.quantity}
-                                                        </p>
-                                                    </div>
-                                                    <p className="infor-store">Cửa hàng: {productDetailBuyNow.store.storeName}</p>
-                                                </div>
+                                    ))
+                                ) : (
+                                    <div className="order-detail-product-item">
+                                        <div className="product-item-infor">
+                                            <div className="product-item-image">
+                                                <img src={'data:image/png;base64,' + productDetailBuyNow.product.image} alt="" />
                                             </div>
-                                            <div className="product-item-totalprice">
-                                                <span>
-                                                    {Number(productDetailBuyNow.product.price * productDetailBuyNow.quantity).toLocaleString('vi-VN')} đ
-                                                </span>
+                                            <div className="product-item-infor">
+                                                <p className="infor-name">{productDetailBuyNow.product.productName} ({productDetailBuyNow.size})</p>
+                                                <div className="infor-price-quantity">
+                                                    <p className="infor-price">
+                                                        {Number(productDetailBuyNow.product.price).toLocaleString('vi-VN')} đ
+                                                    </p>
+                                                    <p className="px-2">x</p>
+                                                    <p className="infor-quantity">{productDetailBuyNow.quantity}</p>
+                                                </div>
+                                                <p className="infor-store">Cửa hàng: {productDetailBuyNow.store.storeName}</p>
                                             </div>
                                         </div>
-                                    )
+                                        <div className="product-item-totalprice">
+                                            <span>{Number(productDetailBuyNow.product.price * productDetailBuyNow.quantity).toLocaleString('vi-VN')} đ</span>
+                                        </div>
+                                    </div>
+                                )
                             }
                         </div>
                         <div className="order-totalprice">
                             <span>Tổng cộng </span>
-                            {
-                                isBuyNow ? <span>{Number(productDetailBuyNow.product.price * productDetailBuyNow.quantity).toLocaleString('vi-VN')} đ</span>
-                                    : <span>{Number(getTotalPriceInCart()).toLocaleString('vi-VN')} đ</span>
-                            }
-
+                            <span>{isBuyNow
+                                ? Number(productDetailBuyNow.product.price * productDetailBuyNow.quantity).toLocaleString('vi-VN')
+                                : Number(getTotalPriceInCart()).toLocaleString('vi-VN')} đ
+                            </span>
                         </div>
 
                         <div className="shipping-method">
@@ -176,8 +164,8 @@ const Checkout = () => {
                                     id="cash"
                                     name="paymentMethod"
                                     value="Thanh toán khi nhận hàng"
-                                    checked={formData.paymentMethod === "Thanh toán khi nhận hàng"}
-                                    onChange={handleChange}
+                                    checked={paymentMethod === "Thanh toán khi nhận hàng"}
+                                    onChange={(e) => setPaymentMethod(e.target.value)}
                                 />
                                 <label htmlFor="cash">Thanh toán khi nhận hàng</label>
                             </div>
@@ -187,19 +175,27 @@ const Checkout = () => {
                                     id="momo"
                                     name="paymentMethod"
                                     value="Momo"
-                                    checked={formData.paymentMethod === "Momo"}
-                                    onChange={handleChange}
+                                    checked={paymentMethod === "Momo"}
+                                    onChange={(e) => setPaymentMethod(e.target.value)}
                                 />
                                 <label htmlFor="momo">Momo</label>
+                            </div>
+                            <div>
+                                <input
+                                    type="radio"
+                                    id="zalopay"
+                                    name="paymentMethod"
+                                    value="Zalopay"
+                                    checked={paymentMethod === "Zalopay"}
+                                    onChange={(e) => setPaymentMethod(e.target.value)}
+                                />
+                                <label htmlFor="Zalopay">Zalopay</label>
                             </div>
                         </div>
 
                         <div className="order-item">
                             <span>Tổng đơn hàng</span>
-                            {
-                                isBuyNow ? <span>{Number(productDetailBuyNow.product.price * productDetailBuyNow.quantity + 20000).toLocaleString('vi-VN')} đ</span>
-                                    : <span>{Number(getTotalPriceInCart() + 20000).toLocaleString('vi-VN')} đ</span>
-                            }
+                            <span>{isBuyNow ? Number(productDetailBuyNow.product.price * productDetailBuyNow.quantity + 20000).toLocaleString('vi-VN') : Number(getTotalPriceInCart() + 20000).toLocaleString('vi-VN')} đ</span>
                         </div>
                         <button className="place-order-btn" onClick={handlePlaceOrder}>
                             ĐẶT HÀNG

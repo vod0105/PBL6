@@ -31,12 +31,21 @@ const userReducer = (state = initialState, action) => {
                 ...state,
                 isBuyNow: false,
             }
-        case 'PLACE_ORDER_SUCCESS':
+        case 'PLACE_ORDER_BUY_NOW_SUCCESS':
+            return {
+                ...state,
+                productDetailBuyNow: {},
+            }
+        case 'PLACE_ORDER_BUY_NOW_ERROR':
+            return {
+                ...state,
+            }
+        case 'PLACE_ORDER_ADD_TO_CART_SUCCESS':
             return {
                 ...state,
                 listProductsInCart: {},
             }
-        case 'PLACE_ORDER_ERROR':
+        case 'PLACE_ORDER_ADD_TO_CART_ERROR':
             return {
                 ...state,
             }

@@ -124,6 +124,13 @@ const Navbar = () => {
           Test  Order Complete
         </NavLink> */}
 
+        <NavLink
+          to="/test-order-complete"
+          className={({ isActive }) => (isActive ? 'active' : '')}
+        >
+          Test  Order Complete
+        </NavLink>
+
       </ul>
       <div className="navbar-right">
         {

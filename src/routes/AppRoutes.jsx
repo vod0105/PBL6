@@ -44,6 +44,7 @@ const AppRoutes = (props) => {
 
                 <Route path="/test-place-order" element={<Checkout />} />
                 <Route path="/promotion-detail/:id" element={<PromotionDetail />} />
+                <Route path="/test-order-complete" element={<OrderComplete />} />
 
                 <Route path="*" element={<div>404 Not Found!!!</div>} />
 
