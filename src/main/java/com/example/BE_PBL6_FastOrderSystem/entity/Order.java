@@ -24,8 +24,8 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "status_id")
     private StatusOrder status;
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<Cart> carts;
+//    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+//    private List<Cart> carts;
     private String deliveryAddress;
     @Column(name = "longitude", columnDefinition = "DOUBLE")
     private Double longitude;
@@ -56,7 +56,6 @@ public class Order {
                 ", totalAmount=" + totalAmount +
                 ", shippingFee=" + shippingFee +
                 ", status=" + status +
-                ", carts=" + carts +
                 ", deliveryAddress='" + deliveryAddress + '\'' +
                 ", longitude=" + longitude +
                 ", latitude=" + latitude +

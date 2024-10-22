@@ -495,11 +495,11 @@ public ResponseEntity<APIRespone> cancelOrder(String orderCode, Long userId) {
     orderRepository.save(order);
 
     // Retrieve and update the cart status
-    List<Cart> carts = cartItemRepository.findByOrderId(order.getOrderId());
-    for (Cart cart : carts) {
-        cart.setStatus("Đã bị hủy");
-        cartItemRepository.save(cart);
-    }
+//    List<Cart> carts = cartItemRepository.findByOrderId(order.getOrderId());
+//    for (Cart cart : carts) {
+//        cart.setStatus("Đã bị hủy");
+//        cartItemRepository.save(cart);
+//    }
 
     return ResponseEntity.ok(new APIRespone(true, "Order and associated cart canceled successfully", ""));
 }

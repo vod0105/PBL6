@@ -8,6 +8,7 @@ import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
 import com.example.BE_PBL6_FastOrderSystem.response.JwtResponse;
 import com.example.BE_PBL6_FastOrderSystem.security.jwt.JwtUtils;
 import com.example.BE_PBL6_FastOrderSystem.security.user.FoodUserDetails;
+import com.example.BE_PBL6_FastOrderSystem.security.user.FoodUserDetailsService;
 import com.example.BE_PBL6_FastOrderSystem.service.IAuthService;
 import com.example.BE_PBL6_FastOrderSystem.utils.ImageGeneral;
 import lombok.RequiredArgsConstructor;
@@ -37,10 +38,11 @@ public class AuthServiceImpl implements IAuthService {
     private final RoleRepository roleRepository;
     private final EmailServiceImpl emailService;
     private final OTPServiceImpl otpService;
+    private final FoodUserDetailsService userDetailsService;
 
     @Override
     public ResponseEntity<APIRespone> authenticateUser(String username, String password) {
-        Optional<User> user = userRepository.findByPhoneNumber(username);
+       Optional<User> user = userRepository.findByPhoneNumber(username);
         if (user.isEmpty()) {
             user = userRepository.findByEmail(username);
         }
