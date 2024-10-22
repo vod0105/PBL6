@@ -33,10 +33,17 @@ const loginGoogleService = (tokenGoogle) => {
         }
     });
 }
+const getUserAccountService = () => {  // Lấy account infor => Xử lý khi Refresh Page
+    return axios({
+        method: 'get',
+        url: `/api/v1/user/auth/profile`,
+    });
+}
 
 export {
     registerNewUserService,
     loginUserService,
     logoutUserService,
-    loginGoogleService
+    loginGoogleService,
+    getUserAccountService
 }

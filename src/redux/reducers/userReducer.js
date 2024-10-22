@@ -40,6 +40,18 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
             }
+        case 'RESET_ALL_USER':
+            return {
+                ...initialState,
+            };
+        case 'REMOVE_PRODUCT_IN_CART_SUCCESS':
+            return {
+                ...state
+            };
+        case 'INCREASE_ONE_QUANTITY_SUCCESS':
+            return {
+                ...state
+            };
         default:
             return state;
     }

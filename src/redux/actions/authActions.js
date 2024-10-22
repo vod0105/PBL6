@@ -1,6 +1,7 @@
 import types from "../types";
-import { registerNewUserService, loginUserService, logoutUserService, loginGoogleService } from "../../services/authService";
+import { registerNewUserService, loginUserService, logoutUserService, loginGoogleService, getUserAccountService } from "../../services/authService";
 import { toast } from "react-toastify";
+import { resetAllUser, fetchProductsInCart } from "./userActions";
 
 // Register New User
 const registerNewUserSuccess = () => {
@@ -62,6 +63,10 @@ const loginUser = (phonenumber, password) => {
                 dispatch(loginUserSuccess(res.data.data));
                 localStorage.setItem("token", res.data.data.token);
                 toast.success(res.data.message);
+                // Đợi token được thiết lập xong trước khi fetch sản phẩm trong giỏ hàng
+                await new Promise((resolve) => setTimeout(resolve, 1000));
+
+                // dispatch(fetchProductsInCart());
             } else {
                 // Hiển thị thông báo lỗi nếu đăng nhập không thành công
                 toast.error(res.data.message || "Đăng nhập thất bại.");
@@ -88,9 +93,9 @@ const updateAccountAuthSuccess = (userInfo) => {
         accountInfo: userInfo
     };
 };
-const updateAccountAuth = (phoneNumber, fullName, avatar, email, address) => {
+const updateAccountAuth = (fullName, avatar, email, address) => {
     return (dispatch) => {
-        dispatch(updateAccountAuthSuccess({ phoneNumber, fullName, avatar, email, address }));
+        dispatch(updateAccountAuthSuccess({ fullName, avatar, email, address }));
     };
 };
 // logout user
@@ -104,6 +109,7 @@ const logoutUser = () => {
         // const res = await logoutUserService();
         toast.success('Đăng xuất thành công!');
         dispatch(logoutUserSuccess());
+        dispatch(resetAllUser());
     };
 };
 
@@ -147,8 +153,36 @@ const loginGoogle = (tokenGoogle) => {
         }
     };
 };
-// click Buy now || Add to cart
-
+// get user account infor => Refresh Page
+const getUserAccountSuccess = (userInfo) => {
+    return {
+        type: types.FETCH_USER_ACCOUNT_SUCCESS,
+        accountInfo: userInfo
+    };
+};
+const getUserAccount = () => {
+    return async (dispatch) => {
+        try {
+            const token = localStorage.getItem("token");
+            // console.log('>>> check token user: ', token);
+            if (token) {
+                const res = await getUserAccountService();
+                const isSuccess = res && res.data ? res.data.success : false;
+                if (isSuccess) {
+                    dispatch(getUserAccountSuccess(res.data.data));
+                    // toast.success(res.data.message);
+                } else {
+                    // Hiển thị thông báo lỗi nếu đăng nhập không thành công
+                    // toast.error(res.data.message || "Đăng nhập thất bại.");
+                }
+            }
+        } catch (error) {
+            console.log(error);
+            // Hiển thị thông báo lỗi
+            // toast.error(res.data.message || "Đăng nhập thất bại.");
+        }
+    };
+};
 
 
 export {
@@ -157,5 +191,6 @@ export {
     updateAccountAuth,
     logoutUser,
     loginGoogle,
+    getUserAccount,
 
 };

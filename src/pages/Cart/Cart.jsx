@@ -3,7 +3,13 @@ import "./Cart.scss";
 import { assets } from "../../assets/assets";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProductsInCart, placeOrderUsingAddToCart } from "../../redux/actions/userActions";
+import {
+  fetchProductsInCart,
+  placeOrderUsingAddToCart,
+  removeProductInCart,
+  increaseOneQuantity,
+} from "../../redux/actions/userActions";
+import { toast } from "react-toastify";
 
 const Cart = () => {
 
@@ -15,33 +21,44 @@ const Cart = () => {
   })
   useEffect(() => {
     dispatch(fetchProductsInCart());
-  }, []);
+  }, [dispatch]);
 
   // Tăng/giảm slsp
   const handleIncreaseQuantity = (item) => {
-    if (item.product.quantity < item.product.stockQuantity) {
-      // dispatch(updateProductQuantityInCart(item, item.product.quantity + 1));
-    }
+    // note: BE thêm stockQuantity ở mỗi sản phẩm trong giỏ hàng khi trả về data
+    // if (item.product.quantity < item.product.stockQuantity) {
+    //   increaseOneQuantity(item.cartId);
+    // }
+    // else {
+    //   toast.error('Sản phẩm vượt quá số lượng!')
+    // }
+
+    dispatch(increaseOneQuantity(item.cartId));
   };
   const handleDecreaseQuantity = (item) => {
     if (item.product.quantity > 1) {
       // dispatch(updateProductQuantityInCart(item, item.product.quantity - 1));
     }
   };
-  const removeProductInCart = (item) => {
-
+  // Xóa sản phẩm khỏi giỏ hàng
+  const handleRemoveProductInCart = (cartId) => {
+    dispatch(removeProductInCart(cartId));
   };
   const getTotalPriceInCart = () => {
     let total = 0;
     for (let i = 0; i < listProducts.length; i++) {
-      total += listProducts[i].product.totalPrice;
+      total += (listProducts[i].product.unitPrice * listProducts[i].product.quantity);
     }
     return total;
   }
   const handlePlaceOrder = () => {
-    dispatch(placeOrderUsingAddToCart());
-    navigate('/test-place-order');
-
+    if (!listProducts || listProducts.length === 0) {
+      toast.error('Không có sản phẩm trong giỏ hàng!');
+    }
+    else {
+      dispatch(placeOrderUsingAddToCart());
+      navigate('/test-place-order');
+    }
   }
   return (
     <div className="cart">
@@ -57,32 +74,41 @@ const Cart = () => {
         </div>
         <br />
         <hr />
-        {listProducts && listProducts.length > 0 && listProducts.map((item, index) => {
-          return (
-            <div>
-              <div className="cart-items-title cart-items-item" key={index}>
-                <img src={'data:image/png;base64,' + item.product.image} alt="" />
-                <p>{item.product.productName}</p>
-                <p>{item.product.size}</p>
-                <p>{Number(item.product.unitPrice).toLocaleString('vi-VN')} đ</p>
-                <div className="quantity-controls">
-                  <button onClick={() => handleDecreaseQuantity(item)}> <i className="fa-solid fa-minus"></i></button>
-                  <p>{item.product.quantity}</p>
-                  <button onClick={() => handleIncreaseQuantity(item)}><i className="fa-solid fa-plus"></i></button>
+        {
+          listProducts && listProducts.length > 0 ? (listProducts.map((item, index) => {
+            return (
+              <div>
+                <div className="cart-items-title cart-items-item" key={index}>
+                  <img src={'data:image/png;base64,' + item.product.image} alt="" />
+                  <p>{item.product.productName}</p>
+                  <p>{item.product.size}</p>
+                  <p>{Number(item.product.unitPrice).toLocaleString('vi-VN')} đ</p>
+                  <div className="quantity-controls">
+                    <button onClick={() => handleDecreaseQuantity(item)}> <i className="fa-solid fa-minus"></i></button>
+                    <p>{item.product.quantity}</p>
+                    <button onClick={() => handleIncreaseQuantity(item)}><i className="fa-solid fa-plus"></i></button>
+                  </div>
+                  {/* Note: totalPrice tính sai ở BE */}
+                  {/* <p>{Number(item.product.totalPrice).toLocaleString('vi-VN')} đ</p> */}
+                  <p>{Number(item.product.unitPrice * item.product.quantity).toLocaleString('vi-VN')} đ</p>
+                  <p
+                    onClick={() => {
+                      handleRemoveProductInCart(item.cartId);
+                    }}
+                  >
+                    <i className="fa-solid fa-trash action-delete" ></i>
+                  </p>
                 </div>
-                <p>{Number(item.product.totalPrice).toLocaleString('vi-VN')} đ</p>
-                <p
-                  onClick={() => {
-                    removeProductInCart(item);
-                  }}
-                >
-                  <i className="fa-solid fa-trash action-delete" ></i>
-                </p>
+                <hr />
               </div>
-              <hr />
-            </div>
-          );
-        })}
+            );
+          }))
+            : (
+              <div className="no-product">
+                <span>Không có sản phẩm trong giỏ hàng</span>
+              </div>
+            )
+        }
       </div>
       <div className="cart-bottom">
         <div className="cart-total">
@@ -104,7 +130,8 @@ const Cart = () => {
               <b>{Number(getTotalPriceInCart()).toLocaleString('vi-VN')} đ</b>
             </div>
           </div>
-          <button onClick={handlePlaceOrder}
+          <button
+            onClick={handlePlaceOrder}
           >
             Thanh toán
           </button>

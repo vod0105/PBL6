@@ -26,12 +26,12 @@
     .multi-fields{
         display: flex;
         flex-direction: column;
+        margin-bottom: 30px;
         .row-edit {
             display: flex;
             flex-direction: row;
             gap: 20px;
         }
-        margin-bottom: 30px;
     }
     button{
         text-transform: uppercase;

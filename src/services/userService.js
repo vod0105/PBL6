@@ -1,11 +1,18 @@
 import axios from "../setup/axios"; // an instance of axios
 
-const updateProfileService = (phoneNumber, fullName, avatar, email, address) => {
+const updateProfileService = (fullName, avatar, email, address) => {
+    const formData = new FormData();
+    formData.append('fullName', fullName);
+    formData.append('avatar', avatar); // Thêm tệp avatar
+    formData.append('email', email);
+    formData.append('address', address);
+
     return axios({
         method: 'put',
         url: '/api/v1/user/auth/profile/update',
-        data: {
-            phoneNumber, fullName, avatar, email, address
+        data: formData,
+        headers: {
+            'Content-Type': 'multipart/form-data' // Đặt header đúng
         }
     });
 }
@@ -31,6 +38,18 @@ const placeOrderService = () => {
         // url: `/api/v1/user/`,
     });
 }
+const removeProductInCartService = (cartId) => {
+    return axios({
+        method: 'delete',
+        url: `/api/v1/user/cart/delete/${cartId}`,
+    });
+}
+const increaseOneQuantityService = (cartId) => {
+    return axios({
+        method: 'put',
+        url: `/api/v1/user/cart/update?cartId=${cartId}&quantity=1`,
+    });
+}
 
 // const getUserAccount = () => {
 //     return axios({
@@ -44,5 +63,7 @@ export {
     addProductToCartService,
     fetchProductsInCartService,
     placeOrderService,
+    removeProductInCartService,
+    increaseOneQuantityService,
 
 }

@@ -3,7 +3,10 @@ import {
     updateProfileService,
     addProductToCartService,
     fetchProductsInCartService,
-    placeOrderService
+    placeOrderService,
+    removeProductInCartService,
+    increaseOneQuantityService,
+
 } from "../../services/userService";
 import { toast } from "react-toastify";
 
@@ -20,10 +23,10 @@ const updateProfileError = (errorMessage) => {
     };
 };
 
-const updateProfile = (phoneNumber, fullName, avatar, email, address) => {
+const updateProfile = (fullName, avatar, email, address) => {
     return async (dispatch) => {
         try {
-            const res = await updateProfileService(phoneNumber, fullName, avatar, email, address);
+            const res = await updateProfileService(fullName, avatar, email, address);
             const isSuccess = res && res.data ? res.data.success : false;
             if (isSuccess) {
                 dispatch(updateProfileSuccess());
@@ -62,6 +65,7 @@ const addToCart = (productId, quantity, storeId, size, status) => {
             const isSuccess = res && res.data ? res.data.success : false;
             if (isSuccess) {
                 dispatch(addToCartSuccess());
+                dispatch(fetchProductsInCart());
                 toast.success(res.data.message);
             } else {
                 dispatch(addToCartError());
@@ -86,9 +90,16 @@ const fetchProductsInCart = () => {
     return async (dispatch, getState) => {
         try {
             const res = await fetchProductsInCartService();
-            const data = res && res.data ? res.data.data : [];
-            dispatch(fetchProductsInCartSuccess(data)); // // Chạy ở đây (2)
-            console.log(data);
+            const data = res && res.data && res.data.data ? res.data.data : [];
+            // Kiểm tra nếu giỏ hàng rỗng
+            if (data.length === 0) {
+                console.log("Giỏ hàng trống");
+                dispatch(fetchProductsInCartSuccess([]));  // Gửi array rỗng đến redux
+            }
+            else {
+                dispatch(fetchProductsInCartSuccess(data));
+                console.log('>>> data cart: ', data);
+            }
         } catch (error) {
             console.log(error);
         }
@@ -142,7 +153,60 @@ const placeOrder = () => {
         }
     };
 }
+const resetAllUser = () => {
+    return {
+        type: types.RESET_ALL_USER,
+    };
+}
+// Xóa sp khỏi giỏ hàng
+const removeProductInCartSuccess = () => {
+    return {
+        type: types.REMOVE_PRODUCT_IN_CART_SUCCESS,
+    };
+};
+const removeProductInCart = (cartId) => {
+    return async (dispatch, getState) => {
+        try {
+            const res = await removeProductInCartService(cartId);
+            const isSuccess = res && res.data ? res.data.success : false;
+            if (isSuccess) {
+                dispatch(removeProductInCartSuccess());
+                dispatch(fetchProductsInCart());
+                toast.success(res.data.message);
+            } else {
+                toast.error(res.data.message || "Xóa sản phẩm khỏi giỏ hàng không thành công!");
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error("Có lỗi ở Server!");
+        }
+    }
+};
 
+// Nhấn + => Tăng 1
+const increaseOneQuantitySuccess = () => {
+    return {
+        type: types.INCREASE_ONE_QUANTITY_SUCCESS,
+    };
+};
+const increaseOneQuantity = (cartId) => {
+    return async (dispatch, getState) => {
+        try {
+            const res = await increaseOneQuantityService(cartId);
+            const isSuccess = res && res.data ? res.data.success : false;
+            if (isSuccess) {
+                dispatch(increaseOneQuantitySuccess());
+                dispatch(fetchProductsInCart());
+                toast.success(res.data.message);
+            } else {
+                toast.error(res.data.message);
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error("Có lỗi ở Server!");
+        }
+    }
+};
 
 
 export {
@@ -151,5 +215,9 @@ export {
     fetchProductsInCart,
     placeOrderUsingBuyNow,
     placeOrderUsingAddToCart,
-    placeOrder
+    placeOrder,
+    resetAllUser,
+    removeProductInCart,
+    increaseOneQuantity,
+
 };

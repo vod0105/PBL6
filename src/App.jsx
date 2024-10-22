@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -9,9 +9,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import AppRoutes from "./routes/AppRoutes";
 import LoginModal from "./components/LoginModal/LoginModal";
 import RegisterModal from "./components/RegisterModal/RegisterModal";
+import { useDispatch, useSelector } from 'react-redux';
+import { getUserAccount } from "./redux/actions/authActions";
 
 const App = () => {
-  // const [showLogin, setShowLogin] = useState(false);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getUserAccount());
+  }, [dispatch]);
   return (
     <>
       <div className="app">
