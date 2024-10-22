@@ -1,5 +1,14 @@
 import types from "../types";
-import { registerNewUserService, loginUserService, logoutUserService, loginGoogleService, getUserAccountService } from "../../services/authService";
+import {
+    registerNewUserService,
+    loginUserService,
+    logoutUserService,
+    loginGoogleService,
+    getUserAccountService,
+    sendOTPService,
+    verifyOTPService,
+
+} from "../../services/authService";
 import { toast } from "react-toastify";
 import { resetAllUser, fetchProductsInCart } from "./userActions";
 
@@ -184,6 +193,55 @@ const getUserAccount = () => {
     };
 };
 
+// send otp (forget password)
+const sentOTPSuccess = () => {
+    return {
+        type: types.SENT_OTP_SUCCESS,
+    };
+};
+const sendOTP = (email) => {
+    return async (dispatch) => {
+        try {
+            const res = await sendOTPService(email);
+            const isSuccess = res && res.data ? res.data.success : false;
+            if (isSuccess) {
+                dispatch(sentOTPSuccess());
+                toast.success('Gửi OTP thành công!');
+            } else {
+                toast.error(res.data.message || "Email không hợp lệ");
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error("Email không hợp lệ");
+            // Hiển thị thông báo lỗi
+            // toast.error(res.data.message || "Đăng nhập thất bại.");
+        }
+    };
+};
+// send otp (forget password)
+const verifyOTPSuccess = () => {
+    return {
+        type: types.VERIFY_OTP_SUCCESS,
+    };
+};
+const verifyOTP = (email, otp, newPassword) => {
+    return async (dispatch) => {
+        try {
+            const res = await verifyOTPService(email, otp, newPassword);
+            const isSuccess = res && res.data ? res.data.success : false;
+            if (isSuccess) {
+                dispatch(verifyOTPSuccess());
+                toast.success(res.data.message);
+            } else {
+                toast.error(res.data.message || "Xác nhận OTP không thành công!");
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error("Xác nhận OTP không thành công!");
+        }
+    };
+};
+
 
 export {
     registerNewUser,
@@ -192,5 +250,7 @@ export {
     logoutUser,
     loginGoogle,
     getUserAccount,
+    sendOTP,
+    verifyOTP,
 
 };

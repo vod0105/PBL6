@@ -39,11 +39,28 @@ const getUserAccountService = () => {  // Lấy account infor => Xử lý khi Re
         url: `/api/v1/user/auth/profile`,
     });
 }
+// forget password
+const sendOTPService = (email) => {
+    return axios({
+        method: 'post',
+        url: `/api/v1/auth/send-otp?email=${email}`,
+    });
+}
+const verifyOTPService = (email, otp, newPassword) => {
+    return axios({
+        method: 'post',
+        url: `/api/v1/auth/confirm-otp?email=${email}&otp=${otp}&newPassword=${newPassword}`,
+    });
+}
 
 export {
     registerNewUserService,
     loginUserService,
     logoutUserService,
     loginGoogleService,
-    getUserAccountService
+    getUserAccountService,
+    sendOTPService,
+    verifyOTPService,
+
+
 }

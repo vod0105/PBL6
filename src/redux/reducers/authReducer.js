@@ -3,6 +3,8 @@ const initialState = {
     isAuthenticated: false, // Đã đăng nhập chưa 
     registerNewUserSuccess: false,
     account: {}, // Thông tin account
+    isSentOTP: false,
+    isVerifyOTPSuccess: false,
 
 };
 
@@ -38,6 +40,10 @@ const authReducer = (state = initialState, action) => {
             email = action.accountInfo.email;
             address = action.accountInfo.address;
             return { ...state, isAuthenticated: true, account: { ...account, phoneNumber, fullName, avatar, email, address } };
+        case 'SENT_OTP_SUCCESS':
+            return { ...state, isSentOTP: true };
+        case 'VERIFY_OTP_SUCCESS':
+            return { ...state, isVerifyOTPSuccess: true };
         default:
             return state;
     }
