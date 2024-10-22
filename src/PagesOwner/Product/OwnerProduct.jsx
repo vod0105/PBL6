@@ -28,7 +28,7 @@ const OwnerProduct = ({ url }) => {
         };
         // const token = localStorage.getItem("access_token");
         const response = await axios.get(
-          `${url}/api/v1/owner/products/get-all-products?storeId=33`,
+          `${url}/api/v1/owner/products/get-all-products`,
           {
             headers,
           }
@@ -52,8 +52,8 @@ const OwnerProduct = ({ url }) => {
         Authorization: `Bearer ${tk}`,
         "Content-Type": "application/json",
       };
-      await axios.post(
-        `${url}/api/v1/owner/products/remove-list-products-from-store?storeId=33&productIds=${productId}`,
+      await axios.delete(
+        `${url}/api/v1/owner/products/remove-from-store?productId=${productId}`,
         {
           // http://localhost:8082/api/v1/owner/products/remove-list-products-from-store?storeId=33&productIds=19
           headers,

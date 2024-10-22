@@ -71,7 +71,7 @@ const CalendarPage = () => {
           "Content-Type": "application/json",
         };
         const response = await axios.get(
-          `${url}/api/v1/owner/schedule/store/35`,
+          `${url}/api/v1/owner/schedule/store`,
           { headers }
         );
         const fetchedData = response.data.data;
