@@ -1,6 +1,7 @@
 package com.example.BE_PBL6_FastOrderSystem.controller.Onwer;
 
 import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
+import com.example.BE_PBL6_FastOrderSystem.security.user.FoodUserDetails;
 import com.example.BE_PBL6_FastOrderSystem.service.IOrderService;
 import com.example.BE_PBL6_FastOrderSystem.service.IUserService;
 import lombok.RequiredArgsConstructor;
@@ -20,31 +21,31 @@ public class OwnerDisplayController {
 
     @GetMapping("/budget/all")
     public ResponseEntity<APIRespone> budgetAll() {
-        return orderService.getAllTotalAmountOrder();
+        Long OwnerId = FoodUserDetails.getCurrentUserId();
+        return orderService.getAllTotalAmountOrderStore(OwnerId);
     }
 
     @GetMapping("/order/month")
     public ResponseEntity<APIRespone> AllOrderMonth() {
-        return orderService.getCountOrderByMonth();
-    }
-
-    @GetMapping("/user/register/month")
-    public ResponseEntity<APIRespone> userRegisterMonth() {
-        return userService.countOrderByMonth();
+        Long OwnerId = FoodUserDetails.getCurrentUserId();
+        return orderService.getCountOrderByMonthStore(OwnerId);
     }
 
     @GetMapping("total/year/{y}")
     public ResponseEntity<APIRespone> totalYear(@PathVariable int y) {
-        return orderService.getTotalAmountByMonth(y);
+        Long OwnerId = FoodUserDetails.getCurrentUserId();
+        return orderService.getTotalAmountByMonthStore(OwnerId,y);
     }
 
     @GetMapping("total/week")
     public ResponseEntity<APIRespone> totalWeek() {
-        return orderService.getTotalAmountByWeek();
+        Long OwnerId = FoodUserDetails.getCurrentUserId();
+        return orderService.getTotalAmountByWeekStore(OwnerId);
     }
 
     @GetMapping("count/products")
     public ResponseEntity<APIRespone> countProducts(@RequestParam String module) {
-        return orderService.getCountProductSole(module);
+        Long OwnerId = FoodUserDetails.getCurrentUserId();
+        return orderService.getCountProductSoleStore(OwnerId,module);
     }
 }

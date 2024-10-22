@@ -51,4 +51,14 @@ public interface IOrderService {
     ResponseEntity<APIRespone> getTotalAmountByWeek();
 
     ResponseEntity<APIRespone> getCountProductSole(String module);
+
+    ResponseEntity<APIRespone> getAllTotalAmountOrderStore(Long ownerId);
+
+    ResponseEntity<APIRespone> getCountOrderByMonthStore(Long OwnerId);
+
+    ResponseEntity<APIRespone> getTotalAmountByMonthStore(Long OwnerId,int year);
+
+    ResponseEntity<APIRespone> getTotalAmountByWeekStore(Long OwnerId);
+
+    ResponseEntity<APIRespone> getCountProductSoleStore(Long OwnerId,String module);
 }

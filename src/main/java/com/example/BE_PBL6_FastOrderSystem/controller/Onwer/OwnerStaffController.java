@@ -55,9 +55,10 @@ public class OwnerStaffController {
     public ResponseEntity<APIRespone> getAllSchedule() {
         return scheduleService.getAllSchedule();
     }
-    @GetMapping("/schedule/store/{storeId}")
-    public ResponseEntity<APIRespone> getScheduleByStoreId(@PathVariable Long storeId) {
-        return scheduleService.getScheduleByStoreId(storeId);
+    @GetMapping("/schedule/store")
+    public ResponseEntity<APIRespone> getScheduleByStoreId() {
+        Long OwerId = FoodUserDetails.getCurrentUserId();
+        return scheduleService.getScheduleByStoreId(OwerId);
     }
     @GetMapping("/schedule/staff/{staffId}")
     public ResponseEntity<APIRespone> getScheduleByStaffId(@PathVariable Long staffId) {

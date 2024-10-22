@@ -9,7 +9,7 @@ public interface IScheduleService {
 
     ResponseEntity<APIRespone> getAllSchedule();
 
-    ResponseEntity<APIRespone> getScheduleByStoreId(Long storeId);
+    ResponseEntity<APIRespone> getScheduleByStoreId(Long ownerId);
 
     ResponseEntity<APIRespone> getScheduleById(Long id);
 

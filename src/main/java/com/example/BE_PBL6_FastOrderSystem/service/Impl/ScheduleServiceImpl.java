@@ -2,6 +2,7 @@ package com.example.BE_PBL6_FastOrderSystem.service.Impl;
 
 import com.example.BE_PBL6_FastOrderSystem.model.Schedule;
 import com.example.BE_PBL6_FastOrderSystem.model.Staff;
+import com.example.BE_PBL6_FastOrderSystem.model.Store;
 import com.example.BE_PBL6_FastOrderSystem.repository.ScheduleRepository;
 import com.example.BE_PBL6_FastOrderSystem.repository.StaffRepository;
 import com.example.BE_PBL6_FastOrderSystem.repository.StoreRepository;
@@ -52,7 +53,9 @@ public class ScheduleServiceImpl implements IScheduleService {
         return ResponseEntity.ok(new APIRespone(true, "Get all schedule successfully", scheduleResponses));
     }
     @Override
-    public ResponseEntity<APIRespone> getScheduleByStoreId(Long storeId) {
+    public ResponseEntity<APIRespone> getScheduleByStoreId(Long ownerId) {
+        List<Store> stores = storeRepository.findAllByManagerId(ownerId);
+        Long storeId = stores.get(0).getStoreId();
         if (staffRepository.findAll().isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new APIRespone(false, "No schedule found", null));
         }

@@ -40,11 +40,22 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("SELECT COUNT(o) FROM Order o WHERE FUNCTION('MONTH', o.createdAt) = ?1 AND FUNCTION('YEAR', o.createdAt) = ?2")
     Long countOrdersByMonth(int month, int year);
 
-    @Query("select sum(o.totalAmount) from Order o where function('MONTH',o.createdAt) = ?1 and function('YEAR', o.createdAt)= ?2")
+    @Query("select sum(o.totalAmount) from Order o where function('MONTH',o.createdAt) = ?1 and function('YEAR', o.createdAt)= ?2 and o.status.statusId = 5")
     Long getTotalAmountByMonth(int month, int year);
 
-    @Query("select sum(o.totalAmount) from Order o where function('MONTH',o.createdAt) = ?2 and function('DAY', o.createdAt) = ?1 and function('YEAR', o.createdAt)= ?3")
+    @Query("select sum(o.totalAmount) from Order o where function('MONTH',o.createdAt) = ?2 and function('DAY', o.createdAt) = ?1 and function('YEAR', o.createdAt)= ?3  and o.status.statusId = 5")
     Long getTotalAmountByWeek(int day, int month, int year);
 
+    @Query("SELECT SUM(o.totalPrice) FROM OrderDetail o WHERE o.status.statusId = 5 and o.store.storeId= ?1")
+    Long getTotalAmountForCompletedOrdersStore(Long idStore);
+
+    @Query("SELECT COUNT(o) FROM OrderDetail o join o.order od WHERE o.store.storeId = ?1 and FUNCTION('MONTH', od.createdAt) = ?2 AND FUNCTION('YEAR', od.createdAt) = ?3 and o.status.statusId = 5")
+    Long countOrdersByMonthStore(Long storeId,int month, int year);
+
+    @Query("select sum(od.totalPrice) from OrderDetail od join od.order o where od.store.storeId= ?1 and function('MONTH',o.createdAt) = ?2 and function('YEAR', o.createdAt)= ?3  and od.status.statusId = 5")
+    Long getTotalAmountByMonthStore(Long storeId,int month, int year);
+
+    @Query("select sum(od.totalPrice) from OrderDetail od join od.order o where od.store.storeId = ?1 and function('MONTH',o.createdAt) = ?3 and function('DAY', o.createdAt) = ?2 and function('YEAR', o.createdAt)= ?4  and od.status.statusId = 5")
+    Long getTotalAmountByWeekStore(Long storeId,int day, int month, int year);
 
 }

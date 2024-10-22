@@ -657,8 +657,8 @@ public class OrderServiceImpl implements IOrderService {
             System.out.println("module: day");
             for (Product product : products) {
                 Long q = orderDetailRepository.getCountProductSoldDay(currentDay,currentMonth,currentYear,product.getProductId());
-                if(q == null) q = Long.valueOf(0);
-                map.put(product.getProductName(), q);
+                if(q != null)
+                    map.put(product.getProductName(), q);
             }
             return ResponseEntity.ok(new APIRespone(true, "Success", map));
 
@@ -666,7 +666,7 @@ public class OrderServiceImpl implements IOrderService {
             System.out.println("module: month");
             for (Product product : products) {
                     Long q = orderDetailRepository.getCountProductSoldMonth(currentMonth,currentYear,product.getProductId());
-                    if(q == null) q = Long.valueOf(0);
+                if(q != null)
                     map.put(product.getProductName(), q);
                 }
                 return ResponseEntity.ok(new APIRespone(true, "Success", map));
@@ -675,8 +675,106 @@ public class OrderServiceImpl implements IOrderService {
             System.out.println("module: year");
             for (Product product : products) {
                 Long q = orderDetailRepository.getCountProductSoldYear(currentYear,product.getProductId());
-                if(q == null) q = Long.valueOf(0);
-                map.put(product.getProductName(), q);
+                if(q != null)
+                    map.put(product.getProductName(), q);
+            }
+            return ResponseEntity.ok(new APIRespone(true, "Success", map));
+        }
+
+
+    }
+
+    @Override
+    public ResponseEntity<APIRespone> getAllTotalAmountOrderStore(Long ownerId){
+        List<Store> stores = storeRepository.findAllByManagerId(ownerId);
+        Long totalAmount = orderRepository.getTotalAmountForCompletedOrdersStore(stores.get(0).getStoreId());
+        return ResponseEntity.ok(new APIRespone(true, "Success", totalAmount));
+    }
+
+    public ResponseEntity<APIRespone> getCountOrderByMonthStore(Long OwnerId){
+        List<Store> stores = storeRepository.findAllByManagerId(OwnerId);
+        Long storeId = stores.get(0).getStoreId();
+        LocalDateTime ldt = LocalDateTime.now();
+        Long totalAmount = orderRepository.countOrdersByMonthStore(storeId,ldt.getMonthValue(), ldt.getYear());
+        return ResponseEntity.ok(new APIRespone(true, "Success", totalAmount));
+
+    }
+    @Override
+    public ResponseEntity<APIRespone> getTotalAmountByMonthStore(Long OwnerId,int year) {
+        Map<String, Long> map = new LinkedHashMap<>();
+        List<Store> stores = storeRepository.findAllByManagerId(OwnerId);
+        Long storeId = stores.get(0).getStoreId();
+        for (int i = 0; i < 12; i++) {
+            // Lùi tháng
+            int month = i+1;
+            Long totalAmount = orderRepository.getTotalAmountByMonthStore(storeId,month, year);
+            map.put("Tháng " + month + " Năm " + year, totalAmount);
+        }
+
+        return ResponseEntity.ok(new APIRespone(true, "Success", map));
+    }
+    @Override
+    public ResponseEntity<APIRespone> getTotalAmountByWeekStore(Long OwnerId){
+        List<Store> stores = storeRepository.findAllByManagerId(OwnerId);
+        Long storeId = stores.get(0).getStoreId();
+        LocalDateTime ldt = LocalDateTime.now();
+        int currentMonth = ldt.getMonthValue();
+        int currentYear = ldt.getYear();
+        int currentDay = ldt.getDayOfMonth();
+        Map<String, Long> map = new LinkedHashMap<>();
+
+        for (int i = 0; i < 7; i++) {
+            int day = currentDay - i;
+            int month = currentMonth;
+            int year = currentYear;
+            if (day < 1) {
+                day += 7;
+                month-=1;
+                if (month < 1) {
+                    month += 12;
+                    year -= 1;
+                }
+            }
+            Long totalAmount = orderRepository.getTotalAmountByWeekStore(storeId,day,month,year);
+            map.put("Ngày "+day+" Tháng " + month + " Năm " + year, totalAmount);
+        }
+        return ResponseEntity.ok(new APIRespone(true, "Success", map));
+    }
+
+    @Override
+    public ResponseEntity<APIRespone> getCountProductSoleStore(Long OwnerId,String module){
+        List<Store> stores = storeRepository.findAllByManagerId(OwnerId);
+        Long storeId = stores.get(0).getStoreId();
+        LocalDateTime ldt = LocalDateTime.now();
+        int currentMonth = ldt.getMonthValue();
+        int currentYear = ldt.getYear();
+        int currentDay = ldt.getDayOfMonth();
+        List<Product> products = productRepository.findAll();
+        Map<String, Long> map = new LinkedHashMap<>();
+        if(module.equals("day")){
+            System.out.println("module: day");
+            for (Product product : products) {
+                Long q = orderDetailRepository.getCountProductSoldDayStore(storeId,currentDay,currentMonth,currentYear,product.getProductId());
+                if(q != null)
+                    map.put(product.getProductName(), q);
+            }
+            return ResponseEntity.ok(new APIRespone(true, "Success", map));
+
+        } else if(module.equals("month")){
+            System.out.println("module: month");
+            for (Product product : products) {
+                Long q = orderDetailRepository.getCountProductSoldMonthStore(storeId,currentMonth,currentYear,product.getProductId());
+                if(q != null)
+                    map.put(product.getProductName(), q);
+            }
+            return ResponseEntity.ok(new APIRespone(true, "Success", map));
+
+        }else{
+            System.out.println("module: year");
+            for (Product product : products) {
+                Long q = orderDetailRepository.getCountProductSoldYearStore(storeId,currentYear,product.getProductId());
+                if(q != null)
+                    map.put(product.getProductName(), q);
             }
             return ResponseEntity.ok(new APIRespone(true, "Success", map));
         }

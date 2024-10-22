@@ -1,4 +1,5 @@
 package com.example.BE_PBL6_FastOrderSystem.controller.Onwer;
+import com.example.BE_PBL6_FastOrderSystem.request.AdminProductRequest;
 import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
 import com.example.BE_PBL6_FastOrderSystem.security.user.FoodUserDetails;
 import com.example.BE_PBL6_FastOrderSystem.service.IOrderService;
@@ -32,5 +33,11 @@ public class OwnerProductController {
     public ResponseEntity<APIRespone> addProductToStore(@RequestParam List<Integer> quantity, @RequestParam List<Long> productIds) {
         Long ownerId = FoodUserDetails.getCurrentUserId();
         return productService.addProductsToStore(productIds,ownerId,quantity);
+    }
+    @PostMapping("/apply-list-products-to-stores")
+    public ResponseEntity<APIRespone> applyListProductsToStores(
+            @RequestBody AdminProductRequest productRequest) {
+        Long stId = Long.parseLong(productRequest.getStoreId());
+        return productService.applyProductsToStores(productRequest.getProductIds(), stId, productRequest.getQuantity());
     }
 }
