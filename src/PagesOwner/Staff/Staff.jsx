@@ -27,7 +27,7 @@ const StaffList = ({ url }) => {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         };
-        const response = await axios.get(`${url}/api/v1/owner/staff/all`, {
+        const response = await axios.get(`${url}/api/v1/owner/staff/store`, {
           headers,
         });
         setData(response.data.data);
@@ -107,7 +107,7 @@ const StaffList = ({ url }) => {
             alignItems: "center",
           }}
         >
-          <h1 className="h-product">List Order</h1>
+          <h1 className="h-product">List Staff</h1>
           <div className="store-search">
             <input
               type="text"

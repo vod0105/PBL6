@@ -170,16 +170,6 @@ const AddProducToStore = ({ url }) => {
       return;
     }
 
-    if (!SelectedStoreId) {
-      toast.error("Vui lòng chọn một cửa hàng.");
-      return;
-    }
-
-    if (selectedIds.length === 0) {
-      toast.error("Vui lòng chọn ít nhất một sản phẩm.");
-      return;
-    }
-
     const headers = {
       Authorization: `Bearer ${tk}`,
       "Content-Type": "application/json",
@@ -201,26 +191,17 @@ const AddProducToStore = ({ url }) => {
     // data.append("productIds", payload.productIds.join(","));
     // data.append("quantity", payload.quantity.join(","));
     try {
-      console.log(
-        "url:",
-        `${url}/api/v1/admin/products/apply-list-products-to-store?storeId=${
-          payload.storeId
-        }&productIds=${payload.productIds.join(
-          ","
-        )}&quantity=${payload.quantity.join(",")}`
-      );
-
       const response = await axios.post(
-        `${url}/api/v1/admin/products/apply-list-products-to-store?storeId=${
-          payload.storeId
-        }&productIds=${payload.productIds.join(
-          ","
-        )}&quantity=${payload.quantity.join(",")}`,
-
+        `${url}/api/v1/admin/products/apply-list-products-to-stores`,
+        {
+          storeId: payload.storeId,
+          productIds: payload.productIds,
+          quantity: payload.quantity,
+        },
         { headers }
       );
       if (response.data.status) {
-        toast.success("ok");
+        toast.success("Add Product Success!");
         setTimeout(() => {
           setSelectedStoreId("");
           setSelectedIds([]);
@@ -374,7 +355,7 @@ const AddProducToStore = ({ url }) => {
           </table>
           <div
             className="pagination pagenigate-pd pd-p-s"
-            style={{ marginTop: "20px" }}
+            style={{ marginTop: "90px" }}
           >
             <button
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
@@ -531,7 +512,7 @@ const AddProducToStore = ({ url }) => {
           </table>
           <div
             className="pagination pagenigate-pd pd-p-r"
-            style={{ marginTop: "20px" }}
+            style={{ marginTop: "70px" }}
           >
             <button
               onClick={() => setCurrentPage2((prev) => Math.max(prev - 1, 1))}

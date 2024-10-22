@@ -39,6 +39,7 @@ import Order from "./PagesOwner/Order/Order";
 import AddStaff from "./PagesOwner/Staff/AddStaff";
 import UpdateStaff from "./PagesOwner/Staff/UpdateStaff";
 import StaffList from "./PagesOwner/Staff/Staff";
+import OwnerAddProductToStorev2 from "./PagesOwner/Product/OwnerAddproductToStore";
 
 const App = () => {
   // const isAuthenticated = !!localStorage.getItem("access_token"); // Kiểm tra nếu có token
@@ -487,7 +488,7 @@ const App = () => {
                     <div className="dashboard">
                       <Sidebar />
                       <div className="dashboard-content">
-                        <OwnerAddProducToStore url={url} />
+                        <OwnerAddProductToStorev2 url={url} />
                       </div>
                     </div>
                   </>

@@ -282,9 +282,6 @@ const Sidebar = () => {
                       <li onClick={(e) => e.stopPropagation()}>
                         <Link to="/owner/calender">Calendar</Link>
                       </li>
-                      <li onClick={(e) => e.stopPropagation()}>
-                        <Link to="/owner/AddEmploy">Add Employee To Shift</Link>
-                      </li>
                     </ul>
                   </div>
                 </p>

@@ -1,6 +1,8 @@
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
+import axios from "axios";
+import { StoreContext } from "../../context/StoreContext";
+import { toast, ToastContainer } from "react-toastify";
 
 const CalendarModalEdit = ({
   show,
@@ -10,10 +12,11 @@ const CalendarModalEdit = ({
   event,
 }) => {
   const [title, setTitle] = useState("");
+  const [shift, setShift] = useState("");
   const [description, setDescription] = useState("");
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
-
+  const { url } = useContext(StoreContext);
   useEffect(() => {
     if (event) {
       setTitle(event.title || ""); // Chỉ lấy tên ca làm việc
@@ -39,8 +42,57 @@ const CalendarModalEdit = ({
     );
   };
 
-  const onUpdate = () => {
+  const onUpdate = async () => {
     if (title && start && end) {
+      const id = title.split("/")[1];
+      const staffId = title.split("--")[0];
+      const token = localStorage.getItem("access_token");
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
+
+      const postData = {
+        shift: shift,
+        startShift: start,
+        endShift: end,
+        date: end,
+        staffId: staffId,
+      };
+      console.log("postdata", postData);
+      console.log(`${url}/api/v1/owner/schedule/update/${id}`);
+      try {
+        const formData = new FormData();
+        formData.append("shift", postData.shift);
+        formData.append("startShift", postData.startShift);
+        formData.append("endShift", postData.endShift);
+        formData.append("date", postData.date);
+        formData.append("staffId", postData.staffId);
+
+        const response = await axios.put(
+          `${url}/api/v1/owner/schedule/update/${id}`, // Đường dẫn API để thêm ca làm việc
+          formData,
+          { headers }
+        );
+        toast.success("Update Shift Successful");
+        console.log("Sửa ca làm việc thành công:", response.data);
+
+        setTitle("");
+        setDescription("");
+        setStart("");
+        setEnd("");
+        setShift("");
+
+        handleClose();
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+
+        // window.location.href = "http://localhost:3000/owner/calender";
+      } catch (error) {
+        console.error("Lỗi khi thêm ca làm việc:", error);
+        alert("Đã xảy ra lỗi khi thêm ca làm việc.");
+      }
       handleUpdate(event.id, title, description, start, end);
     } else {
       alert("Vui lòng điền đầy đủ thông tin!");
@@ -61,24 +113,28 @@ const CalendarModalEdit = ({
       <Modal.Body>
         <Form>
           <Form.Group controlId="formTitle">
-            <Form.Label>Tên Ca</Form.Label>
+            <Form.Label>ID</Form.Label>
             <Form.Control
               type="text"
               placeholder="Nhập tên ca làm việc"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              readOnly
             />
           </Form.Group>
 
-          <Form.Group controlId="formDescription">
-            <Form.Label>Mô Tả</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={3}
-              placeholder="Nhập mô tả ca làm việc"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
+          <Form.Group controlId="formTitle">
+            <Form.Label>Tên Ca</Form.Label>
+            <Form.Select
+              value={shift}
+              onChange={(e) => setShift(e.target.value)}
+            >
+              <option value="">Chọn tên ca</option>
+              <option value="Ca Sáng">Ca Sáng</option>
+              <option value="Ca Chiều">Ca Chiều</option>
+              <option value="Ca Tối">Ca Tối</option>
+              {/* Thêm các lựa chọn khác nếu cần */}
+            </Form.Select>
           </Form.Group>
 
           <Form.Group controlId="formStart">
