@@ -28,7 +28,7 @@ const OwnerProduct = ({ url }) => {
         };
         // const token = localStorage.getItem("access_token");
         const response = await axios.get(
-          `${url}/api/v1/owner/products/get-all-products?storeId=33`,
+          `${url}/api/v1/owner/products/get-all-products?storeId=35`,
           {
             headers,
           }
