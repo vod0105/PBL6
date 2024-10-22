@@ -24,6 +24,8 @@ public class FoodUserDetails implements UserDetails {
     private String password;
     private String fullName;
     private String email;
+    private String sub;
+    private String facebookId;
     private String address;
     private Double longitude;
     private Double latitude;
@@ -42,6 +44,8 @@ public class FoodUserDetails implements UserDetails {
                 user.getPassword(),
                 user.getFullName(),
                 user.getEmail(),
+                user.getSub(),
+                user.getFacebookId(),
                 user.getAddress(),
                 user.getLongitude(),
                 user.getLatitude(),

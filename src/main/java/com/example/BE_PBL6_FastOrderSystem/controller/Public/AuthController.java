@@ -14,6 +14,8 @@ import com.example.BE_PBL6_FastOrderSystem.security.user.FoodUserDetails;
 import com.example.BE_PBL6_FastOrderSystem.service.IAuthService;
 import com.example.BE_PBL6_FastOrderSystem.service.IFormService;
 import com.example.BE_PBL6_FastOrderSystem.utils.ImageGeneral;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.http.*;
@@ -94,7 +96,7 @@ public class AuthController {
         return authService.confirmOTP(email, otp, newPassword);
     }
 @GetMapping("/oauth2/callback")
-public void handleCallback(HttpServletResponse response, @AuthenticationPrincipal OAuth2User principal) throws Exception {
+public void handleCallback(HttpServletResponse response, @AuthenticationPrincipal OAuth2User principal, @RequestParam(value = "client", required = false) String client) throws Exception {
     if (principal == null) {
         response.sendRedirect("http://localhost:3000/login?error");
         return;
@@ -108,9 +110,9 @@ public void handleCallback(HttpServletResponse response, @AuthenticationPrincipa
     User user;
     System.out.println("email: " + email);
 
-    if (email != null) {
+    if (sub != null) {
         // Google login
-        Optional<User> optionalUser = userRepository.findByEmail(email);
+        Optional<User> optionalUser = userRepository.findBySub(sub);
         if (optionalUser.isPresent()) {
             user = optionalUser.get();
             user.setAvatar(base64Image);
@@ -150,15 +152,40 @@ public void handleCallback(HttpServletResponse response, @AuthenticationPrincipa
     Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     String jwt = jwtUtils.generateToken(authentication);
 
-    response.sendRedirect("http://localhost:3000/oauth2/redirect?token=" + jwt);
+    String redirectUrl;
+    if ("flutter".equalsIgnoreCase(client)) {
+        redirectUrl = "myapp://oauth2/redirect?token=" + jwt + "&userId=" + user.getId();
+    } else {
+        redirectUrl = "http://localhost:3000/oauth2/redirect?token=" + jwt + "&userId=" + user.getId();
+    }
+
+    response.sendRedirect(redirectUrl);
 }
     @GetMapping("/user-info")
     public ResponseEntity<APIRespone> getUserInfo(@RequestHeader("Authorization") String token) {
-        String jwt = token.substring(7); // Remove "Bearer " prefix
+        String jwt = token.substring(7);
         System.out.println("JWT: " + jwt);
-        String email = jwtUtils.getUserNameFromToken(jwt);
-        System.out.println("Email: " + email);
-        Optional<User> optionalUser = userRepository.findByPhoneNumber(email);
+
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(jwtUtils.key())
+                .build()
+                .parseClaimsJws(jwt)
+                .getBody();
+
+        String sub = claims.get("sub", String.class);
+        String facebookId = claims.get("facebookId", String.class);
+
+        Optional<User> optionalUser;
+        if (sub != null) {
+            System.out.println("Sub: " + sub);
+            optionalUser = userRepository.findBySub(sub);
+        } else if (facebookId != null) {
+            System.out.println("Facebook ID: " + facebookId);
+            optionalUser = userRepository.findByFacebookId(facebookId);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIRespone(false, "Invalid token", null));
+        }
+
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             return ResponseEntity.ok(new APIRespone(true, "User info retrieved successfully", new JwtResponse(
@@ -181,84 +208,6 @@ public void handleCallback(HttpServletResponse response, @AuthenticationPrincipa
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIRespone(false, "User not found", null));
         }
     }
-
-
-@GetMapping("/user-info-facebook")
-public ResponseEntity<APIRespone> getUserInfoFacebook(@AuthenticationPrincipal OAuth2User principal) throws Exception {
-    if (principal == null) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new APIRespone(false, "User not authenticated", null));
-    }
-    System.out.println("User Attributes: " + principal.getAttributes());
-    String email = principal.getAttribute("email") != null ? principal.getAttribute("email") : "";
-    String facebookId = principal.getAttribute("id");
-    String name = principal.getAttribute("name");
-
-    Map<String, Object> pictureData = (Map<String, Object>) principal.getAttribute("picture");
-    String pictureUrl = null;
-    if (pictureData != null && pictureData.get("data") != null) {
-        Map<String, Object> data = (Map<String, Object>) pictureData.get("data");
-        pictureUrl = (String) data.get("url");
-    }
-
-    if (facebookId == null || name == null) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIRespone(false, "Invalid Facebook profile information: Missing ID or name", null));
-    }
-
-    String base64Image = null;
-    try {
-        if (pictureUrl != null) {
-            base64Image = ImageGeneral.urlToBase64(pictureUrl);
-        }
-    } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new APIRespone(false, "Failed to convert image: " + e.getMessage(), null));
-    }
-
-    Optional<User> optionalUser = userRepository.findByFacebookId(facebookId);
-    User user;
-
-    if (optionalUser.isPresent()) {
-        user = optionalUser.get();
-        user.setAvatar(base64Image);
-        user.setFacebookId(facebookId);
-        user.setAccountLocked(false);
-        userRepository.save(user);
-    } else {
-        user = new User();
-        user.setEmail(email);
-        user.setFacebookId(facebookId);
-        user.setFullName(name);
-        user.setAvatar(base64Image);
-        user.setAccountLocked(false);
-        user.setRole(roleRepository.findByName("ROLE_USER").orElseThrow(() -> new RuntimeException("ROLE_USER not found")));
-        userRepository.save(user);
-    }
-    // Convert User to FoodUserDetails
-    FoodUserDetails userDetails = FoodUserDetails.buildUserDetails(user);
-    Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-    String jwt = jwtUtils.generateToken(authentication);
-
-    List<String> roles = userDetails.getAuthorities().stream()
-            .map(GrantedAuthority::getAuthority)
-            .collect(Collectors.toList());
-
-    // Return API response with user details
-    return ResponseEntity.ok(new APIRespone(true, "Success", new JwtResponse(
-            user.getId(),
-            user.getEmail(),
-            user.getFullName(),
-            user.getPhoneNumber(),
-            user.getAddress(),
-            user.getLongitude(),
-            user.getLatitude(),
-            user.getAvatar(),
-            user.getCreatedAt(),
-            user.getUpdatedAt(),
-            user.getAccountLocked(),
-            user.getIsActive(),
-            jwt,
-            roles
-    )));
-}
 
 
     @PostMapping("/shipper-registration")

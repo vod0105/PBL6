@@ -47,12 +47,15 @@ public class JwtUtils {
 
     public String generateJwtTokenForUser(Authentication authentication) {
         UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
+        FoodUserDetails foodUserDetails = (FoodUserDetails) userPrincipal;
         List<String> roles = userPrincipal.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())
                 .claim("roles", roles)
+                .claim("sub", foodUserDetails.getSub())
+                .claim("facebookId", foodUserDetails.getFacebookId())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(Instant.now().plus(jwtExpirationMs, ChronoUnit.SECONDS).toEpochMilli()))
                 .setIssuer("FastOrderSystem")
@@ -66,7 +69,7 @@ public class JwtUtils {
                 .compact();
     }
 
-    private SecretKey key() {
+    public SecretKey key() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
         return Keys.hmacShaKeyFor(keyBytes);
     }
@@ -79,6 +82,8 @@ public class JwtUtils {
         return Jwts.builder()
                 .setSubject(username)
                 .claim("roles", roles)
+                .claim("sub", claims.get("sub"))
+                .claim("facebookId", claims.get("facebookId"))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs * 1000L))
                 .setIssuer("FastOrderSystem")
@@ -123,24 +128,4 @@ public class JwtUtils {
     public String generateToken(Authentication authentication) {
         return generateJwtTokenForUser(authentication);
     }
-
-
-
-
-//    public String createToken(String userId, String email) {
-//        return Jwts.builder()
-//                .setSubject(userId)
-//                .claim("email", email)
-//                .setIssuedAt(new Date())
-//                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs * 1000L))
-//                .setIssuer("FastOrderSystem")
-//                .setAudience("FastOrderSystem")
-//                .setNotBefore(new Date())
-//                .setHeaderParam("typ", "JWT")
-//                .setHeaderParam("alg", "HS512")
-//                .setHeaderParam("kid", "fastorder")
-//                .setId(UUID.randomUUID().toString())
-//                .signWith(key(), SignatureAlgorithm.HS512)
-//                .compact();
-//    }
 }
