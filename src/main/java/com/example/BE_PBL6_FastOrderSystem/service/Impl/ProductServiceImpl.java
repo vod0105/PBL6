@@ -478,4 +478,38 @@ public class ProductServiceImpl implements IProductService {
         return new ResponseEntity<>(new APIRespone(true, "Products added successfully", ""), HttpStatus.OK);
 
     }
+
+    @Override
+    public ResponseEntity<APIRespone> getProductsByStore(Long ownerId) {
+        List<Store> stores = storeRepository.findAllByManagerId(ownerId);
+        Long storeId = stores.get(0).getStoreId();
+        List<ProductResponse> productResponses = productRepository.findByStoreId(storeId).stream()
+                .map(ResponseConverter::convertToProductResponse)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(new APIRespone(true, "Success", productResponses), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<APIRespone> removeProductFromStoreId(Long ownerId, Long productId) {
+        List<Store> stores = storeRepository.findAllByManagerId(ownerId);
+        Store store = stores.get(0);
+        Optional<Product> productOptional = productRepository.findById(productId);
+        if (productOptional.isEmpty()) {
+            return new ResponseEntity<>(new APIRespone(false, "Product not found", ""), HttpStatus.NOT_FOUND);
+        }
+//        Store store = storeOptional.get();
+        Product product = productOptional.get();
+        List<ProductStore> productStores = product.getProductStores().stream()
+                .filter(productStore -> productStore.getStore().getStoreId().equals(store.getStoreId()))
+                .collect(Collectors.toList());
+        if (productStores.isEmpty()) {
+            return new ResponseEntity<>(new APIRespone(false, "Product not found in store", ""), HttpStatus.NOT_FOUND);
+        }
+        product.getProductStores().removeAll(productStores);
+        store.getProductStores().removeAll(productStores);
+        productStoreRepository.deleteAll(productStores);
+        productRepository.save(product);
+        storeRepository.save(store);
+        return new ResponseEntity<>(new APIRespone(true, "Product removed from store successfully", ""), HttpStatus.OK);
+    }
 }

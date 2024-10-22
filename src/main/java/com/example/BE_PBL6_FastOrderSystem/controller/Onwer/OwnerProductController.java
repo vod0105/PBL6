@@ -20,13 +20,15 @@ public class OwnerProductController {
     private final IOrderService orderService;
 
     @GetMapping("/get-all-products")
-    public ResponseEntity<APIRespone> getAllProducts(@RequestParam Long storeId) {
-        return productService.getProductsByStoreId(storeId);
+    public ResponseEntity<APIRespone> getAllProducts() {
+        Long ownerId = FoodUserDetails.getCurrentUserId();
+        return productService.getProductsByStore(ownerId);
     }
 
     @DeleteMapping("/remove-from-store")
-    public ResponseEntity<APIRespone> removeProductFromStore(@RequestParam Long storeId, @RequestParam Long productId) {
-        return productService.removeProductFromStore(storeId, productId);
+    public ResponseEntity<APIRespone> removeProductFromStore(@RequestParam Long productId) {
+        Long ownerId = FoodUserDetails.getCurrentUserId();
+        return productService.removeProductFromStoreId(ownerId, productId);
     }
 
     @PostMapping("add-to-store")

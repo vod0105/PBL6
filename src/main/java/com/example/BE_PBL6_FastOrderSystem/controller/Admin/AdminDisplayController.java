@@ -47,4 +47,9 @@ public class AdminDisplayController {
     public ResponseEntity<APIRespone> countProducts(@RequestParam String module) {
         return orderService.getCountProductSole(module);
     }
+
+//    @GetMapping("total/stores")
+//    public ResponseEntity<APIRespone> totalStores(@RequestParam String module) {
+//
+//    }
 }

@@ -38,5 +38,8 @@ public interface IProductService {
     ResponseEntity<APIRespone> addProductsToStore(List<Long> productIds, Long OwnerId, List<Integer> quantity);
 
     ResponseEntity<APIRespone> applyProductsToStores(List<Long> productIds, Long storeId, List<Integer> quantity);
+    ResponseEntity<APIRespone> getProductsByStore(Long owner);
+    ResponseEntity<APIRespone> removeProductFromStoreId(Long ownerId, Long productId);
+
 }
 
