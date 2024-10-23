@@ -24,7 +24,7 @@ const Navbar = () => {
   const user = useSelector((state) => state.auth.user);
   const account = useSelector((state) => state.auth.account);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-
+  const listProductsInCart = useSelector((state) => state.user.listProductsInCart); // lấy listProducts in cart -> hiển thị chấm đỏ
   const handleShowLogin = () => {
     dispatch(showLoginModal());
   };
@@ -38,7 +38,6 @@ const Navbar = () => {
     return state.category.listCategories;
   })
   useEffect(() => {
-    // console.log("Fetching categories...");
     dispatch(fetchAllCategories());
   }, []);
 
@@ -111,26 +110,6 @@ const Navbar = () => {
           Cửa hàng
         </NavLink>
 
-        {/* <NavLink
-          to="/test-place-order"
-          className={({ isActive }) => (isActive ? 'active' : '')}
-        >
-          Test  place order
-        </NavLink>
-        <NavLink
-          to="/test-order-complete"
-          className={({ isActive }) => (isActive ? 'active' : '')}
-        >
-          Test  Order Complete
-        </NavLink> */}
-
-        <NavLink
-          to="/test-order-complete"
-          className={({ isActive }) => (isActive ? 'active' : '')}
-        >
-          Test  Order Complete
-        </NavLink>
-
       </ul>
       <div className="navbar-right">
         {
@@ -141,7 +120,10 @@ const Navbar = () => {
                 className="navbar-cart-icon"
               >
                 <img src={logoCart} alt="" />
-                <div className='dot'></div>
+                {
+                  listProductsInCart && listProductsInCart.length > 0 && <div className='dot'></div>
+                }
+
               </Link>
               <Link
                 to="/account"

@@ -46,12 +46,12 @@ const Checkout = () => {
             let latitude = '222';
             if (isBuyNow) { // Mua ngay
                 dispatch(placeOrderBuyNow(method, productDetailBuyNow, address, longitude, latitude));
-                navigate('/test-order-complete');
+                navigate('/order-complete');
             }
             else { // Mua ở giỏ hàng
                 const cartIds = listProductsInCart.map(item => item.cartId);
                 dispatch(placeOrderAddToCart(method, cartIds, address, longitude, latitude));
-                navigate('/test-order-complete');
+                navigate('/order-complete');
             }
         }
     };
@@ -195,7 +195,7 @@ const Checkout = () => {
 
                         <div className="order-item">
                             <span>Tổng đơn hàng</span>
-                            <span>{isBuyNow ? Number(productDetailBuyNow.product.price * productDetailBuyNow.quantity + 20000).toLocaleString('vi-VN') : Number(getTotalPriceInCart() + 20000).toLocaleString('vi-VN')} đ</span>
+                            <span>{isBuyNow ? Number(productDetailBuyNow.product.price * productDetailBuyNow.quantity).toLocaleString('vi-VN') : Number(getTotalPriceInCart()).toLocaleString('vi-VN')} đ</span>
                         </div>
                         <button className="place-order-btn" onClick={handlePlaceOrder}>
                             ĐẶT HÀNG

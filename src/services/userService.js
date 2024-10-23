@@ -51,6 +51,9 @@ const increaseOneQuantityService = (cartId) => {
     });
 }
 
+// note: Mua ngay -> status = 3: Đơn hàng đã được xác nhận
+//       Giỏ hàng -> status = 1: Đơn hàng mới
+// => Phân biệt rứa à bay??
 const placeOrderBuyNowService = (paymentMethod, productDetailBuyNow, address, longitude, latitude) => {
     return axios({
         method: 'post',
@@ -80,6 +83,18 @@ const placeOrderAddToCartService = (paymentMethod, cartIds, address, longitude, 
         }
     });
 }
+const fetchAllOrdersService = () => {
+    return axios({
+        method: 'get',
+        url: `/api/v1/user/order/history`,
+    });
+}
+const cancelOrderService = (orderCode) => {
+    return axios({
+        method: 'post',
+        url: `/api/v1/user/order/cancel/${orderCode}`,
+    });
+}
 
 export {
     updateProfileService,
@@ -90,5 +105,7 @@ export {
     increaseOneQuantityService,
     placeOrderBuyNowService,
     placeOrderAddToCartService,
+    fetchAllOrdersService,
+    cancelOrderService,
 
 }

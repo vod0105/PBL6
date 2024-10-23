@@ -110,7 +110,7 @@ const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, 
           }
           else { // Giả sử thêm vào thành công (Chưa xủ lý các điều kiện -> BE chưa làm)
             dispatch(placeOrderUsingBuyNow(product, quantity, selectedStore, selectedSize));
-            navigate('/test-place-order');
+            navigate('/checkout');
             handleModalClose();
           }
         }

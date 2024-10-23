@@ -2,7 +2,9 @@
 const initialState = {
     listProductsInCart: {}, // fetch từ server
     isBuyNow: false,
-    productDetailBuyNow: {}
+    productDetailBuyNow: {},
+    allOrders: {},
+
 };
 
 const userReducer = (state = initialState, action) => {
@@ -60,6 +62,15 @@ const userReducer = (state = initialState, action) => {
         case 'INCREASE_ONE_QUANTITY_SUCCESS':
             return {
                 ...state
+            };
+        case 'FETCH_ALL_ORDERS_SUCCESS':
+            return {
+                ...state,
+                allOrders: action.dataOrders,
+            };
+        case 'CANCEL_ORDER_SUCCESS':
+            return {
+                ...state,
             };
         default:
             return state;

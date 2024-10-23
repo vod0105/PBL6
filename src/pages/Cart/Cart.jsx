@@ -52,12 +52,12 @@ const Cart = () => {
     return total;
   }
   const handlePlaceOrder = () => {
-    if (!listProducts || listProducts.length === 0) {
+    if (!listProducts || !Array.isArray(listProducts) || listProducts.length === 0) { // -> Xử lý thêm trường hợp listProducts ko phải là Array
       toast.error('Không có sản phẩm trong giỏ hàng!');
     }
     else {
       dispatch(placeOrderUsingAddToCart());
-      navigate('/test-place-order');
+      navigate('/checkout');
     }
   }
   return (

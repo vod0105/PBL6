@@ -7,6 +7,9 @@ import {
     placeOrderAddToCartService,
     removeProductInCartService,
     increaseOneQuantityService,
+    fetchAllOrdersService,
+    cancelOrderService,
+
 
 } from "../../services/userService";
 import { toast } from "react-toastify";
@@ -103,6 +106,8 @@ const fetchProductsInCart = () => {
             }
         } catch (error) {
             console.log(error);
+            // BE return status 400 when cart is empty -> rơi vô catch error ni -> note: BE xử lý sai
+            dispatch(fetchProductsInCartSuccess([]));
         }
     }
 };
@@ -142,6 +147,7 @@ const placeOrderBuyNow = (paymentMethod, productDetailBuyNow, address, longitude
             const isSuccess = res && res.data ? res.data.success : false;
             if (isSuccess) {
                 dispatch(placeOrderBuyNowSuccess());
+                dispatch(fetchAllOrders());
                 toast.success(res.data.message);
             } else {
                 dispatch(placeOrderBuyNowError());
@@ -175,6 +181,7 @@ const placeOrderAddToCart = (paymentMethod, cartIds, address, longitude, latitud
             const isSuccess = res && res.data ? res.data.success : false;
             if (isSuccess) {
                 dispatch(placeOrderAddToCartSuccess());
+                dispatch(fetchAllOrders());
                 toast.success(res.data.message);
             } else {
                 dispatch(placeOrderAddToCartError());
@@ -244,6 +251,49 @@ const increaseOneQuantity = (cartId) => {
     }
 };
 
+// Lấy tất cả orders
+const fetchAllOrdersSuccess = (data) => {
+    return {
+        type: types.FETCH_ALL_ORDERS_SUCCESS,
+        dataOrders: data
+    };
+};
+const fetchAllOrders = () => {
+    return async (dispatch, getState) => {
+        try {
+            const res = await fetchAllOrdersService();
+            const data = res && res.data && res.data.data ? res.data.data : [];
+            dispatch(fetchAllOrdersSuccess(data));
+        } catch (error) {
+            console.log(error);
+            toast.error('Có lỗi ở Server!');
+        }
+    }
+};
+// Hủy đơn hàng
+const cancelOrderSuccess = () => {
+    return {
+        type: types.CANCEL_ORDER_SUCCESS,
+    };
+};
+const cancelOrder = (orderCode) => {
+    return async (dispatch) => {
+        try {
+            const res = await cancelOrderService(orderCode);
+            const isSuccess = res && res.data ? res.data.success : false;
+            if (isSuccess) {
+                dispatch(cancelOrderSuccess());
+                dispatch(fetchAllOrders()); // Recall API lấy lại all orders
+                toast.success(res.data.message);
+            } else {
+                toast.error(res.data.message || "Hủy đơn hàng không thành công!");
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error("Hủy đơn hàng không thành công!");
+        }
+    };
+};
 
 export {
     updateProfile,
@@ -256,5 +306,7 @@ export {
     resetAllUser,
     removeProductInCart,
     increaseOneQuantity,
+    fetchAllOrders,
+    cancelOrder,
 
 };
