@@ -19,7 +19,6 @@ public class ShipperOrderResponse {
     private Long orderId;
     private String orderCode;
     private Long userId;
-    private String address;
     private String fullName;
     private String phone;
     private LocalDateTime orderDate;
@@ -43,7 +42,6 @@ public class ShipperOrderResponse {
         this.orderId = shipperOrder.getOrderDetails().get(0).getOrder().getOrderId();
         this.orderCode = shipperOrder.getOrderDetails().get(0).getOrder().getOrderCode();
         this.userId = shipperOrder.getOrderDetails().get(0).getOrder().getUser().getId();
-        this.address = shipperOrder.getOrderDetails().get(0).getOrder().getUser().getAddress();
         this.fullName = shipperOrder.getOrderDetails().get(0).getOrder().getUser().getFullName();
         this.phone = shipperOrder.getOrderDetails().get(0).getOrder().getUser().getPhoneNumber();
         this.orderDate = shipperOrder.getOrderDetails().get(0).getOrder().getOrderDate();

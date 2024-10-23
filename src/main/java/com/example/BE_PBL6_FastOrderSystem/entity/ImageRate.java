@@ -5,14 +5,14 @@ import lombok.Data;
 
 @Data
 @Entity
-public class ImageRating {
+@Table(name = "image_rate")
+public class ImageRate {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String imageId;
     @Column(name = "image", columnDefinition = "LONGTEXT")
     private String image;
-
     @ManyToOne
-    @JoinColumn(name = "rating_id")
+    @JoinColumn(name = "rate_id")
     private Rate rate;
 }

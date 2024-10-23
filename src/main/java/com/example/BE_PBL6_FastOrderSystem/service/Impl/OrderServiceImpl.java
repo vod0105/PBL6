@@ -132,8 +132,18 @@ public class OrderServiceImpl implements IOrderService {
             }
             return orderDetail;
         }).collect(Collectors.toList());
-        order.setOrderDetails(orderDetails);
         order.setTotalAmount(Double.valueOf(orderDetails.stream().mapToDouble(OrderDetail::getTotalPrice).sum()));
+        // Nhóm các order detail theo cửa hàng
+        if (!deliveryAddress.equalsIgnoreCase("Mua tại cửa hàng")) {
+            Map<Store, List<OrderDetail>> groupedOrderDetails = orderDetails.stream()
+                    .collect(Collectors.groupingBy(OrderDetail::getStore));
+            for (Map.Entry<Store, List<OrderDetail>> entry : groupedOrderDetails.entrySet()) {
+                Store store = entry.getKey();
+                Double shippingFee = calculateShippingFee(order, store);
+                order.setShippingFee(shippingFee);
+            }
+        }
+        order.setOrderDetails(orderDetails);
         orderRepository.save(order);
         Cart cart;
         for (Cart cartItem : cartItems) {
@@ -269,7 +279,10 @@ public class OrderServiceImpl implements IOrderService {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         double distance = EARTH_RADIUS * c;
         System.out.println("Distance: " + distance);
-        double shippingFeePerKm = 10000;
+        double shippingFeePerKm = 10000; // phi ship 1 km
+        if (distance <= 1.2) {
+            return 0.0;
+        }
         double shippingFee = distance * shippingFeePerKm;
         // bội số của 1000
         return (Double) (Math.floor(shippingFee / 1000) * 1000);

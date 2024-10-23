@@ -8,6 +8,7 @@ import java.util.List;
 
 @Data
 @Entity
+@Table(name = "rate")
 public class Rate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +25,7 @@ public class Rate {
     @JoinColumn(name = "combo_id")
     private Combo combo;
     @OneToMany(mappedBy = "rate", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<ImageRating> imageRatings = new ArrayList<>();
+    private List<ImageRate> imageRatings = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {

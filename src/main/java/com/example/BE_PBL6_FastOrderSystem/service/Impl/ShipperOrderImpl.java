@@ -118,7 +118,7 @@ public class ShipperOrderImpl implements IShipperOrderService {
         return R * c; // Distance in km
     }
 
-   // @Scheduled(fixedRate = 30000) // 30 giây
+    @Scheduled(fixedRate = 30000) // 30 giây
     public ResponseEntity<APIRespone> autoAssignShipper() {
         List<OrderDetail> orderDetails = orderDetailRepository.findAllByStatus("Đơn hàng mới");
         Map<Store, Map<Long, List<OrderDetail>>> groupedOrderDetails = orderDetails.stream()
@@ -155,16 +155,15 @@ public class ShipperOrderImpl implements IShipperOrderService {
                     }
                 }
                 else {
-                    //System.out.println("Không tìm thấy shipper");
+                    System.out.println("Không tìm thấy shipper");
                     return ResponseEntity.badRequest().body(new APIRespone(false, "Không tìm thấy shipper", ""));
                 }
             }
         }
-        System.out.println("Gán shipper thành công");
         return ResponseEntity.ok(new APIRespone(true, "Shipper đã được gán", ""));
     }
 
-    //@Scheduled(fixedRate = 100000) // 100 giây
+    @Scheduled(fixedRate = 100000) // 100 giây
     public void autoAssignShipperOrder() {
         List<ShipperOrder> ListShipperOrders = shipperOrderRepository.findAllByStatusIn(List.of("Chưa nhận", "Đã từ chối"));
         for (ShipperOrder shipperOrder : ListShipperOrders) {
@@ -174,19 +173,20 @@ public class ShipperOrderImpl implements IShipperOrderService {
                 if (currentShipper != null) {
                     currentShipper.setIsActive(true);
                     currentShipper.setIsBusy(true);
-                    shipperRepository.save(currentShipper);  // cập nhật trạng thái của shipper cũ
+                    shipperRepository.save(currentShipper);
                 }
                 Store store = shipperOrder.getStore();
                 Optional<User> newShipperOptional = shipperRepository.findNearestShippers(store.getLatitude(), store.getLongitude(), 1)
                         .stream()
                         .findFirst();
                 if (newShipperOptional.isPresent()) {
+                    // tìm thấy shipper khác
                     User newShipper = newShipperOptional.get();
                     newShipper.setIsActive(false);
                     shipperRepository.save(newShipper);
                     shipperOrder.setShipper(newShipper);
                     shipperOrder.setCreatedAt(LocalDateTime.now());
-                    shipperOrder.setStatus("Chưa nhận");
+                    shipperOrder.setStatus("Đã nhận lại từ shipper khác nhưng chưa chấp nhận");
                     shipperOrderRepository.save(shipperOrder);
                 }
             }
@@ -286,6 +286,10 @@ public class ShipperOrderImpl implements IShipperOrderService {
         }
         shipperOrder.setStatus("Đã giao hàng");
         shipperOrder.setDeliveredAt(LocalDateTime.now());
+        // cập nhật trạng thái của shipper
+        User shipper = shipperOrder.getShipper();
+        shipper.setIsActive(true);
+        shipperRepository.save(shipper);
         shipperOrderRepository.save(shipperOrder);
         return ResponseEntity.ok(new APIRespone(true, "Order delivered successfully", ""));
     }
