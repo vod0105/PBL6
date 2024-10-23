@@ -52,7 +52,7 @@ public class JwtUtils {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
         return Jwts.builder()
-                .setSubject(userPrincipal.getUsername())
+                .claim("phone", foodUserDetails.getPhoneNumber())
                 .claim("roles", roles)
                 .claim("sub", foodUserDetails.getSub())
                 .claim("facebookId", foodUserDetails.getFacebookId())
@@ -76,11 +76,11 @@ public class JwtUtils {
 
     public String generateTokenFromRefreshToken(String refreshToken) {
         Claims claims = Jwts.parserBuilder().setSigningKey(key()).build().parseClaimsJws(refreshToken).getBody();
-        String username = claims.getSubject();
+        String phone = (String) claims.get("phone");
         List<String> roles = (List<String>) claims.get("roles");
 
         return Jwts.builder()
-                .setSubject(username)
+                .claim("phone", phone)
                 .claim("roles", roles)
                 .claim("sub", claims.get("sub"))
                 .claim("facebookId", claims.get("facebookId"))
@@ -98,10 +98,7 @@ public class JwtUtils {
     }
 
     public String getUserNameFromToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key())
-                .build()
-                .parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parserBuilder().setSigningKey(key()).build().parseClaimsJws(token).getBody().get("phone", String.class);
     }
 
     public boolean validateToken(String token) {

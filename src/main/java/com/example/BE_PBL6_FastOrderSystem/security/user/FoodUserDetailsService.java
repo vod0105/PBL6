@@ -18,6 +18,7 @@ public class FoodUserDetailsService implements UserDetailsService {
     private UserRepository userRepository;
     @Override
     public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
+        System.out.println("identifier: " + identifier);
         Optional<User> user = userRepository.findByUsernameOrSubOrFacebookId(identifier, identifier, identifier);
         if (user.isPresent()) {
             return FoodUserDetails.buildUserDetails(user.get());

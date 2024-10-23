@@ -7,8 +7,13 @@ import com.example.BE_PBL6_FastOrderSystem.response.OrderDetailResponse;
 import com.example.BE_PBL6_FastOrderSystem.response.ShipperOrderResponse;
 import com.example.BE_PBL6_FastOrderSystem.service.IOrderService;
 import com.example.BE_PBL6_FastOrderSystem.service.IShipperOrderService;
+import com.example.BE_PBL6_FastOrderSystem.service.IStatusDeliveryService;
 import com.example.BE_PBL6_FastOrderSystem.service.IStatusOrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -28,7 +33,8 @@ public class ShipperOrderImpl implements IShipperOrderService {
     private final OrderRepository orderRepository;
     private final ShipperRepository shipperRepository;
     private final StatusOrderRepository statusOrderRepository;
-    private final IStatusOrderService statusOrderService;
+    private final StatusDeliveryRepository statusDeliveryRepository;
+    private final IStatusDeliveryService statusDeliveryService;
     private final IOrderService orderService;
 
     @Override
@@ -38,6 +44,15 @@ public class ShipperOrderImpl implements IShipperOrderService {
                 .map(ShipperOrderResponse::new)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new APIRespone(true, "Success", shipperOrderResponses));
+    }
+    @Override
+    public ResponseEntity<APIRespone> getAllOrderDetailOfShipper(Long shipperId) {
+        List<ShipperOrder> shipperOrders = shipperOrderRepository.findAllByShipperId(shipperId);
+        List<OrderDetailResponse> orderDetailResponses = shipperOrders.stream()
+                .flatMap(shipperOrder -> shipperOrder.getOrderDetails().stream())
+                .map(OrderDetailResponse::new)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(new APIRespone(true, "Success", orderDetailResponses));
     }
 
     @Override
@@ -56,22 +71,17 @@ public class ShipperOrderImpl implements IShipperOrderService {
 
     @Override
     public ResponseEntity<APIRespone> getAllShipperOrderByStatus(Long shipperId, String status) {
+        System.out.println("shipperId: " + shipperId);
+        System.out.println("status: " + status);
         List<ShipperOrder> shipperOrders = shipperOrderRepository.findAllByShipperIdAndStatus(shipperId, status);
-        System.out.println(shipperOrders);
-        List<ShipperOrderResponse> shipperOrderResponses = shipperOrders.stream()
-                .map(ShipperOrderResponse::new)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(new APIRespone(true, "Success", shipperOrderResponses));
-    }
 
-
-    @Override
-    public ResponseEntity<APIRespone> getAllShipperOrder(Long shipperId) {
-        List<ShipperOrder> shipperOrders = shipperOrderRepository.findAllByShipperId(shipperId);
-        List<ShipperOrderResponse> shipperOrderResponses = shipperOrders.stream()
-                .map(ShipperOrderResponse::new)
+        System.out.println("shipperOrders: " + shipperOrders);
+        List<OrderDetailResponse> orderDetailResponses = shipperOrders.stream()
+                .flatMap(shipperOrder -> shipperOrder.getOrderDetails().stream())
+                .map(OrderDetailResponse::new)
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(new APIRespone(true, "Success", shipperOrderResponses));
+        System.out.println("orderDetailResponses: " + orderDetailResponses.size());
+        return ResponseEntity.ok(new APIRespone(true, "Success", orderDetailResponses));
     }
 
     @Override
@@ -144,7 +154,8 @@ public class ShipperOrderImpl implements IShipperOrderService {
                         shipperOrder.setShipper(newShipper);
                         shipperOrder.setStore(store);
                         shipperOrder.setCreatedAt(LocalDateTime.now());
-                        shipperOrder.setStatus("Chưa nhận");
+                        StatusDelivery statusDelivery = statusDeliveryRepository.findByStatusName("Chưa nhận");
+                        shipperOrder.setStatus(statusDelivery);
                         shipperOrderRepository.save(shipperOrder);
                         orderDetail.setShipperOrder(shipperOrder);
                         orderDetailRepository.save(orderDetail);
@@ -186,7 +197,8 @@ public class ShipperOrderImpl implements IShipperOrderService {
                     shipperRepository.save(newShipper);
                     shipperOrder.setShipper(newShipper);
                     shipperOrder.setCreatedAt(LocalDateTime.now());
-                    shipperOrder.setStatus("Đã nhận lại từ shipper khác nhưng chưa chấp nhận");
+                    StatusDelivery statusDelivery = statusDeliveryRepository.findByStatusName("Đã nhận lại từ shipper khác nhưng chưa chấp nhận");
+                    shipperOrder.setStatus(statusDelivery);
                     shipperOrderRepository.save(shipperOrder);
                 }
             }
@@ -201,7 +213,8 @@ public class ShipperOrderImpl implements IShipperOrderService {
         }
         if (isAccepted) {
             // shipper chấp nhận đơn hàng
-            shipperOrder.setStatus("Đã nhận");
+            StatusDelivery statusDelivery = statusDeliveryRepository.findByStatusName("Đã nhận");
+            shipperOrder.setStatus(statusDelivery);
             shipperOrder.setReceivedAt(LocalDateTime.now());
             shipperOrderRepository.save(shipperOrder);
             // cập nhật trạng thái của shipper
@@ -210,7 +223,8 @@ public class ShipperOrderImpl implements IShipperOrderService {
             return ResponseEntity.ok(new APIRespone(true, "Shipper accepted the order", ""));
         } else {
             // shipper từ chối đơn hàng
-            shipperOrder.setStatus("Đã từ chối");
+            StatusDelivery statusDelivery = statusDeliveryRepository.findByStatusName("Đã từ chối");
+            shipperOrder.setStatus(statusDelivery);
             shipperOrderRepository.save(shipperOrder);
             // tìm shipper khác thay thế
             Store store = shipperOrder.getStore();
@@ -284,7 +298,8 @@ public class ShipperOrderImpl implements IShipperOrderService {
             order.setStatus(orderStatus);
             orderRepository.save(order);
         }
-        shipperOrder.setStatus("Đã giao hàng");
+        StatusDelivery statusDelivery = statusDeliveryRepository.findByStatusName("Đã giao hàng");
+        shipperOrder.setStatus(statusDelivery);
         shipperOrder.setDeliveredAt(LocalDateTime.now());
         // cập nhật trạng thái của shipper
         User shipper = shipperOrder.getShipper();

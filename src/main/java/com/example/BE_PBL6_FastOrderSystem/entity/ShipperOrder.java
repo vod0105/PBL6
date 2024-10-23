@@ -22,8 +22,18 @@ public class ShipperOrder {
     private List<OrderDetail> orderDetails;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private String status;
+    @ManyToOne
+    @JoinColumn(name = "status_id")
+    private StatusDelivery status;
     private LocalDateTime receivedAt;
     private LocalDateTime deliveredAt;
     private String note;
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
+    @PreUpdate protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
 }

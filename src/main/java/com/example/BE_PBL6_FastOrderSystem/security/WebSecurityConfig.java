@@ -116,7 +116,7 @@ public class WebSecurityConfig {
                         .requestMatchers(PUBLIC).permitAll()
                         .requestMatchers(MOMO).permitAll()
                         .requestMatchers(ZALO).permitAll()
-                        .requestMatchers(USER).hasAnyRole("ADMIN", "USER", "OWNER")
+                        .requestMatchers(USER).hasAnyRole("ADMIN", "USER", "OWNER", "STAFF", "SHIPPER")
                         .requestMatchers(STAFF).hasAnyRole("STAFF", "ADMIN")
                         .requestMatchers(SHIPPER).hasAnyRole("SHIPPER", "ADMIN", "OWNER")
                         .requestMatchers(OWNER).hasAnyRole("OWNER", "ADMIN")

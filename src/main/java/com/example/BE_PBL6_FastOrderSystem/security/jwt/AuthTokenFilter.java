@@ -31,6 +31,27 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
+//    @Override
+//    protected void doFilterInternal(HttpServletRequest request,
+//                                    HttpServletResponse response,
+//                                    FilterChain filterChain) throws ServletException, IOException {
+//        try {
+//            String jwt = parseJwt(request);
+//            if (jwt != null && jwtUtils.validateToken(jwt)) {
+//                String phone = jwtUtils.getUserNameFromToken(jwt);
+//                System.out.println("phone: " + phone);
+//                UserDetails userDetails = userDetailsService.loadUserByUsername(phone);
+//                var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+//                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+//                SecurityContextHolder.getContext().setAuthentication(authentication);
+//            }
+//        } catch (Exception e) {
+//            logger.error("Cannot set user authentication : {} ", e.getMessage());
+//        }
+//        filterChain.doFilter(request, response);
+//    }
+    // src/main/java/com/example/BE_PBL6_FastOrderSystem/security/jwt/AuthTokenFilter.java
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -39,10 +60,15 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             String jwt = parseJwt(request);
             if (jwt != null && jwtUtils.validateToken(jwt)) {
                 String phone = jwtUtils.getUserNameFromToken(jwt);
-                UserDetails userDetails = userDetailsService.loadUserByUsername(phone);
-                var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                System.out.println("phone: " + phone);
+                logger.debug("JWT Token parsed, phone: {}", phone);
+
+                if (phone != null) {
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(phone);
+                    var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
             }
         } catch (Exception e) {
             logger.error("Cannot set user authentication : {} ", e.getMessage());

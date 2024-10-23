@@ -2,10 +2,12 @@ package com.example.BE_PBL6_FastOrderSystem.response;
 
 import com.example.BE_PBL6_FastOrderSystem.entity.ShipperOrder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
+@RequiredArgsConstructor
 @Data
 public class ShipperOrderResponse {
     private Long shipperOrderId;
@@ -33,7 +35,7 @@ public class ShipperOrderResponse {
     public ShipperOrderResponse(ShipperOrder shipperOrder) {
         this.shipperOrderId = shipperOrder.getId();
         this.shipperId = shipperOrder.getShipper().getId();
-        this.status = shipperOrder.getStatus();
+        this.status = shipperOrder.getStatus().getStatusName();
         this.receivedAt = shipperOrder.getReceivedAt();
         this.deliveredAt = shipperOrder.getDeliveredAt();
         this.storeId = shipperOrder.getStore().getStoreId();

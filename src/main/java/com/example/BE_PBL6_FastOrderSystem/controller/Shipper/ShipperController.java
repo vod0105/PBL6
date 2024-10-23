@@ -23,16 +23,16 @@ public class ShipperController {
         return shipperOrderService.getAll();
     } // lay ra tat ca don hang
     @GetMapping("/order/status")
-    public ResponseEntity<APIRespone> getOrderByStatus(@RequestParam String status) {
-        Long shipperId = getCurrentUserId();
-        return shipperOrderService.getAllShipperOrderByStatus(shipperId, status);
+    public ResponseEntity<APIRespone> getAllOrderOfStatus(@RequestParam String status){
+        Long shipperId= getCurrentUserId();
+        return shipperOrderService.getAllShipperOrderByStatus(shipperId,status);
     }
     // lay ra tat ca don hang theo trang thai
 
-    @GetMapping("/order/all-one-shipper")
+    @GetMapping("/order/all-of-shipper")
     public ResponseEntity<APIRespone> getAllShipperOrder(){
         Long shipperId= getCurrentUserId();
-        return shipperOrderService.getAllShipperOrder(shipperId);
+        return shipperOrderService.getAllOrderDetailOfShipper(shipperId);
     } // lay ra tat ca don hang cua 1 shipper
     @GetMapping("/order/sorted-by-distance")
     public ResponseEntity<APIRespone> getOrdersSortedByDistance(@RequestParam int page, @RequestParam int size){
