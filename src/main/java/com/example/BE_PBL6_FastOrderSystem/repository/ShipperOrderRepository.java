@@ -11,11 +11,12 @@ public interface ShipperOrderRepository extends JpaRepository<ShipperOrder, Long
     List<ShipperOrder> findAllByShipperId(Long shipperId);
 
     @Query("SELECT so FROM ShipperOrder so WHERE so.id = ?1 AND so.shipper.id = ?2")
-    ShipperOrder findByIdAndShipperId(Long shipperOrderId, Long shipperId);
+    List<ShipperOrder> findByIdAndShipperId(Long shipperOrderId, Long shipperId);
     @Query("SELECT so FROM ShipperOrder so WHERE so.status.statusName IN ?1")
     List<ShipperOrder> findAllByStatusIn(List<String> statuses);
 
     @Query("SELECT so FROM ShipperOrder so WHERE so.shipper.id = ?1 AND so.status.statusName= ?2")
     List<ShipperOrder> findAllByShipperIdAndStatus(Long shipperId, String status);
-
+    @Query("SELECT so FROM ShipperOrder so WHERE so.shipper.id = ?1")
+    ShipperOrder findByIdandShipperId(Long shipperOrderId, Long shipperId);
 }

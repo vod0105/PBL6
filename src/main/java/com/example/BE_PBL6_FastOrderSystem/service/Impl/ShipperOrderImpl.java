@@ -48,39 +48,27 @@ public class ShipperOrderImpl implements IShipperOrderService {
     @Override
     public ResponseEntity<APIRespone> getAllOrderDetailOfShipper(Long shipperId) {
         List<ShipperOrder> shipperOrders = shipperOrderRepository.findAllByShipperId(shipperId);
-        List<OrderDetailResponse> orderDetailResponses = shipperOrders.stream()
-                .flatMap(shipperOrder -> shipperOrder.getOrderDetails().stream())
-                .map(OrderDetailResponse::new)
+        List<ShipperOrderResponse> orderDetailResponses = shipperOrders.stream()
+                .map(ShipperOrderResponse::new)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new APIRespone(true, "Success", orderDetailResponses));
     }
 
     @Override
     public ResponseEntity<APIRespone> getShipperOrderbyId(Long shipperId, Long shipperOrderId) {
-        ShipperOrder shipperOrder = shipperOrderRepository.findByIdAndShipperId(shipperOrderId, shipperId);
-        if (shipperOrder == null) {
-            return ResponseEntity.badRequest().body(new APIRespone(false, "No orders found for the specified shipper", ""));
-        }
-        List<OrderDetailResponse> orderDetailResponses = shipperOrder.getOrderDetails().stream()
-                .map(OrderDetailResponse::new)
+        List<ShipperOrder> shipperOrders = shipperOrderRepository.findByIdAndShipperId(shipperOrderId, shipperId);
+        List<ShipperOrderResponse> orderDetailResponses = shipperOrders.stream()
+                .map(ShipperOrderResponse::new)
                 .collect(Collectors.toList());
-        ShipperOrderResponse shipperOrderResponse = new ShipperOrderResponse(shipperOrder);
-        shipperOrderResponse.setOrderDetails(orderDetailResponses);
-        return ResponseEntity.ok(new APIRespone(true, "Success", shipperOrderResponse));
+        return ResponseEntity.ok(new APIRespone(true, "Success", orderDetailResponses));
     }
 
     @Override
     public ResponseEntity<APIRespone> getAllShipperOrderByStatus(Long shipperId, String status) {
-        System.out.println("shipperId: " + shipperId);
-        System.out.println("status: " + status);
         List<ShipperOrder> shipperOrders = shipperOrderRepository.findAllByShipperIdAndStatus(shipperId, status);
-
-        System.out.println("shipperOrders: " + shipperOrders);
-        List<OrderDetailResponse> orderDetailResponses = shipperOrders.stream()
-                .flatMap(shipperOrder -> shipperOrder.getOrderDetails().stream())
-                .map(OrderDetailResponse::new)
+        List<ShipperOrderResponse> orderDetailResponses = shipperOrders.stream()
+                .map(ShipperOrderResponse::new)
                 .collect(Collectors.toList());
-        System.out.println("orderDetailResponses: " + orderDetailResponses.size());
         return ResponseEntity.ok(new APIRespone(true, "Success", orderDetailResponses));
     }
 
@@ -207,7 +195,7 @@ public class ShipperOrderImpl implements IShipperOrderService {
 
     @Override
     public ResponseEntity<APIRespone> approveShipperOrder(Long shipperId, Long shipperOrderId, Boolean isAccepted) {
-        ShipperOrder shipperOrder = shipperOrderRepository.findByIdAndShipperId(shipperOrderId, shipperId);
+        ShipperOrder shipperOrder = shipperOrderRepository.findByIdandShipperId(shipperOrderId, shipperId);
         if (shipperOrder == null) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "No orders found for the specified shipper", ""));
         }
@@ -247,7 +235,7 @@ public class ShipperOrderImpl implements IShipperOrderService {
 
     @Override
     public ResponseEntity<APIRespone> updateStatusOrderDetail(Long shipperId, Long shipperOrderId, Long orderDetailId) {
-        ShipperOrder shipperOrder = shipperOrderRepository.findByIdAndShipperId(shipperOrderId, shipperId);
+        ShipperOrder shipperOrder = shipperOrderRepository.findByIdandShipperId(shipperOrderId, shipperId);
         if (shipperOrder == null) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "No orders found for the specified shipper", ""));
         }
@@ -270,7 +258,7 @@ public class ShipperOrderImpl implements IShipperOrderService {
 
     @Override
     public ResponseEntity<APIRespone> finishDelivery(Long shipperId, Long shipperOrderId, Long orderDetailId) {
-        ShipperOrder shipperOrder = shipperOrderRepository.findByIdAndShipperId(shipperOrderId, shipperId);
+        ShipperOrder shipperOrder = shipperOrderRepository.findByIdandShipperId(shipperOrderId, shipperId);
         if (shipperOrder == null) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "No orders found for the specified shipper", ""));
         }
