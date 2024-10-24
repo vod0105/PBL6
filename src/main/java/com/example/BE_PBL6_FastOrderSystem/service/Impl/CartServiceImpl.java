@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -54,14 +55,24 @@ public class CartServiceImpl implements ICartService {
         Cart cartItem = cartItemRepository.findByUserIdAndProductIdAndSizeAndStoreId(userId, cartProductRequest.getProductId(), cartProductRequest.getSize(), cartProductRequest.getStoreId());
         if (cartItem != null) {
             cartItem.setQuantity(cartItem.getQuantity() + cartProductRequest.getQuantity());
-            cartItem.setTotalPrice(cartItem.getUnitPrice() * cartItem.getQuantity());
+            // Calculate total price of cart item
+            if (product.getDiscountedPrice() != null) {
+                cartItem.setTotalPrice(product.getDiscountedPrice() * cartItem.getQuantity());
+            } else {
+                cartItem.setTotalPrice(product.getPrice() * cartItem.getQuantity());
+            }
+
         } else {
             cartItem = new Cart();
             cartItem.setUser(user);
             cartItem.setProduct(product);
             cartItem.setQuantity(cartProductRequest.getQuantity());
-            cartItem.setUnitPrice(product.getPrice());
-            cartItem.setTotalPrice(product.getPrice() * cartProductRequest.getQuantity());
+            if (product.getDiscountedPrice() != null) {
+                cartItem.setUnitPrice(product.getDiscountedPrice());
+            } else {
+                cartItem.setUnitPrice(product.getPrice());
+            }
+            cartItem.setTotalPrice(cartItem.getUnitPrice() * cartProductRequest.getQuantity());
 
             Size size = sizeRepository.findByName(cartProductRequest.getSize());
             if (size == null) {
@@ -120,6 +131,13 @@ public class CartServiceImpl implements ICartService {
         }
         Cart cartItem = cartItemRepository.findByUserIdAndComboIdAndSizeAndStoreId(userId, cartComboRequest.getComboId(), cartComboRequest.getSize(), cartComboRequest.getStoreId());
         if (cartItem != null) {
+            // Check if drinkProducts list is different
+            List<Product> existingDrinkProducts = cartItem.getDrinkProducts();
+            boolean isDifferent = existingDrinkProducts.size() != drinkProducts.size() || !new HashSet<>(existingDrinkProducts).containsAll(drinkProducts);
+
+            if (isDifferent) {
+                cartItem.setDrinkProducts(drinkProducts);
+            }
             cartItem.setQuantity(cartItem.getQuantity() + cartComboRequest.getQuantity());
             cartItem.setTotalPrice(cartItem.getUnitPrice() * cartItem.getQuantity());
         } else {
@@ -139,7 +157,6 @@ public class CartServiceImpl implements ICartService {
             cartItem.setStatus(cartComboRequest.getStatus());
         }
         cartItemRepository.save(cartItem);
-
         return ResponseEntity.ok(new APIRespone(true, "Add combo to cart successfully", ""));
     }
 

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -42,7 +43,7 @@ public class Cart {
             joinColumns = @JoinColumn(name = "cart_id"),
             inverseJoinColumns = @JoinColumn(name = "drink_product_id")
     )
-    private List<Product> drinkProducts;
+    private List<Product> drinkProducts = new ArrayList<>();
     private Long storeId;
     private String status;
     private LocalDateTime createdAt;
@@ -56,7 +57,7 @@ public class Cart {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
-//
+
 
     @Override
     public String toString() {
