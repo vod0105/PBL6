@@ -5,11 +5,13 @@ import com.example.BE_PBL6_FastOrderSystem.model.User;
 import com.example.BE_PBL6_FastOrderSystem.repository.ChatRepository;
 import com.example.BE_PBL6_FastOrderSystem.repository.UserRepository;
 import com.example.BE_PBL6_FastOrderSystem.request.ChatRequest;
+import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
 import com.example.BE_PBL6_FastOrderSystem.response.ChatResponse;
 import com.example.BE_PBL6_FastOrderSystem.response.UserResponse;
 import com.example.BE_PBL6_FastOrderSystem.security.user.FoodUserDetails;
 import com.example.BE_PBL6_FastOrderSystem.service.IChatService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -172,6 +174,5 @@ public class ChatServiceImpl implements IChatService {
                 .map(UserResponse::new)
                 .collect(Collectors.toList());
     }
-
 
 }

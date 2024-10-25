@@ -2,11 +2,13 @@ package com.example.BE_PBL6_FastOrderSystem.controller.Chat;
 
 import com.example.BE_PBL6_FastOrderSystem.model.Chat;
 import com.example.BE_PBL6_FastOrderSystem.model.User;
+import com.example.BE_PBL6_FastOrderSystem.repository.UserRepository;
 import com.example.BE_PBL6_FastOrderSystem.request.ChatRequest;
 import com.example.BE_PBL6_FastOrderSystem.response.APIResponseChat;
 import com.example.BE_PBL6_FastOrderSystem.response.ChatResponse;
 import com.example.BE_PBL6_FastOrderSystem.response.UserResponse;
 import com.example.BE_PBL6_FastOrderSystem.service.IChatService;
+import com.example.BE_PBL6_FastOrderSystem.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,8 @@ public class ChatController {
 
     @Autowired
     private IChatService chatService;
+    @Autowired
+    private IUserService userService;
 
     @GetMapping
     public ResponseEntity<APIResponseChat<List<Chat>>> getAllChats() {
@@ -113,6 +117,12 @@ public class ChatController {
     public APIResponseChat<List<UserResponse>> getAllUsersChat() {
 
         List<UserResponse> users = chatService.getAllUsersByChatInteraction();
+        return new APIResponseChat<>(users, 0, "Data retrieved successfully");
+    }
+
+    @GetMapping("/search/{phoneNumber}")
+    public APIResponseChat<List<UserResponse>> getSearchByPhoneNumber(@PathVariable String phoneNumber) {
+        List<UserResponse> users = userService.getSearchByPhoneNumber(phoneNumber);
         return new APIResponseChat<>(users, 0, "Data retrieved successfully");
     }
 }

@@ -8,6 +8,7 @@ import com.example.BE_PBL6_FastOrderSystem.repository.*;
 import com.example.BE_PBL6_FastOrderSystem.request.ProductRequest;
 import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
 import com.example.BE_PBL6_FastOrderSystem.response.ProductResponse;
+import com.example.BE_PBL6_FastOrderSystem.response.ProductStoreDTO;
 import com.example.BE_PBL6_FastOrderSystem.service.IProductService;
 import com.example.BE_PBL6_FastOrderSystem.utils.ImageGeneral;
 import com.example.BE_PBL6_FastOrderSystem.response.ResponseConverter;
@@ -60,7 +61,7 @@ public class ProductServiceImpl implements IProductService {
             return new ResponseEntity<>(new APIRespone(false, "Store not found", ""), HttpStatus.NOT_FOUND);
         }
         List<ProductResponse> productResponses = productRepository.findByStoreId(storeId).stream()
-                .map(ResponseConverter::convertToProductResponse)
+                .map(productStoreDTO -> ResponseConverter.convertToProductResponse(productStoreDTO.getProduct()))  // Chỉ lấy đối tượng Product
                 .collect(Collectors.toList());
         return new ResponseEntity<>(new APIRespone(true, "Success", productResponses), HttpStatus.OK);
     }
@@ -72,7 +73,7 @@ public class ProductServiceImpl implements IProductService {
             return new ResponseEntity<>(new APIRespone(false, "Store not found", ""), HttpStatus.NOT_FOUND);
         }
         List<ProductResponse> productResponses = productRepository.findByStoreId(storeId).stream()
-                .map(ResponseConverter::convertToProductResponse)
+                .map(productStoreDTO -> ResponseConverter.convertToProductResponse(productStoreDTO.getProduct()))  // Chỉ lấy đối tượng Product
                 .collect(Collectors.toList());
         List<ProductResponse> product_storeAndcategory = new ArrayList<>();
         for (ProductResponse item : productResponses) {
@@ -444,6 +445,10 @@ public class ProductServiceImpl implements IProductService {
     }
 
     public ResponseEntity<APIRespone> applyProductsToStores(List<Long> productIds, Long storeId, List<Integer> quantity) {
+        System.out.println(storeId);
+        System.out.println(productIds.size());
+        System.out.println(quantity);
+        System.out.println("skjfskdjk");
         Optional<Store> stores = storeRepository.findByStoreId(storeId);
         if (stores.isEmpty()) {
             return new ResponseEntity<>(new APIRespone(false, "Store not found", ""), HttpStatus.NOT_FOUND);
@@ -458,6 +463,8 @@ public class ProductServiceImpl implements IProductService {
         for (int i = 0; i < quantity.size(); i++) {
             Integer quantityToAdd = quantity.get(i);
             Product product = products.get(i);
+            System.out.println("skjfskdjk");
+            System.out.println("quantityToAdd: " + quantityToAdd);
             if (product != null) {
                 Optional<ProductStore> existingProductStore = productStoreRepository.findByProductIdAndStoreId(product.getProductId(), store.getStoreId());
                 if (existingProductStore.isPresent()) {
@@ -484,7 +491,7 @@ public class ProductServiceImpl implements IProductService {
         List<Store> stores = storeRepository.findAllByManagerId(ownerId);
         Long storeId = stores.get(0).getStoreId();
         List<ProductResponse> productResponses = productRepository.findByStoreId(storeId).stream()
-                .map(ResponseConverter::convertToProductResponse)
+                .map(productStoreDTO -> ResponseConverter.convertToProductResponse(productStoreDTO.getProduct()))  // Chỉ lấy đối tượng Product
                 .collect(Collectors.toList());
         return new ResponseEntity<>(new APIRespone(true, "Success", productResponses), HttpStatus.OK);
     }

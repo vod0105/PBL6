@@ -198,4 +198,13 @@ public class UserServiceImpl implements IUserService {
         return  ResponseEntity.ok(new APIRespone(true, "Success", result));
     }
 
+    @Override
+    public List<UserResponse> getSearchByPhoneNumber(String phoneNumber){
+        List<User> users = userRepository.SearchUsersByPhoneNumber(phoneNumber);
+
+        List<UserResponse> userResponses = users.stream()
+                .map(UserResponse::new)
+                .collect(Collectors.toList());
+        return userResponses;
+    }
 }

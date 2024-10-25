@@ -60,7 +60,7 @@ public class CategoryServiceImpl  implements ICategoryService {
         }
         Set<CategoryResponse> set = new HashSet<>();
         List<ProductResponse> productResponses = productRepository.findByStoreId(storeId).stream()
-                .map(ResponseConverter::convertToProductResponse)
+                .map(productStoreDTO -> ResponseConverter.convertToProductResponse(productStoreDTO.getProduct()))  // Chỉ lấy đối tượng Product
                 .collect(Collectors.toList());
         for(ProductResponse item : productResponses){
             set.add(item.getCategory());
