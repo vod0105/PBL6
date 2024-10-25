@@ -21,6 +21,7 @@ public class Order {
     private LocalDateTime orderDate;
     private Double totalAmount;
     private Double shippingFee;
+
     @ManyToOne
     @JoinColumn(name = "status_id")
     private StatusOrder status;
@@ -34,6 +35,9 @@ public class Order {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean isFeedBack;
+    @ManyToOne
+    @JoinColumn(name = "discount_code_id")
+    private DiscountCode discountCode;
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -62,6 +66,7 @@ public class Order {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", isFeedBack=" + isFeedBack +
+                ", discountCode=" + discountCode +
                 '}';
     }
 }

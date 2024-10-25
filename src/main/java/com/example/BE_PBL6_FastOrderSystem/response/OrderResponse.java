@@ -19,6 +19,7 @@ public class OrderResponse {
     private String deliveryAddress;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String discountCode;
     private List<OrderDetailResponse> orderDetails;
 
     public OrderResponse(Order order) {
@@ -31,6 +32,7 @@ public class OrderResponse {
         this.deliveryAddress = order.getDeliveryAddress();
         this.createdAt = order.getCreatedAt();
         this.updatedAt = order.getUpdatedAt();
+        this.discountCode = (order.getDiscountCode() != null) ? order.getDiscountCode().getCode() : "Unknown Discount Code";
         this.orderDetails = order.getOrderDetails().stream().map(OrderDetailResponse::new).collect(Collectors.toList());
     }
 }
