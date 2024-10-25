@@ -50,7 +50,7 @@ public class ShipperOrderResponse {
         this.totalAmount = shipperOrder.getOrderDetails().stream()
                 .filter(orderDetail -> orderDetail.getStore().getStoreId().equals(this.storeId))
                 .mapToDouble(orderDetail -> orderDetail.getTotalPrice())
-                .sum(); // sum total price of order details of this store
+                .sum();
         this.shippingFee = shipperOrder.getOrderDetails().get(0).getOrder().getShippingFee();
         this.deliveryAddress = shipperOrder.getOrderDetails().get(0).getOrder().getDeliveryAddress();
         this.longitude = shipperOrder.getOrderDetails().get(0).getOrder().getLongitude();
@@ -60,5 +60,6 @@ public class ShipperOrderResponse {
                 .collect(java.util.stream.Collectors.toList());
 
     }
+
 
 }

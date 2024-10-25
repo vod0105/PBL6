@@ -84,12 +84,10 @@ public class UserOrderController {
         if ("ZALOPAY".equalsIgnoreCase(paymentMethod)) {
             orderRequest.setOrderId(orderCode);
             orderRequest.setUserId(userId);
-            orderRequest.setOrderInfo("Payment ZaloPay for order " + orderCode);
+            orderRequest.setOrderInfo("Payment for order " + orderCode);
             orderRequest.setLang("en");
             orderRequest.setExtraData("additional data");
             Map<String, Object> zalopayResponse = paymentService.createOrderZaloPay(orderRequest);
-            System.out.println("ZaloPay response: " + zalopayResponse);
-            System.out.println();
             if (Integer.parseInt(zalopayResponse.get("returncode").toString()) == 1) {
                 ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
                 final int[] count = {0};
@@ -100,10 +98,8 @@ public class UserOrderController {
                         return;
                     }
                     ResponseEntity<APIRespone> statusResponse = checkPaymentZaloPayStatus(zalopayResponse.get("apptransid").toString());
-                    System.out.println("Payment status response: " + statusResponse);
                     if (statusResponse.getStatusCode() == HttpStatus.OK) {
                         ResponseEntity<APIRespone> response = orderService.processOrderNow(userId, paymentMethod, productId, comboId, drinkId ,storeId, quantity, size, deliveryAddress, longitude,latitude ,orderCode, discountCode);
-                        System.out.println("Response khi processOrderNow = ZALOPAY: " + response);
                         if (response.getStatusCode() == HttpStatus.OK) {
                             orderService.updateQuantityProduct(productId, comboId, storeId, quantity);
                             ResponseEntity<APIRespone> orderResponse = orderService.findOrderByOrderCode(orderCode);
@@ -112,7 +108,7 @@ public class UserOrderController {
                         }
                         scheduler.shutdown();
                     } else {
-                        System.out.println("Payment status is not OK. Retrying...");
+                        System.out.println("Waiting for payment status...");
                     }
                 }, 0, 10, TimeUnit.SECONDS);
                 APIRespone apiResponse = new APIRespone(true, "ZaloPay payment initiated", zalopayResponse);
@@ -124,11 +120,10 @@ public class UserOrderController {
         if ("MOMO".equalsIgnoreCase(paymentMethod)) {
             orderRequest.setOrderId(orderCode);
             orderRequest.setUserId(userId);
-            orderRequest.setOrderInfo("Payment MOMO for order " + orderCode);
+            orderRequest.setOrderInfo("Payment for order " + orderCode);
             orderRequest.setLang("en");
             orderRequest.setExtraData("additional data");
             Map<String, Object> momoResponse = paymentService.createOrderMomo(orderRequest);
-            System.out.println("MoMo response khi product: " + momoResponse);
             if ("Success".equals(momoResponse.get("message"))) {
                 ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
                 final int[] count = {0};

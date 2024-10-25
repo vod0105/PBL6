@@ -3,6 +3,7 @@ package com.example.BE_PBL6_FastOrderSystem.controller.Shipper;
 import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
 import com.example.BE_PBL6_FastOrderSystem.security.user.FoodUserDetails;
 import com.example.BE_PBL6_FastOrderSystem.service.IShipperOrderService;
+import com.example.BE_PBL6_FastOrderSystem.service.IShipperReportService;
 import com.example.BE_PBL6_FastOrderSystem.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/shipper")
 public class ShipperController {
     private final IShipperOrderService shipperOrderService;
+    private final IShipperReportService shipperReportService;
     private final IUserService userService;
     private Long getCurrentUserId() {
         return FoodUserDetails.getCurrentUserId();
@@ -68,5 +70,10 @@ public class ShipperController {
     public ResponseEntity<APIRespone> setShipperBusy(){
         Long shipperId= getCurrentUserId();
         return shipperOrderService.updateBusyStatus(shipperId);
+    }
+    @GetMapping("/order/report")
+    public ResponseEntity<APIRespone> getShipperReport(){
+        Long shipperId= getCurrentUserId();
+        return shipperReportService.getAllShipperReport(shipperId);
     }
 }
