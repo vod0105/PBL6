@@ -1,5 +1,7 @@
 package com.example.BE_PBL6_FastOrderSystem.security.jwt;
 
+import com.example.BE_PBL6_FastOrderSystem.entity.Token;
+import com.example.BE_PBL6_FastOrderSystem.repository.TokenRepository;
 import com.example.BE_PBL6_FastOrderSystem.security.user.FoodUserDetails;
 import com.example.BE_PBL6_FastOrderSystem.service.IAuthService;
 import com.example.BE_PBL6_FastOrderSystem.service.IUserService;
@@ -20,6 +22,8 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
@@ -39,10 +43,12 @@ public class JwtUtils {
 
     private final IUserService userService;
     private final IAuthService authService;
+    private final TokenRepository tokenRepository;
 
-    public JwtUtils(@Lazy AuthServiceImpl authService, IUserService userService) {
+    public JwtUtils(@Lazy AuthServiceImpl authService, IUserService userService, TokenRepository tokenRepository) {
         this.authService = authService;
         this.userService = userService;
+        this.tokenRepository = tokenRepository;
     }
 
     public String generateJwtTokenForUser(Authentication authentication) {
@@ -123,6 +129,14 @@ public class JwtUtils {
 
 
     public String generateToken(Authentication authentication) {
-        return generateJwtTokenForUser(authentication);
+        String jwt = generateJwtTokenForUser(authentication);
+        Token token = new Token();
+        token.setToken(jwt);
+        token.setUserId(((FoodUserDetails) authentication.getPrincipal()).getId());
+        token.setCreatedAt(LocalDateTime.ofInstant(Instant.now(), ZoneId.systemDefault()));
+        token.setExpiresAt(LocalDateTime.ofInstant(Instant.now().plus(jwtExpirationMs, ChronoUnit.SECONDS), ZoneId.systemDefault()));
+        token.setRevoked(false); // la chua bi thu hoi
+        tokenRepository.save(token);
+        return jwt;
     }
 }

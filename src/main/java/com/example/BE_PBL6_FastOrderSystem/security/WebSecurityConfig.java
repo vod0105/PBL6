@@ -1,5 +1,6 @@
 package com.example.BE_PBL6_FastOrderSystem.security;
 
+import com.example.BE_PBL6_FastOrderSystem.repository.TokenRepository;
 import com.example.BE_PBL6_FastOrderSystem.security.jwt.AuthTokenFilter;
 import com.example.BE_PBL6_FastOrderSystem.security.jwt.JwtAuthEntryPoint;
 import com.example.BE_PBL6_FastOrderSystem.security.jwt.JwtUtils;
@@ -35,9 +36,11 @@ import java.io.IOException;
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 @EnableWebSecurity
 public class WebSecurityConfig {
+
     private final FoodUserDetailsService userDetailsService;
     private final JwtAuthEntryPoint jwtAuthEntryPoint;
     private final JwtUtils jwtUtils;
+    private final TokenRepository tokenRepository;
 
     private static final String[] AUTH = {
             "/api/v1/auth/**"
@@ -68,10 +71,11 @@ public class WebSecurityConfig {
     };
 
     @Autowired
-    public WebSecurityConfig(@Lazy JwtUtils jwtUtils, JwtAuthEntryPoint jwtAuthEntryPoint, FoodUserDetailsService userDetailsService) {
+    public WebSecurityConfig(@Lazy JwtUtils jwtUtils, JwtAuthEntryPoint jwtAuthEntryPoint, FoodUserDetailsService userDetailsService, TokenRepository tokenRepository) {
         this.jwtUtils = jwtUtils;
         this.jwtAuthEntryPoint = jwtAuthEntryPoint;
         this.userDetailsService = userDetailsService;
+        this.tokenRepository = tokenRepository;
     }
 
     @Bean
@@ -86,8 +90,8 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public AuthTokenFilter authTokenFilter() {
-        return new AuthTokenFilter(jwtUtils, userDetailsService);
+    public AuthTokenFilter authTokenFilter(TokenRepository tokenRepository) {
+        return new AuthTokenFilter(jwtUtils, userDetailsService, tokenRepository);
     }
 
     @Bean
@@ -135,7 +139,7 @@ public class WebSecurityConfig {
                 );
 
         http.authenticationProvider(authenticationProvider());
-        http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(authTokenFilter(tokenRepository), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

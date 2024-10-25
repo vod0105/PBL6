@@ -56,7 +56,7 @@ public class AuthServiceImpl implements IAuthService {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password));
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            String jwt = jwtUtils.generateJwtTokenForUser(authentication);
+            String jwt = jwtUtils.generateToken(authentication);
             FoodUserDetails userDetails = (FoodUserDetails) authentication.getPrincipal();
             List<String> roles = userDetails.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)

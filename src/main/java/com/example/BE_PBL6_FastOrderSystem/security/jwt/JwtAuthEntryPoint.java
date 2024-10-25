@@ -19,15 +19,12 @@ public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
-
-        // Set content type for the response
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
         // Check if the error is 404 (Not Found)
         if (response.getStatus() == HttpServletResponse.SC_NOT_FOUND) {
             handleNotFound(request, response);
         } else {
-            // Handle 401 Unauthorized error
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             ResponseEntity<APIRespone> responseEntity = buildResponseEntity(
                     HttpServletResponse.SC_UNAUTHORIZED,
