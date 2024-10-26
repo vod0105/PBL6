@@ -76,6 +76,7 @@ public class WebSecurityConfig {
         this.jwtAuthEntryPoint = jwtAuthEntryPoint;
         this.userDetailsService = userDetailsService;
         this.tokenRepository = tokenRepository;
+
     }
 
     @Bean
