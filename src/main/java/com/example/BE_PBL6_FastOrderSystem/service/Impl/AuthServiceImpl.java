@@ -8,8 +8,8 @@ import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
 import com.example.BE_PBL6_FastOrderSystem.response.JwtResponse;
 import com.example.BE_PBL6_FastOrderSystem.security.jwt.JwtUtils;
 import com.example.BE_PBL6_FastOrderSystem.security.user.FoodUserDetails;
-import com.example.BE_PBL6_FastOrderSystem.security.user.FoodUserDetailsService;
 import com.example.BE_PBL6_FastOrderSystem.service.IAuthService;
+import com.example.BE_PBL6_FastOrderSystem.utils.ImageGeneral;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+
 import java.util.*;
 
 @Service
@@ -35,28 +37,22 @@ public class AuthServiceImpl implements IAuthService {
     private final RoleRepository roleRepository;
     private final EmailServiceImpl emailService;
     private final OTPServiceImpl otpService;
-    private final FoodUserDetailsService userDetailsService;
 
     @Override
     public ResponseEntity<APIRespone> authenticateUser(String username, String password) {
-       Optional<User> user = userRepository.findByPhoneNumber(username);
+        Optional<User> user = userRepository.findByPhoneNumber(username);
         if (user.isEmpty()) {
             user = userRepository.findByEmail(username);
         }
-        if (user.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new APIRespone(false, "Username is required", ""));
-        }
-        if (user.get().getPassword() == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new APIRespone(false, "Password is required", ""));
-        }
+
         if (user.get().getAccountLocked()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new APIRespone(false, "Account is locked", ""));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new APIRespone(false, "Tài khoản đã bị khóa", ""));
         }
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password));
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            String jwt = jwtUtils.generateToken(authentication);
+            String jwt = jwtUtils.generateJwtTokenForUser(authentication);
             FoodUserDetails userDetails = (FoodUserDetails) authentication.getPrincipal();
             List<String> roles = userDetails.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
@@ -65,17 +61,17 @@ public class AuthServiceImpl implements IAuthService {
                     userDetails.getEmail(), userDetails.getFullName(), userDetails.getPhoneNumber(), userDetails.getAddress(), userDetails.getLongitude(), userDetails.getLatitude(), userDetails.getAvatar(),
                     userDetails.getCreatedAt(), userDetails.getUpdatedAt(), userDetails.isAccountLocked(), userDetails.getIsActive(), jwt, roles)));
         } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new APIRespone(false, "Invalid username or password", ""));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new APIRespone(false, "Tài khoản hoặc mật khẩu không chính xác", ""));
         }
     }
 
     @Override
     public ResponseEntity<APIRespone> registerUser(User user) {
         if (userRepository.existsByPhoneNumber(user.getPhoneNumber())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new APIRespone(false, user.getPhoneNumber() + " already exists", ""));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new APIRespone(false, "Số điện thoại đã đăng kí", ""));
         }
         if (userRepository.existsByEmail(user.getEmail())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new APIRespone(false, user.getEmail() + " already exists", ""));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new APIRespone(false, "Email đã đăng kí", ""));
         }
         if (user.getPhoneNumber() == null || !user.getPhoneNumber().matches("\\d{10}") || user.getPhoneNumber().indexOf("0") != 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIRespone(false, "Phone number is should be 10 digits and start with 0", ""));

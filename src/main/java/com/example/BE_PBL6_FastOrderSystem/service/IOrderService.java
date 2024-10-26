@@ -1,8 +1,6 @@
 package com.example.BE_PBL6_FastOrderSystem.service;
 
 import com.example.BE_PBL6_FastOrderSystem.entity.Cart;
-import com.example.BE_PBL6_FastOrderSystem.entity.Order;
-import com.example.BE_PBL6_FastOrderSystem.entity.Store;
 import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
 import org.springframework.http.ResponseEntity;
 
@@ -13,16 +11,10 @@ public interface IOrderService {
 
     ResponseEntity<APIRespone> findNearestShipper(Double latitude, Double longitude, int limit);
 
-    ResponseEntity<APIRespone> processOrder(Long userId, String paymentMethod, List<Long> cartIds, String deliveryAddress,Double longitude, Double latitude, String orderCode, String discountCode);
+    ResponseEntity<APIRespone> processOrder(Long userId, String paymentMethod, List<Long> cartIds, String deliveryAddress,Double longitude, Double latitude, String orderCode);
 
-    ResponseEntity<APIRespone> processOrderNow(Long userId, String paymentMethod, Long productId, Long comboId, List<Long> drinkId, Long storeId, Integer quantity, String size, String deliveryAddress,Double longitude, Double latitude, String orderCode, String discountCode);
-
-    Double calculateShippingFee(Order order, Store store);
-
-    Long calculateOrderNowAmount(Long productId, Long comboId, int quantity, Long storeId, Double Latitude, Double Longitude, String DiscountCode);
-
-
-    Long calculateOrderAmount(List<Long> cartIds, Double latitude, Double longitude, String discountCode);
+    ResponseEntity<APIRespone> processOrderNow(Long userId, String paymentMethod, Long productId, Long comboId, List<Long> drinkId, Long storeId, Integer quantity, String size, String deliveryAddress,Double longitude, Double latitude, String orderCode,double voucherPecent);
+    Long calculateOrderNowAmount(Long productId, Long comboId, int quantity, Long storeId, Double Latitude, Double Longitude);
 
     ResponseEntity<APIRespone> updateQuantityProduct(Long productId, Long comboId, Long storeId, int quantity);
     ResponseEntity<APIRespone> updateOrderStatus(String orderCode, String status);

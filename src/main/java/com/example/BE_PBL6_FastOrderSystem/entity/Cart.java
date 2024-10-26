@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -28,9 +27,9 @@ public class Cart {
     @ManyToOne
     @JoinColumn(name = "combo_id")
     private Combo combo;
-//    @ManyToOne
-//    @JoinColumn(name = "order_id")
-//    private Order order;
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
     private int quantity;
     private double unitPrice;
     private double totalPrice;
@@ -43,7 +42,7 @@ public class Cart {
             joinColumns = @JoinColumn(name = "cart_id"),
             inverseJoinColumns = @JoinColumn(name = "drink_product_id")
     )
-    private List<Product> drinkProducts = new ArrayList<>();
+    private List<Product> drinkProducts;
     private Long storeId;
     private String status;
     private LocalDateTime createdAt;
@@ -66,7 +65,7 @@ public class Cart {
                 ", user=" + user +
                 ", product=" + product +
                 ", combo=" + combo +
-//                ", order=" + order +
+                ", order=" + order +
                 ", quantity=" + quantity +
                 ", unitPrice=" + unitPrice +
                 ", totalPrice=" + totalPrice +

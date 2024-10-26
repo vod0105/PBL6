@@ -15,7 +15,9 @@ import java.util.List;
 public class RateRequest {
     private int rate;
     private String comment;
-    private List<MultipartFile> imageFiles;
+    private Long productId;
+    private Long comboId;
+//    private List<MultipartFile> imageFiles;
     private List<Long> productIds;
     private List<Long> comboIds;
 

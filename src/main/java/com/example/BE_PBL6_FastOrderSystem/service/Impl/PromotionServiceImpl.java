@@ -31,6 +31,7 @@ public class PromotionServiceImpl implements IPromotionService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
 
+
     @Override
     public ResponseEntity<APIRespone> getAllPromotion() {
         if (promotionRepository.findAll().isEmpty()) {
@@ -45,8 +46,7 @@ public class PromotionServiceImpl implements IPromotionService {
                         promotion.getDiscountPercentage(),
                         promotion.getStartDate(),
                         promotion.getEndDate(),
-                        promotion.getStores().stream().map(store -> store.getStoreId()).collect(Collectors.toList()),
-                        promotion.getStores().stream().map(store -> store.getStoreName()).collect(Collectors.toList())
+                        promotion.getStores().stream().map(store -> store.getStoreId()).collect(Collectors.toList())
                 ))
                 .collect(Collectors.toList());
         return new ResponseEntity<>(new APIRespone(true, "Success", promotionResponses), HttpStatus.OK);
@@ -66,8 +66,7 @@ public class PromotionServiceImpl implements IPromotionService {
                 promotion.get().getDiscountPercentage(),
                 promotion.get().getStartDate(),
                 promotion.get().getEndDate(),
-                promotion.get().getStores().stream().map(store -> store.getStoreId()).collect(Collectors.toList()),
-                promotion.get().getStores().stream().map(store -> store.getStoreName()).collect(Collectors.toList())
+                promotion.get().getStores().stream().map(store -> store.getStoreId()).collect(Collectors.toList())
         );
         return new ResponseEntity<>(new APIRespone(true, "Success", promotionResponse), HttpStatus.OK);
 
@@ -90,7 +89,7 @@ public class PromotionServiceImpl implements IPromotionService {
                         promotion.getDiscountPercentage(),
                         promotion.getStartDate(),
                         promotion.getEndDate(),
-                        promotion.getStores().stream().map(store1 -> store1.getStoreId()).collect(Collectors.toList()), promotion.getStores().stream().map(store1 -> store1.getStoreName()).collect(Collectors.toList())
+                        promotion.getStores().stream().map(store1 -> store1.getStoreId()).collect(Collectors.toList())
                 ))
                 .collect(Collectors.toList());
         return new ResponseEntity<>(new APIRespone(true, "Success", promotionResponses), HttpStatus.OK);
@@ -130,6 +129,9 @@ public class PromotionServiceImpl implements IPromotionService {
 
     @Override
     public ResponseEntity<APIRespone> updatePromotion(Long promotionId, PromotionRequest promotionRequest) {
+//        if (promotionRepository.existsByName(promotionRequest.getName())) {
+//            return new ResponseEntity<>(new APIRespone(false, "Promotion already exists", ""), HttpStatus.BAD_REQUEST);
+//        }
         if (promotionRepository.findById(promotionId).isEmpty()) {
             return new ResponseEntity<>(new APIRespone(false, "Promotion not found", ""), HttpStatus.NOT_FOUND);
         }
@@ -235,12 +237,6 @@ public class PromotionServiceImpl implements IPromotionService {
         if (isPromotionInProductStores) {
             product.getPromotions().add(promotion);
             promotion.getProducts().add(product);
-            // Calculate discounted price
-            double maxDiscountPercentage = product.getPromotions().stream()
-                    .mapToDouble(Promotion::getDiscountPercentage)
-                    .max()
-                    .orElse(0);
-            product.setDiscountedPrice(product.getPrice() * (1 - maxDiscountPercentage / 100));
             productRepository.save(product);
             promotionRepository.save(promotion);
             return ResponseEntity.ok(new APIRespone(true, "Promotion applied to product successfully", ""));
@@ -301,12 +297,6 @@ public class PromotionServiceImpl implements IPromotionService {
             if (!product.getPromotions().contains(promotion)) {
                 product.getPromotions().add(promotion);
                 promotion.getProducts().add(product);
-                // Calculate discounted price
-                double maxDiscountPercentage = product.getPromotions().stream()
-                        .mapToDouble(Promotion::getDiscountPercentage)
-                        .max()
-                        .orElse(0);
-                product.setDiscountedPrice(product.getPrice() * (1 - maxDiscountPercentage / 100));
             }
         });
         productRepository.saveAll(productsToApply);
@@ -330,19 +320,8 @@ public class PromotionServiceImpl implements IPromotionService {
         if (!product.getPromotions().contains(promotion)) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "Promotion not applied to product", ""));
         }
-        // Remove promotion from product
         product.getPromotions().remove(promotion);
         promotion.getProducts().remove(product);
-        // Calculate discounted price after removing promotion = null if no promotion
-        if (product.getPromotions().isEmpty()) {
-            product.setDiscountedPrice(null);
-        } else {
-            double maxDiscountPercentage = product.getPromotions().stream()
-                    .mapToDouble(Promotion::getDiscountPercentage)
-                    .max()
-                    .orElse(0);
-            product.setDiscountedPrice(product.getPrice() * (1 - maxDiscountPercentage / 100));
-        }
         productRepository.save(product);
         promotionRepository.save(promotion);
         return ResponseEntity.ok(new APIRespone(true, "Promotion removed from product successfully", ""));

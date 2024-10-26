@@ -1,6 +1,5 @@
 package com.example.BE_PBL6_FastOrderSystem.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,5 +30,5 @@ public class PaymentRequest {
     private String lang;
     private String extraData;
     private String paymentMethod;
-    private String discountCode;
+    private Long voucherId;
 }

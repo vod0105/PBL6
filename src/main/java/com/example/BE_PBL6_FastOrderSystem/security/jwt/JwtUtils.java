@@ -1,7 +1,5 @@
 package com.example.BE_PBL6_FastOrderSystem.security.jwt;
 
-import com.example.BE_PBL6_FastOrderSystem.entity.Token;
-import com.example.BE_PBL6_FastOrderSystem.repository.TokenRepository;
 import com.example.BE_PBL6_FastOrderSystem.security.user.FoodUserDetails;
 import com.example.BE_PBL6_FastOrderSystem.service.IAuthService;
 import com.example.BE_PBL6_FastOrderSystem.service.IUserService;
@@ -22,8 +20,6 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
@@ -43,25 +39,20 @@ public class JwtUtils {
 
     private final IUserService userService;
     private final IAuthService authService;
-    private final TokenRepository tokenRepository;
 
-    public JwtUtils(@Lazy AuthServiceImpl authService, IUserService userService, TokenRepository tokenRepository) {
+    public JwtUtils(@Lazy AuthServiceImpl authService, IUserService userService) {
         this.authService = authService;
         this.userService = userService;
-        this.tokenRepository = tokenRepository;
     }
 
     public String generateJwtTokenForUser(Authentication authentication) {
         UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
-        FoodUserDetails foodUserDetails = (FoodUserDetails) userPrincipal;
         List<String> roles = userPrincipal.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
         return Jwts.builder()
-                .claim("phone", foodUserDetails.getPhoneNumber())
+                .setSubject(userPrincipal.getUsername())
                 .claim("roles", roles)
-                .claim("sub", foodUserDetails.getSub())
-                .claim("facebookId", foodUserDetails.getFacebookId())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(Instant.now().plus(jwtExpirationMs, ChronoUnit.SECONDS).toEpochMilli()))
                 .setIssuer("FastOrderSystem")
@@ -75,21 +66,19 @@ public class JwtUtils {
                 .compact();
     }
 
-    public SecretKey key() {
+    private SecretKey key() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
     public String generateTokenFromRefreshToken(String refreshToken) {
         Claims claims = Jwts.parserBuilder().setSigningKey(key()).build().parseClaimsJws(refreshToken).getBody();
-        String phone = (String) claims.get("phone");
+        String username = claims.getSubject();
         List<String> roles = (List<String>) claims.get("roles");
 
         return Jwts.builder()
-                .claim("phone", phone)
+                .setSubject(username)
                 .claim("roles", roles)
-                .claim("sub", claims.get("sub"))
-                .claim("facebookId", claims.get("facebookId"))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs * 1000L))
                 .setIssuer("FastOrderSystem")
@@ -104,7 +93,10 @@ public class JwtUtils {
     }
 
     public String getUserNameFromToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(key()).build().parseClaimsJws(token).getBody().get("phone", String.class);
+        return Jwts.parserBuilder()
+                .setSigningKey(key())
+                .build()
+                .parseClaimsJws(token).getBody().getSubject();
     }
 
     public boolean validateToken(String token) {
@@ -129,14 +121,26 @@ public class JwtUtils {
 
 
     public String generateToken(Authentication authentication) {
-        String jwt = generateJwtTokenForUser(authentication);
-        Token token = new Token();
-        token.setToken(jwt);
-        token.setUserId(((FoodUserDetails) authentication.getPrincipal()).getId());
-        token.setCreatedAt(LocalDateTime.ofInstant(Instant.now(), ZoneId.systemDefault()));
-        token.setExpiresAt(LocalDateTime.ofInstant(Instant.now().plus(jwtExpirationMs, ChronoUnit.SECONDS), ZoneId.systemDefault()));
-        token.setRevoked(false); // la chua bi thu hoi
-        tokenRepository.save(token);
-        return jwt;
+        return generateJwtTokenForUser(authentication);
     }
+
+
+
+
+//    public String createToken(String userId, String email) {
+//        return Jwts.builder()
+//                .setSubject(userId)
+//                .claim("email", email)
+//                .setIssuedAt(new Date())
+//                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs * 1000L))
+//                .setIssuer("FastOrderSystem")
+//                .setAudience("FastOrderSystem")
+//                .setNotBefore(new Date())
+//                .setHeaderParam("typ", "JWT")
+//                .setHeaderParam("alg", "HS512")
+//                .setHeaderParam("kid", "fastorder")
+//                .setId(UUID.randomUUID().toString())
+//                .signWith(key(), SignatureAlgorithm.HS512)
+//                .compact();
+//    }
 }

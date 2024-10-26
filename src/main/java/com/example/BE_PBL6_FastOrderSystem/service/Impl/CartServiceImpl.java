@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -55,24 +54,14 @@ public class CartServiceImpl implements ICartService {
         Cart cartItem = cartItemRepository.findByUserIdAndProductIdAndSizeAndStoreId(userId, cartProductRequest.getProductId(), cartProductRequest.getSize(), cartProductRequest.getStoreId());
         if (cartItem != null) {
             cartItem.setQuantity(cartItem.getQuantity() + cartProductRequest.getQuantity());
-            // Calculate total price of cart item
-            if (product.getDiscountedPrice() != null) {
-                cartItem.setTotalPrice(product.getDiscountedPrice() * cartItem.getQuantity());
-            } else {
-                cartItem.setTotalPrice(product.getPrice() * cartItem.getQuantity());
-            }
-
+            cartItem.setTotalPrice(cartItem.getUnitPrice() * cartItem.getQuantity());
         } else {
             cartItem = new Cart();
             cartItem.setUser(user);
             cartItem.setProduct(product);
             cartItem.setQuantity(cartProductRequest.getQuantity());
-            if (product.getDiscountedPrice() != null) {
-                cartItem.setUnitPrice(product.getDiscountedPrice());
-            } else {
-                cartItem.setUnitPrice(product.getPrice());
-            }
-            cartItem.setTotalPrice(cartItem.getUnitPrice() * cartProductRequest.getQuantity());
+            cartItem.setUnitPrice(product.getPrice());
+            cartItem.setTotalPrice(product.getPrice() * cartProductRequest.getQuantity());
 
             Size size = sizeRepository.findByName(cartProductRequest.getSize());
             if (size == null) {
@@ -131,13 +120,6 @@ public class CartServiceImpl implements ICartService {
         }
         Cart cartItem = cartItemRepository.findByUserIdAndComboIdAndSizeAndStoreId(userId, cartComboRequest.getComboId(), cartComboRequest.getSize(), cartComboRequest.getStoreId());
         if (cartItem != null) {
-            // Check if drinkProducts list is different
-            List<Product> existingDrinkProducts = cartItem.getDrinkProducts();
-            boolean isDifferent = existingDrinkProducts.size() != drinkProducts.size() || !new HashSet<>(existingDrinkProducts).containsAll(drinkProducts);
-
-            if (isDifferent) {
-                cartItem.setDrinkProducts(drinkProducts);
-            }
             cartItem.setQuantity(cartItem.getQuantity() + cartComboRequest.getQuantity());
             cartItem.setTotalPrice(cartItem.getUnitPrice() * cartItem.getQuantity());
         } else {
@@ -157,6 +139,7 @@ public class CartServiceImpl implements ICartService {
             cartItem.setStatus(cartComboRequest.getStatus());
         }
         cartItemRepository.save(cartItem);
+
         return ResponseEntity.ok(new APIRespone(true, "Add combo to cart successfully", ""));
     }
 
@@ -164,7 +147,7 @@ public class CartServiceImpl implements ICartService {
     public ResponseEntity<APIRespone> getHistoryCart(Long userId) {
         List<Cart> cartItems = cartItemRepository.findByUserId(userId);
         if (cartItems.isEmpty()) {
-            return ResponseEntity.badRequest().body(new APIRespone(true, "Cart item not found", ""));
+            return ResponseEntity.badRequest().body(new APIRespone(false, "No cart items found for the user", ""));
         }
         List<CartResponse> cartResponses = CartResponse.convertListCartToCartResponse(cartItems);
         return ResponseEntity.ok(new APIRespone(true, "Get history cart successfully", cartResponses));
@@ -186,6 +169,9 @@ public class CartServiceImpl implements ICartService {
         if (cartItem == null) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "Cart item not found", ""));
         }
+        if (quantity <= 0) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "Quantity must be greater than 0", ""));
+        }
         if (cartItem.getProduct() != null) {
             if (cartItem.getProduct().getStockQuantity() < quantity) {
                 return ResponseEntity.badRequest().body(new APIRespone(false, "Product not enough", ""));
@@ -199,11 +185,8 @@ public class CartServiceImpl implements ICartService {
             }
         }
         Integer currentQuantity = cartItem.getQuantity();
-        if (currentQuantity + quantity <= 0) {
-            return ResponseEntity.badRequest().body(new APIRespone(false, "Quantity must be greater than 0", ""));
-        }
-        cartItem.setQuantity(currentQuantity + quantity);
-        cartItem.setTotalPrice(cartItem.getUnitPrice() * cartItem.getQuantity());
+        cartItem.setQuantity( quantity);
+        cartItem.setTotalPrice(cartItem.getUnitPrice() * quantity);
         cartItemRepository.save(cartItem);
         return ResponseEntity.ok(new APIRespone(true, "Update cart item successfully", ""));
     }

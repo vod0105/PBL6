@@ -21,12 +21,11 @@ public class Order {
     private LocalDateTime orderDate;
     private Double totalAmount;
     private Double shippingFee;
-
     @ManyToOne
     @JoinColumn(name = "status_id")
     private StatusOrder status;
-//    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-//    private List<Cart> carts;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<Cart> carts;
     private String deliveryAddress;
     @Column(name = "longitude", columnDefinition = "DOUBLE")
     private Double longitude;
@@ -34,15 +33,13 @@ public class Order {
     private Double latitude;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private boolean isFeedBack;
-    @ManyToOne
-    @JoinColumn(name = "discount_code_id")
-    private DiscountCode discountCode;
+    private boolean FeedBack;
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
     }
+
 
     @PreUpdate
     protected void onUpdate() {
@@ -60,13 +57,13 @@ public class Order {
                 ", totalAmount=" + totalAmount +
                 ", shippingFee=" + shippingFee +
                 ", status=" + status +
+                ", carts=" + carts +
                 ", deliveryAddress='" + deliveryAddress + '\'' +
                 ", longitude=" + longitude +
                 ", latitude=" + latitude +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
-                ", isFeedBack=" + isFeedBack +
-                ", discountCode=" + discountCode +
+                ", isFeedBack=" + FeedBack +
                 '}';
     }
 }

@@ -2,12 +2,10 @@ package com.example.BE_PBL6_FastOrderSystem.response;
 
 import com.example.BE_PBL6_FastOrderSystem.entity.ShipperOrder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
-@RequiredArgsConstructor
+
 @Data
 public class ShipperOrderResponse {
     private Long shipperOrderId;
@@ -21,6 +19,7 @@ public class ShipperOrderResponse {
     private Long orderId;
     private String orderCode;
     private Long userId;
+    private String address;
     private String fullName;
     private String phone;
     private LocalDateTime orderDate;
@@ -35,7 +34,7 @@ public class ShipperOrderResponse {
     public ShipperOrderResponse(ShipperOrder shipperOrder) {
         this.shipperOrderId = shipperOrder.getId();
         this.shipperId = shipperOrder.getShipper().getId();
-        this.status = shipperOrder.getStatus().getStatusName();
+        this.status = shipperOrder.getStatus();
         this.receivedAt = shipperOrder.getReceivedAt();
         this.deliveredAt = shipperOrder.getDeliveredAt();
         this.storeId = shipperOrder.getStore().getStoreId();
@@ -44,13 +43,14 @@ public class ShipperOrderResponse {
         this.orderId = shipperOrder.getOrderDetails().get(0).getOrder().getOrderId();
         this.orderCode = shipperOrder.getOrderDetails().get(0).getOrder().getOrderCode();
         this.userId = shipperOrder.getOrderDetails().get(0).getOrder().getUser().getId();
+        this.address = shipperOrder.getOrderDetails().get(0).getOrder().getUser().getAddress();
         this.fullName = shipperOrder.getOrderDetails().get(0).getOrder().getUser().getFullName();
         this.phone = shipperOrder.getOrderDetails().get(0).getOrder().getUser().getPhoneNumber();
         this.orderDate = shipperOrder.getOrderDetails().get(0).getOrder().getOrderDate();
         this.totalAmount = shipperOrder.getOrderDetails().stream()
                 .filter(orderDetail -> orderDetail.getStore().getStoreId().equals(this.storeId))
                 .mapToDouble(orderDetail -> orderDetail.getTotalPrice())
-                .sum();
+                .sum(); // sum total price of order details of this store
         this.shippingFee = shipperOrder.getOrderDetails().get(0).getOrder().getShippingFee();
         this.deliveryAddress = shipperOrder.getOrderDetails().get(0).getOrder().getDeliveryAddress();
         this.longitude = shipperOrder.getOrderDetails().get(0).getOrder().getLongitude();
@@ -60,6 +60,5 @@ public class ShipperOrderResponse {
                 .collect(java.util.stream.Collectors.toList());
 
     }
-
 
 }
