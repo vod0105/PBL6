@@ -714,6 +714,12 @@ public class OrderServiceImpl implements IOrderService {
                 if(q != null)
                     map.put(product.getProductName(), q);
             }
+            // Sắp xếp map theo giá trị giảm dần và lấy 10 phần tử đầu tiên
+            map = map.entrySet()
+                    .stream()
+                    .sorted(Map.Entry.<String, Long>comparingByValue().reversed()) // Sắp xếp theo giá trị giảm dần
+                    .limit(10) // Giới hạn 10 phần tử đầu tiên
+                    .collect(LinkedHashMap::new, (m, e) -> m.put(e.getKey(), e.getValue()), LinkedHashMap::putAll);
             return ResponseEntity.ok(new APIRespone(true, "Success", map));
 
         } else if(module.equals("month")){
@@ -723,6 +729,12 @@ public class OrderServiceImpl implements IOrderService {
                 if(q != null)
                     map.put(product.getProductName(), q);
                 }
+            // Sắp xếp map theo giá trị giảm dần và lấy 10 phần tử đầu tiên
+            map = map.entrySet()
+                    .stream()
+                    .sorted(Map.Entry.<String, Long>comparingByValue().reversed()) // Sắp xếp theo giá trị giảm dần
+                    .limit(10) // Giới hạn 10 phần tử đầu tiên
+                    .collect(LinkedHashMap::new, (m, e) -> m.put(e.getKey(), e.getValue()), LinkedHashMap::putAll);
                 return ResponseEntity.ok(new APIRespone(true, "Success", map));
 
             }else{
@@ -732,6 +744,12 @@ public class OrderServiceImpl implements IOrderService {
                 if(q != null)
                     map.put(product.getProductName(), q);
             }
+            // Sắp xếp map theo giá trị giảm dần và lấy 10 phần tử đầu tiên
+            map = map.entrySet()
+                    .stream()
+                    .sorted(Map.Entry.<String, Long>comparingByValue().reversed()) // Sắp xếp theo giá trị giảm dần
+                    .limit(10) // Giới hạn 10 phần tử đầu tiên
+                    .collect(LinkedHashMap::new, (m, e) -> m.put(e.getKey(), e.getValue()), LinkedHashMap::putAll);
             return ResponseEntity.ok(new APIRespone(true, "Success", map));
         }
 
@@ -812,6 +830,12 @@ public class OrderServiceImpl implements IOrderService {
                 if(q != null)
                     map.put(product.getProductName(), q);
             }
+            // Sắp xếp map theo giá trị giảm dần và lấy 10 phần tử đầu tiên
+            map = map.entrySet()
+                    .stream()
+                    .sorted(Map.Entry.<String, Long>comparingByValue().reversed()) // Sắp xếp theo giá trị giảm dần
+                    .limit(10) // Giới hạn 10 phần tử đầu tiên
+                    .collect(LinkedHashMap::new, (m, e) -> m.put(e.getKey(), e.getValue()), LinkedHashMap::putAll);
             return ResponseEntity.ok(new APIRespone(true, "Success", map));
 
         } else if(module.equals("month")){
@@ -821,6 +845,12 @@ public class OrderServiceImpl implements IOrderService {
                 if(q != null)
                     map.put(product.getProductName(), q);
             }
+            // Sắp xếp map theo giá trị giảm dần và lấy 10 phần tử đầu tiên
+            map = map.entrySet()
+                    .stream()
+                    .sorted(Map.Entry.<String, Long>comparingByValue().reversed()) // Sắp xếp theo giá trị giảm dần
+                    .limit(10) // Giới hạn 10 phần tử đầu tiên
+                    .collect(LinkedHashMap::new, (m, e) -> m.put(e.getKey(), e.getValue()), LinkedHashMap::putAll);
             return ResponseEntity.ok(new APIRespone(true, "Success", map));
 
         }else{
@@ -830,6 +860,12 @@ public class OrderServiceImpl implements IOrderService {
                 if(q != null)
                     map.put(product.getProductName(), q);
             }
+            // Sắp xếp map theo giá trị giảm dần và lấy 10 phần tử đầu tiên
+            map = map.entrySet()
+                    .stream()
+                    .sorted(Map.Entry.<String, Long>comparingByValue().reversed()) // Sắp xếp theo giá trị giảm dần
+                    .limit(10) // Giới hạn 10 phần tử đầu tiên
+                    .collect(LinkedHashMap::new, (m, e) -> m.put(e.getKey(), e.getValue()), LinkedHashMap::putAll);
             return ResponseEntity.ok(new APIRespone(true, "Success", map));
         }
     }
