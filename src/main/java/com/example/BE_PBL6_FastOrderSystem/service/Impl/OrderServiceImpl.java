@@ -4,6 +4,7 @@ import com.example.BE_PBL6_FastOrderSystem.model.*;
 import com.example.BE_PBL6_FastOrderSystem.repository.*;
 import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
 import com.example.BE_PBL6_FastOrderSystem.response.OrderResponse;
+import com.example.BE_PBL6_FastOrderSystem.response.OrderStore;
 import com.example.BE_PBL6_FastOrderSystem.response.UserResponse;
 import com.example.BE_PBL6_FastOrderSystem.service.IOrderService;
 import jakarta.persistence.EntityNotFoundException;
@@ -33,6 +34,7 @@ public class OrderServiceImpl implements IOrderService {
     private final StatusOrderRepository statusOrderRepository;
     private final ShipperOrderRepository shipperOrderRepository;
     private final ShipperRepository shipperRepository;
+
     public String generateUniqueOrderCode() {
         Random random = new Random();
         String orderCode;
@@ -41,6 +43,7 @@ public class OrderServiceImpl implements IOrderService {
         } while (orderRepository.existsByOrderCode(orderCode));
         return orderCode;
     }
+
     @Override
     public ResponseEntity<APIRespone> findNearestShipper(Double latitude, Double longitude, int limit) {
         List<User> nearestShippers = shipperRepository.findNearestShippers(latitude, longitude, limit);
@@ -161,7 +164,7 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public ResponseEntity<APIRespone> processOrderNow(Long userId, String paymentMethod, Long productId, Long comboId, Long drinkId, Long storeId, Integer quantity, String size, String deliveryAddress, Double longitude, Double latitude,String orderCode) {
+    public ResponseEntity<APIRespone> processOrderNow(Long userId, String paymentMethod, Long productId, Long comboId, Long drinkId, Long storeId, Integer quantity, String size, String deliveryAddress, Double longitude, Double latitude, String orderCode) {
         Product product = null;
         Combo combo = null;
 
@@ -281,6 +284,7 @@ public class OrderServiceImpl implements IOrderService {
 
         return ResponseEntity.ok(new APIRespone(true, "Order placed successfully", ""));
     }
+
     private Double calculateShippingFee(Order order, Store store) {
         double storeLatitude = store.getLatitude();
         double storeLongitude = store.getLongitude();
@@ -301,7 +305,6 @@ public class OrderServiceImpl implements IOrderService {
         // bội số của 1000
         return (Double) (Math.floor(shippingFee / 1000) * 1000);
     }
-
 
 
     @Override
@@ -387,9 +390,10 @@ public class OrderServiceImpl implements IOrderService {
         }
         return ResponseEntity.badRequest().body(new APIRespone(false, "Neither product nor combo found", ""));
     }
+
     @Transactional
     @Override
-    public ResponseEntity<APIRespone> updateOrderStatus(String orderCode,String status) {
+    public ResponseEntity<APIRespone> updateOrderStatus(String orderCode, String status) {
         Optional<Order> orderOptional = orderRepository.findByOrderCode(orderCode);
         if (orderOptional.isEmpty()) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "Order code not found", ""));
@@ -401,8 +405,9 @@ public class OrderServiceImpl implements IOrderService {
         Order order = orderOptional.get();
         order.setStatus(statusOrder);
         orderRepository.save(order);
-        return ResponseEntity.ok(new APIRespone(true, "Order status updated successfully",""));
+        return ResponseEntity.ok(new APIRespone(true, "Order status updated successfully", ""));
     }
+
     @Override
     public ResponseEntity<APIRespone> getAllOrderDetailOfStore(Long ownerId) {
         List<Order> orders = orderRepository.findAll();
@@ -489,6 +494,7 @@ public class OrderServiceImpl implements IOrderService {
         orderRepository.save(order);
         return ResponseEntity.ok(new APIRespone(true, "Status OrderDetail updated successfully", ""));
     }
+
     @Override
     public ResponseEntity<APIRespone> cancelOrder(String orderCode, Long userId) {
         Optional<Order> orderOptional = orderRepository.findByOrderCode(orderCode);
@@ -499,7 +505,7 @@ public class OrderServiceImpl implements IOrderService {
         if (!order.getUser().getId().equals(userId)) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "Order does not belong to the specified user", ""));
         }
-        if (order.getStatus().equals("Đơn hàng đã được xác nhận")) { 
+        if (order.getStatus().equals("Đơn hàng đã được xác nhận")) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "Order cannot be canceled", ""));
         }
         order.setStatus(statusOrderRepository.findByStatusName("Đơn hàng đã bị hủy"));
@@ -522,6 +528,7 @@ public class OrderServiceImpl implements IOrderService {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new APIRespone(true, "Success", orderResponses));
     }
+
     @Override
     public ResponseEntity<APIRespone> findOrderByOrderCodeAndUserId(String orderCode, Long userId) {
         Optional<Order> orderOptional = orderRepository.findByOrderCode(orderCode);
@@ -540,6 +547,7 @@ public class OrderServiceImpl implements IOrderService {
     public List<Cart> getCartItemsByCartId(Long cartId) {
         return cartItemRepository.findByCartId(cartId);
     }
+
     @Transactional
     @Override
     public ResponseEntity<APIRespone> findOrderByOrderCode(String orderCode) {
@@ -580,15 +588,61 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public ResponseEntity<APIRespone> getAllOrderByStatusOfStore(String statusName, Long OwnerId) {
+    public ResponseEntity<APIRespone> getAllOrderByStatusOfStore(String statusName, Long ownerId) {
         StatusOrder statusOrder = statusOrderRepository.findByStatusName(statusName);
-        List<Store> stores = storeRepository.findAllByManagerId(OwnerId);
-
+        List<Order> orders = orderRepository.findAll();
+        if (orders.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(true, "No order found", ""));
+        }
+        List<Store> stores = storeRepository.findAllByManagerId(ownerId);
         if (stores.isEmpty()) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "Store not found", ""));
         }
-        return ResponseEntity.badRequest().body(new APIRespone(false, "Store not found", ""));
 
+        // Kiểm tra xem có đơn hàng nào có chi tiết hợp lệ không
+        List<Order> orders1 = orders.stream()
+                .filter(order -> {
+                    if (order.getOrderDetails() != null && !order.getOrderDetails().isEmpty()) {
+                        return order.getOrderDetails().stream()
+                                .anyMatch(orderDetail -> orderDetail.getStore() != null && stores.contains(orderDetail.getStore()));
+                    }
+                    // Không in ra order nếu không có OrderDetail
+                    return false;
+                })
+                .toList();
+
+        if (orders1.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "No order found", ""));
+        }
+        Store store = stores.get(0);
+        List<OrderStore> orderStores = new ArrayList<>();
+        for (Order order : orders1) {
+            if (order.getOrderDetails() != null && !order.getOrderDetails().isEmpty()) {
+                Optional<List<OrderDetail>> orderDetails = orderRepository.findOrderDetailsByOrderCodeAndStore(order.getOrderCode(), store.getStoreId());
+                List<OrderDetail> orderDetailList = orderDetails.get();
+                OrderStore os = new OrderStore(orderDetailList);
+                orderStores.add(os);
+            }
+        }
+
+        orderStores.removeIf(os -> {
+            boolean hasValidProductStatus = os.getOrderDetails().get(0).getProductDetail() != null &&
+                    os.getOrderDetails().get(0).getProductDetail().getStatus() != null &&
+                    os.getOrderDetails().get(0).getProductDetail().getStatus().equals(statusName);
+
+            boolean hasValidComboStatus = os.getOrderDetails().get(0).getComboDetail() != null &&
+                    os.getOrderDetails().get(0).getComboDetail().getStatus() != null &&
+                    os.getOrderDetails().get(0).getComboDetail().getStatus().equals(statusName);
+            // Debugging: In ra trạng thái để kiểm tra
+            System.out.println("Status Name: " + statusName);
+            System.out.println("OrderStore: " + os);
+            System.out.println("Has Valid Product Status: " + hasValidProductStatus);
+            System.out.println("Has Valid Combo Status: " + hasValidComboStatus);
+            return !(hasValidProductStatus || hasValidComboStatus);
+        });
+
+        System.out.println(orderStores.size());
+        return ResponseEntity.ok(new APIRespone(true, "Success", orderStores));
     }
 
     @Override
@@ -778,7 +832,60 @@ public class OrderServiceImpl implements IOrderService {
             }
             return ResponseEntity.ok(new APIRespone(true, "Success", map));
         }
+    }
 
+    @Override
+    public ResponseEntity<APIRespone> getOrderDetailOfStoreForOwner(Long ownerId, String orderCode) {
+        List<Store> stores = storeRepository.findAllByManagerId(ownerId);
+        if (stores.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "Store not found", ""));
+        }
+        Optional<List<OrderDetail>> orderOptional = orderRepository.findOrderDetailsByOrderCodeAndStore(orderCode,stores.get(0).getStoreId());
 
+        if (orderOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "Order code not found", ""));
+        }
+        List<OrderDetail> orderDetails = orderOptional.get();
+        OrderStore os = new OrderStore(orderDetails);
+        return ResponseEntity.ok(new APIRespone(true, "Success",os));
+    }
+
+    @Override
+    public ResponseEntity<APIRespone> getAllOrderDetailOfStoreForOwner(Long ownerId) {
+        List<Order> orders = orderRepository.findAll();
+        if (orders.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "No order found", ""));
+        }
+        List<Store> stores = storeRepository.findAllByManagerId(ownerId);
+        if (stores.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "Store not found", ""));
+        }
+
+        // Kiểm tra xem có đơn hàng nào có chi tiết hợp lệ không
+        List<Order> orders1 = orders.stream()
+                .filter(order -> {
+                    if (order.getOrderDetails() != null && !order.getOrderDetails().isEmpty()) {
+                        return order.getOrderDetails().stream()
+                                .anyMatch(orderDetail -> orderDetail.getStore() != null && stores.contains(orderDetail.getStore()));
+                    }
+                    // Không in ra order nếu không có OrderDetail
+                    return false;
+                })
+                .toList();
+
+        if (orders1.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "No order found", ""));
+        }
+        Store store = stores.get(0);
+        List<OrderStore> orderStores = new ArrayList<>();
+        for (Order order : orders1) {
+            if (order.getOrderDetails() != null && !order.getOrderDetails().isEmpty()) {
+               Optional<List<OrderDetail>> orderDetails = orderRepository.findOrderDetailsByOrderCodeAndStore(order.getOrderCode(),store.getStoreId());
+               List<OrderDetail> orderDetailList = orderDetails.get();
+                    OrderStore os = new OrderStore(orderDetailList);
+                    orderStores.add(os);
+            }
+        }
+        return ResponseEntity.ok(new APIRespone(true, "Success", orderStores));
     }
 }

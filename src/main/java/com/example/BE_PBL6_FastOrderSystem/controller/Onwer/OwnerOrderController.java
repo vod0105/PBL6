@@ -17,12 +17,12 @@ public class OwnerOrderController {
     @GetMapping("")
     public ResponseEntity<APIRespone> getAllOrder() {
         Long OwnerId = FoodUserDetails.getCurrentUserId();
-        return orderService.getAllOrderDetailOfStore(OwnerId);
+        return orderService.getAllOrderDetailOfStoreForOwner(OwnerId);
     }
     @GetMapping("/get-by-code")
     public ResponseEntity<APIRespone> getOrderByCode(@RequestParam String orderCode) {
         Long ownerId = FoodUserDetails.getCurrentUserId();
-        return orderService.getOrderDetailOfStore(ownerId, orderCode);
+        return orderService.getOrderDetailOfStoreForOwner(ownerId, orderCode);
     }
     @PutMapping("/update-status")
     public ResponseEntity<APIRespone> updateOrderStatus(
@@ -42,9 +42,9 @@ public class OwnerOrderController {
     }
 
     @GetMapping("/status")
-    public ResponseEntity<APIRespone> getAllOrderByStatusOfStore(String statusName) {
+    public ResponseEntity<APIRespone> getAllOrderByStatusOfStore(@RequestParam String status) {
         Long ownerId = FoodUserDetails.getCurrentUserId();
-        return orderService.getAllOrderByStatusOfStore(statusName,ownerId);
+        return orderService.getAllOrderByStatusOfStore(status,ownerId);
     }
 
 }

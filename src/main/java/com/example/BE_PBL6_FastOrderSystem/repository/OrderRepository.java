@@ -1,9 +1,11 @@
 package com.example.BE_PBL6_FastOrderSystem.repository;
 
 import com.example.BE_PBL6_FastOrderSystem.model.Order;
+import com.example.BE_PBL6_FastOrderSystem.model.OrderDetail;
 import com.example.BE_PBL6_FastOrderSystem.model.StatusOrder;
 
 import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
+import com.example.BE_PBL6_FastOrderSystem.response.OrderStore;
 import org.jooq.impl.QOM;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,5 +59,11 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("select sum(od.totalPrice) from OrderDetail od join od.order o where od.store.storeId = ?1 and function('MONTH',o.createdAt) = ?3 and function('DAY', o.createdAt) = ?2 and function('YEAR', o.createdAt)= ?4  and od.status.statusId = 5")
     Long getTotalAmountByWeekStore(Long storeId,int day, int month, int year);
+
+    @Query("SELECT od " +
+            "FROM Order o " +
+            "JOIN o.orderDetails od " +
+            "WHERE o.orderCode = ?1 AND od.store.storeId = ?2")
+    Optional<List<OrderDetail>> findOrderDetailsByOrderCodeAndStore(String orderCode, Long storeId);
 
 }

@@ -61,4 +61,8 @@ public interface IOrderService {
     ResponseEntity<APIRespone> getTotalAmountByWeekStore(Long OwnerId);
 
     ResponseEntity<APIRespone> getCountProductSoleStore(Long OwnerId,String module);
+
+    ResponseEntity<APIRespone> getOrderDetailOfStoreForOwner(Long ownerId, String orderCode);
+
+    ResponseEntity<APIRespone> getAllOrderDetailOfStoreForOwner(Long ownerId);
 }
