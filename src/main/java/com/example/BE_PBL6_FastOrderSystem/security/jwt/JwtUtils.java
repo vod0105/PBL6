@@ -104,7 +104,13 @@ public class JwtUtils {
     }
 
     public String getUserNameFromToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(key()).build().parseClaimsJws(token).getBody().get("phone", String.class);
+
+        Claims claims = Jwts.parser()
+                .setSigningKey(jwtSecret)
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.getSubject();
+
     }
 
     public boolean validateToken(String token) {
