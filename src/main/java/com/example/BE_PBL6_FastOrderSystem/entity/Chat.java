@@ -31,7 +31,7 @@ public class Chat {
     Boolean isRead = false; // Mặc định là false
 
     @Lob
-    @Column(columnDefinition = "LONGTEXT")
+    @Column(columnDefinition = "TEXT")
     private String image; // Lưu ảnh dưới dạng chuỗi Base64
 
     @PrePersist

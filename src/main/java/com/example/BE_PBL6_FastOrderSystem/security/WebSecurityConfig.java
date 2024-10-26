@@ -77,6 +77,7 @@ public class WebSecurityConfig {
         this.userDetailsService = userDetailsService;
         this.tokenRepository = tokenRepository;
 
+
     }
 
     @Bean
