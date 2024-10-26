@@ -279,7 +279,7 @@ public class OrderServiceImpl implements IOrderService {
         double deliveryLatitude = order.getLatitude();
         double deliveryLongitude = order.getLongitude();
 
-        final int EARTH_RADIUS = 6371; // ban kinh trai dat
+        final int EARTH_RADIUS = 6371;
         double latDistance = Math.toRadians(deliveryLatitude - storeLatitude);
         double lonDistance = Math.toRadians(deliveryLongitude - storeLongitude);
         double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
@@ -291,7 +291,7 @@ public class OrderServiceImpl implements IOrderService {
         System.out.println("Distance: " + distance);
 
         double shippingFeePerKm = 10000; // phí ship 1 km
-        if (distance <= 1.5) {
+        if (distance <= 1.1) {
             return 0.0;
         }
         double shippingFee = distance * shippingFeePerKm;
@@ -349,27 +349,32 @@ public class OrderServiceImpl implements IOrderService {
         }
         return totalAmount;
     }
+
     @Override
     public Long calculateOrderAmount(List<Long> cartIds, Double latitude, Double longitude, String discountCode) {
         List<Cart> cartItems = cartIds.stream()
                 .flatMap(cartId -> getCartItemsByCartId(cartId).stream())
                 .toList();
+
         long totalAmount = 0;
         for (Cart item : cartItems) {
             totalAmount += (long) item.getTotalPrice();
         }
+
         // Kiểm tra mã giảm giá
         if (discountCode != null) {
             LocalDateTime now = LocalDateTime.now();
             List<DiscountCode> discountCodeOptional = discountCodeRepository.findByStartDateBeforeAndEndDateAfterAndStatus(now);
-            if (discountCodeOptional.isEmpty()) {
-                System.out.println("Discount code not found");
-                return null;
+
+            if (!discountCodeOptional.isEmpty()) {
+                DiscountCode discountCode1 = discountCodeOptional.get(0);
+                discountCode1.setStatus(false); // Cập nhật status nếu cần
+                totalAmount -= Math.round(totalAmount * discountCode1.getDiscountPercent() / 100);
+            } else {
+                System.out.println("Discount code not found or expired");
             }
-            DiscountCode discountCode1 = discountCodeOptional.get(0);
-            discountCode1.setStatus(false);
-            totalAmount -= Math.round(totalAmount * discountCode1.getDiscountPercent() / 100);
         }
+
         // Tính phí giao hàng
         Optional<Store> storeOptional = storeRepository.findById(cartItems.get(0).getStoreId());
         if (storeOptional.isPresent()) {
@@ -377,16 +382,17 @@ public class OrderServiceImpl implements IOrderService {
             Order dummyOrder = new Order();
             dummyOrder.setLatitude(latitude);
             dummyOrder.setLongitude(longitude);
-
             Double shippingFee = calculateShippingFee(dummyOrder, store);
             totalAmount += Math.round(shippingFee);
         } else {
             System.out.println("Store not found");
-            return null;
+            return 0L;
         }
-        System.out.println("Total amount khi da : " + totalAmount);
+
+        System.out.println("Total amount sau khi tính toán: " + totalAmount);
         return totalAmount;
     }
+
 
 
     @Transactional

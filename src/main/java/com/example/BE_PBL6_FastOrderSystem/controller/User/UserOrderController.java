@@ -159,6 +159,7 @@ public class UserOrderController {
             orderRequest.setOrderInfo("Payment CASH for order " + orderCode);
             orderRequest.setLang("en");
             orderRequest.setExtraData("additional data");
+            System.out.println("Check 1 " + orderRequest);
             ResponseEntity<APIRespone> response = orderService.processOrderNow(userId, paymentMethod, productId, comboId, drinkId ,storeId, quantity, size, deliveryAddress,  longitude,latitude, orderCode, discountCode);
             if (response.getStatusCode() == HttpStatus.OK) {
                 orderService.updateQuantityProduct(productId, comboId, storeId, quantity);
@@ -192,7 +193,8 @@ public class UserOrderController {
         orderRequest.setOrderId(orderCode);
         orderRequest.setUserId(userId);
         String discountCode = orderRequest.getDiscountCode();
-        Long totalAmount = orderService.calculateOrderAmount(cartIds, latitude, longitude,discountCode);
+        long totalAmount = orderService.calculateOrderAmount(cartIds, latitude, longitude,discountCode);
+        System.out.println("Total amounsst: " + totalAmount);
         orderRequest.setAmount(totalAmount);
         if ("ZALOPAY".equalsIgnoreCase(paymentMethod)) {
             orderRequest.setOrderId(orderCode);

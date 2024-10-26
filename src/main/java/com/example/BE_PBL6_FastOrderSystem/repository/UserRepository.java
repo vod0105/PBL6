@@ -24,4 +24,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u WHERE u.phoneNumber = ?1 OR u.sub = ?2 OR u.facebookId = ?3")
     Optional<User> findByUsernameOrSubOrFacebookId(String username, String sub, String facebookId);
+
+    User findByid(Long id);
 }
