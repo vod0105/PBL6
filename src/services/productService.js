@@ -24,11 +24,18 @@ const fetchProductsByIdStoreService = (id) => {
         url: `/api/v1/public/products/store/${id}`,
     });
 }
+const fetchRatingProductByIdService = (id) => {
+    return axios({
+        method: 'get',
+        url: `/api/v1/public/rate/product/${id}`,
+    });
+}
 
 export {
     fetchProductsBestSaleService,
     fetchProductsByIdCategoryService,
     fetchProductByIdService,
     fetchProductsByIdStoreService,
+    fetchRatingProductByIdService,
 
 }

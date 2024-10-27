@@ -99,12 +99,15 @@ const reviewOrderService = (listProductIds, rate, listImageFiles, comment) => {
     const formData = new FormData();
     formData.append('productId', listProductIds);
     formData.append('rate', rate);
-    formData.append('imageFiles', listImageFiles);
+    // formData.append('imageFiles', listImageFiles);
+    listImageFiles.forEach((file, index) => {
+        formData.append('imageFiles', file);  // Thêm từng file ảnh vào FormData
+    });
     formData.append('comment', comment);
-    console.log('>>> list id: ', listProductIds);
-    console.log('>>> rate: ', rate);
-    console.log('>>> listImageFiles: ', listImageFiles);
-    console.log('>>> comment: ', comment);
+    // console.log('>>> list id: ', listProductIds);
+    // console.log('>>> rate: ', rate);
+    // console.log('>>> listImageFiles: ', listImageFiles);
+    // console.log('>>> comment: ', comment);
 
     return axios({
         method: 'post',

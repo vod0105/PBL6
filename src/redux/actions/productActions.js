@@ -3,7 +3,8 @@ import {
     fetchProductsBestSaleService,
     fetchProductsByIdCategoryService,
     fetchProductByIdService,
-    fetchProductsByIdStoreService
+    fetchProductsByIdStoreService,
+    fetchRatingProductByIdService
 } from "../../services/productService";
 
 // Best sale
@@ -83,12 +84,30 @@ const fetchProductsByIdStore = (id) => {
         }
     }
 };
-
-
+// rating product by id
+const fetchRatingProductByIdSuccess = (data) => {
+    return {
+        type: types.FETCH_RATING_PRODUCT_BY_ID_SUCCESS,
+        dataRatingProduct: data
+    };
+};
+const fetchRatingProductById = (id) => {
+    return async (dispatch, getState) => {
+        try {
+            const res = await fetchRatingProductByIdService(id);
+            const data = res && res.data ? res.data.data : [];
+            dispatch(fetchRatingProductByIdSuccess(data)); // // Chạy ở đây (2)
+        } catch (error) {
+            console.log(error);
+            toast.error('Không lấy được đánh giá sản phẩm!')
+        }
+    }
+};
 export {
     fetchProductsBestSale,
     fetchProductsByIdCategory,
     fetchProductById,
     fetchProductsByIdStore,
+    fetchRatingProductById,
 
 }

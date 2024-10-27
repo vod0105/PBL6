@@ -5,6 +5,8 @@ const INITIAL_STATE = {
     listProductsByIdCategory: [],
     productDetail: {},
     listProductsByIdStore: [],
+    ratingProduct: [],
+
 };
 
 const productReducer = (state = INITIAL_STATE, action) => {
@@ -30,7 +32,11 @@ const productReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 listProductsByIdStore: action.dataProducts,
             };
-
+        case types.FETCH_RATING_PRODUCT_BY_ID_SUCCESS:
+            return {
+                ...state,
+                ratingProduct: action.dataRatingProduct,
+            };
         default: return state;
 
     }
