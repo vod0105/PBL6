@@ -14,11 +14,11 @@ public class Product {
     @Column(name = "product_id")
     private Long productId;
     private String productName;
-    @Column(name = "image", columnDefinition = "TEXT")
+    @Column(name = "image", columnDefinition = "LONGTEXT")
     private String image;
     private String description;
-    private double price;
-    private double discountedPrice;
+    private Double price;
+    private Double discountedPrice;
     @ManyToMany(mappedBy = "products")
     private List<Promotion> promotions = new ArrayList<>();
 

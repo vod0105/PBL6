@@ -15,10 +15,10 @@ public class Promotion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @Column(name = "image", columnDefinition = "TEXT")
+    @Column(name = "image", columnDefinition = "LONGTEXT")
     private String image;
     private String description;
-    private double discountPercentage;
+    private Double discountPercentage;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     @ManyToMany

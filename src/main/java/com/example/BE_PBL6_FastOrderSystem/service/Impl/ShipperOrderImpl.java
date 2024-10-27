@@ -122,7 +122,7 @@ public class ShipperOrderImpl implements IShipperOrderService {
     }
     @Scheduled(fixedRate = 30000) // 30 giây
     public ResponseEntity<APIRespone> autoAssignShipper() {
-        List<OrderDetail> orderDetails = orderDetailRepository.findAllByStatus("Đơn hàng mới");
+        List<OrderDetail> orderDetails = orderDetailRepository.findAllByStatus("Đơn hàng đã được xác nhận");
         Map<Store, Map<Long, List<OrderDetail>>> groupedOrderDetails = orderDetails.stream()
                 .collect(Collectors.groupingBy(OrderDetail::getStore,
                         Collectors.groupingBy(orderDetail -> orderDetail.getOrder().getOrderId())));

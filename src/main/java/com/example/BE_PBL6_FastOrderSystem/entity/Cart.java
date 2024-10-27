@@ -32,8 +32,8 @@ public class Cart {
 //    @JoinColumn(name = "order_id")
 //    private Order order;
     private int quantity;
-    private double unitPrice;
-    private double totalPrice;
+    private Double unitPrice;
+    private Double totalPrice;
     @ManyToOne
     @JoinColumn(name = "size_id")
     private Size size;

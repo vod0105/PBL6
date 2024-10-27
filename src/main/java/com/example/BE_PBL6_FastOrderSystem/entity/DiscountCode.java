@@ -16,7 +16,7 @@ public class DiscountCode {
     @Column(name = "code")
     private String code;
     @Column(name = "discount_percent")
-    private double discountPercent;
+    private Double discountPercent;
     @Column(name = "description")
     private String description;
     @Column(name = "start_date")

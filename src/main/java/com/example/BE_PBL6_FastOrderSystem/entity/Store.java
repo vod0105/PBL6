@@ -15,12 +15,12 @@ public class Store {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long storeId;
     private String storeName;
-    @Column(name = "image", columnDefinition = "TEXT")
+    @Column(name = "image", columnDefinition = "LONGTEXT")
     private String image;
     private String phoneNumber;
     private String location;
-    private double longitude;
-    private double latitude;
+    private Double longitude;
+    private Double latitude;
     private LocalDateTime openingTime;
     private LocalDateTime closingTime;
     @OneToOne
