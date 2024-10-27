@@ -137,11 +137,9 @@ public class ShipperOrderImpl implements IShipperOrderService {
                         .stream()
                         .findFirst();
                 if (newShipperOptional.isPresent()) {
-                    System.out.println("Tìm thấy shipper");
                     User newShipper = newShipperOptional.get();
                     newShipper.setIsActive(false);
                     shipperRepository.save(newShipper);
-
                     // Create a single ShipperOrder for the store and order group
                     ShipperOrder shipperOrder = new ShipperOrder();
                     shipperOrder.setShipper(newShipper);
@@ -173,8 +171,8 @@ public class ShipperOrderImpl implements IShipperOrderService {
     public void autoAssignShipperOrder() {
         List<ShipperOrder> ListShipperOrders = shipperOrderRepository.findAllByStatusIn(List.of("Chưa nhận", "Đã từ chối"));
         for (ShipperOrder shipperOrder : ListShipperOrders) {
-            if (shipperOrder.getCreatedAt().plusMinutes(10).isBefore(LocalDateTime.now())) {
-                // 10 phút chưa nhận đơn hàng thì tự động gán shipper khác
+            if (shipperOrder.getCreatedAt().plusMinutes(15).isBefore(LocalDateTime.now())) {
+                // 15 phút chưa nhận đơn hàng thì tự động gán shipper khác
                 User currentShipper = shipperOrder.getShipper();
                 if (currentShipper != null) {
                     currentShipper.setIsActive(true);
@@ -199,7 +197,6 @@ public class ShipperOrderImpl implements IShipperOrderService {
             }
         }
     }
-    @Transactional
     @Override
     public ResponseEntity<APIRespone> approveShipperOrder(Long shipperId, Long shipperOrderId, Boolean isAccepted) {
         ShipperOrder shipperOrder = shipperOrderRepository.findByIdandShipperId(shipperOrderId, shipperId);
@@ -222,9 +219,6 @@ public class ShipperOrderImpl implements IShipperOrderService {
             shipper.setIsActive(true);
             shipperOrderRepository.save(shipperOrder);
             shipperRepository.save(shipper);
-
-            // Log the status to verify
-            System.out.println("Status after accepting: " + shipperOrder.getStatus().getStatusName());
 
             return ResponseEntity.ok(new APIRespone(true, "Shipper accepted the order", ""));
 
@@ -281,23 +275,6 @@ public class ShipperOrderImpl implements IShipperOrderService {
             return ResponseEntity.badRequest().body(new APIRespone(false, "Status not found", ""));
         }
         orderDetailRepository.save(orderDetail);
-        String status = orderDetail.getStatus().getStatusName();
-        System.out.println(status);;
-
-        // Cập nhật statusOrder dựa trên status hiện tại
-        if (status.equals("Đơn hàng đã được xác nhận")) {
-            statusOrder = statusOrderRepository.findByStatusName("Đơn hàng đang giao");
-        } else if (status.equals("Đơn hàng đang giao")) {
-            statusOrder = statusOrderRepository.findByStatusName("Đơn hàng đã hoàn thành");
-        }
-
-        // Kiểm tra nếu không tìm thấy statusOrder mới, trả về lỗi
-        if (statusOrder == null) {
-            return ResponseEntity.badRequest().body(new APIRespone(false, "Status not found", ""));
-        }
-
-        // Cập nhật status của orderDetail
-        orderDetail.setStatus(statusOrder);
 
         // Tìm tất cả các OrderDetail có cùng orderId
         List<OrderDetail> orderDetails = orderDetailRepository.findByOrderId(orderDetail.getOrder().getOrderId());
