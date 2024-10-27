@@ -17,9 +17,14 @@
     .table-orders{
         text-align: center;
         margin: auto 0;
-        margin-bottom: 50px !important;
+        margin-bottom: 30px !important;
     }
     .btn-return-homepage{
         padding: 10px 25px !important;
     }
+    .pagination-container{
+        display: flex;
+        justify-content: center; 
+        margin-top: 40px;
+      }  
 }

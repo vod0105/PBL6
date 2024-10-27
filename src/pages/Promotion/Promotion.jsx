@@ -1,50 +1,51 @@
-import React, { useState, useEffect, useRef } from 'react'
-import './Promotion.scss'
-import { Container, Row, Col } from "react-bootstrap";
+import React, { useState, useEffect, useRef } from 'react';
+import './Promotion.scss';
+import { Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import line from "../../assets/svg/marker.png";
 import promotionIcon from "../../assets/svg/promotion.png";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllPromotions } from '../../redux/actions/promotionActions';
-
-
-import promo1 from '../../assets/promotion/promotion_1.png'
-import promo2 from '../../assets/promotion/promotion_2.png'
-import promo3 from '../../assets/promotion/promotion_3.png'
-import promo4 from '../../assets/promotion/promotion_4.png'
-import promo5 from '../../assets/promotion/promotion_5.png'
+import Pagination from 'react-bootstrap/Pagination';
 
 const Promotion = () => {
-  // fetch all promotions
   const dispatch = useDispatch();
-  const promotions = useSelector((state) => {
-    return state.promotion.listPromotions;
-  })
+  const promotions = useSelector((state) => state.promotion.listPromotions);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(6); // Số lượng chương trình khuyến mãi hiển thị mỗi trang
+
   useEffect(() => {
     dispatch(fetchAllPromotions());
-  }, []);
+  }, [dispatch]);
+
   // Lướt trang
   const contentRef = useRef(null);
   const scrollToContent = () => {
     if (contentRef.current) {
-      contentRef.current.scrollIntoView({ behavior: 'smooth' }); // Cuộn đến nội dung
+      contentRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
-  useEffect(() => {
-    return () => {
-      contentRef.current = null;
-    };
-  }, []);
+
+  // Phân trang
+  const indexOfLastPromo = currentPage * itemsPerPage;
+  const indexOfFirstPromo = indexOfLastPromo - itemsPerPage;
+  const currentPromotions = promotions?.slice(indexOfFirstPromo, indexOfLastPromo);
+
+  // Tính toán tổng số trang
+  const totalPages = Math.ceil(promotions?.length / itemsPerPage);
+
+  // Hàm để chuyển trang
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    scrollToContent(); // Cuộn lên đầu nội dung khi chuyển trang
+  };
 
   return (
     <section className="page-promotion">
       <Row>
-        {/* Image */}
         <div className='header'>
           <div className="header-circle">
-            <div className="header-title">
-              KHUYẾN MÃI
-            </div>
+            <div className="header-title">KHUYẾN MÃI</div>
             <div className="header-deco">
               <img className='icon-zigzak' src={line} alt="" />
               <img className='icon-promotion' src={promotionIcon} alt="" />
@@ -63,26 +64,44 @@ const Promotion = () => {
         <div className="promotions-container">
           <div className="promotions-grid">
             {
-              promotions ? (promotions.map((promo, index) => (
-                <Link to={`/promotion-detail/${promo.id}`}>
-                  <div className="promo-card" key={index}>
-                    <img src={'data:image/png;base64,' + promo.image} alt='Khuyến mãi' />
-                    <div className="promo-content">
-                      <h3>{promo.name}</h3>
-                      <p>{promo.description}</p>
+              currentPromotions && currentPromotions.length > 0 ? (
+                currentPromotions.map((promo, index) => (
+                  <Link to={`/promotion-detail/${promo.id}`} key={index}>
+                    <div className="promo-card">
+                      <img src={'data:image/png;base64,' + promo.image} alt='Khuyến mãi' />
+                      <div className="promo-content">
+                        <h3>{promo.name}</h3>
+                        <p>{promo.description}</p>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              )))
-                : (
-                  <div>KHÔNG CÓ CHƯƠNG TRÌNH KHUYẾN MÃI</div>
-                )
+                  </Link>
+                ))
+              ) : (
+                <div>KHÔNG CÓ CHƯƠNG TRÌNH KHUYẾN MÃI</div>
+              )
             }
+          </div>
+
+          {/* Phân trang */}
+          <div className="pagination-container">
+            <Pagination>
+              <Pagination.Prev onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
+              {[...Array(totalPages).keys()].map(number => (
+                <Pagination.Item
+                  key={number + 1}
+                  active={number + 1 === currentPage}
+                  onClick={() => handlePageChange(number + 1)}
+                >
+                  {number + 1}
+                </Pagination.Item>
+              ))}
+              <Pagination.Next onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} />
+            </Pagination>
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }
 
-export default Promotion
+export default Promotion;

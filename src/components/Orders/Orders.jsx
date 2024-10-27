@@ -3,8 +3,8 @@ import './Orders.scss';
 import OrderDetailModal from '../../components/OrderDetailModal/OrderDetailModal'; // Import Modal
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllOrders, cancelOrder } from "../../redux/actions/userActions";
-import { toast } from "react-toastify";
 import ReviewModal from "../ReviewModal/ReviewModal";
+import Pagination from 'react-bootstrap/Pagination';
 // const _ = require('lodash'); // copy object
 const Orders = () => {
   const dispatch = useDispatch();
@@ -15,6 +15,9 @@ const Orders = () => {
   const [showModalReviewOrder, setShowModalReviewOrder] = useState(false);
   const [orderDetails, setOrderDetails] = useState(null);
   const [statusOrderInteger, setStatusOrderInteger] = useState(0);
+  // Phân trang
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5); // Số lượng đơn hàng hiển thị mỗi trang
 
   const handleShowDetails = (order) => {
     // let orderChangeStatus = _.cloneDeep(order);
@@ -68,6 +71,17 @@ const Orders = () => {
   const handleCancelOrder = (orderCode) => {
     dispatch(cancelOrder(orderCode));
   }
+  // Phân trang
+  const indexOfLastOrder = currentPage * itemsPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - itemsPerPage;
+  const currentOrders = Array.isArray(orders) ? orders.slice(indexOfFirstOrder, indexOfLastOrder) : []; // Kiểm tra orders là mảng?
+  // Tính toán tổng số trang
+  const totalPages = Math.ceil((Array.isArray(orders) ? orders.length : 0) / itemsPerPage);
+
+  // Hàm để chuyển trang
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
   useEffect(() => {
     dispatch(fetchAllOrders());
   }, [dispatch]);
@@ -92,7 +106,7 @@ const Orders = () => {
           </thead>
           <tbody>
             {
-              orders && orders.length > 0 ? (orders.map((order, index) => (
+              currentOrders && currentOrders.length > 0 ? (currentOrders.map((order, index) => (
                 <tr key={index}>
                   <td scope="row" className="text-center align-middle">{order.orderCode}</td>
                   <td className="text-center align-middle">{formatDate(order.orderDate)}</td>
@@ -144,8 +158,23 @@ const Orders = () => {
             }
           </tbody>
         </table>
-
         <button className="btn btn-dark btn-return-homepage">TRỞ LẠI TRANG CHỦ</button>
+        {/* Phân trang */}
+        <div className="pagination-container">
+          <Pagination>
+            <Pagination.Prev onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
+            {[...Array(totalPages).keys()].map(number => (
+              <Pagination.Item
+                key={number + 1}
+                active={number + 1 === currentPage}
+                onClick={() => handlePageChange(number + 1)}
+              >
+                {number + 1}
+              </Pagination.Item>
+            ))}
+            <Pagination.Next onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} />
+          </Pagination>
+        </div>
         <OrderDetailModal
           showModal={showModalViewDetail}
           handleClose={handleCloseViewDetail}

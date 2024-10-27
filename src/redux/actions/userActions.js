@@ -138,7 +138,7 @@ const placeOrderBuyNowError = () => {
     };
 };
 
-const placeOrderBuyNow = (paymentMethod, productDetailBuyNow, address, longitude, latitude) => {
+const placeOrderBuyNow = (paymentMethod, productDetailBuyNow, address, longitude, latitude, navigate) => {
     return async (dispatch) => {
         try {
             // dispatch(placeOrderBuyNowSuccess());
@@ -185,7 +185,7 @@ const placeOrderAddToCartError = () => {
     };
 };
 
-const placeOrderAddToCart = (paymentMethod, cartIds, address, longitude, latitude) => {
+const placeOrderAddToCart = (paymentMethod, cartIds, address, longitude, latitude, navigate) => {
     return async (dispatch) => {
         try {
             const res = await placeOrderAddToCartService(paymentMethod, cartIds, address, longitude, latitude);
