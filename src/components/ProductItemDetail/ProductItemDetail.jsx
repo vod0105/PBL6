@@ -197,7 +197,7 @@ const ProductItemDetail = () => {
                       <img key={imgIndex} src={'data:image/png;base64,' + image} alt={`Review image ${imgIndex}`} className="review-image" />
                     ))}
                   </div>
-                  <p className="comment-date">{formatDate(comment.updatedAt)}</p>
+                  <p className="comment-date">{formatDate(comment.createdAt)}</p>
                 </div>
               );
             })

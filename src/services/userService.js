@@ -1,5 +1,5 @@
-import axios from "../setup/axios"; // an instance of axios
-
+import instance from "../setup/axios"; // an instance of axios
+import axios from "axios";
 const updateProfileService = (fullName, avatar, email, address) => {
     const formData = new FormData();
     formData.append('fullName', fullName);
@@ -7,7 +7,7 @@ const updateProfileService = (fullName, avatar, email, address) => {
     formData.append('email', email);
     formData.append('address', address);
 
-    return axios({
+    return instance({
         method: 'put',
         url: '/api/v1/user/auth/profile/update',
         data: formData,
@@ -18,7 +18,7 @@ const updateProfileService = (fullName, avatar, email, address) => {
 }
 
 const addProductToCartService = (productId, quantity, storeId, size, status) => {
-    return axios({
+    return instance({
         method: 'post',
         url: '/api/v1/user/cart/add/product',
         data: {
@@ -27,25 +27,25 @@ const addProductToCartService = (productId, quantity, storeId, size, status) => 
     });
 }
 const fetchProductsInCartService = () => {
-    return axios({
+    return instance({
         method: 'get',
         url: `/api/v1/user/cart/history`,
     });
 }
 const placeOrderService = () => {
-    return axios({
+    return instance({
         // method: 'post',
         // url: `/api/v1/user/`,
     });
 }
 const removeProductInCartService = (cartId) => {
-    return axios({
+    return instance({
         method: 'delete',
         url: `/api/v1/user/cart/delete/${cartId}`,
     });
 }
 const increaseOneQuantityService = (cartId) => {
-    return axios({
+    return instance({
         method: 'put',
         url: `/api/v1/user/cart/update?cartId=${cartId}&quantity=1`,
     });
@@ -55,42 +55,72 @@ const increaseOneQuantityService = (cartId) => {
 //       Giỏ hàng -> status = 1: Đơn hàng mới
 // => Phân biệt rứa à bay??
 const placeOrderBuyNowService = (paymentMethod, productDetailBuyNow, address, longitude, latitude) => {
-    return axios({
-        method: 'post',
-        url: `/api/v1/user/order/create/now`,
-        data: {
-            paymentMethod,
-            productId: productDetailBuyNow.product.productId,
-            storeId: productDetailBuyNow.store.storeId,
-            quantity: productDetailBuyNow.quantity,
-            size: productDetailBuyNow.size,
-            deliveryAddress: address,
-            longitude,
-            latitude
-        }
-    });
+    if (paymentMethod === 'CASH') {
+        return instance({
+            method: 'post',
+            url: `/api/v1/user/order/create/now`,
+            data: {
+                paymentMethod,
+                productId: productDetailBuyNow.product.productId,
+                storeId: productDetailBuyNow.store.storeId,
+                quantity: productDetailBuyNow.quantity,
+                size: productDetailBuyNow.size,
+                deliveryAddress: address,
+                longitude,
+                latitude
+            }
+        });
+    }
+    else { // ZALOPAY
+        return axios({
+            method: 'post',
+            url: `https://pbl6-fastordersystem.onrender.com/api/v1/zalopay/create-order`,
+            data: {
+                amount: 20000,
+                orderId: '3',
+                orderInfo: 'Payment for order with id=3',
+                lang: 'en',
+                extraData: 'additional data'
+            }
+        });
+    }
 }
 const placeOrderAddToCartService = (paymentMethod, cartIds, address, longitude, latitude) => {
-    return axios({
-        method: 'post',
-        url: `/api/v1/user/order/create`,
-        data: {
-            cartIds,
-            deliveryAddress: address,
-            longitude,
-            latitude,
-            paymentMethod
-        }
-    });
+    if (paymentMethod === 'CASH') {
+        return instance({
+            method: 'post',
+            url: `/api/v1/user/order/create`,
+            data: {
+                cartIds,
+                deliveryAddress: address,
+                longitude,
+                latitude,
+                paymentMethod
+            }
+        });
+    }
+    else { // ZALOPAY
+        return axios({
+            method: 'post',
+            url: `https://pbl6-fastordersystem.onrender.com/api/v1/zalopay/create-order`,
+            data: {
+                amount: 20000,
+                orderId: '3',
+                orderInfo: 'Payment for order with id=3',
+                lang: 'en',
+                extraData: 'additional data'
+            }
+        });
+    }
 }
 const fetchAllOrdersService = () => {
-    return axios({
+    return instance({
         method: 'get',
         url: `/api/v1/user/order/history`,
     });
 }
 const cancelOrderService = (orderCode) => {
-    return axios({
+    return instance({
         method: 'post',
         url: `/api/v1/user/order/cancel/${orderCode}`,
     });
@@ -109,7 +139,7 @@ const reviewOrderService = (listProductIds, rate, listImageFiles, comment) => {
     // console.log('>>> listImageFiles: ', listImageFiles);
     // console.log('>>> comment: ', comment);
 
-    return axios({
+    return instance({
         method: 'post',
         url: `/api/v1/user/product/rating`,
         data: formData,

@@ -144,14 +144,26 @@ const placeOrderBuyNow = (paymentMethod, productDetailBuyNow, address, longitude
             // dispatch(placeOrderBuyNowSuccess());
 
             const res = await placeOrderBuyNowService(paymentMethod, productDetailBuyNow, address, longitude, latitude);
-            const isSuccess = res && res.data ? res.data.success : false;
-            if (isSuccess) {
-                dispatch(placeOrderBuyNowSuccess());
-                dispatch(fetchAllOrders());
-                toast.success(res.data.message);
-            } else {
-                dispatch(placeOrderBuyNowError());
-                toast.error(res.data.message || "Đặt hàng không thành công!");
+            // console.log('>>> res: ', res);
+            if (paymentMethod === 'CASH') {
+                const isSuccess = res && res.data ? res.data.success : false;
+                if (isSuccess) {
+                    dispatch(placeOrderBuyNowSuccess());
+                    dispatch(fetchAllOrders());
+                    toast.success(res.data.message);
+                    navigate('/order-complete');
+                } else {
+                    dispatch(placeOrderBuyNowError());
+                    toast.error(res.data.message || "Đặt hàng không thành công!");
+                }
+            }
+            else { // ZALOPAY
+                const zalopayUrl = res && res.data ? res.data.data.orderurl : '';
+                if (zalopayUrl) {
+                    window.location.href = zalopayUrl; // Chuyển hướng sang URL thanh toán của ZaloPay
+                } else {
+                    toast.error("Không thể thanh toán đơn hàng với ZaloPay!");
+                }
             }
         } catch (error) {
             console.log(error);
@@ -176,16 +188,27 @@ const placeOrderAddToCartError = () => {
 const placeOrderAddToCart = (paymentMethod, cartIds, address, longitude, latitude) => {
     return async (dispatch) => {
         try {
-
             const res = await placeOrderAddToCartService(paymentMethod, cartIds, address, longitude, latitude);
-            const isSuccess = res && res.data ? res.data.success : false;
-            if (isSuccess) {
-                dispatch(placeOrderAddToCartSuccess());
-                dispatch(fetchAllOrders());
-                toast.success(res.data.message);
-            } else {
-                dispatch(placeOrderAddToCartError());
-                toast.error(res.data.message || "Đặt hàng không thành công!");
+            // console.log('>>> res: ', res);
+            if (paymentMethod === 'CASH') {
+                const isSuccess = res && res.data ? res.data.success : false;
+                if (isSuccess) {
+                    dispatch(placeOrderAddToCartSuccess());
+                    dispatch(fetchAllOrders());
+                    toast.success(res.data.message);
+                    navigate('/order-complete');
+                } else {
+                    dispatch(placeOrderAddToCartError());
+                    toast.error(res.data.message || "Đặt hàng không thành công!");
+                }
+            }
+            else {// ZALOPAY
+                const zalopayUrl = res && res.data ? res.data.data.orderurl : '';
+                if (zalopayUrl) {
+                    window.location.href = zalopayUrl; // Chuyển hướng sang URL thanh toán của ZaloPay
+                } else {
+                    toast.error("Không thể thanh toán đơn hàng với ZaloPay!");
+                }
             }
         } catch (error) {
             console.log(error);

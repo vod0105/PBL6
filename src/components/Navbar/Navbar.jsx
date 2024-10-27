@@ -130,7 +130,7 @@ const Navbar = () => {
               >
                 {
                   account && account.avatar ? (
-                    <img src={'data:image/png;base64,' + account.avatar} alt="avatar-user" />
+                    <img src={'data:image/png;base64,' + account.avatar} alt="avatar-user" title="Quản lý tài khoản" />
                   )
                     : (
                       <img src={logoUser} alt="avatar-user" />

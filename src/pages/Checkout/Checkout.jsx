@@ -45,13 +45,13 @@ const Checkout = () => {
             let longitude = '111';
             let latitude = '222';
             if (isBuyNow) { // Mua ngay
-                dispatch(placeOrderBuyNow(method, productDetailBuyNow, address, longitude, latitude));
-                navigate('/order-complete');
+                dispatch(placeOrderBuyNow(method, productDetailBuyNow, address, longitude, latitude, navigate));
+                // navigate('/order-complete');
             }
             else { // Mua ở giỏ hàng
                 const cartIds = listProductsInCart.map(item => item.cartId);
-                dispatch(placeOrderAddToCart(method, cartIds, address, longitude, latitude));
-                navigate('/order-complete');
+                dispatch(placeOrderAddToCart(method, cartIds, address, longitude, latitude, navigate));
+                // navigate('/order-complete');
             }
         }
     };
@@ -173,17 +173,6 @@ const Checkout = () => {
                             <div>
                                 <input
                                     type="radio"
-                                    id="momo"
-                                    name="paymentMethod"
-                                    value="Momo"
-                                    checked={paymentMethod === "Momo"}
-                                    onChange={(e) => setPaymentMethod(e.target.value)}
-                                />
-                                <label htmlFor="momo">Momo</label>
-                            </div>
-                            <div>
-                                <input
-                                    type="radio"
                                     id="zalopay"
                                     name="paymentMethod"
                                     value="Zalopay"
@@ -191,6 +180,17 @@ const Checkout = () => {
                                     onChange={(e) => setPaymentMethod(e.target.value)}
                                 />
                                 <label htmlFor="Zalopay">Zalopay</label>
+                            </div>
+                            <div>
+                                <input
+                                    type="radio"
+                                    id="momo"
+                                    name="paymentMethod"
+                                    value="Momo"
+                                    checked={paymentMethod === "Momo"}
+                                    onChange={(e) => setPaymentMethod(e.target.value)}
+                                />
+                                <label htmlFor="momo">Momo</label>
                             </div>
                         </div>
 
