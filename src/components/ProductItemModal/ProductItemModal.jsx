@@ -54,7 +54,7 @@ const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, 
   // total price
   const finalPrice = (product?.price != null && product?.discountedPrice != null)
     // ? (product.price - product.discountedPrice)
-    ? (product.price)
+    ? (product.discountedPrice)
     : 0;
 
   // ADD TO CART / BUY NOW

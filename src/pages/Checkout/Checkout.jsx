@@ -133,7 +133,7 @@ const Checkout = () => {
                                                 <p className="infor-name">{productDetailBuyNow.product.productName} ({productDetailBuyNow.size})</p>
                                                 <div className="infor-price-quantity">
                                                     <p className="infor-price">
-                                                        {Number(productDetailBuyNow.product.price).toLocaleString('vi-VN')} đ
+                                                        {Number(productDetailBuyNow.product.discountedPrice).toLocaleString('vi-VN')} đ
                                                     </p>
                                                     <p className="px-2">x</p>
                                                     <p className="infor-quantity">{productDetailBuyNow.quantity}</p>
@@ -142,7 +142,7 @@ const Checkout = () => {
                                             </div>
                                         </div>
                                         <div className="product-item-totalprice">
-                                            <span>{Number(productDetailBuyNow.product.price * productDetailBuyNow.quantity).toLocaleString('vi-VN')} đ</span>
+                                            <span>{Number(productDetailBuyNow.product.discountedPrice * productDetailBuyNow.quantity).toLocaleString('vi-VN')} đ</span>
                                         </div>
                                     </div>
                                 )
@@ -151,12 +151,13 @@ const Checkout = () => {
                         <div className="order-totalprice">
                             <span>Tổng cộng </span>
                             <span>{isBuyNow
-                                ? Number(productDetailBuyNow.product.price * productDetailBuyNow.quantity).toLocaleString('vi-VN')
+                                ? Number(productDetailBuyNow.product.discountedPrice * productDetailBuyNow.quantity).toLocaleString('vi-VN')
                                 : Number(getTotalPriceInCart()).toLocaleString('vi-VN')} đ
                             </span>
                         </div>
 
                         <div className="shipping-method">
+                            {/* note: Phải call api lấy all payment methods -> thêm vô reducer: payment method-> BE chưa làm */}
                             <h3>Phương thức thanh toán</h3>
                             <div>
                                 <input
@@ -195,7 +196,7 @@ const Checkout = () => {
 
                         <div className="order-item">
                             <span>Tổng đơn hàng</span>
-                            <span>{isBuyNow ? Number(productDetailBuyNow.product.price * productDetailBuyNow.quantity).toLocaleString('vi-VN') : Number(getTotalPriceInCart()).toLocaleString('vi-VN')} đ</span>
+                            <span>{isBuyNow ? Number(productDetailBuyNow.product.discountedPrice * productDetailBuyNow.quantity).toLocaleString('vi-VN') : Number(getTotalPriceInCart()).toLocaleString('vi-VN')} đ</span>
                         </div>
                         <button className="place-order-btn" onClick={handlePlaceOrder}>
                             ĐẶT HÀNG

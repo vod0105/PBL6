@@ -95,6 +95,26 @@ const cancelOrderService = (orderCode) => {
         url: `/api/v1/user/order/cancel/${orderCode}`,
     });
 }
+const reviewOrderService = (listProductIds, rate, listImageFiles, comment) => {
+    const formData = new FormData();
+    formData.append('productId', listProductIds);
+    formData.append('rate', rate);
+    formData.append('imageFiles', listImageFiles);
+    formData.append('comment', comment);
+    console.log('>>> list id: ', listProductIds);
+    console.log('>>> rate: ', rate);
+    console.log('>>> listImageFiles: ', listImageFiles);
+    console.log('>>> comment: ', comment);
+
+    return axios({
+        method: 'post',
+        url: `/api/v1/user/product/rating`,
+        data: formData,
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+}
 
 export {
     updateProfileService,
@@ -107,5 +127,6 @@ export {
     placeOrderAddToCartService,
     fetchAllOrdersService,
     cancelOrderService,
+    reviewOrderService,
 
 }

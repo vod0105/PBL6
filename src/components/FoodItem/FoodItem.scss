@@ -1,5 +1,6 @@
 .food-item {
   width: 100%;
+  max-height: 450px;
   margin: auto;
   border-radius: 15px;
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15); 
@@ -14,7 +15,10 @@
     position: relative;
     .food-item-image {
       width: 100%;
+      // height: auto; 
+      aspect-ratio: 1/1; /* Thiết lập tỉ lệ 1:1 giữa chiều rộng và chiều cao */
       border-radius: 15px 15px 0px 0px;
+      object-fit: cover; /* Image ko bị méo */
     }
     .food-item-addtocart {
       position: absolute;

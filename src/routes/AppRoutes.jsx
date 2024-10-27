@@ -16,6 +16,7 @@ import PlaceOrder from '../pages/PlaceOrder/PlaceOrder';
 import Checkout from '../pages/Checkout/Checkout';
 import OrderComplete from '../pages/OrderComplete/OrderComplete';
 import PromotionDetail from '../pages/PromotionDetail/PromotionDetail';
+import OAuth2RedirectHandler from '../components/OAuth2RedirectHandler/OAuth2RedirectHandler';
 
 const AppRoutes = (props) => {
     return (
@@ -45,6 +46,8 @@ const AppRoutes = (props) => {
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/promotion-detail/:id" element={<PromotionDetail />} />
                 <Route path="/order-complete" element={<OrderComplete />} />
+
+                <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
 
                 <Route path="*" element={<div>404 Not Found!!!</div>} />
 

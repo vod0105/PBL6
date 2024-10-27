@@ -9,6 +9,7 @@ import { loginUser, loginGoogle } from '../../redux/actions/authActions';
 import { GoogleLogin } from '@react-oauth/google';
 import FacebookLogin from 'react-facebook-login';
 import fbIcon from '../../assets/logo/facebook.png'
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import ForgetPasswordModal from '../ForgetPasswordModal/ForgetPasswordModal';
 
@@ -65,7 +66,8 @@ const LoginModal = () => {
 
   // GG + FB
   const handleSuccessGoogle = async (credentialResponse) => {
-    dispatch(loginGoogle(credentialResponse.credential));
+    // dispatch(loginGoogle(credentialResponse.credential));
+    window.location.href = 'https://pbl6-fastordersystem.onrender.com/oauth2/authorization/google';
   }
   const handleErrorGoogle = () => {
     alert('Lỗi tùm lum');

@@ -12,6 +12,9 @@ import product2 from "../../assets/food-yummy/product2.jpg";
 import product3 from "../../assets/food-yummy/product3.jpg";
 import product4 from "../../assets/food-yummy/product4.jpg";
 
+import logoStar from '../../assets/logo/star.png'
+import logoStarNobgColor from '../../assets/logo/star_no_bgcolor.png'
+
 import StoreList from '../StoreList/StoreList';
 import ProductItemModal from '../ProductItemModal/ProductItemModal';
 
@@ -21,6 +24,31 @@ import { fetchProductById } from "../../redux/actions/productActions";
 
 
 const ProductItemDetail = () => {
+  const listComments = [
+    {
+      avatar: product1,
+      username: "Nhật Hải",
+      rate: 5,
+      commentContent: 'ngon tàn bạo, ngon xuất sắc nha cả nhà',
+      images: [product2, product3]
+    },
+    {
+      avatar: product2,
+      username: "Việt Hoàng",
+      rate: 3,
+      commentContent: 'Khá là ngon',
+      images: [product4]
+    },
+    {
+      avatar: product4,
+      username: "Thương Thắng",
+      rate: 1,
+      commentContent: 'Chưa có món mô dở ri',
+      images: [product2, product3, product4]
+    },
+  ];
+
+
   // Modal
   const [showModalProduct, setShowModalProduct] = useState(false);
   const [isAddToCart, setIsAddToCart] = useState(false);
@@ -73,7 +101,7 @@ const ProductItemDetail = () => {
             <div className="infor-right-price-container">
               <span className="infor-right-price-discount">
                 {/* {Number(productDetail.price - productDetail.discountedPrice).toLocaleString('vi-VN')} đ */}
-                {Number(productDetail.price).toLocaleString('vi-VN')} đ
+                {Number(productDetail.discountedPrice).toLocaleString('vi-VN')} đ
               </span>
               <span className="infor-right-price-origin">
                 {Number(productDetail.price).toLocaleString('vi-VN')} đ
@@ -114,7 +142,42 @@ const ProductItemDetail = () => {
           </div>
         </div>
         <div className="product-detail-comment">
-          ĐÂY LÀ COMMENT
+          <h2>Bài viết đánh giá</h2>
+          {listComments && listComments.length > 0 ? (
+            listComments.map((comment, index) => {
+              return (
+                <div className="comment-container" key={index}>
+                  <div className="avatar-username-star-container">
+                    <div className="avatar">
+                      <img src={comment.avatar} alt="" />
+                    </div>
+                    <div className="username-star">
+                      <span className="username-user">{comment.username}</span>
+                      <div className="star-container">
+                        {[...Array(comment.rate)].map((_, i) => (
+                          <img key={i} src={logoStar} alt="" />
+                        ))}
+                        {[...Array(5 - comment.rate)].map((_, i) => (
+                          <img key={i + comment.rate} src={logoStarNobgColor} alt="" />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="comment-content">
+                    <p>{comment.commentContent}</p>
+                  </div>
+                  <div className="review-images-container">
+                    {comment.images.map((image, imgIndex) => (
+                      <img key={imgIndex} src={image} alt={`Review image ${imgIndex}`} className="review-image" />
+                    ))}
+                  </div>
+                  <p className="comment-date">11/05/2024 11:11</p>
+                </div>
+              );
+            })
+          ) : (
+            <div>Không có bình luận</div>
+          )}
         </div>
       </div>
     </div>

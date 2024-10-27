@@ -4,13 +4,15 @@ import OrderDetailModal from '../../components/OrderDetailModal/OrderDetailModal
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllOrders, cancelOrder } from "../../redux/actions/userActions";
 import { toast } from "react-toastify";
+import ReviewModal from "../ReviewModal/ReviewModal";
 // const _ = require('lodash'); // copy object
 const Orders = () => {
   const dispatch = useDispatch();
   const orders = useSelector((state) => {
     return state.user.allOrders;
   })
-  const [showModal, setShowModal] = useState(false);
+  const [showModalViewDetail, setShowModalViewDetail] = useState(false);
+  const [showModalReviewOrder, setShowModalReviewOrder] = useState(false);
   const [orderDetails, setOrderDetails] = useState(null);
   const [statusOrderInteger, setStatusOrderInteger] = useState(0);
 
@@ -35,13 +37,20 @@ const Orders = () => {
       default:
         setStatusOrderInteger(1);
     }
-    setOrderDetails(order); // Lưu trữ thông tin đơn hàng
-    setShowModal(true);
+    setOrderDetails(order);
+    setShowModalViewDetail(true);
+  };
+  const handleShowReviewOrder = (order) => {
+    setOrderDetails(order);
+    setShowModalReviewOrder(true);
   };
 
-  const handleClose = () => {
-    setShowModal(false);
+  const handleCloseViewDetail = () => {
+    setShowModalViewDetail(false);
     // setOrderDetails(null); // Reset thông tin đơn hàng
+  };
+  const handleCloseReviewOrder = () => {
+    setShowModalReviewOrder(false);
   };
 
   // Format Date
@@ -62,20 +71,6 @@ const Orders = () => {
   useEffect(() => {
     dispatch(fetchAllOrders());
   }, [dispatch]);
-  // const orders = [
-  //   {
-  //     id: '1',
-  //     customerId: 'KH001',
-  //     name: 'Nguyễn Văn A',
-  //     phone: '0123456789',
-  //     email: 'nguyenvana@gmail.com',
-  //     address: '123 Đường ABC, Quận 1, TP HCM',
-  //     note: 'Giao vào buổi sáng',
-  //     orderDate: '06/10/2024',
-  //     total: '1,330,000 đ',
-  //     status: 3
-  //   }
-  // ];
 
   return (
     <div className="orders-management">
@@ -92,7 +87,7 @@ const Orders = () => {
               <th scope="col">Tổng tiền</th>
               <th scope="col">Trạng thái</th>
               <th scope="col">Xem chi tiết đơn hàng</th>
-              <th scope="col">Hủy đơn hàng</th>
+              <th scope="col">Hành động</th>
             </tr>
           </thead>
           <tbody>
@@ -111,19 +106,40 @@ const Orders = () => {
                       Xem chi tiết
                     </button>
                   </td>
-                  <td className="text-center align-middle">
-                    <button
-                      className="btn btn-warning"
-                      disabled={order.status === 'Đơn hàng mới' ? false : true}
-                      onClick={() => handleCancelOrder(order.orderCode)}
-                    >
-                      Hủy
-                    </button>
-                  </td>
+
+                  {/* status = 5 -> Hiện button 'Đánh giá' */}
+                  {/* status = 1 -> Hiện button 'Hủy đơn hàng */}
+                  {/* status = 2,3,4 -> Disable button 'Hủy đơn hàng' */}
+                  {
+                    order && order.status == 'Đơn hàng đã hoàn thành' ? (
+                      <td className="text-center align-middle">
+                        <button
+                          className="btn btn-success"
+                          onClick={() => handleShowReviewOrder(order)}
+                        >
+                          Đánh giá
+                        </button>
+                      </td>
+                    )
+                      : (
+                        <td className="text-center align-middle">
+                          <button
+                            className="btn btn-warning"
+                            disabled={order.status === 'Đơn hàng mới' ? false : true}
+                            onClick={() => handleCancelOrder(order.orderCode)}
+                          >
+                            Hủy đơn hàng
+                          </button>
+                        </td>
+                      )
+                  }
+
                 </tr>
               )))
                 : (
-                  <div>Không có đơn hàng nào</div>
+                  <tr >
+                    <td colSpan={6}>Không có đơn hàng nào</td>
+                  </tr>
                 )
             }
           </tbody>
@@ -131,10 +147,15 @@ const Orders = () => {
 
         <button className="btn btn-dark btn-return-homepage">TRỞ LẠI TRANG CHỦ</button>
         <OrderDetailModal
-          showModal={showModal}
-          handleClose={handleClose}
+          showModal={showModalViewDetail}
+          handleClose={handleCloseViewDetail}
           orderDetails={orderDetails}
           statusOrderInteger={statusOrderInteger}
+        />
+        <ReviewModal
+          showModal={showModalReviewOrder}
+          handleClose={handleCloseReviewOrder}
+          orderDetails={orderDetails}
         />
       </div>
     </div>

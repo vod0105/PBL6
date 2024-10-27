@@ -9,7 +9,7 @@ import {
     increaseOneQuantityService,
     fetchAllOrdersService,
     cancelOrderService,
-
+    reviewOrderService,
 
 } from "../../services/userService";
 import { toast } from "react-toastify";
@@ -266,7 +266,7 @@ const fetchAllOrders = () => {
             dispatch(fetchAllOrdersSuccess(data));
         } catch (error) {
             console.log(error);
-            toast.error('Có lỗi ở Server!');
+            // toast.error('Có lỗi ở Server!');  // BE return status=400 -> Lỗi do BE nên chạy vô catch error ni
         }
     }
 };
@@ -295,6 +295,31 @@ const cancelOrder = (orderCode) => {
     };
 };
 
+// đánh giá đơn hàng
+const reviewOrderSuccess = () => {
+    return {
+        type: types.REVIEW_ORDER_SUCCESS,
+    };
+};
+const reviewOrder = (listProductIds, rate, listImageFiles, comment) => {
+    return async (dispatch) => {
+        try {
+            const res = await reviewOrderService(listProductIds, rate, listImageFiles, comment);
+            const isSuccess = res && res.data ? res.data.success : false;
+            if (isSuccess) {
+                dispatch(reviewOrderSuccess());
+                // dispatch(fetchAllOrders()); // Recall API lấy lại all orders
+                toast.success(res.data.message);
+            } else {
+                toast.error(res.data.message || "Đánh giá đơn hàng không thành công!");
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error("Đánh giá đơn hàng không thành công!");
+        }
+    };
+};
+
 export {
     updateProfile,
     addToCart,
@@ -308,5 +333,7 @@ export {
     increaseOneQuantity,
     fetchAllOrders,
     cancelOrder,
+    reviewOrder,
+
 
 };

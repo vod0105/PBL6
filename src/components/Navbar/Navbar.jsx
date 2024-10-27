@@ -50,7 +50,6 @@ const Navbar = () => {
         end // 'end' đảm bảo rằng chỉ '/' (Trang Chủ) được kích hoạt
       >
         <img src={assets.logo} alt="" className="logo-image" />
-        {/* <p className="logo-name">LILI</p> */}
       </NavLink>
       <ul className="navbar-menu">
         <NavLink
@@ -129,7 +128,14 @@ const Navbar = () => {
                 to="/account"
                 className="navbar-profile"
               >
-                <img src={logoUser} alt="" />
+                {
+                  account && account.avatar ? (
+                    <img src={'data:image/png;base64,' + account.avatar} alt="avatar-user" />
+                  )
+                    : (
+                      <img src={logoUser} alt="avatar-user" />
+                    )
+                }
               </Link>
             </>
             : <>

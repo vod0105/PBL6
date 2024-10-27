@@ -72,6 +72,10 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
             };
+        case 'REVIEW_ORDER_SUCCESS':
+            return {
+                ...state,
+            };
         default:
             return state;
     }

@@ -1,34 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { Modal, Button } from 'react-bootstrap';
 import './OrderDetailModal.scss';
-import imageProduct from '../../assets/3.png'
 const OrderDetailModal = ({ showModal, handleClose, orderDetails, statusOrderInteger }) => {
-  // const listProducts = [
-  //   {
-  //     image: imageProduct,
-  //     name: 'Gà giòn sốt cay',
-  //     price: '130.000 đ',
-  //     quantity: 3
-  //   },
-  //   {
-  //     image: imageProduct,
-  //     name: 'Gà giòn sốt cay',
-  //     price: '130.000 đ',
-  //     quantity: 3
-  //   },
-  //   {
-  //     image: imageProduct,
-  //     name: 'Gà giòn sốt cay',
-  //     price: '130.000 đ',
-  //     quantity: 3
-  //   },
-  // ];
   const [listProducts, setListProducts] = useState([]);
   useEffect(() => {
     if (orderDetails) {
       setListProducts(orderDetails.orderDetails);
+      console.log('>>> check list products: ', listProducts);
     }
-    console.log('>>> check list producs: ', listProducts);
   }, [orderDetails]);
   return (
     <Modal
