@@ -24,14 +24,14 @@ public class User {
     private String phoneNumber;
     private String password;
     private String fullName;
-    @Column(name = "avatar", columnDefinition = "LONGTEXT")
+    @Column(name = "avatar", columnDefinition = "TEXT")
     private String avatar;
     private String email;
     private String address;
-    @Column(name = "longitude", columnDefinition = "DOUBLE")
-    private Double longitude;
-    @Column(name = "latitude", columnDefinition = "DOUBLE")
-    private Double latitude;
+    @Column(name = "longitude")
+    private double longitude;
+    @Column(name = "latitude")
+    private double latitude;
     @Column(name = "is_approved")
     private Boolean isApproved = (Boolean) false;
     @Column(name = "is_active")

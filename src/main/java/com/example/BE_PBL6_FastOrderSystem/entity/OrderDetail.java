@@ -32,8 +32,8 @@ public class OrderDetail {
     private List<Product> drinkProducts = new ArrayList<>();
 
     private Integer quantity;
-    private Double unitPrice;
-    private Double totalPrice;
+    private double unitPrice;
+    private double totalPrice;
     @ManyToOne
     @JoinColumn(name = "fee_id")
     private ShippingFee shippingFee;

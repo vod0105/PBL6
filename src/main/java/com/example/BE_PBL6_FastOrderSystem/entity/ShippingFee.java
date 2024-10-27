@@ -10,5 +10,5 @@ public class ShippingFee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fee_id;
-    private Double fee;
+    private double fee;
 }

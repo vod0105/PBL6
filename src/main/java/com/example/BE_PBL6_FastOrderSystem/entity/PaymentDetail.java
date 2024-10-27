@@ -23,8 +23,7 @@ public class PaymentDetail {
     @ManyToOne
     @JoinColumn(name = "store_id", nullable = false)
     private Store store;
-
-    private Double totalAmount;
+    private double totalAmount;
 
     private String paymentStatus;
 

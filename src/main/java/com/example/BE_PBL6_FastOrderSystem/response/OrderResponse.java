@@ -20,6 +20,7 @@ public class OrderResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String discountCode;
+    private boolean isFeedBack;
     private List<OrderDetailResponse> orderDetails;
 
     public OrderResponse(Order order) {
@@ -28,11 +29,12 @@ public class OrderResponse {
         this.userId = order.getUser().getId();
         this.orderDate = order.getOrderDate();
         this.totalAmount = order.getTotalAmount();
-        this.status = (order.getStatus() != null) ? order.getStatus().getStatusName() : "Unknown Status"; // Hoặc giá trị mặc định khác
+        this.status = (order.getStatus() != null) ? order.getStatus().getStatusName() : "Unknown Status";
         this.deliveryAddress = order.getDeliveryAddress();
         this.createdAt = order.getCreatedAt();
         this.updatedAt = order.getUpdatedAt();
         this.discountCode = (order.getDiscountCode() != null) ? order.getDiscountCode().getCode() : "Unknown Discount Code";
+        this.isFeedBack = order.isFeedBack();
         this.orderDetails = order.getOrderDetails().stream().map(OrderDetailResponse::new).collect(Collectors.toList());
     }
 }

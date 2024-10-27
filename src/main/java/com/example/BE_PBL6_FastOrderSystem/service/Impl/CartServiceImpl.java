@@ -56,7 +56,7 @@ public class CartServiceImpl implements ICartService {
         if (cartItem != null) {
             cartItem.setQuantity(cartItem.getQuantity() + cartProductRequest.getQuantity());
             // Calculate total price of cart item
-            if (product.getDiscountedPrice() != null) {
+            if (product.getDiscountedPrice() != 0.0) {
                 cartItem.setTotalPrice(product.getDiscountedPrice() * cartItem.getQuantity());
             } else {
                 cartItem.setTotalPrice(product.getPrice() * cartItem.getQuantity());
@@ -67,7 +67,7 @@ public class CartServiceImpl implements ICartService {
             cartItem.setUser(user);
             cartItem.setProduct(product);
             cartItem.setQuantity(cartProductRequest.getQuantity());
-            if (product.getDiscountedPrice() != null) {
+            if (product.getDiscountedPrice() != 0.0) {
                 cartItem.setUnitPrice(product.getDiscountedPrice());
             } else {
                 cartItem.setUnitPrice(product.getPrice());

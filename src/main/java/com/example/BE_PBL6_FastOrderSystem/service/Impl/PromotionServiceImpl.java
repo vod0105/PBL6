@@ -335,7 +335,7 @@ public class PromotionServiceImpl implements IPromotionService {
         promotion.getProducts().remove(product);
         // Calculate discounted price after removing promotion = null if no promotion
         if (product.getPromotions().isEmpty()) {
-            product.setDiscountedPrice(null);
+            product.setDiscountedPrice(0.0);
         } else {
             double maxDiscountPercentage = product.getPromotions().stream()
                     .mapToDouble(Promotion::getDiscountPercentage)

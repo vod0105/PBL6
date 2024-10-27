@@ -298,7 +298,7 @@ public class OrderServiceImpl implements IOrderService {
                 * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         double distance = EARTH_RADIUS * c;
-        double shippingFeePerKm = 10000; // 10,000 VND/km
+        double shippingFeePerKm = 10000;
         if (distance <= 1.1) {
             return 0.0;
         }
@@ -365,9 +365,9 @@ public Long calculateOrderAmount(List<Long> cartIds, Double latitude, Double lon
 
     long totalAmount = 0;
     for (Cart item : cartItems) {
-        totalAmount += (long) item.getTotalPrice();
+        totalAmount += Math.round(item.getTotalPrice());
     }
-
+    
     // Kiểm tra mã giảm giá
     if (discountCode != null) {
         LocalDateTime now = LocalDateTime.now();

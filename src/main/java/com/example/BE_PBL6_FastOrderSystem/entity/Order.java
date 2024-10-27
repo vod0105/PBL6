@@ -19,17 +19,17 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetails;
     private LocalDateTime orderDate;
-    private Double totalAmount;
+    private double totalAmount;
     @ManyToOne
     @JoinColumn(name = "status_id")
     private StatusOrder status;
 //    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
 //    private List<Cart> carts;
     private String deliveryAddress;
-    @Column(name = "longitude", columnDefinition = "DOUBLE")
-    private Double longitude;
-    @Column(name = "latitude", columnDefinition = "DOUBLE")
-    private Double latitude;
+    @Column(name = "longitude")
+    private double longitude;
+    @Column(name = "latitude")
+    private double latitude;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean isFeedBack;
