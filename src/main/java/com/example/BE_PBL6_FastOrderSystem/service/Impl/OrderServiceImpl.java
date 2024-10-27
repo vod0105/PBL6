@@ -31,7 +31,7 @@ public class OrderServiceImpl implements IOrderService {
     private final ProductStoreRepository productStoreRepository;
     private final SizeRepository sizeRepository;
     private final StatusOrderRepository statusOrderRepository;
-    private final ShipperOrderRepository shipperOrderRepository;
+    private final ShippingFeeRepository shippingFeeRepository;
     private final ShipperRepository shipperRepository;
     private final DiscountCodeRepository discountCodeRepository;
     public String generateUniqueOrderCode() {
@@ -100,7 +100,7 @@ public class OrderServiceImpl implements IOrderService {
         order.setUpdatedAt(LocalDateTime.now());
         order.setUser(user);
         order.setFeedBack(false);
-       //order.setCarts(cartItems);
+        //order.setCarts(cartItems);
         order.setDeliveryAddress(deliveryAddress);
         if (deliveryAddress.equalsIgnoreCase("Mua tại cửa hàng")) {
             order.setDeliveryAddress("Mua tại cửa hàng");
@@ -137,22 +137,25 @@ public class OrderServiceImpl implements IOrderService {
         order.setTotalAmount(Double.valueOf(totalAmount));
         // Nhóm các order detail theo cửa hàng
         if (!deliveryAddress.equalsIgnoreCase("Mua tại cửa hàng")) {
+            // Group OrderDetail objects by their store
             Map<Store, List<OrderDetail>> groupedOrderDetails = orderDetails.stream()
                     .collect(Collectors.groupingBy(OrderDetail::getStore));
             for (Map.Entry<Store, List<OrderDetail>> entry : groupedOrderDetails.entrySet()) {
                 Store store = entry.getKey();
+                List<OrderDetail> storeOrderDetails = entry.getValue();
+                // Calculate the shipping fee for the store
                 Double shippingFee = calculateShippingFee(order, store);
-                order.setShippingFee(shippingFee);
+                // Assign the shipping fee to each OrderDetail in the group
+                ShippingFee fee = new ShippingFee();
+                fee.setFee(shippingFee);
+                shippingFeeRepository.save(fee);
+                for (OrderDetail orderDetail : storeOrderDetails) {
+                    orderDetail.setShippingFee(fee);
+                }
             }
         }
         order.setOrderDetails(orderDetails);
         orderRepository.save(order);
-        Cart cart;
-        for (Cart cartItem : cartItems) {
-            cart = cartItem;
-            cart.setStatus("Đã đặt hàng");
-            cartItemRepository.save(cart);
-        }
         return ResponseEntity.ok(new APIRespone(true, "Order placed successfully", ""));
     }
 
@@ -259,12 +262,21 @@ public class OrderServiceImpl implements IOrderService {
 
         // Nhóm các order detail theo cửa hàng
         if (!deliveryAddress.equalsIgnoreCase("Mua tại cửa hàng")) {
+            // Group OrderDetail objects by their store
             Map<Store, List<OrderDetail>> groupedOrderDetails = orderDetails.stream()
                     .collect(Collectors.groupingBy(OrderDetail::getStore));
             for (Map.Entry<Store, List<OrderDetail>> entry : groupedOrderDetails.entrySet()) {
                 Store store = entry.getKey();
+                List<OrderDetail> storeOrderDetails = entry.getValue();
+                // Calculate the shipping fee for the store
                 Double shippingFee = calculateShippingFee(order, store);
-                order.setShippingFee(shippingFee);
+                // Assign the shipping fee to each OrderDetail in the group
+                ShippingFee fee = new ShippingFee();
+                fee.setFee(shippingFee);
+                shippingFeeRepository.save(fee);
+                for (OrderDetail orderDetail1 : storeOrderDetails) {
+                    orderDetail1.setShippingFee(fee);
+                }
             }
         }
         order.setOrderDetails(orderDetails);
@@ -278,7 +290,6 @@ public class OrderServiceImpl implements IOrderService {
         double storeLongitude = store.getLongitude();
         double deliveryLatitude = order.getLatitude();
         double deliveryLongitude = order.getLongitude();
-
         final int EARTH_RADIUS = 6371;
         double latDistance = Math.toRadians(deliveryLatitude - storeLatitude);
         double lonDistance = Math.toRadians(deliveryLongitude - storeLongitude);
@@ -287,10 +298,7 @@ public class OrderServiceImpl implements IOrderService {
                 * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         double distance = EARTH_RADIUS * c;
-
-        System.out.println("Distance: " + distance);
-
-        double shippingFeePerKm = 10000; // phí ship 1 km
+        double shippingFeePerKm = 10000; // 10,000 VND/km
         if (distance <= 1.1) {
             return 0.0;
         }
@@ -349,50 +357,58 @@ public class OrderServiceImpl implements IOrderService {
         }
         return totalAmount;
     }
+@Override
+public Long calculateOrderAmount(List<Long> cartIds, Double latitude, Double longitude, String discountCode) {
+    List<Cart> cartItems = cartIds.stream()
+            .flatMap(cartId -> getCartItemsByCartId(cartId).stream())
+            .toList();
 
-    @Override
-    public Long calculateOrderAmount(List<Long> cartIds, Double latitude, Double longitude, String discountCode) {
-        List<Cart> cartItems = cartIds.stream()
-                .flatMap(cartId -> getCartItemsByCartId(cartId).stream())
-                .toList();
+    long totalAmount = 0;
+    for (Cart item : cartItems) {
+        totalAmount += (long) item.getTotalPrice();
+    }
 
-        long totalAmount = 0;
-        for (Cart item : cartItems) {
-            totalAmount += (long) item.getTotalPrice();
+    // Kiểm tra mã giảm giá
+    if (discountCode != null) {
+        LocalDateTime now = LocalDateTime.now();
+        List<DiscountCode> discountCodeOptional = discountCodeRepository.findByStartDateBeforeAndEndDateAfterAndStatus(now);
+
+        if (!discountCodeOptional.isEmpty()) {
+            DiscountCode discountCode1 = discountCodeOptional.get(0);
+            discountCode1.setStatus(false); // Cập nhật status nếu cần
+            totalAmount -= Math.round(totalAmount * discountCode1.getDiscountPercent() / 100);
+        } else {
+            System.out.println("Discount code not found or expired");
         }
+    }
 
-        // Kiểm tra mã giảm giá
-        if (discountCode != null) {
-            LocalDateTime now = LocalDateTime.now();
-            List<DiscountCode> discountCodeOptional = discountCodeRepository.findByStartDateBeforeAndEndDateAfterAndStatus(now);
+    // Group cart items by store
+    Map<Long, List<Cart>> itemsByStore = cartItems.stream()
+            .collect(Collectors.groupingBy(Cart::getStoreId));
 
-            if (!discountCodeOptional.isEmpty()) {
-                DiscountCode discountCode1 = discountCodeOptional.get(0);
-                discountCode1.setStatus(false); // Cập nhật status nếu cần
-                totalAmount -= Math.round(totalAmount * discountCode1.getDiscountPercent() / 100);
-            } else {
-                System.out.println("Discount code not found or expired");
-            }
-        }
-
-        // Tính phí giao hàng
-        Optional<Store> storeOptional = storeRepository.findById(cartItems.get(0).getStoreId());
+    // Calculate shipping fee for each store
+    double totalShippingFee = 0;
+    for (Map.Entry<Long, List<Cart>> entry : itemsByStore.entrySet()) {
+        Long storeId = entry.getKey();
+        Optional<Store> storeOptional = storeRepository.findById(storeId);
         if (storeOptional.isPresent()) {
             Store store = storeOptional.get();
             Order dummyOrder = new Order();
             dummyOrder.setLatitude(latitude);
             dummyOrder.setLongitude(longitude);
             Double shippingFee = calculateShippingFee(dummyOrder, store);
-            totalAmount += Math.round(shippingFee);
+            totalShippingFee += Math.round(shippingFee);
         } else {
-            System.out.println("Store not found");
+            System.out.println("Store not found for storeId: " + storeId);
             return 0L;
         }
-
-        System.out.println("Total amount sau khi tính toán: " + totalAmount);
-        return totalAmount;
     }
 
+    totalAmount += totalShippingFee;
+
+    System.out.println("Total amount sau khi tính toán: " + totalAmount);
+    return totalAmount;
+}
 
 
     @Transactional

@@ -15,7 +15,7 @@ public interface ShipperRepository extends JpaRepository<User, Long> {
             "AND is_approved = true \n" +
             "AND is_busy = false \n" +
             "AND role_id = (SELECT id FROM role WHERE name = 'ROLE_SHIPPER') \n" +
-            "HAVING distance <= 5 \n" +
+            "HAVING distance <= 10 \n" +
             "ORDER BY distance \n" +
             "LIMIT :limit", nativeQuery = true)
     List<User> findNearestShippers(@Param("latitude") double latitude, @Param("longitude") double longitude, @Param("limit") int limit);

@@ -35,7 +35,7 @@ public class ShipperOrderResponse {
     public ShipperOrderResponse(ShipperOrder shipperOrder) {
         this.shipperOrderId = shipperOrder.getId();
         this.shipperId = shipperOrder.getShipper().getId();
-        this.status = shipperOrder.getStatus().getStatusName();
+        this.status = shipperOrder.getStatus().getStatusName().isEmpty() ? null : shipperOrder.getStatus().getStatusName();
         this.receivedAt = shipperOrder.getReceivedAt();
         this.deliveredAt = shipperOrder.getDeliveredAt();
         this.storeId = shipperOrder.getStore().getStoreId();
@@ -51,7 +51,9 @@ public class ShipperOrderResponse {
                 .filter(orderDetail -> orderDetail.getStore().getStoreId().equals(this.storeId))
                 .mapToDouble(orderDetail -> orderDetail.getTotalPrice())
                 .sum();
-        this.shippingFee = shipperOrder.getOrderDetails().get(0).getOrder().getShippingFee();
+        this.shippingFee = shipperOrder.getOrderDetails().isEmpty() || shipperOrder.getOrderDetails().get(0).getShippingFee() == null
+                ? null
+                : shipperOrder.getOrderDetails().get(0).getShippingFee().getFee();
         this.deliveryAddress = shipperOrder.getOrderDetails().get(0).getOrder().getDeliveryAddress();
         this.longitude = shipperOrder.getOrderDetails().get(0).getOrder().getLongitude();
         this.latitude = shipperOrder.getOrderDetails().get(0).getOrder().getLatitude();

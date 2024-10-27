@@ -8,6 +8,7 @@ import java.util.List;
 
 @Data
 @Entity
+@Table(name = "order_detail")
 public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +34,9 @@ public class OrderDetail {
     private Integer quantity;
     private Double unitPrice;
     private Double totalPrice;
+    @ManyToOne
+    @JoinColumn(name = "fee_id")
+    private ShippingFee shippingFee;
     @ManyToOne
     @JoinColumn(name = "size_id")
     private Size size;

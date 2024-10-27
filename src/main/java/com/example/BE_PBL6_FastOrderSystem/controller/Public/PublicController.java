@@ -21,6 +21,7 @@ public class PublicController {
     private final ISizeService sizeService;
     private final IStatusOrderService statusOrderService;
     private final IRateService rateService;
+    private final IUserService userService;
 
     private final IOrderService orderService;
     @GetMapping("/categories/all")

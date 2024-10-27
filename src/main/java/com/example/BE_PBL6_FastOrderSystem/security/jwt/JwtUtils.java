@@ -104,13 +104,25 @@ public class JwtUtils {
     }
 
     public String getUserNameFromToken(String token) {
-
-        Claims claims = Jwts.parser()
+        Claims claims = Jwts.parserBuilder()
                 .setSigningKey(jwtSecret)
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
-        return claims.getSubject();
 
+        String phone = claims.get("phone", String.class);
+        String sub = claims.get("sub", String.class);
+        String facebookId = claims.get("facebookId", String.class);
+
+        if (phone != null) {
+            return phone;
+        } else if (sub != null) {
+            return sub;
+        } else if (facebookId != null) {
+            return facebookId;
+        } else {
+            return null;
+        }
     }
 
     public boolean validateToken(String token) {

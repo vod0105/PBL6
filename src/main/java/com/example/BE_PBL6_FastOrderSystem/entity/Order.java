@@ -20,8 +20,6 @@ public class Order {
     private List<OrderDetail> orderDetails;
     private LocalDateTime orderDate;
     private Double totalAmount;
-    private Double shippingFee;
-
     @ManyToOne
     @JoinColumn(name = "status_id")
     private StatusOrder status;
@@ -58,7 +56,6 @@ public class Order {
                 ", orderDetails=" + orderDetails +
                 ", orderDate=" + orderDate +
                 ", totalAmount=" + totalAmount +
-                ", shippingFee=" + shippingFee +
                 ", status=" + status +
                 ", deliveryAddress='" + deliveryAddress + '\'' +
                 ", longitude=" + longitude +

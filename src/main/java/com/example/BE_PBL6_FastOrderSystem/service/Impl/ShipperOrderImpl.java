@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -64,6 +65,9 @@ public class ShipperOrderImpl implements IShipperOrderService {
     @Override
     public ResponseEntity<APIRespone> getAllShipperOrderByStatus(Long shipperId, String status) {
         List<ShipperOrder> shipperOrders = shipperOrderRepository.findAllByShipperIdAndStatus(shipperId, status);
+        if (shipperOrders.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "Orders not found", ""));
+        }
         List<ShipperOrderResponse> orderDetailResponses = shipperOrders.stream()
                 .map(ShipperOrderResponse::new)
                 .collect(Collectors.toList());
@@ -90,6 +94,9 @@ public class ShipperOrderImpl implements IShipperOrderService {
         }
 
         List<OrderDetail> orderDetails = orderDetailRepository.findAllByStatus("Đơn hàng mới");
+        if (orderDetails.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "No orders found", ""));
+        }
         List<OrderDetailResponse> sortedOrderDetails = orderDetails.stream()
                 .sorted(Comparator.comparingDouble(orderDetail -> calculateDistance(
                         shipper.getLatitude(), shipper.getLongitude(),
@@ -113,7 +120,6 @@ public class ShipperOrderImpl implements IShipperOrderService {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return R * c; // Distance in km
     }
-
     @Scheduled(fixedRate = 30000) // 30 giây
     public ResponseEntity<APIRespone> autoAssignShipper() {
         List<OrderDetail> orderDetails = orderDetailRepository.findAllByStatus("Đơn hàng mới");
@@ -135,14 +141,18 @@ public class ShipperOrderImpl implements IShipperOrderService {
                     User newShipper = newShipperOptional.get();
                     newShipper.setIsActive(false);
                     shipperRepository.save(newShipper);
+
+                    // Create a single ShipperOrder for the store and order group
+                    ShipperOrder shipperOrder = new ShipperOrder();
+                    shipperOrder.setShipper(newShipper);
+                    shipperOrder.setStore(store);
+                    shipperOrder.setCreatedAt(LocalDateTime.now());
+                    StatusDelivery statusDelivery = statusDeliveryRepository.findByStatusName("Chưa nhận");
+                    System.out.println(statusDelivery);
+                    shipperOrder.setStatus(statusDelivery);
+                    shipperOrderRepository.save(shipperOrder);
+
                     for (OrderDetail orderDetail : storeOrderDetails) {
-                        ShipperOrder shipperOrder = new ShipperOrder();
-                        shipperOrder.setShipper(newShipper);
-                        shipperOrder.setStore(store);
-                        shipperOrder.setCreatedAt(LocalDateTime.now());
-                        StatusDelivery statusDelivery = statusDeliveryRepository.findByStatusName("Chưa nhận");
-                        shipperOrder.setStatus(statusDelivery);
-                        shipperOrderRepository.save(shipperOrder);
                         orderDetail.setShipperOrder(shipperOrder);
                         orderDetailRepository.save(orderDetail);
                         // cập nhật trạng thái của orderDetail
@@ -150,8 +160,7 @@ public class ShipperOrderImpl implements IShipperOrderService {
                         orderDetail.setStatus(statusOrder);
                         orderDetailRepository.save(orderDetail);
                     }
-                }
-                else {
+                } else {
                     System.out.println("Không tìm thấy shipper");
                     return ResponseEntity.badRequest().body(new APIRespone(false, "Không tìm thấy shipper", ""));
                 }
@@ -190,29 +199,49 @@ public class ShipperOrderImpl implements IShipperOrderService {
             }
         }
     }
-
+    @Transactional
     @Override
     public ResponseEntity<APIRespone> approveShipperOrder(Long shipperId, Long shipperOrderId, Boolean isAccepted) {
         ShipperOrder shipperOrder = shipperOrderRepository.findByIdandShipperId(shipperOrderId, shipperId);
         if (shipperOrder == null) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "No orders found for the specified shipper", ""));
         }
+
+        StatusDelivery statusDelivery;
+        User shipper = shipperOrder.getShipper();
+
         if (isAccepted) {
-            // shipper chấp nhận đơn hàng
-            StatusDelivery statusDelivery = statusDeliveryRepository.findByStatusName("Đã nhận");
+            // Shipper chấp nhận đơn hàng
+            statusDelivery = statusDeliveryRepository.findByStatusName("Đã nhận");
+            if (statusDelivery == null) {
+                return ResponseEntity.badRequest().body(new APIRespone(false, "Status not found", ""));
+            }
+
             shipperOrder.setStatus(statusDelivery);
             shipperOrder.setReceivedAt(LocalDateTime.now());
-            shipperOrderRepository.save(shipperOrder);
-            // cập nhật trạng thái của shipper
-            User shipper = shipperOrder.getShipper();
             shipper.setIsActive(true);
+            shipperOrderRepository.save(shipperOrder);
+            shipperRepository.save(shipper);
+
+            // Log the status to verify
+            System.out.println("Status after accepting: " + shipperOrder.getStatus().getStatusName());
+
             return ResponseEntity.ok(new APIRespone(true, "Shipper accepted the order", ""));
+
         } else {
-            // shipper từ chối đơn hàng
-            StatusDelivery statusDelivery = statusDeliveryRepository.findByStatusName("Đã từ chối");
+            // Shipper từ chối đơn hàng
+            statusDelivery = statusDeliveryRepository.findByStatusName("Đã từ chối");
+            if (statusDelivery == null) {
+                return ResponseEntity.badRequest().body(new APIRespone(false, "Status not found", ""));
+            }
+
             shipperOrder.setStatus(statusDelivery);
             shipperOrderRepository.save(shipperOrder);
-            // tìm shipper khác thay thế
+
+            // Log the status to verify
+            System.out.println("Status after rejecting: " + shipperOrder.getStatus().getStatusName());
+
+            // Tìm shipper khác gần nhất
             Store store = shipperOrder.getStore();
             Optional<User> newShipperOptional = shipperRepository.findNearestShippers(store.getLatitude(), store.getLongitude(), 1)
                     .stream()
@@ -221,9 +250,10 @@ public class ShipperOrderImpl implements IShipperOrderService {
             if (newShipperOptional.isPresent()) {
                 User newShipper = newShipperOptional.get();
                 newShipper.setIsActive(false);
-                shipperRepository.save(newShipper);
                 shipperOrder.setShipper(newShipper);
                 shipperOrderRepository.save(shipperOrder);
+                shipperRepository.save(newShipper);
+
                 return ResponseEntity.ok(new APIRespone(true, "Shipper đã từ chối, hệ thống đã tìm thấy shipper khác", ""));
             } else {
                 return ResponseEntity.badRequest().body(new APIRespone(false, "Không tìm thấy shipper khác", ""));
@@ -233,7 +263,7 @@ public class ShipperOrderImpl implements IShipperOrderService {
 
     @Override
     public ResponseEntity<APIRespone> updateStatusOrderDetail(Long shipperId, Long shipperOrderId, Long orderDetailId) {
-        ShipperOrder shipperOrder = (ShipperOrder) shipperOrderRepository.findByIdandShipperId(shipperOrderId, shipperId);
+        ShipperOrder shipperOrder = shipperOrderRepository.findByIdandShipperId(shipperOrderId, shipperId);
         if (shipperOrder == null) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "No orders found for the specified shipper", ""));
         }
@@ -244,11 +274,15 @@ public class ShipperOrderImpl implements IShipperOrderService {
         if (!orderDetail.getShipperOrder().getShipper().getId().equals(shipperId)) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "The OrderDetail is not being delivered by the specified shipper", ""));
         }
+        StatusOrder statusOrder = statusOrderRepository.findByStatusName("Đơn hàng đang giao");
+        if (statusOrder != null) {
+            orderDetail.setStatus(statusOrder);
+        } else {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "Status not found", ""));
+        }
+        orderDetailRepository.save(orderDetail);
         String status = orderDetail.getStatus().getStatusName();
-        System.out.println(status);
-
-        // Khởi tạo StatusOrder mới
-        StatusOrder statusOrder = null;
+        System.out.println(status);;
 
         // Cập nhật statusOrder dựa trên status hiện tại
         if (status.equals("Đơn hàng đã được xác nhận")) {
@@ -321,6 +355,7 @@ public class ShipperOrderImpl implements IShipperOrderService {
             orderRepository.save(order);
         }
         StatusDelivery statusDelivery = statusDeliveryRepository.findByStatusName("Đã giao hàng");
+        System.out.println(statusDelivery);
         shipperOrder.setStatus(statusDelivery);
         shipperOrder.setDeliveredAt(LocalDateTime.now());
         // cập nhật trạng thái của shipper

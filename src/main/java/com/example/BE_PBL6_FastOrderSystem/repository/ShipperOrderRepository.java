@@ -18,6 +18,6 @@ public interface ShipperOrderRepository extends JpaRepository<ShipperOrder, Long
 
     @Query("SELECT so FROM ShipperOrder so WHERE so.shipper.id = ?1 AND so.status.statusName= ?2")
     List<ShipperOrder> findAllByShipperIdAndStatus(Long shipperId, String status);
-    @Query("SELECT so FROM ShipperOrder so WHERE so.shipper.id = ?1")
+    @Query("SELECT so FROM ShipperOrder so WHERE so.id = ?1 AND so.shipper.id= ?2")
     ShipperOrder findByIdandShipperId(Long shipperOrderId, Long shipperId);
 }
