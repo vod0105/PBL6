@@ -109,6 +109,13 @@ const Navbar = () => {
           Cửa hàng
         </NavLink>
 
+        <NavLink
+          to="/test-ggmap"
+          className={({ isActive }) => (isActive ? 'active' : '')}
+        >
+          Test GGMAP
+        </NavLink>
+
       </ul>
       <div className="navbar-right">
         {
