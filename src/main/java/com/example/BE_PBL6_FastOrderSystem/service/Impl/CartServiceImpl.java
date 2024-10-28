@@ -54,36 +54,50 @@ public class CartServiceImpl implements ICartService {
         }
         Cart cartItem = cartItemRepository.findByUserIdAndProductIdAndSizeAndStoreId(userId, cartProductRequest.getProductId(), cartProductRequest.getSize(), cartProductRequest.getStoreId());
         if (cartItem != null) {
+          Double unitPrice = getPriceBasedProductOnSize(product, cartItem.getSize());
             cartItem.setQuantity(cartItem.getQuantity() + cartProductRequest.getQuantity());
-            // Calculate total price of cart item
-            if (product.getDiscountedPrice() != 0.0) {
-                cartItem.setTotalPrice(product.getDiscountedPrice() * cartItem.getQuantity());
-            } else {
-                cartItem.setTotalPrice(product.getPrice() * cartItem.getQuantity());
-            }
-
+            cartItem.setTotalPrice(unitPrice * cartItem.getQuantity());
         } else {
             cartItem = new Cart();
             cartItem.setUser(user);
             cartItem.setProduct(product);
             cartItem.setQuantity(cartProductRequest.getQuantity());
-            if (product.getDiscountedPrice() != 0.0) {
-                cartItem.setUnitPrice(product.getDiscountedPrice());
-            } else {
-                cartItem.setUnitPrice(product.getPrice());
-            }
-            cartItem.setTotalPrice(cartItem.getUnitPrice() * cartProductRequest.getQuantity());
 
             Size size = sizeRepository.findByName(cartProductRequest.getSize());
             if (size == null) {
                 return ResponseEntity.badRequest().body(new APIRespone(false, "Size not found", ""));
             }
             cartItem.setSize(size);
+
+            // Assuming you have a method to get price based on size
+            Double unitPrice = getPriceBasedProductOnSize(product, size);
+            cartItem.setUnitPrice(unitPrice);
+            cartItem.setTotalPrice(unitPrice * cartProductRequest.getQuantity());
+
             cartItem.setStoreId(cartProductRequest.getStoreId());
             cartItem.setStatus(cartProductRequest.getStatus());
         }
         cartItemRepository.save(cartItem);
         return ResponseEntity.ok(new APIRespone(true, "Add to cart successfully", cartItem.getCartId().toString()));
+    }
+    @Override
+    public Double getPriceBasedProductOnSize(Product product, Size size) {
+        Double basePrice = (product.getDiscountedPrice() != 0.0) ? product.getDiscountedPrice() : product.getPrice();
+
+        return switch (size.getName()) {
+            case "L" -> basePrice + 10000;
+            case "XL" -> basePrice + 20000;
+            default -> basePrice;
+        };
+    }
+    @Override
+    public Double getPriceBasedComboOnSize(Combo combo, Size size) {
+        Double basePrice = combo.getComboPrice();
+        return switch (size.getName()) {
+            case "L" -> basePrice + 10000;
+            case "XL" -> basePrice + 20000;
+            default -> basePrice;
+        };
     }
 
     @Override
@@ -138,21 +152,24 @@ public class CartServiceImpl implements ICartService {
             if (isDifferent) {
                 cartItem.setDrinkProducts(drinkProducts);
             }
+            Double unitPrice = getPriceBasedComboOnSize(combo, cartItem.getSize());
             cartItem.setQuantity(cartItem.getQuantity() + cartComboRequest.getQuantity());
-            cartItem.setTotalPrice(cartItem.getUnitPrice() * cartItem.getQuantity());
+            cartItem.setTotalPrice(unitPrice * cartItem.getQuantity());
+
         } else {
             cartItem = new Cart();
             cartItem.setUser(user);
             cartItem.setCombo(combo);
             cartItem.setDrinkProducts(drinkProducts);
             cartItem.setQuantity(cartComboRequest.getQuantity());
-            cartItem.setUnitPrice(combo.getComboPrice());
-            cartItem.setTotalPrice(combo.getComboPrice() * cartComboRequest.getQuantity());
             Size size = sizeRepository.findByName(cartComboRequest.getSize());
             if (size == null) {
                 return ResponseEntity.badRequest().body(new APIRespone(false, "Size not found", ""));
             }
             cartItem.setSize(size);
+            Double unitPrice = getPriceBasedComboOnSize(combo, size);
+            cartItem.setUnitPrice(unitPrice);
+            cartItem.setTotalPrice(unitPrice * cartComboRequest.getQuantity());
             cartItem.setStoreId(cartComboRequest.getStoreId());
             cartItem.setStatus(cartComboRequest.getStatus());
         }

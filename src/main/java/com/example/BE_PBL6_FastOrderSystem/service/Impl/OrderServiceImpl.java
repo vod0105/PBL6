@@ -43,6 +43,25 @@ public class OrderServiceImpl implements IOrderService {
         return orderCode;
     }
     @Override
+    public Double getPriceBasedProductOnSize(Product product, Size size) {
+        Double basePrice = (product.getDiscountedPrice() != 0.0) ? product.getDiscountedPrice() : product.getPrice();
+
+        return switch (size.getName()) {
+            case "L" -> basePrice + 10000;
+            case "XL" -> basePrice + 20000;
+            default -> basePrice;
+        };
+    }
+    @Override
+    public Double getPriceBasedComboOnSize(Combo combo, Size size) {
+        Double basePrice = combo.getComboPrice();
+        return switch (size.getName()) {
+            case "L" -> basePrice + 10000;
+            case "XL" -> basePrice + 20000;
+            default -> basePrice;
+        };
+    }
+    @Override
     public ResponseEntity<APIRespone> findNearestShipper(Double latitude, Double longitude, int limit) {
         List<User> nearestShippers = shipperRepository.findNearestShippers(latitude, longitude, limit);
         if (nearestShippers.isEmpty()) {
@@ -57,7 +76,6 @@ public class OrderServiceImpl implements IOrderService {
     @Transactional
     @Override
     public ResponseEntity<APIRespone> processOrder(Long userId, String paymentMethod, List<Long> cartIds, String deliveryAddress, Double longitude, Double latitude, String orderCode, String discountCode) {
-        System.out.println("Vao 1");
         List<Cart> cartItems = cartIds.stream()
                 .flatMap(cartId -> cartItemRepository.findByCartId(cartId).stream())
                 .filter(cartItem -> cartItem.getUser().getId().equals(userId))
@@ -226,11 +244,13 @@ public class OrderServiceImpl implements IOrderService {
         orderDetail.setQuantity(quantity);
 
         if (product != null) {
-            orderDetail.setUnitPrice(product.getPrice());
-            orderDetail.setTotalPrice(Double.valueOf(product.getPrice() * quantity));
-        } else if (combo != null) {
-            orderDetail.setUnitPrice(combo.getComboPrice());
-            orderDetail.setTotalPrice(Double.valueOf(combo.getComboPrice() * quantity));
+          Double unitPrice = getPriceBasedProductOnSize(product, s);
+            orderDetail.setUnitPrice(unitPrice);
+            orderDetail.setTotalPrice(unitPrice * quantity);
+        } else {
+            Double unitPrice = getPriceBasedComboOnSize(combo, s);
+            orderDetail.setUnitPrice(unitPrice);
+            orderDetail.setTotalPrice(unitPrice * quantity);
         }
         // Thiết lập thông tin nước uống nếu có
         if (drinkId != null && !drinkId.isEmpty()) {
@@ -251,15 +271,13 @@ public class OrderServiceImpl implements IOrderService {
         List<OrderDetail> orderDetails = new ArrayList<>();
         orderDetails.add(orderDetail);
         // Calculate total amount
-        Long totalAmount = calculateOrderNowAmount(productId, comboId, quantity, storeId, latitude, longitude, discountCode);
+        Long totalAmount = calculateOrderNowAmount(productId, comboId, quantity, storeId, latitude, longitude, discountCode, size);
         if (totalAmount == null) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "Failed to calculate total amount", ""));
         }
 
         order.setTotalAmount(Double.valueOf(totalAmount));
         order.setOrderDetails(orderDetails);
-
-
         // Nhóm các order detail theo cửa hàng
         if (!deliveryAddress.equalsIgnoreCase("Mua tại cửa hàng")) {
             // Group OrderDetail objects by their store
@@ -307,7 +325,7 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public Long calculateOrderNowAmount(Long productId, Long comboId, int quantity, Long storeId, Double latitude, Double longitude, String discountCode) {
+    public Long calculateOrderNowAmount(Long productId, Long comboId, int quantity, Long storeId, Double latitude, Double longitude, String discountCode, String size) {
         long totalAmount = 0;
         // Tính tổng số tiền từ sản phẩm
         if (productId != null) {
@@ -316,7 +334,9 @@ public class OrderServiceImpl implements IOrderService {
                 return null;
             }
             Product product = productOptional.get();
-            totalAmount += Math.round(product.getPrice() * quantity);
+            Size s = sizeRepository.findByName(size);
+            Double unitPrice = getPriceBasedProductOnSize(product, s);
+            totalAmount += Math.round(unitPrice * quantity);
         }
 
         // Tính tổng số tiền từ combo
@@ -326,7 +346,9 @@ public class OrderServiceImpl implements IOrderService {
                 return null;
             }
             Combo combo = comboOptional.get();
-            totalAmount += Math.round(combo.getComboPrice() * quantity);
+            Size s = sizeRepository.findByName(size);
+            Double unitPrice = getPriceBasedComboOnSize(combo, s);
+            totalAmount += Math.round(unitPrice * quantity);
         }
 
         // Kiểm tra mã giảm giá
@@ -338,7 +360,6 @@ public class OrderServiceImpl implements IOrderService {
             }
             DiscountCode discountCode1 = discountCodeOptional.get(0);
             discountCode1.setStatus(false);
-            System.out.println("Discount Code: " + discountCode1);
             totalAmount -= Math.round(totalAmount * discountCode1.getDiscountPercent() / 100);
         }
 

@@ -80,7 +80,7 @@ public class UserOrderController {
         String discountCode = orderRequest.getDiscountCode();
         orderRequest.setOrderId(orderCode);
         orderRequest.setUserId(userId);
-        orderRequest.setAmount(orderService.calculateOrderNowAmount(productId, comboId, quantity, storeId, latitude, longitude, discountCode));
+        orderRequest.setAmount(orderService.calculateOrderNowAmount(productId, comboId, quantity, storeId, latitude, longitude, discountCode, size));
         if ("ZALOPAY".equalsIgnoreCase(paymentMethod)) {
             orderRequest.setOrderId(orderCode);
             orderRequest.setUserId(userId);

@@ -1,8 +1,6 @@
 package com.example.BE_PBL6_FastOrderSystem.service;
 
-import com.example.BE_PBL6_FastOrderSystem.entity.Cart;
-import com.example.BE_PBL6_FastOrderSystem.entity.Order;
-import com.example.BE_PBL6_FastOrderSystem.entity.Store;
+import com.example.BE_PBL6_FastOrderSystem.entity.*;
 import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
 import org.springframework.http.ResponseEntity;
 
@@ -10,6 +8,10 @@ import java.util.List;
 
 public interface IOrderService {
     String generateUniqueOrderCode();
+
+    Double getPriceBasedProductOnSize(Product product, Size size);
+
+    Double getPriceBasedComboOnSize(Combo combo, Size size);
 
     ResponseEntity<APIRespone> findNearestShipper(Double latitude, Double longitude, int limit);
 
@@ -19,7 +21,7 @@ public interface IOrderService {
 
     Double calculateShippingFee(Order order, Store store);
 
-    Long calculateOrderNowAmount(Long productId, Long comboId, int quantity, Long storeId, Double Latitude, Double Longitude, String DiscountCode);
+    Long calculateOrderNowAmount(Long productId, Long comboId, int quantity, Long storeId, Double Latitude, Double Longitude, String DiscountCode, String size);
 
 
     Long calculateOrderAmount(List<Long> cartIds, Double latitude, Double longitude, String discountCode);

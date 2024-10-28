@@ -5,6 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Entity
@@ -35,6 +36,13 @@ public class Product {
     private Boolean bestSale;
     @ManyToMany(mappedBy = "products")
     private List<Combo> combos = new ArrayList<>();
+//    @ElementCollection // đây là một collection chứa các phần tử đơn giản
+//    @MapKeyColumn(name = "size") // đây là tên cột chứa key của map
+//    @Column(name = "price") // đây là tên cột chứa value của map
+//    private Map<String,Double> sizePrice;
+//    public Double getPriceForSize(Size size){
+//        return sizePrice.get(size.getName());
+//    }
 
     @PrePersist
     protected void onCreate() {
