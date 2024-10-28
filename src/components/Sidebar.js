@@ -232,6 +232,10 @@ const Sidebar = () => {
           {userRole === "ROLE_OWNER" && (
             <>
               {" "}
+              <Link className="item" to="/owner/dashboard">
+                <BiSolidDashboard className="icon" />
+                <p>Dashboard</p>
+              </Link>
               <div className="item" onClick={() => toggleSubMenu("oproduct")}>
                 {/* <BiLogoProductHunt className="icon icon-item" /> */}
                 <Link to="/admin/product" className="linkitem">

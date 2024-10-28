@@ -41,18 +41,20 @@
   display: flex;
   gap: 20px;
   user-select: none;
+  width: 100%;
 }
 .dashboard-content {
   background-color: #fff;
   flex: 1;
   height: 97vh;
-  width: 80%;
+  width: 100%;
   border-radius: 20px;
   padding: 2rem;
   display: flex;
   gap: 1.5rem;
   justify-content: space-between;
   z-index: 2;
+  margin: 0 auto;
 }
 .logo .icon {
   font-size: 14rem;

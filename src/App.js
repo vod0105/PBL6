@@ -450,7 +450,6 @@ const App = () => {
                 ) : (
                   <>
                     <div className="dashboard">
-                      {/* <div className="side-bar collapse"><Sidebar /></div> */}
                       <Sidebar />
                       <div className="dashboard-content">
                         <OwnerDasboard />

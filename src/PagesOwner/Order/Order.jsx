@@ -102,17 +102,26 @@ const Order = ({ url }) => {
           }}
         >
           <h1 className="h-product">List Order</h1>
-          <div className="store-search">
-            <input
-              type="text"
-              placeholder="Search Name Product"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              style={{
-                padding: "5px 15px",
-                outlineColor: "tomato",
-              }}
-            />
+          <div className="order__action">
+            <section className="order__action--cover" s>
+              <label htmlFor="">Tìm kiếm</label>
+              <input
+                type="text"
+                placeholder="Search Name Product"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{
+                  padding: "5px 15px",
+                  outlineColor: "tomato",
+                }}
+              />
+            </section>
+            <select name="order_select" id="" className="order_select">
+              <option value="">---Chọn-----</option>
+              <option value="">Đơn hàng đang chờ</option>
+              <option value="">Lịch sử xác nhận</option>
+              <option value="">Đơn hàng đã hủy</option>
+            </select>
           </div>
         </div>
         <table
