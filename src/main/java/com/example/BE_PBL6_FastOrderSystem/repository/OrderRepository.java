@@ -4,6 +4,7 @@ import com.example.BE_PBL6_FastOrderSystem.model.Order;
 import com.example.BE_PBL6_FastOrderSystem.model.OrderDetail;
 import com.example.BE_PBL6_FastOrderSystem.model.StatusOrder;
 
+import com.example.BE_PBL6_FastOrderSystem.model.Store;
 import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
 import com.example.BE_PBL6_FastOrderSystem.response.OrderStore;
 import org.jooq.impl.QOM;
@@ -66,4 +67,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "WHERE o.orderCode = ?1 AND od.store.storeId = ?2")
     Optional<List<OrderDetail>> findOrderDetailsByOrderCodeAndStore(String orderCode, Long storeId);
 
+    @Query("SELECT o FROM Order o JOIN o.orderDetails od WHERE od.store.storeId = ?1 and od.status.statusName = ?2")
+    Page<Order> findOrdersWithStatusAndStores(@Param("storeId") Long storeId, String statusName,Pageable pageable);
 }

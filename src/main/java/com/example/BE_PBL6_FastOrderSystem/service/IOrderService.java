@@ -4,6 +4,7 @@ import com.example.BE_PBL6_FastOrderSystem.model.Cart;
 import com.example.BE_PBL6_FastOrderSystem.model.Order;
 import com.example.BE_PBL6_FastOrderSystem.model.OrderDetail;
 import com.example.BE_PBL6_FastOrderSystem.model.Size;
+import com.example.BE_PBL6_FastOrderSystem.response.APILazyOrders;
 import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
 import com.example.BE_PBL6_FastOrderSystem.response.OrderResponse;
 import org.springframework.http.ResponseEntity;
@@ -65,4 +66,8 @@ public interface IOrderService {
     ResponseEntity<APIRespone> getOrderDetailOfStoreForOwner(Long ownerId, String orderCode);
 
     ResponseEntity<APIRespone> getAllOrderDetailOfStoreForOwner(Long ownerId);
+
+    ResponseEntity<APILazyOrders> getAllOrderByStatusOfStore1(String statusName, Long ownerId, int page, int size);
+
+    ResponseEntity<APIRespone> getOrderDetails(Long ownerId, String order_code);
 }

@@ -1,6 +1,7 @@
 package com.example.BE_PBL6_FastOrderSystem.controller.Onwer;
 
 import com.example.BE_PBL6_FastOrderSystem.request.UpdateQuantityRequest;
+import com.example.BE_PBL6_FastOrderSystem.response.APILazyOrders;
 import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
 import com.example.BE_PBL6_FastOrderSystem.response.OrderResponse;
 import com.example.BE_PBL6_FastOrderSystem.security.user.FoodUserDetails;
@@ -46,5 +47,19 @@ public class OwnerOrderController {
         Long ownerId = FoodUserDetails.getCurrentUserId();
         return orderService.getAllOrderByStatusOfStore(status,ownerId);
     }
+    @GetMapping("/order/status")
+    public ResponseEntity<APILazyOrders> getOrders(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam String status
+           ) {
+        Long ownerId = FoodUserDetails.getCurrentUserId();
+        return orderService.getAllOrderByStatusOfStore1(status, ownerId, page, size);
+    }
 
+    @GetMapping("get/details")
+    public ResponseEntity<APIRespone> getOrderDetails(@RequestParam String orderCode) {
+        Long ownerId = FoodUserDetails.getCurrentUserId();
+        return orderService.getOrderDetails(ownerId,orderCode);
+    }
 }

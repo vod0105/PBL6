@@ -48,4 +48,5 @@ public class OwnerDisplayController {
         Long OwnerId = FoodUserDetails.getCurrentUserId();
         return orderService.getCountProductSoleStore(OwnerId,module);
     }
+
 }
