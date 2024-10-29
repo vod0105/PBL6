@@ -14,6 +14,8 @@ public class OrderDetailComboResponse {
     private String drinkId;
     private Long storeId;
     private String status;
+    private String image;
+    private String comboName;
 
     public OrderDetailComboResponse(OrderDetail orderDetail) {
         this.orderDetailId = orderDetail.getOrderDetailId();
@@ -25,5 +27,7 @@ public class OrderDetailComboResponse {
         this.drinkId = String.valueOf(orderDetail.getDrinkProduct() != null ? orderDetail.getDrinkProduct().getProductId() : null);
         this.storeId = orderDetail.getStore() != null ? orderDetail.getStore().getStoreId() : null;
         this.status = orderDetail.getStatus().getStatusName();
+        this.image = orderDetail.getCombo().getImage();
+        this.comboName = orderDetail.getCombo().getComboName();
     }
 }

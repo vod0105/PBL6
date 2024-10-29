@@ -19,6 +19,8 @@ public class OrderDetailProductResponse {
     private String drinkId;
     private Long storeId;
     private String status;
+    private String nameProduct;
+    private String image;
 
     public OrderDetailProductResponse(OrderDetail orderDetail) {
         this.orderDetailId = orderDetail.getOrderDetailId();
@@ -35,5 +37,7 @@ public class OrderDetailProductResponse {
         this.drinkId = String.valueOf(orderDetail.getDrinkProduct() != null ? orderDetail.getDrinkProduct().getProductId() : null);
         this.storeId = orderDetail.getStore() != null ? orderDetail.getStore().getStoreId() : null;
         this.status = orderDetail.getStatus().getStatusName();
+        this.nameProduct = orderDetail.getProduct().getProductName();
+        this.image = orderDetail.getProduct().getImage();
     }
 }
