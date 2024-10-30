@@ -457,6 +457,23 @@ public class ProductServiceImpl implements IProductService {
         return new ResponseEntity<>(new APIRespone(true, "Product quantity updated successfully", ""), HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<APIRespone> getDrinksByListStoreId(List<Long> storeIds) {
+        Set<ProductResponse> productResponses = new HashSet<>();
+        for (Long storeId : storeIds) {
+            storeRepository.findById(storeId).ifPresent(store -> {
+                List<ProductResponse> products = productRepository.findByStoreId(storeId).stream()
+                        .filter(product -> product.getCategory().getCategoryName().equals("Drinks"))
+                        .map(ResponseConverter::convertToProductResponse)
+                        .toList();
+                productResponses.addAll(products);
+            });
+        }
+        if (productResponses.isEmpty()) {
+            return new ResponseEntity<>(new APIRespone(false, "No drinks found for the provided store IDs", ""), HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(new APIRespone(true, "Success", new ArrayList<>(productResponses)));
+    }
 
 
 }

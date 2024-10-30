@@ -39,4 +39,6 @@ public interface IProductService {
     ResponseEntity<APIRespone> applyProductsToStoreOfOwner(Long managerId, Long storeId, List<Long> productIds, List<Integer> quantity);
 
     ResponseEntity<APIRespone> updateQuantityProductOfOwner(Long managerId, Long storeId, Long productId, int quantity);
+
+    ResponseEntity<APIRespone> getDrinksByListStoreId(List<Long> storeIds);
 }

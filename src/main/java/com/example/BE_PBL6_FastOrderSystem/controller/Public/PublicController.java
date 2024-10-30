@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -77,6 +78,12 @@ public class PublicController {
       public ResponseEntity<APIRespone> getCombosByStoreId(@PathVariable("storeId") Long storeId) {
          return comboService.getCombosByStoreId(storeId);
       }
+    @GetMapping("/products/drinks")
+    public ResponseEntity<APIRespone> getDrinksByListStoreId(
+            @RequestParam("storeIds") List<Long> storeIds) {
+        return productService.getDrinksByListStoreId(storeIds);
+    }
+
     @GetMapping("/stores/all")
     public ResponseEntity<APIRespone> getStores() {
          return storeService.getAllStores();

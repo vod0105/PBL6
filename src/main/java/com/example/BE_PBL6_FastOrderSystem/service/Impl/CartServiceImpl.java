@@ -219,7 +219,7 @@ public class CartServiceImpl implements ICartService {
         if (currentQuantity + quantity <= 0) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "Quantity must be greater than 0", ""));
         }
-        cartItem.setQuantity(currentQuantity + quantity);
+        cartItem.setQuantity(quantity);
         cartItem.setTotalPrice(cartItem.getUnitPrice() * cartItem.getQuantity());
         cartItemRepository.save(cartItem);
         return ResponseEntity.ok(new APIRespone(true, "Update cart item successfully", ""));
