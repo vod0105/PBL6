@@ -10,7 +10,7 @@ const Login = ({ url }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const { setIsAuthenticated, setUserData, userData } =
+  const { setIsAuthenticated, setUserData, setIdU } =
     useContext(StoreContext);
 
   const handleSubmit = async (event) => {
@@ -23,8 +23,11 @@ const Login = ({ url }) => {
       console.log("REsponse OWNER:", response);
       const access_token = response.data.data.token;
       const role = response.data.data.roles[0];
+      const id = response.data.data.id;
       localStorage.setItem("access_token", access_token);
       localStorage.setItem("role", role);
+      localStorage.setItem("id",id);
+      setIdU(id);
       setIsAuthenticated(true);
       setUserData(response.data.data.roles[0]);
       // console.log("userData", userData);

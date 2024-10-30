@@ -34,6 +34,7 @@ const AutoLogout = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("role");
     localStorage.removeItem("loginTime");
+    localStorage.removeItem("id");
     setIsAuthenticated(false);
 
     // Điều hướng về trang đăng nhập

@@ -7,7 +7,7 @@ import Login from "./pages/Login/Login";
 import "./App.css";
 import Register from "./pages/Register/Register";
 import { StoreContext } from "./context/StoreContext";
-
+import ChatButton from "./pages/Chatbox/ChatButton"
 import Store from "./pages/store/Store";
 
 import Add from "./pages/store/Add";
@@ -42,6 +42,10 @@ import StaffList from "./PagesOwner/Staff/Staff";
 import OwnerAddProductToStorev2 from "./PagesOwner/Product/OwnerAddproductToStore";
 
 const App = () => {
+  const [showChat, setShowChat] = useState(false);
+  const [product, setProduct] = useState(null);
+  const [st, setST] = useState(null);
+
   // const isAuthenticated = !!localStorage.getItem("access_token"); // Kiểm tra nếu có token
   const { isAuthenticated, setIsAuthenticated, url, setUrl } =
     useContext(StoreContext);
@@ -61,6 +65,18 @@ const App = () => {
   return (
     <div className="app">
       <AutoLogout />
+      {
+        isAuthenticated &&(
+          <ChatButton 
+          showChat = {showChat}
+          setShowChat = {setShowChat}
+          product = {product}
+          setProduct = {setProduct}
+          st = {st}
+          url={url}
+          />
+        )
+      }
       <Routes>
         {userRole === "ROLE_ADMIN" && (
           <>
