@@ -879,7 +879,7 @@ public class OrderServiceImpl implements IOrderService {
     public ResponseEntity<APIRespone> getAllOrderDetailOfStoreForOwner(Long ownerId) {
         List<Order> orders = orderRepository.findAll();
         if (orders.isEmpty()) {
-            return ResponseEntity.badRequest().body(new APIRespone(false, "No order found", ""));
+            return ResponseEntity.ok(new APIRespone(true, "No order found", ""));
         }
         List<Store> stores = storeRepository.findAllByManagerId(ownerId);
         if (stores.isEmpty()) {
@@ -916,6 +916,8 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public ResponseEntity<APILazyOrders> getAllOrderByStatusOfStore1(String statusName, Long ownerId, int page, int size) {
+        System.out.println(page);
+        System.out.println((size));
         StatusOrder statusOrder = statusOrderRepository.findByStatusName(statusName);
 
         // Tìm các cửa hàng của chủ sở hữu
@@ -946,7 +948,7 @@ public class OrderServiceImpl implements IOrderService {
             }
         }
 
-        orderStores.removeIf(os -> !os.getStatus().equals(statusName));
+//        orderStores.removeIf(os -> !os.getStatus().equals(statusName));
 
         return ResponseEntity.ok(new APILazyOrders(true, totalPages, "Success", orderStores));
     }

@@ -85,6 +85,14 @@ public class ChatController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PutMapping("/update/read")
+    public ResponseEntity<APIResponseChat<String>> updateRead(@RequestParam Long userId){
+        System.out.println("updateRead");
+        System.out.println(userId);
+        APIResponseChat<String> read = chatService.updateReadUser(userId);
+         return ResponseEntity.ok(read);
+    }
+
     @GetMapping("/mark-messages-as-read/{userId}")
     public ResponseEntity<APIResponseChat<String>> markMessagesAsRead(@PathVariable Long userId) {
         chatService.markMessagesAsReadForUser(userId);

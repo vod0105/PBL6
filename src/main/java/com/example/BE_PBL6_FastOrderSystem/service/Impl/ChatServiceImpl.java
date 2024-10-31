@@ -5,13 +5,12 @@ import com.example.BE_PBL6_FastOrderSystem.model.User;
 import com.example.BE_PBL6_FastOrderSystem.repository.ChatRepository;
 import com.example.BE_PBL6_FastOrderSystem.repository.UserRepository;
 import com.example.BE_PBL6_FastOrderSystem.request.ChatRequest;
-import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
+import com.example.BE_PBL6_FastOrderSystem.response.APIResponseChat;
 import com.example.BE_PBL6_FastOrderSystem.response.ChatResponse;
 import com.example.BE_PBL6_FastOrderSystem.response.UserResponse;
 import com.example.BE_PBL6_FastOrderSystem.security.user.FoodUserDetails;
 import com.example.BE_PBL6_FastOrderSystem.service.IChatService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -175,4 +174,21 @@ public class ChatServiceImpl implements IChatService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public APIResponseChat<String> updateReadUser(Long userId) {
+        Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isEmpty()) {
+            return new APIResponseChat<>("Not found user", 1, "Update failed");
+        }
+        User user = userOpt.get();
+        User userCurrent = getCurrentUserId();
+        System.out.println(user.getId());
+        System.out.println(userCurrent.getId());
+        try {
+            int sl = chatRepository.updateMessagesToOnline(userCurrent.getId(), user.getId());
+            return new APIResponseChat<>(sl+"", 0, "Success");
+        } catch (Exception e) {
+            return new APIResponseChat<>(e.getMessage(), 1, "Update failed");
+        }
+    }
 }

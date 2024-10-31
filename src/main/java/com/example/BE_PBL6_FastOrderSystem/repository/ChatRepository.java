@@ -34,4 +34,9 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
     @Transactional
     @Query("UPDATE Chat m SET m.isRead = true WHERE m.receiver = :receiver AND m.sender = :sender AND m.isRead = false")
     void markMessagesAsRead(@Param("receiver") User receiver, @Param("sender") User sender);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Chat m SET m.isRead = true WHERE m.isRead = false AND m.receiver.id = :sender AND m.sender.id= :user")
+    int updateMessagesToOnline(@Param("sender") Long sender,@Param("user") Long user);
 }

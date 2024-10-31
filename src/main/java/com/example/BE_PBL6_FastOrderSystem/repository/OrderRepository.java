@@ -67,6 +67,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "WHERE o.orderCode = ?1 AND od.store.storeId = ?2")
     Optional<List<OrderDetail>> findOrderDetailsByOrderCodeAndStore(String orderCode, Long storeId);
 
-    @Query("SELECT o FROM Order o JOIN o.orderDetails od WHERE od.store.storeId = ?1 and od.status.statusName = ?2")
-    Page<Order> findOrdersWithStatusAndStores(@Param("storeId") Long storeId, String statusName,Pageable pageable);
+    @Query("SELECT distinct o FROM Order o JOIN o.orderDetails od WHERE od.store.storeId = ?1 and od.status.statusName = ?2")
+    Page<Order> findOrdersWithStatusAndStores(Long storeId, String statusName,Pageable pageable);
 }
