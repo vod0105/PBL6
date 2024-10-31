@@ -33,7 +33,7 @@ public class OrderServiceImpl implements IOrderService {
     private final StatusOrderRepository statusOrderRepository;
     private final ShippingFeeRepository shippingFeeRepository;
     private final ShipperRepository shipperRepository;
-    private final DiscountCodeRepository discountCodeRepository;
+    private final VoucherRepository discountCodeRepository;
     public String generateUniqueOrderCode() {
         Random random = new Random();
         String orderCode;
@@ -354,13 +354,12 @@ public class OrderServiceImpl implements IOrderService {
         // Kiểm tra mã giảm giá
         if (discountCode != null) {
             LocalDateTime now = LocalDateTime.now();
-            List<DiscountCode> discountCodeOptional = discountCodeRepository.findByStartDateBeforeAndEndDateAfterAndStatus(now);
-            if (discountCodeOptional.isEmpty()) {
+            List<Voucher> voucherOptional = discountCodeRepository.findByStartDateBeforeAndEndDateAfter(now);
+            if (voucherOptional.isEmpty()) {
                 return null;
             }
-            DiscountCode discountCode1 = discountCodeOptional.get(0);
-            discountCode1.setStatus(false);
-            totalAmount -= Math.round(totalAmount * discountCode1.getDiscountPercent() / 100);
+            Voucher voucher1 = voucherOptional.get(0);
+            totalAmount -= Math.round(totalAmount * voucher1.getDiscountPercent() / 100);
         }
 
         // Tính phí giao hàng
@@ -392,12 +391,11 @@ public Long calculateOrderAmount(List<Long> cartIds, Double latitude, Double lon
     // Kiểm tra mã giảm giá
     if (discountCode != null) {
         LocalDateTime now = LocalDateTime.now();
-        List<DiscountCode> discountCodeOptional = discountCodeRepository.findByStartDateBeforeAndEndDateAfterAndStatus(now);
+        List<Voucher> voucherOptional = discountCodeRepository.findByStartDateBeforeAndEndDateAfter(now);
 
-        if (!discountCodeOptional.isEmpty()) {
-            DiscountCode discountCode1 = discountCodeOptional.get(0);
-            discountCode1.setStatus(false); // Cập nhật status nếu cần
-            totalAmount -= Math.round(totalAmount * discountCode1.getDiscountPercent() / 100);
+        if (!voucherOptional.isEmpty()) {
+            Voucher voucher1 = voucherOptional.get(0);
+            totalAmount -= Math.round(totalAmount * voucher1.getDiscountPercent() / 100);
         } else {
             System.out.println("Discount code not found or expired");
         }

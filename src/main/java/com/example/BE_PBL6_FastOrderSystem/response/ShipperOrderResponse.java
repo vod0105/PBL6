@@ -23,6 +23,7 @@ public class ShipperOrderResponse {
     private Long userId;
     private String fullName;
     private String phone;
+    private Integer rewardPoints;
     private LocalDateTime orderDate;
     private Double totalAmount;
     private Double shippingFee;
@@ -46,6 +47,7 @@ public class ShipperOrderResponse {
         this.userId = shipperOrder.getOrderDetails().get(0).getOrder().getUser().getId();
         this.fullName = shipperOrder.getOrderDetails().get(0).getOrder().getUser().getFullName();
         this.phone = shipperOrder.getOrderDetails().get(0).getOrder().getUser().getPhoneNumber();
+        this.rewardPoints = shipperOrder.getOrderDetails().get(0).getOrder().getUser().getRewardPoints();
         this.orderDate = shipperOrder.getOrderDetails().get(0).getOrder().getOrderDate();
         this.totalAmount = shipperOrder.getOrderDetails().stream()
                 .filter(orderDetail -> orderDetail.getStore().getStoreId().equals(this.storeId))

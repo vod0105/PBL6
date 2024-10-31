@@ -23,6 +23,7 @@ public class PublicController {
     private final IStatusOrderService statusOrderService;
     private final IRateService rateService;
     private final IUserService userService;
+    private final IVoucherService voucherService;
 
     private final IOrderService orderService;
     @GetMapping("/categories/all")
@@ -138,5 +139,14 @@ public class PublicController {
     @GetMapping("/user/search/{keyname}")
     public ResponseEntity<APIRespone> searchUser(@PathVariable String keyname) {
         return userService.searchByName(keyname);
+    }
+    @GetMapping("/voucher/all")
+    public ResponseEntity<APIRespone> getAllVoucher() {
+        return voucherService.getAllDiscountCode();
+
+    }
+    @GetMapping("/voucher/{storeId}")
+    public ResponseEntity<APIRespone> getVoucherByStoreId(@PathVariable("storeId") Long storeId) {
+        return voucherService.getVouchersByStoreId(storeId);
     }
 }

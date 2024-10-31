@@ -5,8 +5,11 @@ import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "users", uniqueConstraints = {
@@ -41,6 +44,9 @@ public class User {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Boolean accountLocked;
+    private Integer rewardPoints;
+    @OneToMany(mappedBy = "user")
+    private List<UserVoucher> vouchers;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;

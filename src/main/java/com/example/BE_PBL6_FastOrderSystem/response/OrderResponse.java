@@ -35,7 +35,7 @@ public class OrderResponse {
         this.deliveryAddress = order.getDeliveryAddress();
         this.createdAt = order.getCreatedAt();
         this.updatedAt = order.getUpdatedAt();
-        this.discountCode = (order.getDiscountCode() != null) ? order.getDiscountCode().getCode() : "Unknown Discount Code";
+        this.discountCode = (order.getVoucher() != null) ? order.getVoucher().getCode() : "Unknown Discount Code";
         this.isFeedBack = order.isFeedBack();
         this.orderDetails = order.getOrderDetails().stream().map(OrderDetailResponse::new).collect(Collectors.toList());
     }

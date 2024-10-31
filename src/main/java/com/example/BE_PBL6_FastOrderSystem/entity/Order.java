@@ -36,7 +36,7 @@ public class Order {
     private boolean FeedBack;
     @ManyToOne
     @JoinColumn(name = "discount_code_id")
-    private DiscountCode discountCode;
+    private Voucher voucher;
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -64,7 +64,7 @@ public class Order {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", isFeedBack=" + FeedBack +
-                ", discountCode=" + discountCode +
+                ", voucher=" + voucher +
                 '}';
     }
 }

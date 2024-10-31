@@ -5,13 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DiscountResponse {
-    private Long promoCodeId;
-    private String promoCode;
+public class VoucherResponse {
+    private Long voucherId;
+    private List<Long> storeId;
+    private String code;
     private Double discountPercent;
     private String description;
     private LocalDateTime startDate;

@@ -12,4 +12,5 @@ public class ComboRequest {
     private Double price;
     private MultipartFile image;
     private String description;
+    private Integer numberDrinks;
 }

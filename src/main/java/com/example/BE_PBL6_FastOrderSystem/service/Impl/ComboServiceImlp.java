@@ -73,6 +73,7 @@ public class ComboServiceImlp implements IComboService {
             throw new RuntimeException(e);
         }
         combo.setDescription(comboRequest.getDescription());
+        combo.setNumberDrinks(comboRequest.getNumberDrinks());
         comboRepository.save(combo);
        return ResponseEntity.status(HttpStatus.CREATED).body(new APIRespone(true, "Combo added successfully", ""));
     }
@@ -95,6 +96,7 @@ public class ComboServiceImlp implements IComboService {
               }
        }
         combo.setDescription(comboRequest.getDescription());
+        combo.setNumberDrinks(comboRequest.getNumberDrinks());
         comboRepository.save(combo);
         return ResponseEntity.ok(new APIRespone(true, "Combo updated successfully", ""));
     }

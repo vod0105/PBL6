@@ -6,8 +6,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class DiscountCodeRequest {
-    private String promoCode;
+public class VoucherRequest {
     private Double discountPercent;
     private String description;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

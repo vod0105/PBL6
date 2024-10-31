@@ -338,6 +338,7 @@ public class ShipperOrderImpl implements IShipperOrderService {
         // cập nhật trạng thái của shipper
         User shipper = shipperOrder.getShipper();
         shipper.setIsActive(true);
+        shipper.setRewardPoints(shipper.getRewardPoints() + 12);
         shipperRepository.save(shipper);
         shipperOrderRepository.save(shipperOrder);
         return ResponseEntity.ok(new APIRespone(true, "Order delivered successfully", ""));
