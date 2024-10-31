@@ -933,7 +933,7 @@ public class OrderServiceImpl implements IOrderService {
         Page<Order> pagedOrders = orderRepository.findOrdersWithStatusAndStores(store.getStoreId(), statusName, pageable);
 
         if (pagedOrders.isEmpty()) {
-            return ResponseEntity.badRequest().body(new APILazyOrders(false, 0, "No order found", ""));
+            return ResponseEntity.ok(new APILazyOrders(true, 0, "No order found", ""));
         }
         long totalElements = pagedOrders.getTotalElements(); // Tổng số bản ghi
         int totalPages = pagedOrders.getTotalPages(); // Tổng số trang
