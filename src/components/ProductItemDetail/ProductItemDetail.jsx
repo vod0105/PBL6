@@ -193,9 +193,9 @@ const ProductItemDetail = () => {
                     <p>{comment.comment}</p>
                   </div>
                   <div className="review-images-container">
-                    {comment.imageRatings.map((image, imgIndex) => (
-                      <img key={imgIndex} src={'data:image/png;base64,' + image} alt={`Review image ${imgIndex}`} className="review-image" />
-                    ))}
+                  {comment.imageRatings && Array.isArray(comment.imageRatings) && comment.imageRatings.map((image, imgIndex) => (
+    <img key={imgIndex} src={'data:image/png;base64,' + image} alt={`Review image ${imgIndex}`} className="review-image" />
+  ))}
                   </div>
                   <p className="comment-date">{formatDate(comment.createdAt)}</p>
                 </div>

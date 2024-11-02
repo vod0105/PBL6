@@ -67,7 +67,7 @@ const loginUser = (phonenumber, password) => {
         try {
             const res = await loginUserService(phonenumber, password);
             const isSuccess = res && res.data ? res.data.success : false;
-
+            // console.log("res login: ",res);
             if (isSuccess) {
                 dispatch(loginUserSuccess(res.data.data));
                 localStorage.setItem("token", res.data.data.token);

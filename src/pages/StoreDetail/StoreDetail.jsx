@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import './StoreDetail.scss'
 import test_product from "../../assets/food-yummy/product1.jpg";
 import { assets } from '../../assets/assets'
@@ -14,16 +14,92 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchStoreById } from "../../redux/actions/storeActions";
 import { fetchProductsByIdStore } from '../../redux/actions/productActions';
+import ChatContext from '../../context/showChat';
+import { GetAllStoresChat, PostSaveMess, searchOwnerForStore } from '../../services/chat';
+import { fetchUpdate } from '../../redux/actions/chatStoreAction';
+
 
 const StoreDetail = () => {
+  const {setShowChat,setSelectedUser } = useContext(ChatContext);
   const { id } = useParams();
   const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const [owner, setOwner] = useState(null);
+  const u = useSelector((state) => state.auth.account)
+  const idU = u.id;
+  const stores = useSelector((state) => state.stores.stores); // Lấy dữ liệu từ Redux store
+
   const storeDetail = useSelector((state) => {
     return state.store.storeDetail;
   })
   const listProductsByIdStore = useSelector((state) => {
     return state.product.listProductsByIdStore;
   })
+
+  const handleClickChatStore = async() => {
+    const on = await SearchOwner();
+    console.log("Onn: ",on)
+    const index = stores.findIndex(u =>u.id === on.id);
+    if(index === -1){
+      saveMessage(on.id);
+      setTimeout(() => {
+        loadStoreAgain();
+      },1000);
+      
+    }
+    
+    if(on!=null){
+      setSelectedUser(on);
+      setShowChat(true);
+    }
+    
+  }
+
+  const loadStoreAgain = async () => {
+    try {
+        console.log("Loading stores again...");
+
+        const previousOnlineUsers = stores
+            .filter(user => user.online === true)
+            .map(user => user.id);
+
+        const res = await GetAllStoresChat();
+
+        if (res.data.EC === 0 && res.data.DT) {
+            const updatedStores = res.data.DT.map(store => ({
+                ...store,
+                online: previousOnlineUsers.includes(store.id) // Dựa trên danh sách online trước đó
+            }));
+            dispatch(fetchUpdate({ DT: updatedStores }));
+        } else {
+            console.error("Lỗi khi tải lại stores:", res);
+        }
+    } catch (error) {
+        console.error("Lỗi khi thực hiện loadStoreAgain:", error);
+    }
+};
+
+  const saveMessage = async(idOwner) =>{
+    const sender = idOwner;
+    const receiver = Number(idU);
+    const isRead = false;
+    const mess = `Xin chào mừng bạn đến với cửa hàng ${storeDetail.storeName},cửa hàng chúng tôi tự hào bán những sản phẩm chất lượng và an toàn. Bạn cần sự giúp đỡ gì từ chúng tôi đây?`;
+    try {
+      let res = await PostSaveMess(sender, receiver, isRead, mess);
+      console.log(res);
+  } catch (exception) {
+      console.error('Error sending image:', exception);
+  }
+  }
+
+  const SearchOwner = async () => {
+    const res = await searchOwnerForStore(id);
+    console.log("owner: ",res)
+    if (res.data.EC === 0) {
+      return res.data.DT;
+    }
+    return null;
+  }
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -57,6 +133,11 @@ const StoreDetail = () => {
                   <i class="fa-solid fa-clock"></i>
                   {storeDetail.openingTime} - {storeDetail.closingTime}
                 </span>
+                {
+                  isAuthenticated === true
+                  &&
+                  <button onClick={()=>handleClickChatStore()} className='chat-store'>Chat với của hàng</button>
+                }
               </div>
             </div>
           </div>

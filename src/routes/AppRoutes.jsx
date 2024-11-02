@@ -48,7 +48,7 @@ const AppRoutes = (props) => {
                 <Route path="/promotion-detail/:id" element={<PromotionDetail />} />
                 <Route path="/order-complete" element={<OrderComplete />} />
 
-                <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
+                <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />   
                 <Route path="/test-ggmap" element={<RouteMap />} />
 
                 <Route path="*" element={<div>404 Not Found!!!</div>} />

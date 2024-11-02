@@ -11,6 +11,7 @@ import LoginModal from "./components/LoginModal/LoginModal";
 import RegisterModal from "./components/RegisterModal/RegisterModal";
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserAccount } from "./redux/actions/authActions";
+import ChatContext, { ChatProvider } from "./context/showChat";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -20,8 +21,10 @@ const App = () => {
   return (
     <>
       <div className="app">
+        <ChatProvider>
         <Navbar />
         <AppRoutes />
+        </ChatProvider>
         {/* Redux -> Dùng Provider bọc Login/Register Modal => Bắt buộc Provider phải bọc Modal nếu không Modal sẽ không sử dụng được state Redux */}
         <LoginModal />
         <RegisterModal />

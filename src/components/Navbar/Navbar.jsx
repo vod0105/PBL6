@@ -16,6 +16,7 @@ import cate_5 from "../../assets/navbar/cate_5.png";
 import cate_6 from "../../assets/navbar/cate_6.png";
 import cate_7 from "../../assets/navbar/cate_7.png";
 import cate_8 from "../../assets/navbar/cate_8.png";
+import ChatButton from "../Chatbox/ChatButton";
 
 
 const Navbar = () => {
@@ -25,6 +26,10 @@ const Navbar = () => {
   const account = useSelector((state) => state.auth.account);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const listProductsInCart = useSelector((state) => state.user.listProductsInCart); // lấy listProducts in cart -> hiển thị chấm đỏ
+
+  const [product, setProduct] = useState(null);
+  const [st, setST] = useState(null);
+  
   const handleShowLogin = () => {
     dispatch(showLoginModal());
   };
@@ -144,6 +149,11 @@ const Navbar = () => {
                     )
                 }
               </Link>
+              <ChatButton 
+                    product = {product}
+                    setProduct = {setProduct}
+                    st = {st}
+              />
             </>
             : <>
               <button onClick={handleShowLogin}>Đăng nhập</button>

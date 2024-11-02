@@ -9,7 +9,7 @@ const initialState = {
 };
 
 const authReducer = (state = initialState, action) => {
-    let phoneNumber = '', fullName = '', avatar = '', email = '', address = '', account = {};
+    let phoneNumber = '', fullName = '', avatar = '', email = '', address = '', account = {}, id = 0;
     switch (action.type) {
         case 'LOGIN_USER_SUCCESS':
             return { ...state, isAuthenticated: true, account: action.account };
@@ -34,12 +34,13 @@ const authReducer = (state = initialState, action) => {
             return { ...state, isAuthenticated: false };
         case 'FETCH_USER_ACCOUNT_SUCCESS':
             account = state.account || {};
+            id = action.accountInfo.id;
             phoneNumber = action.accountInfo.phoneNumber;
             fullName = action.accountInfo.fullName;
             avatar = action.accountInfo.avatar;
             email = action.accountInfo.email;
             address = action.accountInfo.address;
-            return { ...state, isAuthenticated: true, account: { ...account, phoneNumber, fullName, avatar, email, address } };
+            return { ...state, isAuthenticated: true, account: { ...account,id, phoneNumber, fullName, avatar, email, address } };
         case 'SENT_OTP_SUCCESS':
             return { ...state, isSentOTP: true };
         case 'VERIFY_OTP_SUCCESS':
