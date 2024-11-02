@@ -10,8 +10,11 @@ import {
     fetchAllOrdersService,
     cancelOrderService,
     reviewOrderService,
+    fetchOrderInTransitByOrderCodeService,
+    fetchShipperDetailByIdService
 
 } from "../../services/userService";
+import { fetchStoreByIdService } from "../../services/storeService";
 import { toast } from "react-toastify";
 
 // Register New User
@@ -94,15 +97,31 @@ const fetchProductsInCart = () => {
     return async (dispatch, getState) => {
         try {
             const res = await fetchProductsInCartService();
-            const data = res && res.data && res.data.data ? res.data.data : [];
+            let data = res && res.data && res.data.data ? res.data.data : [];
+            // Thêm thông tin cửa hàng -> storeId -> infor store
+            data = await Promise.all(
+                data.map(async (productInCart) => {
+                    const resStore = await fetchStoreByIdService(productInCart.product.storeId);
+                    const dataStore = resStore && resStore.data ? resStore.data.data : {};
+                    // console.log('dataStore: ', dataStore);
+                    return {
+                        ...productInCart,
+                        product: {
+                            ...productInCart.product,
+                            dataStore: dataStore, // Thêm thông tin từ dataStore vào product
+                        },
+                    };
+                })
+            );
             // Kiểm tra nếu giỏ hàng rỗng
             if (data.length === 0) {
                 console.log("Giỏ hàng trống");
                 dispatch(fetchProductsInCartSuccess([]));  // Gửi array rỗng đến redux
             }
             else {
+                console.log('data: ', data);
                 dispatch(fetchProductsInCartSuccess(data));
-                console.log('>>> data cart: ', data);
+                // console.log('>>> data cart: ', data);
             }
         } catch (error) {
             console.log(error);
@@ -286,6 +305,7 @@ const fetchAllOrders = () => {
         try {
             const res = await fetchAllOrdersService();
             const data = res && res.data && res.data.data ? res.data.data : [];
+            // Lấy thêm thông tin User => Ko cần
             dispatch(fetchAllOrdersSuccess(data));
         } catch (error) {
             console.log(error);
@@ -342,6 +362,32 @@ const reviewOrder = (listProductIds, rate, listImageFiles, comment) => {
         }
     };
 };
+// Fetch chi tiết đơn hàng = orderCode
+const fetchOrderInTransitByOrderCodeSuccess = (data) => {
+    return {
+        type: types.FETCH_ORDER_IN_TRANSIT_SUCCESS,
+        dataOrderDetail: data
+    };
+};
+const fetchOrderInTransitByOrderCode = (orderCode) => {
+    return async (dispatch, getState) => {
+        try {
+            console.log('orderCode: ', orderCode);
+            const resOrder = await fetchOrderInTransitByOrderCodeService(orderCode);
+            const dataOrderDetail = resOrder && resOrder.data ? resOrder.data.data : {};
+            if (dataOrderDetail.shipperId !== 0) {
+                const resShipper = await fetchShipperDetailByIdService(dataOrderDetail.shipperId);
+                const dataShipperDetail = resShipper && resShipper.data ? resShipper.data.data : {};
+                dataOrderDetail['shipperDetail'] = dataShipperDetail;
+            }
+            console.log('>>> đơn hàng đang giao: ', dataOrderDetail)
+            dispatch(fetchOrderInTransitByOrderCodeSuccess(dataOrderDetail));
+        } catch (error) {
+            console.log(error);
+        }
+    }
+};
+
 
 export {
     updateProfile,
@@ -357,6 +403,5 @@ export {
     fetchAllOrders,
     cancelOrder,
     reviewOrder,
-
-
+    fetchOrderInTransitByOrderCode
 };

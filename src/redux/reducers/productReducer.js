@@ -3,7 +3,7 @@ import types from "../types";
 const INITIAL_STATE = {
     listProductsBestSale: [],
     listProductsByIdCategory: [],
-    productDetail: {},
+    productDetail: {},  // product đang nhấn để coi chi tiết hiện tại
     listProductsByIdStore: [],
     ratingProduct: [],
 

@@ -18,6 +18,7 @@ import OrderComplete from '../pages/OrderComplete/OrderComplete';
 import PromotionDetail from '../pages/PromotionDetail/PromotionDetail';
 import OAuth2RedirectHandler from '../components/OAuth2RedirectHandler/OAuth2RedirectHandler';
 import RouteMap from '../components/RouteMap/RouteMap';
+import DeliveryMap from '../components/DeliveryMap/DeliveryMap';
 
 const AppRoutes = (props) => {
     return (
@@ -50,6 +51,8 @@ const AppRoutes = (props) => {
 
                 <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />   
                 <Route path="/test-ggmap" element={<RouteMap />} />
+                <Route path="/order-in-transit/:orderCode" element={<DeliveryMap />} />
+
 
                 <Route path="*" element={<div>404 Not Found!!!</div>} />
 

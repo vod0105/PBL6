@@ -19,15 +19,36 @@ const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, 
   const isLogin = useSelector((state) => state.auth.isAuthenticated);
   const [selectedSize, setSelectedSize] = useState(listSizes.length > 0 ? listSizes[0].name : "");
   const [selectedStore, setSelectedStore] = useState(null);
+  const [finalPrice, setFinalPrice] = useState((product?.discountedPrice != null) ? product.discountedPrice : 0);
 
+  // Change size
+  // const handleSizeChange = (size) => {
+  //   setSelectedSize(size); // Cập nhật kích thước được chọn
+  //   switch (size) {
+  //     case listSizes[0].name:
+  //       setFinalPrice((product?.discountedPrice != null) ? product.discountedPrice : 0);
+  //       break;
+  //     case listSizes[1].name:
+  //       setFinalPrice((product?.discountedPrice != null) ? (product.discountedPrice + 10000) : 0);
+  //       break;
+  //     case listSizes[2].name:
+  //       setFinalPrice((product?.discountedPrice != null) ? (product.discountedPrice + 20000) : 0);
+  //       break;
+  //   }
+  // };
+
+  // Optimize change size
   const handleSizeChange = (size) => {
-    setSelectedSize(size); // Cập nhật kích thước được chọn 
+    setSelectedSize(size);
+    const basePrice = product?.discountedPrice || 0; // Giá cơ bản (size M)
+    const sizeIndex = listSizes.findIndex(item => item.name === size); // Tìm chỉ số của kích thước được chọn 
+    const finalPrice = sizeIndex >= 0 ? basePrice + sizeIndex * 10000 : 0;
+    setFinalPrice(finalPrice); // Cập nhật giá cuối cùng
   };
 
   const handleStoreSelect = (store) => {
     setSelectedStore(store); // Cập nhật cửa hàng đã chọn
   };
-
   // Quantity + Total Price
   const [quantity, setQuantity] = useState(1);
   const handleIncrease = () => {
@@ -50,12 +71,6 @@ const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, 
       setSelectedSize(listSizes[0].name);
     }
   }, [listSizes]);
-
-  // total price
-  const finalPrice = (product?.price != null && product?.discountedPrice != null)
-    // ? (product.price - product.discountedPrice)
-    ? (product.discountedPrice)
-    : 0;
 
   // ADD TO CART / BUY NOW
   const handleAddToCart = async () => {
@@ -176,30 +191,30 @@ const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, 
 
                     {/* Note: Chọn cửa hàng rồi mới hiển thị kích cỡ + số lượng còn lại */}
                     {
-                      selectedStore ? (
-                        <>
-                          <div className="size-container">
-                            <span className='title'>Chọn kích cỡ</span>
-                            <div className="list-size">
-                              {listSizes.map((size, index) => ( // Note: Sửa lại listSizes là của sản phẩm ở cửa hàng được chọn => Default size: first item
-                                <div
-                                  key={index}
-                                  className={`size-item ${selectedSize === size.name ? 'selected' : ''}`}
-                                  onClick={() => handleSizeChange(size.name)}
-                                >
-                                  <span>{size.name}</span>
-                                </div>
-                              ))}
-                            </div>
+                      // selectedStore ? (
+                      <>
+                        <div className="size-container">
+                          <span className='title'>Chọn kích cỡ</span>
+                          <div className="list-size">
+                            {listSizes.map((size, index) => ( // Note: Sửa lại listSizes là của sản phẩm ở cửa hàng được chọn => Default size: first item
+                              <div
+                                key={index}
+                                className={`size-item ${selectedSize === size.name ? 'selected' : ''}`}
+                                onClick={() => handleSizeChange(size.name)}
+                              >
+                                <span>{size.name}</span>
+                              </div>
+                            ))}
                           </div>
-                          <div className="stock-quantity">  {/* Note: Sửa lại số lượng còn lại là size + cửa hàng chọn có số lượng sp trên */}
+                        </div>
+                        {/* <div className="stock-quantity">  
                             {selectedStore ? <span>Số lượng sản phẩm còn lại: {product.stockQuantity}</span> : <span></span>}
-                          </div>
-                        </>
-                      )
-                        : (
-                          <div></div>
-                        )
+                          </div> */}
+                      </>
+                      // )
+                      //   : (
+                      //     <div></div>
+                      //   )
 
                     }
                     <div className="btn-container">

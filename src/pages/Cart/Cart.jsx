@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./Cart.scss";
-import { assets } from "../../assets/assets";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -8,9 +7,10 @@ import {
   placeOrderUsingAddToCart,
   removeProductInCart,
   increaseOneQuantity,
+
 } from "../../redux/actions/userActions";
 import { toast } from "react-toastify";
-
+import { Link } from "react-router-dom";
 const Cart = () => {
 
   const dispatch = useDispatch();
@@ -60,13 +60,63 @@ const Cart = () => {
       navigate('/checkout');
     }
   }
+
+  // select -> filter
+  const [selectedStore, setSelectedStore] = useState("all");
+  const handleStoreChange = (event) => {
+    console.log('storeId đang chọn: ', selectedStore);
+    setSelectedStore(event.target.value);
+    console.log('storeId đang chọn: ', selectedStore);
+  };
+  const filteredProducts = Array.isArray(listProducts) ? listProducts.filter((item) => {
+    console.log('item.product.storeId: ', item.product.storeId);
+    return selectedStore === "all" || +item.product.storeId === +selectedStore;
+  }) : [];
+
+
   return (
-    <div className="cart">
+    <div className="page-cart">
+      <div className="search-filter-container">
+        <div className="search-container">
+          <div className="row">
+            <div className="col-md-12">
+              <div className="input-group">
+                <input className="form-control border-end-0 border" type="search" id="example-search-input" />
+                <span className="input-group-append">
+                  <button className="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5" type="button">
+                    <i className="fa fa-search"></i>
+                  </button>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="filter-container">
+          <select
+            className="form-select"
+            value={selectedStore}
+            onChange={handleStoreChange}
+            aria-label="Default select example"
+          >
+            <option value="all">Tất cả cửa hàng</option>
+            {Array.isArray(listProducts) && listProducts
+              .map((item) => item.product.dataStore)
+              .filter((value, index, self) => self.findIndex(v => v.storeId === value.storeId) === index)
+              .map((store) => (
+                <option key={store.storeId} value={store.storeId}>
+                  {store.storeName}
+                </option>
+              ))}
+          </select>
+        </div>
+
+      </div>
       <div className="cart-items">
         <div className="cart-items-title">
           <p>Sản phẩm</p>
           <p>Tên</p>
           <p>Kích cỡ</p>
+          <p>Cửa hàng</p>
           <p>Giá</p>
           <p>Số lượng</p>
           <p>Tổng tiền</p>
@@ -75,21 +125,22 @@ const Cart = () => {
         <br />
         <hr />
         {
-          listProducts && listProducts.length > 0 ? (listProducts.map((item, index) => {
+          filteredProducts && filteredProducts.length > 0 ? (filteredProducts.map((item, index) => {
             return (
-              <div>
+              <div key={index}>
                 <div className="cart-items-title cart-items-item" key={index}>
-                  <img src={'data:image/png;base64,' + item.product.image} alt="" />
+                  <Link to={`/product-detail/${item.product.productId}`}>
+                    <img src={'data:image/png;base64,' + item.product.image} alt="" />
+                  </Link>
                   <p>{item.product.productName}</p>
                   <p>{item.product.size}</p>
+                  <p>{item.product.dataStore.storeName}</p>
                   <p>{Number(item.product.unitPrice).toLocaleString('vi-VN')} đ</p>
                   <div className="quantity-controls">
                     <button onClick={() => handleDecreaseQuantity(item)}> <i className="fa-solid fa-minus"></i></button>
                     <p>{item.product.quantity}</p>
                     <button onClick={() => handleIncreaseQuantity(item)}><i className="fa-solid fa-plus"></i></button>
                   </div>
-                  {/* Note: totalPrice tính sai ở BE */}
-                  {/* <p>{Number(item.product.totalPrice).toLocaleString('vi-VN')} đ</p> */}
                   <p>{Number(item.product.unitPrice * item.product.quantity).toLocaleString('vi-VN')} đ</p>
                   <p
                     onClick={() => {

@@ -1,65 +1,80 @@
-.cart {
+.page-cart {
     width: 80%;
-    margin: 50px auto;
-    .no-product{
-      text-align: center;
-      font-size: 20px;
-      color: red;
+    margin: 20px auto;
+    border-top: 1px solid #E7E7E7;
+    .search-filter-container{
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 40px;
+      margin-top: 20px;
+      // flex-direction: column;
+      .search-container{
+        margin-right: 50px;
+      }
     }
-    .cart-items-title {
-      display: grid;
-      grid-template-columns: 0.5fr 1.5fr 0.5fr 1fr 1fr 1fr 0.5fr;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: gray;
-      font-size: max(1vw, 12px);
-      &.cart-items-item {
-        margin: 10px 0;
-        color: black;
-  
-        img {
-          width: 70px;
-          margin: 0 auto;
-        }
-  
+    .cart-items{
+      .no-product{
+        text-align: center;
+        font-size: 20px;
+        color: red;
+      } 
+      .cart-items-title {
+        display: grid;
+        grid-template-columns: 0.5fr 1.3fr 0.5fr 0.8fr 0.8fr 0.8fr 0.8fr 0.6fr;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: gray;
+        font-size: max(1vw, 12px);
         p {
           margin-bottom: 0;
         }
-        .quantity-controls {
-            display: flex;
-            align-items: center;
-            gap: 2px;
+        &.cart-items-item {
+          margin: 10px 0;
+          color: black;
+    
+          img {
+            width: 70px;
             margin: 0 auto;
-            button {
-              padding: 4px 8px;
-              background-color: #f0f0f0;
-              border: none;
-              cursor: pointer;
-              font-size: 12px;
-              border-radius: 4px;
-            font-weight: 500;
-              &:hover {
-                background-color: #ddd;
-              }
-            }        
-            p {
-              margin: 0;
-              border: 1px solid #e2e0e0;
-              padding: 0 10px;
-              border-radius: 4px;
-              font-size: 16px;
-            }
           }
-        .action-delete {
-          &:hover {
-            cursor: pointer;
-            color: red;
+    
+          p {
+            margin-bottom: 0;
+          }
+          .quantity-controls {
+              display: flex;
+              align-items: center;
+              gap: 2px;
+              margin: 0 auto;
+              button {
+                padding: 4px 8px;
+                background-color: #f0f0f0;
+                border: none;
+                cursor: pointer;
+                font-size: 12px;
+                border-radius: 4px;
+              font-weight: 500;
+                &:hover {
+                  background-color: #ddd;
+                }
+              }        
+              p {
+                margin: 0;
+                border: 1px solid #e2e0e0;
+                padding: 0 10px;
+                border-radius: 4px;
+                font-size: 16px;
+              }
+            }
+          .action-delete {
+            &:hover {
+              cursor: pointer;
+              color: red;
+            }
           }
         }
       }
     }
-  
     hr {
       background-color: grey;
       border: none;
@@ -149,5 +164,4 @@
         flex-direction: start;
       }
     }
-  }
-  
+}

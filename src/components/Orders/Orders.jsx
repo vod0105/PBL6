@@ -5,11 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllOrders, cancelOrder } from "../../redux/actions/userActions";
 import ReviewModal from "../ReviewModal/ReviewModal";
 import Pagination from 'react-bootstrap/Pagination';
+import { Link } from "react-router-dom";
 // const _ = require('lodash'); // copy object
 const Orders = () => {
   const dispatch = useDispatch();
   const orders = useSelector((state) => {
-    return state.user.allOrders;
+    return state.user.allOrders || [];
   })
   const [showModalViewDetail, setShowModalViewDetail] = useState(false);
   const [showModalReviewOrder, setShowModalReviewOrder] = useState(false);
@@ -18,6 +19,9 @@ const Orders = () => {
   // Phân trang
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5); // Số lượng đơn hàng hiển thị mỗi trang
+
+  // Filter status -> Select
+  const [selectedStatus, setSelectedStatus] = useState("0"); // Mặc định là "Tất cả đơn hàng"
 
   const handleShowDetails = (order) => {
     // let orderChangeStatus = _.cloneDeep(order);
@@ -71,16 +75,28 @@ const Orders = () => {
   const handleCancelOrder = (orderCode) => {
     dispatch(cancelOrder(orderCode));
   }
+
+  // Lọc đơn hàng theo selectedStatus
+  const filteredOrders = Array.isArray(orders) ? orders.filter(order =>
+    selectedStatus === "0" || order.status === selectedStatus
+    // selectedStatus = 0: All orders sẽ được gán vô filteredOrders -> Hiển thị all (không áp dụng điều kiện lọc).
+    // selectedStatus != 0: Chỉ các order có order.status trùng khớp với selectedStatus sẽ được giữ lại -> Gán vô 
+  ) : [];
+
   // Phân trang
   const indexOfLastOrder = currentPage * itemsPerPage;
   const indexOfFirstOrder = indexOfLastOrder - itemsPerPage;
-  const currentOrders = Array.isArray(orders) ? orders.slice(indexOfFirstOrder, indexOfLastOrder) : []; // Kiểm tra orders là mảng?
+  const currentOrders = Array.isArray(filteredOrders) ? filteredOrders.slice(indexOfFirstOrder, indexOfLastOrder) : []; // Kiểm tra orders là mảng?
   // Tính toán tổng số trang
-  const totalPages = Math.ceil((Array.isArray(orders) ? orders.length : 0) / itemsPerPage);
+  const totalPages = Math.ceil((Array.isArray(filteredOrders) ? filteredOrders.length : 0) / itemsPerPage);
 
   // Hàm để chuyển trang
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+  };
+  const handleStatusChange = (event) => {
+    setSelectedStatus(event.target.value);
+    setCurrentPage(1); // Đặt lại về trang đầu khi thay đổi filter
   };
   useEffect(() => {
     dispatch(fetchAllOrders());
@@ -89,9 +105,26 @@ const Orders = () => {
   return (
     <div className="orders-management">
       <div className="container">
-        <div className="orders-management-icon">
-          <i class="icon-i fa-solid fa-box-open"></i>
-          <span className='icon-span'>các đơn hàng của bạn</span>
+        <div className="icon-filter-container">
+          <div className="icon-container">
+            <i class="icon-i fa-solid fa-box-open"></i>
+            <span className='icon-span'>các đơn hàng của bạn</span>
+          </div>
+          <div className="filter-container">
+            <select
+              className="form-select"
+              value={selectedStatus}
+              onChange={handleStatusChange}
+              aria-label="Default select example"
+            >
+              <option value="0" selected>Tất cả đơn hàng</option>
+              <option value="Đơn hàng mới">Đơn hàng mới</option>
+              <option value="Đơn hàng đã bị hủy">Đơn hàng đã bị hủy</option>
+              <option value="Đơn hàng đã được xác nhận">Đơn hàng đã được xác nhận</option>
+              <option value="Đơn hàng đang giao">Đơn hàng đang giao</option>
+              <option value="Đơn hàng đã hoàn thành">Đơn hàng đã hoàn thành</option>
+            </select>
+          </div>
         </div>
         <table className="table table-striped table-orders table-bordered">
           <thead>
@@ -122,32 +155,46 @@ const Orders = () => {
                   </td>
 
                   {/* status = 5 -> Hiện button 'Đánh giá' */}
+                  {/* status = 4 -> Hiện button 'Xem lộ trình' */}
                   {/* status = 1 -> Hiện button 'Hủy đơn hàng */}
-                  {/* status = 2,3,4 -> Disable button 'Hủy đơn hàng' */}
+                  {/* status = 2,3 -> Disable button 'Hủy đơn hàng' */}
                   {
-                    order && order.status == 'Đơn hàng đã hoàn thành' ? (
+                    order && order.status == 'Đơn hàng đã hoàn thành' && (
                       <td className="text-center align-middle">
                         <button
                           className="btn btn-success"
                           onClick={() => handleShowReviewOrder(order)}
+                          disabled={order.feedBack === true ? true : false}
                         >
                           Đánh giá
                         </button>
+                      </td>)
+                  }
+                  {
+                    order && order.status == 'Đơn hàng đang giao' && (
+                      <td className="text-center align-middle">
+                        <Link to={`/order-in-transit/${order.orderCode}`}>
+                          <button
+                            className="btn btn-info"
+                          >
+                            Xem lộ trình
+                          </button>
+                        </Link>
+                      </td>)
+                  }
+                  {
+                    order && order.status !== 'Đơn hàng đã hoàn thành' && order.status !== 'Đơn hàng đang giao' && (
+                      <td className="text-center align-middle">
+                        <button
+                          className="btn btn-warning"
+                          disabled={order.status === 'Đơn hàng mới' ? false : true}
+                          onClick={() => handleCancelOrder(order.orderCode)}
+                        >
+                          Hủy đơn hàng
+                        </button>
                       </td>
                     )
-                      : (
-                        <td className="text-center align-middle">
-                          <button
-                            className="btn btn-warning"
-                            disabled={order.status === 'Đơn hàng mới' ? false : true}
-                            onClick={() => handleCancelOrder(order.orderCode)}
-                          >
-                            Hủy đơn hàng
-                          </button>
-                        </td>
-                      )
                   }
-
                 </tr>
               )))
                 : (

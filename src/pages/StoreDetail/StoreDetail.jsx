@@ -142,8 +142,21 @@ const StoreDetail = () => {
             </div>
           </div>
           <div className="infor-right">
-            <div className="infor-right-img-container">
-              <img src={DownloadImage} alt="" />
+            <div className="infor-right-ggmap-container">
+              {/* <img src={DownloadImage} alt="" /> */}
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3833.842405348711!2d108.14729407579229!3d16.073665739317885!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x314218d68dff9545%3A0x714561e9f3a7292c!2zVHLGsOG7nW5nIMSQ4bqhaSBo4buNYyBCw6FjaCBLaG9hIC0gxJDhuqFpIGjhu41jIMSQw6AgTuG6tW5n!5e0!3m2!1svi!2s!4v1730165637898!5m2!1svi!2s"
+                // width="600"
+                // height="450"
+                style={{ border: 0, width: '100%', height: '80vh' }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
+              {/* 
+                  2d: longitude => Kinh độ, 
+                  3d: latitude => Vĩ độ
+              */}
             </div>
           </div>
         </div>

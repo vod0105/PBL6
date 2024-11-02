@@ -1,53 +1,29 @@
 import React, { useState, useEffect } from 'react'
 import './ProductItemDetail.scss'
-import test_product from "../../assets/food-yummy/product3.jpg";
 import { assets } from '../../assets/assets'
-import store1 from "../../assets/image_gg/introduce_1.png";
-import store2 from "../../assets/image_gg/introduce_2.png";
-import store3 from "../../assets/image_gg/introduce_3.png";
-import store4 from "../../assets/image_gg/introduce_4.png";
-import store5 from "../../assets/image_gg/introduce_5.png";
-import product1 from "../../assets/food-yummy/product1.jpg";
-import product2 from "../../assets/food-yummy/product2.jpg";
-import product3 from "../../assets/food-yummy/product3.jpg";
-import product4 from "../../assets/food-yummy/product4.jpg";
-
 import logoStar from '../../assets/logo/star.png'
 import logoStarNobgColor from '../../assets/logo/star_no_bgcolor.png'
 import logoUser from '../../assets/logo/user.png'
-
 import StoreList from '../StoreList/StoreList';
 import ProductItemModal from '../ProductItemModal/ProductItemModal';
-
+import ImagePreviewModal from '../ImagePreviewModal/ImagePreviewModal'
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProductById, fetchRatingProductById } from "../../redux/actions/productActions";
 
 
 const ProductItemDetail = () => {
-  // const listComments = [
-  //   {
-  //     avatar: product1,
-  //     username: "Nhật Hải",
-  //     rate: 5,
-  //     commentContent: 'ngon tàn bạo, ngon xuất sắc nha cả nhà',
-  //     images: [product2, product3]
-  //   },
-  //   {
-  //     avatar: product2,
-  //     username: "Việt Hoàng",
-  //     rate: 3,
-  //     commentContent: 'Khá là ngon',
-  //     images: [product4]
-  //   },
-  //   {
-  //     avatar: product4,
-  //     username: "Thương Thắng",
-  //     rate: 1,
-  //     commentContent: 'Chưa có món mô dở ri',
-  //     images: [product2, product3, product4]
-  //   },
-  // ];
+  // Preview image
+  const [showImagePreview, setShowImagePreview] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
+  const handleImageClick = (image) => {
+    setPreviewImage(image);
+    setShowImagePreview(true);
+  };
+  const handleCloseImagePreview = () => {
+    setShowImagePreview(false);
+    setPreviewImage('');
+  };
 
   // Format Date
   const formatDate = (dateString) => {
@@ -166,8 +142,8 @@ const ProductItemDetail = () => {
                   <div className="avatar-username-star-container">
                     <div className="avatar">
                       {
-                        comment && comment.avataUser ? (
-                          <img src={'data:image/png;base64,' + comment.avataUser} alt="" />
+                        comment && comment.dataUser && comment.dataUser.avatar ? (
+                          <img src={'data:image/png;base64,' + comment.dataUser.avatar} alt="" />
                         ) : (
                           <img src={logoUser} alt="" />
                         )
@@ -176,7 +152,7 @@ const ProductItemDetail = () => {
                     <div className="username-star">
                       <span className="username-user">
                         {
-                          comment && comment.username ? comment.username : 'Khách hàng'
+                          comment && comment.dataUser && comment.dataUser.fullName ? comment.dataUser.fullName : 'Khách hàng'
                         }
                       </span>
                       <div className="star-container">
@@ -193,9 +169,22 @@ const ProductItemDetail = () => {
                     <p>{comment.comment}</p>
                   </div>
                   <div className="review-images-container">
-                  {comment.imageRatings && Array.isArray(comment.imageRatings) && comment.imageRatings.map((image, imgIndex) => (
-    <img key={imgIndex} src={'data:image/png;base64,' + image} alt={`Review image ${imgIndex}`} className="review-image" />
-  ))}
+                    {/* {comment.imageRatings && Array.isArray(comment.imageRatings) && comment.imageRatings.map((image, imgIndex) => (
+                      <img
+                        key={imgIndex}
+                        src={'data:image/png;base64,' + image}
+                        alt={`Review image ${imgIndex}`}
+                        className="review-image" />
+                    ))} */}
+                    {comment.imageRatings && Array.isArray(comment.imageRatings) && comment.imageRatings.map((image, imgIndex) => (
+                      <img
+                        key={imgIndex}
+                        src={'data:image/png;base64,' + image}
+                        alt={`Review image ${imgIndex}`}
+                        className="review-image"
+                        onClick={() => handleImageClick('data:image/png;base64,' + image)} // Gọi modal preview
+                      />
+                    ))}
                   </div>
                   <p className="comment-date">{formatDate(comment.createdAt)}</p>
                 </div>
@@ -205,6 +194,12 @@ const ProductItemDetail = () => {
             <div className='no-comment'>Không có bình luận</div>
           )}
         </div>
+        {/* Modal preview ảnh */}
+        <ImagePreviewModal
+          show={showImagePreview}
+          image={previewImage}
+          onClose={handleCloseImagePreview}
+        />
       </div>
     </div>
   )

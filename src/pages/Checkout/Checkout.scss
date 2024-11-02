@@ -44,6 +44,9 @@
                   outline: 1px solid #ccc;
               }
           }
+        //   .input-no-change{
+        //     background-color: #e9ecef;
+        //   }
 
           textarea[name="note"] {
               height: 150px;
@@ -60,6 +63,9 @@
               &:focus {
                   outline: 1px solid #ccc;
               }
+          }
+          .map-container{
+            margin-bottom: 20px;
           }
       }
 

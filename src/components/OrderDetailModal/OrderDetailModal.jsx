@@ -1,14 +1,28 @@
 import React, { useState, useEffect } from 'react'
 import { Modal, Button } from 'react-bootstrap';
 import './OrderDetailModal.scss';
+import ImagePreviewModal from '../ImagePreviewModal/ImagePreviewModal';
+
 const OrderDetailModal = ({ showModal, handleClose, orderDetails, statusOrderInteger }) => {
+  // Preview image
+  const [showImagePreview, setShowImagePreview] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
+  const handleImageClick = (image) => {
+    setPreviewImage(image);
+    setShowImagePreview(true);
+  };
+  const handleCloseImagePreview = () => {
+    setShowImagePreview(false);
+    setPreviewImage('');
+  };
   const [listProducts, setListProducts] = useState([]);
   useEffect(() => {
     if (orderDetails) {
       setListProducts(orderDetails.orderDetails);
-      console.log('>>> check list products: ', listProducts);
+      // console.log('>>> check list products: ', listProducts);
     }
   }, [orderDetails]);
+
   return (
     <Modal
       show={showModal}
@@ -22,32 +36,13 @@ const OrderDetailModal = ({ showModal, handleClose, orderDetails, statusOrderInt
       <Modal.Body>
         {orderDetails ? (
           <div className="order-detail">
-            <div className="order-detail-orderID">
-              <p className="orderID-title">
-                Mã đơn hàng:
-              </p>
-              <p className="orderID-content">
-                {orderDetails.orderCode}
-              </p>
-            </div>
             <div className="order-detail-infor">
               <div className="order-detail-infor-item">
-                {/* note: DB ko có trường ni */}
-                <p className="infor-title">Họ tên người nhận</p>
-                <p className="infor-content">Biện Văn Nhật</p>
+                <p className="infor-title">Mã đơn hàng</p>
+                <p className="infor-content">{orderDetails.orderCode}</p>
               </div>
               <div className="order-detail-infor-item">
-                {/* note: DB ko có trường ni */}
-                <p className="infor-title">Số điện thoại</p>
-                <p className="infor-content">04357834755</p>
-              </div>
-              <div className="order-detail-infor-item">
-                {/* note: DB ko có trường ni */}
-                <p className="infor-title">Email</p>
-                <p className="infor-content">jfsdg@gmail.com</p>
-              </div>
-              <div className="order-detail-infor-item">
-                <p className="infor-title">Địa chỉ</p>
+                <p className="infor-title">Địa chỉ nhận hàng</p>
                 <p className="infor-content">{orderDetails.deliveryAddress}</p>
               </div>
               <div className="order-detail-infor-item">
@@ -120,7 +115,12 @@ const OrderDetailModal = ({ showModal, handleClose, orderDetails, statusOrderInt
                   return (
                     <div className="order-detail-product-item" key={index}>
                       <div className="product-item-image">
-                        <img src={'data:image/png;base64,' + item.productDetail.productImage} alt="" />
+                        {/* <img src={'data:image/png;base64,' + item.productDetail.productImage} alt="" /> */}
+                        <img
+                          src={'data:image/png;base64,' + item.productDetail.productImage}
+                          alt='Ảnh sản phẩm'
+                          onClick={() => handleImageClick('data:image/png;base64,' + item.productDetail.productImage)} // Gọi modal preview
+                        />
                       </div>
                       <div className="product-item-infor">
                         <p className="infor-name">{item.productDetail.productName} ({item.productDetail.size})</p>
@@ -148,6 +148,12 @@ const OrderDetailModal = ({ showModal, handleClose, orderDetails, statusOrderInt
                   )
               }
             </div>
+            {/* Modal preview ảnh */}
+            <ImagePreviewModal
+              show={showImagePreview}
+              image={previewImage}
+              onClose={handleCloseImagePreview}
+            />
           </div >
         ) : (
           <p>Không có thông tin chi tiết đơn hàng.</p>

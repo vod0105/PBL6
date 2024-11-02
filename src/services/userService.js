@@ -134,11 +134,6 @@ const reviewOrderService = (listProductIds, rate, listImageFiles, comment) => {
         formData.append('imageFiles', file);  // Thêm từng file ảnh vào FormData
     });
     formData.append('comment', comment);
-    // console.log('>>> list id: ', listProductIds);
-    // console.log('>>> rate: ', rate);
-    // console.log('>>> listImageFiles: ', listImageFiles);
-    // console.log('>>> comment: ', comment);
-
     return instance({
         method: 'post',
         url: `/api/v1/user/product/rating`,
@@ -148,6 +143,26 @@ const reviewOrderService = (listProductIds, rate, listImageFiles, comment) => {
         }
     });
 }
+const fetchOrderInTransitByOrderCodeService = (orderCode) => {
+    return instance({
+        method: 'get',
+        url: `/api/v1/user/order/history/${orderCode}`,
+    });
+}
+const fetchShipperDetailByIdService = (id) => {
+    return instance({
+        method: 'get',
+        url: `/api/v1/public/user/${id}`,
+    });
+}
+
+const fetchUserDetailByIdService = (id) => {
+    return instance({
+        method: 'get',
+        url: `/api/v1/public/user/${id}`,
+    });
+}
+
 
 export {
     updateProfileService,
@@ -161,5 +176,8 @@ export {
     fetchAllOrdersService,
     cancelOrderService,
     reviewOrderService,
+    fetchOrderInTransitByOrderCodeService,
+    fetchShipperDetailByIdService,
+    fetchUserDetailByIdService,
 
 }

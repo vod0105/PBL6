@@ -20,7 +20,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 80px;
+    gap: 40px;
     text-align: center;
     margin: 20px 150px;
     overflow: auto;
@@ -30,6 +30,7 @@
     }
 
     .explore-menu-list-item {
+      min-width: 110px;
       img {
         width: 7vw;
         height: 7vw;
@@ -51,6 +52,10 @@
         cursor: pointer;
         text-transform: uppercase;
         font-weight: 700;
+        min-height: 50px; 
+        white-space: wrap; 
+        // overflow: hidden; // Cắt bớt phần nội dung vượt quá
+        // text-overflow: ellipsis; // Thêm dấu "..." nếu văn bản quá dài
       }
 
       &:hover {

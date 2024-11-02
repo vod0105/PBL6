@@ -1,17 +1,25 @@
 .orders-management{
-    .orders-management-icon{
-        margin-bottom: 20px;
-        padding-bottom: 20px;
+    .icon-filter-container{
+        display: flex;
+        justify-content: space-between;
         border-bottom: 1px solid #D7D7D7;
-        .icon-i{
-            font-size: 26px;
-            margin-right: 15px;
-            color: #D3D3D4;
+        margin-bottom: 20px;
+         padding-bottom: 20px;
+        .icon-container{
+            
+            .icon-i{
+                font-size: 26px;
+                margin-right: 15px;
+                color: #D3D3D4;
+            }
+            .icon-span{
+                font-size: 21px;
+                font-weight: 600;
+                text-transform: uppercase;
+            }
         }
-        .icon-span{
-            font-size: 21px;
-            font-weight: 600;
-            text-transform: uppercase;
+        .filter-container{
+
         }
     }
     .table-orders{

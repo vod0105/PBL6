@@ -9,31 +9,33 @@
     .order-detail {
         display: flex;
         flex-direction: column;
-        .order-detail-orderID{
-            display: flex;
-            .orderID-title{
-                font-weight: 600;
-                margin-right: 20px;
-            }
-        }
         .order-detail-infor {
             display: flex;                  
             flex-wrap: wrap;               
-            margin: 10px 0;                
-            border: 1px solid #E7E7E7;
+            gap: 10px; 
+            padding: 15px;
+            background-color: #f8f9fa; // Màu nền nhẹ cho toàn bộ box
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
             .order-detail-infor-item {
-              flex: 1;                      // Mỗi mục chiếm đều không gian
-              padding: 10px;               
-            //   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
-            //   background-color: #f9f9f9;   
+              flex: 1;                      
+              padding: 12px;
+              background-color: #ffffff; // Nền trắng cho mỗi item
+              border-radius: 6px;
+              box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); // Đổ bóng nhẹ            
             }
             .infor-title{
-                font-weight: 600;
+              font-weight: 600;
+              color: #495057;
+              margin-bottom: 5px; 
+              font-size: 16px;
             }
             .infor-content{
-                font-size: 14px;
+              font-size: 15px;
+              color: #6c757d; 
             }
         }
+        
 
         .order-detail-status {
             margin: 40px 0;
@@ -99,6 +101,7 @@
                     width: 90px;
                     height: 90px;
                     border: 1px solid #E7E7E7;
+                    cursor: pointer;
                     img{
                       width: 100%;
                       height: 100%;

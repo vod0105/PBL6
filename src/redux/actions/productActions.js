@@ -4,8 +4,11 @@ import {
     fetchProductsByIdCategoryService,
     fetchProductByIdService,
     fetchProductsByIdStoreService,
-    fetchRatingProductByIdService
+    fetchRatingProductByIdService,
+
 } from "../../services/productService";
+import { fetchUserDetailByIdService } from "../../services/userService";
+import { toast } from "react-toastify";
 
 // Best sale
 const fetchProductsBestSaleSuccess = (data) => {
@@ -94,9 +97,21 @@ const fetchRatingProductByIdSuccess = (data) => {
 const fetchRatingProductById = (id) => {
     return async (dispatch, getState) => {
         try {
-            const res = await fetchRatingProductByIdService(id);
-            const data = res && res.data ? res.data.data : [];
-            dispatch(fetchRatingProductByIdSuccess(data)); // // Chạy ở đây (2)
+            const resRating = await fetchRatingProductByIdService(id);
+            let dataRating = resRating && resRating.data ? resRating.data.data : [];
+            // Lấy thêm avatar + fullname User cho từng phần tử trong dataRating
+            dataRating = await Promise.all(
+                dataRating.map(async (rating) => {
+                    const resUser = await fetchUserDetailByIdService(rating.userId);
+                    const dataUser = resUser && resUser.data ? resUser.data.data : {};
+                    return {
+                        ...rating,
+                        dataUser: dataUser,
+                    };
+                })
+            );
+            dispatch(fetchRatingProductByIdSuccess(dataRating));
+            console.log('dataRating: ', dataRating);
         } catch (error) {
             console.log(error);
             toast.error('Không lấy được đánh giá sản phẩm!')

@@ -4,7 +4,7 @@ const initialState = {
     isBuyNow: false,
     productDetailBuyNow: {},
     allOrders: {},
-
+    orderInTransit: {}
 };
 
 const userReducer = (state = initialState, action) => {
@@ -75,6 +75,11 @@ const userReducer = (state = initialState, action) => {
         case 'REVIEW_ORDER_SUCCESS':
             return {
                 ...state,
+            };
+        case 'FETCH_ORDER_IN_TRANSIT_SUCCESS':
+            return {
+                ...state,
+                orderInTransit: action.dataOrderDetail
             };
         default:
             return state;

@@ -5,6 +5,17 @@
   align-items: center;
   margin: 0 50px;
   position: relative;
+  // Chuyển sang chế độ sticky khi đạt đến vị trí top
+  &.sticky {
+    position: sticky;
+    top: 0;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    background-color: #fff;
+    margin: 0;
+    padding: 20px;
+  }
+
   .logo {
     display: flex;
     align-items: flex-end;
@@ -106,7 +117,7 @@
       color: black;
       margin-top: 5px; 
 
-      li {
+      .navbar-category-item {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -123,15 +134,18 @@
           font-size: 13px;
           margin: 0;
         }
-
-        &:hover {
-          color: red;
-        }
-
         img {
           width: 70px;
           height: 50px;
         }
+        .active-category-item p {
+          color: red; // Màu cho mục con active
+        }
+        &:hover {
+          color: red;
+        }
+
+
       }
     }
   }
@@ -188,4 +202,10 @@
       display: none;
     }
   }
+}
+
+
+// Đảm bảo nội dung không bị navbar che khuất
+.navbar + .content {
+  padding-top: 80px;
 }

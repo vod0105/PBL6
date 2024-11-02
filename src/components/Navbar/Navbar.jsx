@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Navbar.scss";
 import { assets } from "../../assets/assets";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { showLoginModal, showRegisterModal } from "../../redux/actions/modalActions";
 import { fetchAllCategories } from "../../redux/actions/categoryActions";
@@ -46,7 +46,25 @@ const Navbar = () => {
     dispatch(fetchAllCategories());
   }, []);
 
+  // Mỗi li ở ul thực đơn được nhấn -> active cho THỰC ĐƠN -> Dùng path trên URL 
+  const location = useLocation(); // useLocation -> Tự động re-render cho component nào sử dụng Hook này
+  const isMenuActive = listCategories.some( // true/false
+    (category) => location.pathname === `/category/${category.categoryId}` // condition
+  );
 
+  // ??? -> sticky chưa hiểu: JS + CSS
+  useEffect(() => {
+    const handleScroll = () => {
+      const navbar = document.querySelector('.navbar');
+      if (window.scrollY > 60) {
+        navbar.classList.add('sticky');
+      } else {
+        navbar.classList.remove('sticky');
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <div className="navbar">
@@ -72,7 +90,7 @@ const Navbar = () => {
         </NavLink>
         <NavLink
           to={listCategories.length > 0 ? `/category/${listCategories[0].categoryId}` : "/category"}
-          className={({ isActive }) => (isActive ? "active navbar-category" : "navbar-category")}
+          className={({ isActive }) => ((isActive || isMenuActive) ? "active navbar-category" : "navbar-category")}
         >
           Thực đơn
           <ul className="navbar-category-dropdown">
@@ -81,12 +99,16 @@ const Navbar = () => {
               &&
               listCategories.map((category, index) => {
                 return (
-                  <Link to={`/category/${category.categoryId}`} key={index}>
-                    <li >
+                  <li key={index} className="navbar-category-item">
+                    <NavLink
+                      to={`/category/${category.categoryId}`}
+                      key={index}
+                      className={({ isActive }) => (isActive ? "active-category-item" : "")}
+                    >
                       <img src={'data:image/png;base64,' + category.image} alt="" />
                       <p>{category.categoryName}</p>
-                    </li>
-                  </Link>
+                    </NavLink>
+                  </li>
 
                 )
               })
@@ -121,7 +143,21 @@ const Navbar = () => {
           Test GGMAP
         </NavLink>
 
-      </ul>
+        {/* <NavLink
+          to="/test-checkout"
+          className={({ isActive }) => (isActive ? 'active' : '')}
+        >
+          Test thanh toán
+        </NavLink> */}
+
+        {/* <NavLink
+          to="/test-delivery"
+          className={({ isActive }) => (isActive ? 'active' : '')}
+        >
+          Test Map giao hàng
+        </NavLink> */}
+
+      </ul >
       <div className="navbar-right">
         {
           isAuthenticated === true
@@ -161,7 +197,7 @@ const Navbar = () => {
             </>
         }
       </div>
-    </div>
+    </div >
   );
 };
 

@@ -59,7 +59,7 @@ const ReviewModal = ({ showModal, handleClose, orderDetails }) => {
     setCommentContent(event.target.value);
   };
   const handleSubmit = () => {
-    console.log('>>> order detail đây nè: ', orderDetails);
+    // console.log('>>> order detail đây nè: ', orderDetails);
     const listProductIds = listProducts.map((product) => product.productDetail.productId)
       .join(',');
     const rate = rating;
@@ -68,6 +68,7 @@ const ReviewModal = ({ showModal, handleClose, orderDetails }) => {
     const comment = commentContent;
     dispatch(reviewOrder(listProductIds, rate, listImageFiles, comment));
     handleClose();
+    dispatch(fetchAllOrders()); // fetch lại list orders
   }
 
   return (
