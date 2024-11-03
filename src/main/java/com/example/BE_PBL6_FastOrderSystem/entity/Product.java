@@ -15,8 +15,7 @@ public class Product {
     @Column(name = "product_id")
     private Long productId;
     private String productName;
-    @Column(name = "image", columnDefinition = "NVARCHAR(MAX)")
-//@Column(name = "image", columnDefinition = "LONGTEXT")
+    @Column(name = "image", columnDefinition = "LONGTEXT")
     private String image;
     private String description;
     private Double price;
@@ -37,14 +36,6 @@ public class Product {
     private Boolean bestSale;
     @ManyToMany(mappedBy = "products")
     private List<Combo> combos = new ArrayList<>();
-//    @ElementCollection // đây là một collection chứa các phần tử đơn giản
-//    @MapKeyColumn(name = "size") // đây là tên cột chứa key của map
-//    @Column(name = "price") // đây là tên cột chứa value của map
-//    private Map<String,Double> sizePrice;
-//    public Double getPriceForSize(Size size){
-//        return sizePrice.get(size.getName());
-//    }
-
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

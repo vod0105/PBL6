@@ -15,7 +15,7 @@ public class Store {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long storeId;
     private String storeName;
-    @Column(name = "image", columnDefinition = "NVARCHAR(MAX)")
+    @Column(name = "image", columnDefinition = "LONGTEXT")
     private String image;
     private String phoneNumber;
     private String location;

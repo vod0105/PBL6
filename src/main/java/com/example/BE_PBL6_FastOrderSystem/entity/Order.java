@@ -23,8 +23,6 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "status_id")
     private StatusOrder status;
-//    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-//    private List<Cart> carts;
     private String deliveryAddress;
     @Column(name = "longitude")
     private Double longitude;

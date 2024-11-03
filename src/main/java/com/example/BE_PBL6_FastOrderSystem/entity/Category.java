@@ -13,8 +13,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long categoryId;
     private String categoryName;
-    @Column(name = "image", columnDefinition = "NVARCHAR(MAX)")
-//@Column(name = "image", columnDefinition = "LONGTEXT")
+    @Column(name = "image", columnDefinition = "LONGTEXT")
     private String image;
     private String description;
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
