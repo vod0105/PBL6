@@ -270,7 +270,7 @@ const AddProducToStore = ({ url }) => {
     <div className="add-productToStore1">
       {/* Cửa hàng (left) */}
       <div className="left">
-        <form onSubmit={onSubmitHandler}>
+        <div>
           <div className="search-store">
             <label htmlFor="">Search Store</label>
             <input
@@ -383,14 +383,14 @@ const AddProducToStore = ({ url }) => {
           </div>
 
           {/* Cửa hàng chỉ chọn một nên không cần nút "Huỷ bỏ lựa chọn" ở đây */}
-        </form>
+        </div>
       </div>
 
       <div className="line"></div>
 
       {/* Sản phẩm (right) */}
       <div className="right">
-        <form onSubmit={onSubmitHandler}>
+        <div>
           <div className="search-store">
             <label htmlFor="">Search Product</label>
             <input
@@ -550,7 +550,7 @@ const AddProducToStore = ({ url }) => {
               </button>
             </div>
           </div>
-        </form>
+        </div>
       </div>
       <ToastContainer position="top-right" />
     </div>

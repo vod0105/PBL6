@@ -127,6 +127,14 @@ const ChatHistory = (props) => {
 
             } else if (message.type === 'loadImage') {
                 fetchChatHistory();
+                setTimeout(() => {
+                    if (!unreadRef.current.includes(message.sender)) {
+                        unreadRef.current = [...unreadRef.current, message.sender];
+                        setUnreadUsers(unreadRef.current);
+                        newMessagesCountRef.current += 1;
+                        setNewMessagesCount(newMessagesCountRef.current);
+                    }
+                },2000);
             } else if (message.receiver === idU || message.sender === idU) {
                 setChatHistory(prevChatHistory => [
                     ...prevChatHistory,
