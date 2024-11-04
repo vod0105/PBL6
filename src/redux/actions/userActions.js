@@ -5,6 +5,7 @@ import {
     addComboToCartService,
     fetchProductsInCartService,
     placeOrderBuyNowService,
+    placeOrderComboBuyNowService,
     placeOrderAddToCartService,
     removeProductInCartService,
     increaseOneQuantityService,
@@ -88,10 +89,10 @@ const addToCartProduct = (productId, quantity, storeId, size, status) => {
         }
     };
 }
-const addToCartCombo = (comboId, quantity, storeId, size, status, drinkId) => {
+const addToCartCombo = (comboId, quantity, storeId, size, status, drink) => {
     return async (dispatch) => {
         try {
-            const res = await addComboToCartService(comboId, quantity, storeId, size, status, drinkId);
+            const res = await addComboToCartService(comboId, quantity, storeId, size, status, drink.productId);
             const isSuccess = res && res.data ? res.data.success : false;
             if (isSuccess) {
                 dispatch(addToCartSuccess());
@@ -184,6 +185,15 @@ const placeOrderUsingBuyNow = (product, quantity, store, size) => {
         productDetail: { product, quantity, store, size }
     };
 };
+
+// Nhấn MUA NGAY trong Modal Combo -> Chuyển đến Check out
+const placeOrderComboUsingBuyNow = (combo, unitPrice, quantity, store, size, drink) => {
+    return {
+        type: types.BUY_NOW_COMBO_OPTION,
+        comboDetail: { combo, unitPrice, quantity, store, size, drink }
+    };
+};
+
 // Nhấn THANH TOÁN trong Cart -> Chuyển đến Check out
 const placeOrderUsingAddToCart = () => {
     return {
@@ -237,7 +247,40 @@ const placeOrderBuyNow = (paymentMethod, productDetailBuyNow, address, longitude
         }
     };
 }
+const placeOrderComboBuyNow = (paymentMethod, comboDetailBuyNow, address, longitude, latitude, navigate) => {
+    return async (dispatch) => {
+        try {
+            // dispatch(placeOrderBuyNowSuccess());
 
+            const res = await placeOrderComboBuyNowService(paymentMethod, comboDetailBuyNow, address, longitude, latitude);
+            console.log('>>> res: ', res);
+            if (paymentMethod === 'CASH') {
+                const isSuccess = res && res.data ? res.data.success : false;
+                if (isSuccess) {
+                    dispatch(placeOrderBuyNowSuccess());
+                    dispatch(fetchAllOrders());
+                    toast.success(res.data.message);
+                    navigate('/order-complete');
+                } else {
+                    dispatch(placeOrderBuyNowError());
+                    toast.error(res.data.message || "Đặt hàng không thành công!");
+                }
+            }
+            else { // ZALOPAY
+                const zalopayUrl = res && res.data ? res.data.data.orderurl : '';
+                if (zalopayUrl) {
+                    window.location.href = zalopayUrl; // Chuyển hướng sang URL thanh toán của ZaloPay
+                } else {
+                    toast.error("Không thể thanh toán đơn hàng với ZaloPay!");
+                }
+            }
+        } catch (error) {
+            console.log(error);
+            dispatch(placeOrderBuyNowError());
+            toast.error('Có lỗi ở Server');
+        }
+    };
+}
 // Check out = Add to cart
 const placeOrderAddToCartSuccess = () => {
     return {
@@ -464,9 +507,11 @@ export {
     addToCartProduct,
     addToCartCombo,
     fetchProductsInCart,
-    placeOrderUsingBuyNow,
-    placeOrderUsingAddToCart,
-    placeOrderBuyNow,
+    placeOrderUsingBuyNow, // modal page
+    placeOrderComboUsingBuyNow,
+    placeOrderUsingAddToCart, // modal page
+    placeOrderBuyNow, // checkout page: product 
+    placeOrderComboBuyNow, // checkout page: combo 
     placeOrderAddToCart,
     resetAllUser,
     removeProductInCart,

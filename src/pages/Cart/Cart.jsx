@@ -49,16 +49,18 @@ const Cart = () => {
   };
   const getTotalPriceInCart = () => {
     let total = 0;
-    for (let i = 0; i < listProductsInCart.length; i++) {
+    for (let i = 0; i < listProductsInCart?.length; i++) {
       total += (listProductsInCart[i].product.unitPrice * listProductsInCart[i].product.quantity);
     }
-    for (let i = 0; i < listCombosInCart.length; i++) {
+    for (let i = 0; i < listCombosInCart?.length; i++) {
       total += (listCombosInCart[i].combo.unitPrice * listCombosInCart[i].combo.quantity);
     }
     return total;
   }
   const handlePlaceOrder = () => {
-    if (!listProductsInCart || !Array.isArray(listProductsInCart) || listProductsInCart.length === 0 || !listCombosInCart || !Array.isArray(listCombosInCart) || listCombosInCart.length === 0) { // -> Xử lý thêm trường hợp listProducts ko phải là Array
+    console.log('listProductsInCart: ', listProductsInCart);
+    console.log('listCombosInCart: ', listCombosInCart);
+    if (!listProductsInCart && !Array.isArray(listProductsInCart) && listProductsInCart.length === 0 && !listCombosInCart && !Array.isArray(listCombosInCart) && listCombosInCart.length === 0) { // -> Xử lý thêm trường hợp listProducts ko phải là Array
       toast.error('Không có sản phẩm trong giỏ hàng!');
     }
     else {

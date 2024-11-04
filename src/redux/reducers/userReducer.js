@@ -3,7 +3,9 @@ const initialState = {
     listProductsInCart: {}, // fetch từ server
     listCombosInCart: {},
     isBuyNow: false,
+    isBuyNowCombo: false,
     productDetailBuyNow: {},
+    comboDetailBuyNow: {},
     allOrders: {},
     orderInTransit: {}
 };
@@ -24,16 +26,25 @@ const userReducer = (state = initialState, action) => {
                 listProductsInCart: action.dataProducts,
                 listCombosInCart: action.dataCombos
             };
-        case 'BUY_NOW_OPTION': // Nhấn mua ngay
+        case 'BUY_NOW_OPTION': // Nhấn mua ngay PRODUCT
             return {
                 ...state,
                 productDetailBuyNow: action.productDetail,
                 isBuyNow: true,
+                isBuyNowCombo: false,
+            }
+        case 'BUY_NOW_COMBO_OPTION': // Nhấn mua ngay COMBO
+            return {
+                ...state,
+                comboDetailBuyNow: action.comboDetail,
+                isBuyNow: false,
+                isBuyNowCombo: true,
             }
         case 'ADD_TO_CART_OPTION': // Nhấn thanh toán trong Cart
             return {
                 ...state,
                 isBuyNow: false,
+                isBuyNowCombo: false,
             }
         case 'PLACE_ORDER_BUY_NOW_SUCCESS':
             return {

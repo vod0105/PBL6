@@ -71,7 +71,7 @@ const RouteMap = () => {
         // const geometry = response.data.routes[0].geometry;
         // Convert geometry -> [lng, lat] to [lat, lng]
         const decodedPath = decodePolyline(response.data.routes[0].geometry);
-        console.log('>>> geometry: ', decodedPath);
+        // console.log('>>> geometry: ', decodedPath);
         setRoute(decodedPath);
         setError(null);
       } else {
@@ -98,7 +98,7 @@ const RouteMap = () => {
         }
       );
 
-      console.log('>>> Geocoding response: ', response);
+      // console.log('>>> Geocoding response: ', response);
 
       if (response.data && response.data.features.length > 0) {
         const coords = response.data.features[0].geometry.coordinates;
@@ -130,7 +130,7 @@ const RouteMap = () => {
         }
       );
 
-      console.log('>>> Reverse Geocoding response: ', response);
+      // console.log('>>> Reverse Geocoding response: ', response);
 
       if (response.data && response.data.features.length > 0) {
         const address = response.data.features[0].properties.label; // Địa chỉ đầy đủ
@@ -161,7 +161,7 @@ const RouteMap = () => {
   const handleMapClick = (event) => {
     const { lat, lng } = event.latlng;
     setClickedCoords([lat, lng]); // Lưu tọa độ đã click
-    console.log("Clicked coordinates:", [lat, lng]); // Thêm log để kiểm tra tọa độ đã click
+    // console.log("Clicked coordinates:", [lat, lng]); // Thêm log để kiểm tra tọa độ đã click
   };
 
   return (
@@ -182,8 +182,8 @@ const RouteMap = () => {
               (position) => {
                 const latitude = position.coords.latitude;
                 const longitude = position.coords.longitude;
-                console.log("Latitude:", latitude);
-                console.log("Longitude:", longitude);
+                // console.log("Latitude:", latitude);
+                // console.log("Longitude:", longitude);
 
                 const latLng = [latitude, longitude];
                 setAddressCoords(latLng);

@@ -72,7 +72,7 @@ const DeliveryMap = () => {
   const [orderCoords, setOrderCoords] = useState(null); // [lon, lat]: Tọa độ nhận hàng
   const [shipperCoords, setShipperCoords] = useState(null); // Tọa độ hiện tại của Shipper
   useEffect(() => {
-    console.log('orderCode: ', orderCode);
+    // console.log('orderCode: ', orderCode);
     dispatch(fetchOrderInTransitByOrderCode(orderCode));
   }, [orderCode]);
 
@@ -196,10 +196,10 @@ const DeliveryMap = () => {
         const routeDuration = response.data.routes[0].segments[0].duration; // Đơn vị: giây
         setDistance((routeDistance / 1000).toFixed(2)); // m -> km
         setDuration((routeDuration / 60).toFixed(2));   // Chuyển đổi sang phút
-        console.log('>>> res 2 điểm trên map: ', response);
+        // console.log('>>> res 2 điểm trên map: ', response);
         console.log('Số km: ', distance);
         const decodedPath = decodePolyline(response.data.routes[0].geometry);
-        console.log('>>> geometry -> route?: ', decodedPath); // Array các điểm -> Nối lại có đường đi với mỗi điểm: [lat, lng]
+        // console.log('>>> geometry -> route?: ', decodedPath); // Array các điểm -> Nối lại có đường đi với mỗi điểm: [lat, lng]
         setRoute(decodedPath); // Đường đi
       }
     } catch (err) {

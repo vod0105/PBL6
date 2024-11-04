@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Checkout.scss";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { placeOrderBuyNow, placeOrderAddToCart } from "../../redux/actions/userActions";
+import { placeOrderBuyNow, placeOrderComboBuyNow, placeOrderAddToCart } from "../../redux/actions/userActions";
 import { toast } from "react-toastify";
 
 //MAP
@@ -26,23 +26,30 @@ const Checkout = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const isBuyNow = useSelector((state) => state.user.isBuyNow);
+    const isBuyNowCombo = useSelector((state) => state.user.isBuyNowCombo);
     const productDetailBuyNow = useSelector((state) => state.user.productDetailBuyNow);
+    const comboDetailBuyNow = useSelector((state) => state.user.comboDetailBuyNow);
     const listProductsInCart = useSelector((state) => state.user.listProductsInCart);
+    const listCombosInCart = useSelector((state) => state.user.listCombosInCart);
     const accountInfo = useSelector((state) => {
         return state.auth.account;
     });
 
     const [fullname, setFullname] = useState(accountInfo.fullName);
     const [phonenumber, setPhonenumber] = useState(accountInfo.phoneNumber);
-    const [address, setAddress] = useState("");
+    const [address, setAddress] = useState("hehehe");
     const [note, setNote] = useState("");
     const [paymentMethod, setPaymentMethod] = useState("Thanh toán khi nhận hàng");
 
     const getTotalPriceInCart = () => {
-        if (listProductsInCart && listProductsInCart.length > 0) {
-            return listProductsInCart.reduce((total, item) => total + (item.product.unitPrice * item.product.quantity), 0);
+        let total = 0;
+        for (let i = 0; i < listProductsInCart.length; i++) {
+            total += (listProductsInCart[i].product.unitPrice * listProductsInCart[i].product.quantity);
         }
-        else return 0;
+        for (let i = 0; i < listCombosInCart.length; i++) {
+            total += (listCombosInCart[i].combo.unitPrice * listCombosInCart[i].combo.quantity);
+        }
+        return total;
     }
     const handlePlaceOrder = () => {
         if (!fullname || !phonenumber || !address) {
@@ -63,11 +70,18 @@ const Checkout = () => {
                 default:
                     break;
             }
-            if (isBuyNow) { // Mua ngay
+            if (isBuyNow === true && isBuyNowCombo === false) { // Mua ngay PRODUCT
                 dispatch(placeOrderBuyNow(method, productDetailBuyNow, address, addressCoords[1], addressCoords[0], navigate));
             }
+            else if (isBuyNow === false && isBuyNowCombo === true) { // Mua ngay COMBO
+                dispatch(placeOrderComboBuyNow(method, comboDetailBuyNow, address, addressCoords[1], addressCoords[0], navigate));
+            }
             else { // Mua ở giỏ hàng
-                const cartIds = listProductsInCart.map(item => item.cartId);
+                const cartIds = [
+                    ...(listProductsInCart && listProductsInCart.length > 0 ? listProductsInCart.map(item => item.cartId) : []),
+                    ...(listCombosInCart && listCombosInCart.length > 0 ? listCombosInCart.map(item => item.cartId) : [])
+                ];
+
                 dispatch(placeOrderAddToCart(method, cartIds, address, addressCoords[1], addressCoords[0], navigate));
             }
         }
@@ -86,8 +100,8 @@ const Checkout = () => {
                 (position) => {
                     const latitude = position.coords.latitude;
                     const longitude = position.coords.longitude;
-                    console.log("Current Latitude:", latitude);
-                    console.log("Current Longitude:", longitude);
+                    // console.log("Current Latitude:", latitude);
+                    // console.log("Current Longitude:", longitude);
                     const latLon = [latitude, longitude];
                     setAddressCoords(latLon);
                 },
@@ -146,13 +160,14 @@ const Checkout = () => {
     // Mới vô -> Hiển thị trên input + map => Vị trí hiện tại
     useEffect(() => {
         getCurrentCoors();
-        fetchAddressFromCoordinates(addressCoords[0], addressCoords[1]);  // (lat, lon)
+        // fetchAddressFromCoordinates(addressCoords[0], addressCoords[1]);  // (lat, lon)
     }, []);
 
     // Click chuột -> Tọa độ thay đổi -> Input thay đổi
     useEffect(() => {
         if (addressCoords) {
-            fetchAddressFromCoordinates(addressCoords[0], addressCoords[1]);  // Gọi hàm với tọa độ mới
+            // console.log('>>> comboDetailBuyNow: ', comboDetailBuyNow);
+            // fetchAddressFromCoordinates(addressCoords[0], addressCoords[1]);  // Gọi hàm với tọa độ mới
         }
     }, [addressCoords]);
     return (
@@ -248,60 +263,116 @@ const Checkout = () => {
                         </div>
                         <div className="order-detail-product">
                             {
-                                isBuyNow === false ? (
-                                    listProductsInCart && listProductsInCart.length > 0 && listProductsInCart.map((item, index) => (
-                                        <div className="order-detail-product-item" key={index}>
+                                isBuyNow === false && isBuyNowCombo === false ? ( // Mua trong giỏ hàng
+                                    <>
+                                        {listProductsInCart && listProductsInCart.length > 0 && listProductsInCart.map((item, index) => (
+                                            <div className="order-detail-product-item" key={index}>
+                                                <div className="product-item-infor">
+                                                    <div className="product-item-image">
+                                                        <img src={'data:image/png;base64,' + item.product.image} alt="" />
+                                                    </div>
+                                                    <div className="product-item-infor">
+                                                        <p className="infor-name">{item.product.productName} (L)</p>
+                                                        <div className="infor-price-quantity">
+                                                            <p className="infor-price">
+                                                                {Number(item.product.unitPrice).toLocaleString('vi-VN')} đ
+                                                            </p>
+                                                            <p className="px-2">x</p>
+                                                            <p className="infor-quantity">{item.product.quantity}</p>
+                                                        </div>
+                                                        <p className="infor-store">Cửa hàng: {item.product.storeId}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="product-item-totalprice">
+                                                    <span>{Number(item.product.unitPrice * item.product.quantity).toLocaleString('vi-VN')} đ</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                        {listCombosInCart && listCombosInCart.length > 0 && listCombosInCart.map((item, index) => (
+                                            <div className="order-detail-product-item" key={index}>
+                                                <div className="product-item-infor">
+                                                    <div className="product-item-image">
+                                                        <img src={'data:image/png;base64,' + item.combo.image} alt="" />
+                                                    </div>
+                                                    <div className="product-item-infor">
+                                                        <p className="infor-name">{item.combo.comboName} {item.combo.dataDrink.productName} ({item.combo.size})</p>
+                                                        <div className="infor-price-quantity">
+                                                            <p className="infor-price">
+                                                                {Number(item.combo.unitPrice).toLocaleString('vi-VN')} đ
+                                                            </p>
+                                                            <p className="px-2">x</p>
+                                                            <p className="infor-quantity">{item.combo.quantity}</p>
+                                                        </div>
+                                                        <p className="infor-store">Cửa hàng: {item.combo.dataStore.storeName}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="product-item-totalprice">
+                                                    <span>{Number(item.combo.unitPrice * item.combo.quantity).toLocaleString('vi-VN')} đ</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </>
+                                ) : (
+                                    isBuyNow === true && isBuyNowCombo === false ? ( // Mua ngay trong PRODUCT
+                                        <div className="order-detail-product-item">
                                             <div className="product-item-infor">
                                                 <div className="product-item-image">
-                                                    <img src={'data:image/png;base64,' + item.product.image} alt="" />
+                                                    <img src={'data:image/png;base64,' + productDetailBuyNow.product.image} alt="" />
                                                 </div>
                                                 <div className="product-item-infor">
-                                                    <p className="infor-name">{item.product.productName} (L)</p>
+                                                    <p className="infor-name">{productDetailBuyNow.product.productName} ({productDetailBuyNow.size})</p>
                                                     <div className="infor-price-quantity">
                                                         <p className="infor-price">
-                                                            {Number(item.product.unitPrice).toLocaleString('vi-VN')} đ
+                                                            {Number(productDetailBuyNow.product.discountedPrice).toLocaleString('vi-VN')} đ
                                                         </p>
                                                         <p className="px-2">x</p>
-                                                        <p className="infor-quantity">{item.product.quantity}</p>
+                                                        <p className="infor-quantity">{productDetailBuyNow.quantity}</p>
                                                     </div>
-                                                    <p className="infor-store">Cửa hàng: {item.product.storeId}</p>
+                                                    <p className="infor-store">Cửa hàng: {productDetailBuyNow.store.storeName}</p>
                                                 </div>
                                             </div>
                                             <div className="product-item-totalprice">
-                                                <span>{Number(item.product.unitPrice * item.product.quantity).toLocaleString('vi-VN')} đ</span>
+                                                <span>{Number(productDetailBuyNow.product.discountedPrice * productDetailBuyNow.quantity).toLocaleString('vi-VN')} đ</span>
                                             </div>
                                         </div>
-                                    ))
-                                ) : (
-                                    <div className="order-detail-product-item">
-                                        <div className="product-item-infor">
-                                            <div className="product-item-image">
-                                                <img src={'data:image/png;base64,' + productDetailBuyNow.product.image} alt="" />
-                                            </div>
+                                    ) : ( // Mua ngay trong COMBO
+                                        <div className="order-detail-product-item">
                                             <div className="product-item-infor">
-                                                <p className="infor-name">{productDetailBuyNow.product.productName} ({productDetailBuyNow.size})</p>
-                                                <div className="infor-price-quantity">
-                                                    <p className="infor-price">
-                                                        {Number(productDetailBuyNow.product.discountedPrice).toLocaleString('vi-VN')} đ
-                                                    </p>
-                                                    <p className="px-2">x</p>
-                                                    <p className="infor-quantity">{productDetailBuyNow.quantity}</p>
+                                                <div className="product-item-image">
+                                                    <img src={'data:image/png;base64,' + comboDetailBuyNow.combo.image} alt="" />
                                                 </div>
-                                                <p className="infor-store">Cửa hàng: {productDetailBuyNow.store.storeName}</p>
+                                                <div className="product-item-infor">
+                                                    <p className="infor-name">{comboDetailBuyNow.combo.comboName} + {comboDetailBuyNow.drink.productName} ({comboDetailBuyNow.size})</p>
+                                                    <div className="infor-price-quantity">
+                                                        <p className="infor-price">
+                                                            {Number(comboDetailBuyNow.unitPrice).toLocaleString('vi-VN')} đ
+                                                        </p>
+                                                        <p className="px-2">x</p>
+                                                        <p className="infor-quantity">{comboDetailBuyNow.quantity}</p>
+                                                    </div>
+                                                    <p className="infor-store">Cửa hàng: {comboDetailBuyNow.store.storeName}</p>
+                                                </div>
+                                            </div>
+                                            <div className="product-item-totalprice">
+                                                <span>{Number(comboDetailBuyNow.unitPrice * comboDetailBuyNow.quantity).toLocaleString('vi-VN')} đ</span>
                                             </div>
                                         </div>
-                                        <div className="product-item-totalprice">
-                                            <span>{Number(productDetailBuyNow.product.discountedPrice * productDetailBuyNow.quantity).toLocaleString('vi-VN')} đ</span>
-                                        </div>
-                                    </div>
+                                    )
                                 )
                             }
                         </div>
                         <div className="order-totalprice">
                             <span>Tổng cộng </span>
-                            <span>{isBuyNow
-                                ? Number(productDetailBuyNow.product.discountedPrice * productDetailBuyNow.quantity).toLocaleString('vi-VN')
-                                : Number(getTotalPriceInCart()).toLocaleString('vi-VN')} đ
+                            <span>
+                                {
+                                    (isBuyNow === false && isBuyNowCombo === false)
+                                        ? Number(getTotalPriceInCart()).toLocaleString('vi-VN')
+                                        : (isBuyNow === false && isBuyNowCombo === true)
+                                            ? Number(comboDetailBuyNow.unitPrice * comboDetailBuyNow.quantity).toLocaleString('vi-VN')
+                                            : (isBuyNow === true && isBuyNowCombo === false)
+                                                ? Number(productDetailBuyNow.product.discountedPrice * productDetailBuyNow.quantity).toLocaleString('vi-VN')
+                                                : null
+                                } đ
                             </span>
                         </div>
 
@@ -345,7 +416,15 @@ const Checkout = () => {
 
                         <div className="order-item">
                             <span>Tổng đơn hàng</span>
-                            <span>{isBuyNow ? Number(productDetailBuyNow.product.discountedPrice * productDetailBuyNow.quantity).toLocaleString('vi-VN') : Number(getTotalPriceInCart()).toLocaleString('vi-VN')} đ</span>
+                            <span>
+                                {
+                                    isBuyNow === true && isBuyNowCombo === false
+                                        ? Number(productDetailBuyNow.product.discountedPrice * productDetailBuyNow.quantity).toLocaleString('vi-VN')
+                                        : isBuyNow === false && isBuyNowCombo === true
+                                            ? Number(comboDetailBuyNow.unitPrice * comboDetailBuyNow.quantity).toLocaleString('vi-VN')
+                                            : Number(getTotalPriceInCart()).toLocaleString('vi-VN')
+                                } đ
+                            </span>
                         </div>
                         <button className="place-order-btn" onClick={handlePlaceOrder}>
                             ĐẶT HÀNG

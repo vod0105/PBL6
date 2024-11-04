@@ -78,7 +78,7 @@ const ComboItemDetail = () => {
     const filteredStores = combo.products[0].stores.filter(store =>
       commonStores.includes(store.storeId)
     );
-    console.log('list stores: ', filteredStores);
+    // console.log('list stores: ', filteredStores);
     return filteredStores;
   };
 

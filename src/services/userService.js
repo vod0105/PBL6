@@ -26,12 +26,13 @@ const addProductToCartService = (productId, quantity, storeId, size, status) => 
         }
     });
 }
-const addComboToCartService = (comboId, quantity, storeId, size, status, drinkId) => {
+const addComboToCartService = (comboId, quantity, storeId, size, status, drinkIdAction) => {
+    console.log('drinkdjfsjfs:', drinkIdAction);
     return instance({
         method: 'post',
         url: '/api/v1/user/cart/add/combo',
         data: {
-            comboId, quantity, storeId, size, status, drinkId: [...drinkId] //BE y/c truyền array drinks
+            comboId, quantity, storeId, size, status, drinkId: [drinkIdAction] //BE y/c truyền array drinks
         }
     });
 }
@@ -81,6 +82,39 @@ const placeOrderBuyNowService = (paymentMethod, productDetailBuyNow, address, lo
                 storeId: productDetailBuyNow.store.storeId,
                 quantity: productDetailBuyNow.quantity,
                 size: productDetailBuyNow.size,
+                deliveryAddress: address,
+                longitude,
+                latitude
+            }
+        });
+    }
+    else { // ZALOPAY
+        return axios({
+            method: 'post',
+            url: `https://pbl6-fastordersystem.onrender.com/api/v1/zalopay/create-order`,
+            data: {
+                amount: 20000,
+                orderId: '3',
+                orderInfo: 'Payment for order with id=3',
+                lang: 'en',
+                extraData: 'additional data'
+            }
+        });
+    }
+}
+const placeOrderComboBuyNowService = (paymentMethod, comboDetailBuyNow, address, longitude, latitude) => {
+    if (paymentMethod === 'CASH') {
+        console.log('>>> mua gio hang moi combo: ', comboDetailBuyNow);
+        return instance({
+            method: 'post',
+            url: `/api/v1/user/order/create/now`,
+            data: {
+                paymentMethod,
+                comboId: comboDetailBuyNow.combo.comboId,
+                drinkId: [comboDetailBuyNow.drink.productId],
+                storeId: comboDetailBuyNow.store.storeId,
+                quantity: comboDetailBuyNow.quantity,
+                size: comboDetailBuyNow.size,
                 deliveryAddress: address,
                 longitude,
                 latitude
@@ -189,6 +223,7 @@ export {
     removeProductInCartService,
     increaseOneQuantityService,
     placeOrderBuyNowService,
+    placeOrderComboBuyNowService,
     placeOrderAddToCartService,
     fetchAllOrdersService,
     cancelOrderService,
