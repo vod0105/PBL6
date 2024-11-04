@@ -12,7 +12,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "users", uniqueConstraints = {
+@Table(name = "user", uniqueConstraints = {
         @UniqueConstraint(columnNames = "facebook_id"),
         @UniqueConstraint(columnNames = "sub")
 })
