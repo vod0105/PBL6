@@ -12,10 +12,23 @@ const fetchProductsByIdCategoryService = (id) => {
         url: `/api/v1/public/products/category/${id}`,
     });
 }
+const fetchAllCombosService = () => {
+    return axios({
+        method: 'get',
+        url: `/api/v1/public/combo/all`,
+    });
+}
+
 const fetchProductByIdService = (id) => {
     return axios({
         method: 'get',
         url: `/api/v1/public/products/${id}`,
+    });
+}
+const fetchComboByIdService = (id) => {
+    return axios({
+        method: 'get',
+        url: `/api/v1/public/combo/${id}`,
     });
 }
 const fetchProductsByIdStoreService = (id) => {
@@ -34,7 +47,9 @@ const fetchRatingProductByIdService = (id) => {
 export {
     fetchProductsBestSaleService,
     fetchProductsByIdCategoryService,
+    fetchAllCombosService,
     fetchProductByIdService,
+    fetchComboByIdService,
     fetchProductsByIdStoreService,
     fetchRatingProductByIdService,
 

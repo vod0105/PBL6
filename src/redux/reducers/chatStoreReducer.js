@@ -8,7 +8,7 @@ const initialState = {
 const chatStoreReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_UPDATE:
-      console.log('check: ', action);
+      // console.log('check: ', action);
       // Giả sử action.payload.DT là mảng chứa dữ liệu stores mới
       return {
         ...state,
@@ -44,15 +44,15 @@ const chatStoreReducer = (state = initialState, action) => {
             : store
         )
       }
-      case UPDATE_ALL_USER_UNREAD:
-        return {
-          ...state,
-          stores: state.stores.map(store => {
-            // Kiểm tra xem userId có trong mảng payload không
-            const isRead = action.payload.includes(store.id);
-            return { ...store, is_read: isRead };
-          })
-        }  
+    case UPDATE_ALL_USER_UNREAD:
+      return {
+        ...state,
+        stores: state.stores.map(store => {
+          // Kiểm tra xem userId có trong mảng payload không
+          const isRead = action.payload.includes(store.id);
+          return { ...store, is_read: isRead };
+        })
+      }
     default:
       return state;
   }

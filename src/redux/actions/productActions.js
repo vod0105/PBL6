@@ -2,7 +2,9 @@ import types from "../types";
 import {
     fetchProductsBestSaleService,
     fetchProductsByIdCategoryService,
+    fetchAllCombosService,
     fetchProductByIdService,
+    fetchComboByIdService,
     fetchProductsByIdStoreService,
     fetchRatingProductByIdService,
 
@@ -48,6 +50,25 @@ const fetchProductsByIdCategory = (id) => {
         }
     }
 };
+// fetch all combos
+const fetchAllCombosSuccess = (data) => {
+    return {
+        type: types.FETCH_ALL_COMBO_SUCCESS,
+        dataCombos: data
+    };
+};
+const fetchAllCombos = (id) => {
+    return async (dispatch, getState) => {
+        try {
+            const res = await fetchAllCombosService();
+            const data = res && res.data ? res.data.data : [];
+            dispatch(fetchAllCombosSuccess(data)); // // Chạy ở đây (2)
+            console.log(data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+};
 
 // by idProduct => Product Detail
 const fetchProductByIdSuccess = (data) => {
@@ -68,6 +89,26 @@ const fetchProductById = (id) => {
         }
     }
 };
+// by idCombo => Combo Detail
+const fetchComboByIdSuccess = (data) => {
+    return {
+        type: types.FETCH_COMBO_BY_ID_SUCCESS,
+        comboDetail: data
+    };
+};
+const fetchComboById = (id) => {
+    return async (dispatch, getState) => {
+        try {
+            const res = await fetchComboByIdService(id);
+            const data = res && res.data ? res.data.data[0] : {};
+            dispatch(fetchComboByIdSuccess(data)); // // Chạy ở đây (2)
+            console.log(data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+};
+
 // by ID Store
 const fetchProductsByIdStoreSuccess = (data) => {
     return {
@@ -121,8 +162,10 @@ const fetchRatingProductById = (id) => {
 export {
     fetchProductsBestSale,
     fetchProductsByIdCategory,
+    fetchAllCombos,
     fetchProductById,
     fetchProductsByIdStore,
     fetchRatingProductById,
+    fetchComboById,
 
 }

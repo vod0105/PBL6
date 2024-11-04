@@ -50,6 +50,13 @@ const increaseOneQuantityService = (cartId) => {
         url: `/api/v1/user/cart/update?cartId=${cartId}&quantity=1`,
     });
 }
+const decreaseOneQuantityService = (cartId) => {
+    return instance({
+        method: 'put',
+        url: `/api/v1/user/cart/update?cartId=${cartId}&quantity=-1`,
+    });
+}
+
 
 // note: Mua ngay -> status = 3: Đơn hàng đã được xác nhận
 //       Giỏ hàng -> status = 1: Đơn hàng mới
@@ -179,5 +186,6 @@ export {
     fetchOrderInTransitByOrderCodeService,
     fetchShipperDetailByIdService,
     fetchUserDetailByIdService,
+    decreaseOneQuantityService,
 
 }

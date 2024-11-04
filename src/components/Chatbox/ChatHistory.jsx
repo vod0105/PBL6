@@ -28,8 +28,8 @@ const ChatHistory = (props) => {
     const [imagePreview, setImagePreview] = useState("");
 
     useEffect(() => {
-        console.log("idu", idU);
-        console.log("u: ", u);
+        // console.log("idu", idU);
+        // console.log("u: ", u);
     })
     // đó ko có giá trị
     const unreadRef = useRef(unreadUsers);
@@ -49,7 +49,7 @@ const ChatHistory = (props) => {
         unreadRef.current = unreadUsers;
     }, [unreadUsers]);
     useEffect(() => {
-        console.log("count: ", newMessagesCount);
+        // console.log("count: ", newMessagesCount);
     }, [newMessagesCount])
 
     useEffect(() => {
@@ -94,10 +94,10 @@ const ChatHistory = (props) => {
 
     useEffect(() => {
         // Set up WebSocket connection once
-        const socket = new WebSocket('ws://localhost:8888/ws/chat');
+        const socket = new WebSocket('ws://localhost:8080/ws/chat');
 
         socket.onopen = () => {
-            console.log('Connected to the WebSocket server');
+            // console.log('Connected to the WebSocket server');
             // Send userId information when connected
             socket.send(JSON.stringify({
                 type: 'identify',
@@ -107,11 +107,11 @@ const ChatHistory = (props) => {
 
         socket.onmessage = (event) => {
             const message = JSON.parse(event.data);
-            console.log("Received message: ", message);
+            // console.log("Received message: ", message);
 
             if (message.type === 'online') {
                 const { userId, status } = message;
-                console.log(`User ${userId} is ${status ? 'online' : 'offline'}`);
+                // console.log(`User ${userId} is ${status ? 'online' : 'offline'}`);
                 dispatch(updateUserStatus(userId, status));
 
             } else if (message.type === 'onlineUsers') {
@@ -136,7 +136,7 @@ const ChatHistory = (props) => {
                     message
                 ]);
                 if (message.receiver === idU) {
-                    console.log("vao day rôiiiiff")
+                    // console.log("vao day rôiiiiff")
                     if (!unreadRef.current) {
                         unreadRef.current = [];
                     }
@@ -149,7 +149,7 @@ const ChatHistory = (props) => {
                     }
                     changeUserLocation(message.sender, storesRef);
                 } else if (message.sender === idU) {
-                    console.log("vao day rôiiiiff2")
+                    // console.log("vao day rôiiiiff2")
                     // dispatch(updateUserIsRead(idU,false));
                     changeUserLocation(message.receiver, storesRef);
                 }
@@ -157,7 +157,7 @@ const ChatHistory = (props) => {
         };
 
         socket.onclose = () => {
-            console.log('Disconnected from WebSocket server');
+            // console.log('Disconnected from WebSocket server');
         };
 
         setWs(socket);
@@ -185,7 +185,7 @@ const ChatHistory = (props) => {
 
     const fetchChatHistory = async () => {
         const res = await GetChatHistory(prevselectedUser.current.id);
-        console.log(res);
+        // console.log(res);
         if (res.data.EC === 0) {
             setChatHistory(res.data.DT);
         }
@@ -268,7 +268,7 @@ const ChatHistory = (props) => {
 
             try {
                 let res = await PostImageChat(sender, receiver, isRead, image);
-                console.log(res);
+                // console.log(res);
 
                 if (res.data.EC === 0) {
                     ws.send(JSON.stringify({

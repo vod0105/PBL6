@@ -9,23 +9,23 @@ import ChatContext from '../../context/showChat';
 
 const ChatContent = (props) => {
     const stores = useSelector((state) => state.stores.stores); // Lấy dữ liệu từ Redux store
-    const { setNewMessagesCount, newMessagesCount, setShowChat, product, st, unreadUsers, setUnreadUsers,selectedUser, setSelectedUser } = props;
+    const { setNewMessagesCount, newMessagesCount, setShowChat, product, st, unreadUsers, setUnreadUsers, selectedUser, setSelectedUser } = props;
     const [searchTerm, setSearchTerm] = useState("");
     const [search, setSearch] = useState(false);
     const [users, setUsers] = useState([]);
     const [loadStores, setLoadStores] = useState(false);
     const [filteredUsers, setFilteredUsers] = useState([]);
     const searchRef = useRef(null);  // Tạo ref cho ô input
-    const dispatch = useDispatch();  
-    const [rederKey, setRenderKey] = useState(0);  
+    const dispatch = useDispatch();
+    const [rederKey, setRenderKey] = useState(0);
     useEffect(() => {
         const timer = setTimeout(() => {
             if (stores && stores.length > 0) {
                 setSelectedUser(stores[0]);
             }
-        }, 1000); 
+        }, 1000);
         return () => clearTimeout(timer);
-       
+
     }, [stores]);
     useEffect(() => {
         // Khi selectedUser thay đổi, bạn có thể cập nhật một trạng thái khác để buộc render lại
@@ -44,11 +44,11 @@ const ChatContent = (props) => {
     // };
 
     useEffect(() => {
-        console.log("stores thay ddoi: ", stores)
+        // console.log("stores thay ddoi: ", stores)
     }, [stores])
 
     useEffect(() => {
-        console.log("store o conten: ", stores)
+        // console.log("store o conten: ", stores)
     }, [])
 
     useEffect(() => {
@@ -74,7 +74,7 @@ const ChatContent = (props) => {
     };
 
     const changeUserLocation = (idReceiver, storesRef) => {
-        console.log("stores change: ", storesRef.current);
+        // console.log("stores change: ", storesRef.current);
 
         // Tìm kiếm người dùng trong storesRef
         const index = storesRef.current.findIndex(u => u.id === idReceiver);
@@ -86,8 +86,8 @@ const ChatContent = (props) => {
             storesRef.current = newStores;
             dispatch(fetchUpdate({ DT: newStores }));  // Cập nhật lại stores qua Redux
         } else {
-            loadStoreAgain(idReceiver,storesRef);
-            console.log('Không tìm thấy người dùng');
+            loadStoreAgain(idReceiver, storesRef);
+            // console.log('Không tìm thấy người dùng');
         }
     };
 
@@ -96,7 +96,7 @@ const ChatContent = (props) => {
         const currentStores = storesRef.current;  // Lấy giá trị mới nhất từ storesRef
         const ion = isOnlineRef.current;     // Lấy giá trị mới nhất từ isOnlineRef
 
-        console.log("Danh sách đang online: ", ion);
+        // console.log("Danh sách đang online: ", ion);
 
         // Cập nhật trạng thái `online` của các stores dựa trên danh sách `isOnline`
         const updatedStores = currentStores.map(store => ({
@@ -105,7 +105,7 @@ const ChatContent = (props) => {
         }));
 
         dispatch(fetchUpdate({ DT: updatedStores }));
-        console.log("Danh sách stores cập nhật: ", updatedStores);
+        // console.log("Danh sách stores cập nhật: ", updatedStores);
     };
     //
     const handleClickUser = (user) => {
@@ -125,7 +125,7 @@ const ChatContent = (props) => {
             const response = await PutUpdateRead(userId);
 
             if (response.data.EC === 0) {
-                console.log('Update successful:', response.data);
+                // console.log('Update successful:', response.data);
             }
         } catch (error) {
             console.error('Error updating read status:', error);
@@ -147,9 +147,9 @@ const ChatContent = (props) => {
     }, [users]);
 
 
-    const loadStoreAgain = async (idReceiver,storesRef) => {
+    const loadStoreAgain = async (idReceiver, storesRef) => {
         try {
-            console.log("Loading stores again...");
+            // console.log("Loading stores again...");
 
             const previousOnlineUsers = storesRef.current
                 .filter(user => user.online === true)
@@ -185,10 +185,10 @@ const ChatContent = (props) => {
 
     const handleClickSearch = async () => {
         if (searchTerm !== '') {
-            console.log("Loading stores again...");
+            // console.log("Loading stores again...");
             const res = await searchUsers(searchTerm);
             if (res.data.EC === 0) {
-                console.log("data user: ", res.data.DT)
+                // console.log("data user: ", res.data.DT)
                 setUsers(res.data.DT);
                 setFilteredUsers(res.data.DT);
             }
@@ -233,7 +233,7 @@ const ChatContent = (props) => {
                                     className="form-control"
                                     placeholder="Search..."
                                     value={searchTerm}
-                                    style={{outline:"none"}}
+                                    style={{ outline: "none" }}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                     onClick={() => {
                                         setSearchTerm("")

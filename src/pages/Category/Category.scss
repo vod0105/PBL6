@@ -1,11 +1,19 @@
 
 .page-category {
-  margin-top: 50px;
-  &.has-products {
+  margin-top: 20px;
+  .search-filter-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 50px;
+    margin-right: 200px;
+    .search-container{
+      margin-right: 30px;
+    }
+  }
+  .has-products {
     background: url('../../assets/category/jollibee.png') no-repeat;
     background-size: inherit;
     background-position: center;
-  }
   .category-title {
     margin-top: 30px;
     text-align: center;
@@ -80,4 +88,5 @@
         grid-template-columns: repeat(2, 1fr);
       }
     }
+  }
 }

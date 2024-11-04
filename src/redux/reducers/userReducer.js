@@ -1,6 +1,7 @@
 // reducers/authReducer.js
 const initialState = {
     listProductsInCart: {}, // fetch từ server
+    listCombosInCart: {},
     isBuyNow: false,
     productDetailBuyNow: {},
     allOrders: {},
@@ -21,6 +22,7 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 listProductsInCart: action.dataProducts,
+                listCombosInCart: action.dataCombos
             };
         case 'BUY_NOW_OPTION': // Nhấn mua ngay
             return {
@@ -46,6 +48,7 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 listProductsInCart: {},
+                listCombosInCart: {}
             }
         case 'PLACE_ORDER_ADD_TO_CART_ERROR':
             return {

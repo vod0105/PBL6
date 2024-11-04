@@ -29,7 +29,7 @@ const Navbar = () => {
 
   const [product, setProduct] = useState(null);
   const [st, setST] = useState(null);
-  
+
   const handleShowLogin = () => {
     dispatch(showLoginModal());
   };
@@ -48,9 +48,13 @@ const Navbar = () => {
 
   // Mỗi li ở ul thực đơn được nhấn -> active cho THỰC ĐƠN -> Dùng path trên URL 
   const location = useLocation(); // useLocation -> Tự động re-render cho component nào sử dụng Hook này
-  const isMenuActive = listCategories.some( // true/false
-    (category) => location.pathname === `/category/${category.categoryId}` // condition
+  // const isMenuActive = listCategories.some( // true/false
+  //   (category) => location.pathname === `/category/${category.categoryId}` // condition
+  // );
+  const isMenuActive = listCategories.some(
+    (category) => location.pathname === `/category/${category.categoryId}` || location.pathname === `/combo`
   );
+
 
   // ??? -> sticky chưa hiểu: JS + CSS
   useEffect(() => {
@@ -89,11 +93,20 @@ const Navbar = () => {
           Giới thiệu
         </NavLink>
         <NavLink
-          to={listCategories.length > 0 ? `/category/${listCategories[0].categoryId}` : "/category"}
-          className={({ isActive }) => ((isActive || isMenuActive) ? "active navbar-category" : "navbar-category")}
+          to={listCategories.length > 0 ? `combo` : "/category"}
+          className={({ isActive }) => (isActive || isMenuActive ? "active navbar-category" : "navbar-category")}
         >
           Thực đơn
           <ul className="navbar-category-dropdown">
+            <li className="navbar-category-item">
+              <NavLink
+                to={`/combo`}
+                className={({ isActive }) => (isActive ? "active-category-item" : "")}
+              >
+                <img src={cate_1} alt="" />
+                <p>Combo</p>
+              </NavLink>
+            </li>
             {
               listCategories && listCategories.length > 0
               &&
@@ -136,12 +149,12 @@ const Navbar = () => {
           Cửa hàng
         </NavLink>
 
-        <NavLink
+        {/* <NavLink
           to="/test-ggmap"
           className={({ isActive }) => (isActive ? 'active' : '')}
         >
           Test GGMAP
-        </NavLink>
+        </NavLink> */}
 
         {/* <NavLink
           to="/test-checkout"
@@ -185,10 +198,10 @@ const Navbar = () => {
                     )
                 }
               </Link>
-              <ChatButton 
-                    product = {product}
-                    setProduct = {setProduct}
-                    st = {st}
+              <ChatButton
+                product={product}
+                setProduct={setProduct}
+                st={st}
               />
             </>
             : <>

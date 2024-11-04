@@ -19,6 +19,8 @@ import PromotionDetail from '../pages/PromotionDetail/PromotionDetail';
 import OAuth2RedirectHandler from '../components/OAuth2RedirectHandler/OAuth2RedirectHandler';
 import RouteMap from '../components/RouteMap/RouteMap';
 import DeliveryMap from '../components/DeliveryMap/DeliveryMap';
+import Combo from '../pages/Combo/Combo';
+import ComboItemDetail from '../components/ComboItemDetail/ComboItemDetail';
 
 const AppRoutes = (props) => {
     return (
@@ -34,6 +36,8 @@ const AppRoutes = (props) => {
                 <Route path="/" element={<Home />} />
                 <Route path="/introduce" element={<Introduce />} />
                 <Route path="/category/:id" element={<Category />} />
+                <Route path="/combo" element={<Combo />} />
+
                 <Route path="/promotion" element={<Promotion />} />
                 {/* <Route path="/store" element={<Store_Old />} /> */}
                 <Route path="/cart" element={<Cart />} />
@@ -42,6 +46,8 @@ const AppRoutes = (props) => {
                 <Route path="/account/*" element={<Account />} />
 
                 <Route path="/product-detail/:id" element={<ProductItemDetail />} />
+                <Route path="/combo-detail/:id" element={<ComboItemDetail />} />
+
                 <Route path="/store" element={<Store />} />
                 <Route path="/store-detail/:id" element={<StoreDetail />} />
 
@@ -49,7 +55,7 @@ const AppRoutes = (props) => {
                 <Route path="/promotion-detail/:id" element={<PromotionDetail />} />
                 <Route path="/order-complete" element={<OrderComplete />} />
 
-                <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />   
+                <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
                 <Route path="/test-ggmap" element={<RouteMap />} />
                 <Route path="/order-in-transit/:orderCode" element={<DeliveryMap />} />
 

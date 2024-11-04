@@ -1,27 +1,26 @@
 import React, { useState, useEffect } from "react";
-import './Category.scss';
-import ProductItem from "../../components/ProductItem/ProductItem";
+import './Combo.scss';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProductsByIdCategory } from "../../redux/actions/productActions";
+import { fetchAllCombos } from "../../redux/actions/productActions";
 import Pagination from 'react-bootstrap/Pagination';
+import ComboItem from "../../components/ComboItem/ComboItem";
 
-export default function Category() {
-  const { id } = useParams();
+export default function Combo() {
   const dispatch = useDispatch();
-  const listProducts = useSelector((state) => state.product.listProductsByIdCategory);
+  const allCombos = useSelector((state) => state.product.allCombos);
 
   // State -> rang hiện tại
   const [activePage, setActivePage] = useState(1);
   const itemsPerPage = 8; // Số sản phẩm mỗi trang
-  const totalPages = Math.ceil(listProducts.length / itemsPerPage); // Tổng số trang
+  const totalPages = Math.ceil(allCombos.length / itemsPerPage); // Tổng số trang
   // State cho tìm kiếm và sắp xếp
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSort, setSelectedSort] = useState("default");
   useEffect(() => {
     window.scrollTo(0, 0);
-    dispatch(fetchProductsByIdCategory(id));
-  }, [id, dispatch]); // 'id' category thay đổi -> lấy lại list products
+    dispatch(fetchAllCombos());
+  }, [dispatch]);
 
   // Hàm xử lý thay đổi từ khóa tìm kiếm
   const handleSearchChange = (event) => {
@@ -36,16 +35,16 @@ export default function Category() {
   };
 
   // Lọc và sắp xếp sản phẩm theo từ khóa và giá
-  const filteredProducts = listProducts
-    .filter((product) => product.productName.toLowerCase().includes(searchTerm.toLowerCase()))
+  const filteredProducts = allCombos
+    .filter((combo) => combo.comboName.toLowerCase().includes(searchTerm.toLowerCase()))
     .sort((a, b) => {
-      if (selectedSort === "asc") return a.discountedPrice - b.discountedPrice;
-      if (selectedSort === "desc") return b.discountedPrice - a.discountedPrice;
+      if (selectedSort === "asc") return a.price - b.price;
+      if (selectedSort === "desc") return b.price - a.price;
       return 0; // Mặc định
     });
 
   // Lấy sản phẩm cho trang hiện tại
-  const currentProducts = filteredProducts.slice(
+  const currentCombos = filteredProducts.slice(
     (activePage - 1) * itemsPerPage,
     activePage * itemsPerPage
   );
@@ -68,6 +67,8 @@ export default function Category() {
       setActivePage(activePage + 1);
     }
   };
+
+
 
   return (
     <div className="page-category">
@@ -107,16 +108,16 @@ export default function Category() {
         </div>
       </div>
       <div
-        className={`${listProducts && listProducts.length > 0 ? 'has-products' : ''}`}
+        className={`${allCombos && allCombos.length > 0 ? 'has-products' : ''}`}
       >
         <div className="category-list-products">
           {
-            currentProducts && currentProducts.length > 0 ? (
-              currentProducts.map((product, index) => (
+            currentCombos && currentCombos.length > 0 ? (
+              currentCombos.map((combo, index) => (
                 <React.Fragment key={index}>
-                  <ProductItem product={product} />
+                  <ComboItem combo={combo} />
                   {
-                    (index + 1) % 4 === 0 && (index + 1) !== currentProducts.length && <hr className="hr-separate" />
+                    (index + 1) % 4 === 0 && (index + 1) !== currentCombos.length && <hr className="hr-separate" />
                   }
                 </React.Fragment>
               ))

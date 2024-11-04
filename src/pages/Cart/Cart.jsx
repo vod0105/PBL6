@@ -7,6 +7,7 @@ import {
   placeOrderUsingAddToCart,
   removeProductInCart,
   increaseOneQuantity,
+  decreaseOneQuantity,
 
 } from "../../redux/actions/userActions";
 import { toast } from "react-toastify";
@@ -16,13 +17,16 @@ const Cart = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const listProducts = useSelector((state) => {
+  const listProductsInCart = useSelector((state) => {
     return state.user.listProductsInCart;
+  })
+
+  const listCombosInCart = useSelector((state) => {
+    return state.user.listCombosInCart;
   })
   useEffect(() => {
     dispatch(fetchProductsInCart());
   }, [dispatch]);
-
   // Tăng/giảm slsp
   const handleIncreaseQuantity = (item) => {
     // note: BE thêm stockQuantity ở mỗi sản phẩm trong giỏ hàng khi trả về data
@@ -32,12 +36,11 @@ const Cart = () => {
     // else {
     //   toast.error('Sản phẩm vượt quá số lượng!')
     // }
-
     dispatch(increaseOneQuantity(item.cartId));
   };
   const handleDecreaseQuantity = (item) => {
     if (item.product.quantity > 1) {
-      // dispatch(updateProductQuantityInCart(item, item.product.quantity - 1));
+      dispatch(decreaseOneQuantity(item.cartId));
     }
   };
   // Xóa sản phẩm khỏi giỏ hàng
@@ -46,13 +49,16 @@ const Cart = () => {
   };
   const getTotalPriceInCart = () => {
     let total = 0;
-    for (let i = 0; i < listProducts.length; i++) {
-      total += (listProducts[i].product.unitPrice * listProducts[i].product.quantity);
+    for (let i = 0; i < listProductsInCart.length; i++) {
+      total += (listProductsInCart[i].product.unitPrice * listProductsInCart[i].product.quantity);
+    }
+    for (let i = 0; i < listCombosInCart.length; i++) {
+      total += (listCombosInCart[i].combo.unitPrice * listCombosInCart[i].combo.quantity);
     }
     return total;
   }
   const handlePlaceOrder = () => {
-    if (!listProducts || !Array.isArray(listProducts) || listProducts.length === 0) { // -> Xử lý thêm trường hợp listProducts ko phải là Array
+    if (!listProductsInCart || !Array.isArray(listProductsInCart) || listProductsInCart.length === 0 || !listCombosInCart || !Array.isArray(listCombosInCart) || listCombosInCart.length === 0) { // -> Xử lý thêm trường hợp listProducts ko phải là Array
       toast.error('Không có sản phẩm trong giỏ hàng!');
     }
     else {
@@ -63,17 +69,29 @@ const Cart = () => {
 
   // select -> filter
   const [selectedStore, setSelectedStore] = useState("all");
+  const [searchTerm, setSearchTerm] = useState(""); // Thêm state lưu từ khóa tìm kiếm
   const handleStoreChange = (event) => {
-    console.log('storeId đang chọn: ', selectedStore);
+    // console.log('storeId đang chọn: ', selectedStore);
     setSelectedStore(event.target.value);
-    console.log('storeId đang chọn: ', selectedStore);
+    // console.log('storeId đang chọn: ', selectedStore);
   };
-  const filteredProducts = Array.isArray(listProducts) ? listProducts.filter((item) => {
-    console.log('item.product.storeId: ', item.product.storeId);
-    return selectedStore === "all" || +item.product.storeId === +selectedStore;
-  }) : [];
 
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value); // Cập nhật từ khóa tìm kiếm khi nhập
+  };
 
+  const filteredProducts = Array.isArray(listProductsInCart)
+    ? listProductsInCart.filter((item) => {
+      const isStoreMatch = selectedStore === "all" || +item.product.storeId === +selectedStore;
+      const isSearchMatch = item.product.productName.toLowerCase().includes(searchTerm.toLowerCase()); // Lọc theo tên sản phẩm
+      return isStoreMatch && isSearchMatch;
+    })
+    : [];
+
+  // const filteredProducts = Array.isArray(listProductsInCart) ? listProductsInCart.filter((item) => {
+  //   console.log('item.product.storeId: ', item.product.storeId);
+  //   return selectedStore === "all" || +item.product.storeId === +selectedStore;
+  // }) : [];
   return (
     <div className="page-cart">
       <div className="search-filter-container">
@@ -81,9 +99,16 @@ const Cart = () => {
           <div className="row">
             <div className="col-md-12">
               <div className="input-group">
-                <input className="form-control border-end-0 border" type="search" id="example-search-input" />
+                <input
+                  className="form-control border-end-0 border"
+                  type="search"
+                  value={searchTerm} // Hiển thị từ khóa trong ô input
+                  onChange={handleSearchChange} // Xử lý khi người dùng nhập
+                  placeholder="Tìm kiếm sản phẩm"
+                />
+
                 <span className="input-group-append">
-                  <button className="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5" type="button">
+                  <button className="btn btn-outline-secondary bg-white border ms-n5" type="button">
                     <i className="fa fa-search"></i>
                   </button>
                 </span>
@@ -99,17 +124,18 @@ const Cart = () => {
             aria-label="Default select example"
           >
             <option value="all">Tất cả cửa hàng</option>
-            {Array.isArray(listProducts) && listProducts
-              .map((item) => item.product.dataStore)
-              .filter((value, index, self) => self.findIndex(v => v.storeId === value.storeId) === index)
-              .map((store) => (
-                <option key={store.storeId} value={store.storeId}>
-                  {store.storeName}
-                </option>
-              ))}
+            {
+              Array.isArray(listProductsInCart) && listProductsInCart
+                .map((item) => item.product.dataStore)
+                .filter((value, index, self) => self.findIndex(v => v.storeId === value.storeId) === index)
+                .map((store) => (
+                  <option key={store.storeId} value={store.storeId}>
+                    {store.storeName}
+                  </option>
+                ))
+            }
           </select>
         </div>
-
       </div>
       <div className="cart-items">
         <div className="cart-items-title">

@@ -7,14 +7,15 @@ import {
     placeOrderAddToCartService,
     removeProductInCartService,
     increaseOneQuantityService,
+    decreaseOneQuantityService,
     fetchAllOrdersService,
     cancelOrderService,
     reviewOrderService,
     fetchOrderInTransitByOrderCodeService,
     fetchShipperDetailByIdService
-
 } from "../../services/userService";
 import { fetchStoreByIdService } from "../../services/storeService";
+import { fetchProductByIdService } from "../../services/productService";
 import { toast } from "react-toastify";
 
 // Register New User
@@ -87,10 +88,11 @@ const addToCart = (productId, quantity, storeId, size, status) => {
     };
 }
 // fetch list products in cart
-const fetchProductsInCartSuccess = (data) => {
+const fetchProductsInCartSuccess = (dataProducts, dataCombos) => {
     return {
         type: types.FETCH_PRODUCT_CART_SUCCESS,
-        dataProducts: data
+        dataProducts: dataProducts,
+        dataCombos: dataCombos
     };
 };
 const fetchProductsInCart = () => {
@@ -98,17 +100,38 @@ const fetchProductsInCart = () => {
         try {
             const res = await fetchProductsInCartService();
             let data = res && res.data && res.data.data ? res.data.data : [];
-            // Thêm thông tin cửa hàng -> storeId -> infor store
-            data = await Promise.all(
-                data.map(async (productInCart) => {
+            // Lọc chỉ lấy sản phẩm có type là 'product'
+            let dataProducts = data.filter((cartItem) => cartItem.type === 'product');
+            dataProducts = await Promise.all(
+                dataProducts.map(async (productInCart) => {
                     const resStore = await fetchStoreByIdService(productInCart.product.storeId);
+                    // Thêm thông tin cửa hàng -> storeId -> infor store
                     const dataStore = resStore && resStore.data ? resStore.data.data : {};
-                    // console.log('dataStore: ', dataStore);
                     return {
                         ...productInCart,
                         product: {
                             ...productInCart.product,
                             dataStore: dataStore, // Thêm thông tin từ dataStore vào product
+                        },
+                    };
+                })
+            );
+            // Lọc chỉ lấy sản phẩm có type là 'combo'
+            let dataCombos = data.filter((cartItem) => cartItem.type === 'combo');
+            dataCombos = await Promise.all(
+                dataCombos.map(async (comboItem) => {
+                    // Thông tin Store
+                    const resStore = await fetchStoreByIdService(comboItem.combo.storeId);
+                    const dataStore = resStore && resStore.data ? resStore.data.data : {};
+                    // Thông tin drink -> note: Chỉ có 1 drink
+                    const resDrink = await fetchProductByIdService(comboItem.combo.drinkId[0]);
+                    const dataDrink = resDrink && resDrink.data ? resStore.data.data : {};
+                    return {
+                        ...comboItem,
+                        combo: {
+                            ...comboItem.combo,
+                            dataStore: dataStore,
+                            dataDrink: dataDrink
                         },
                     };
                 })
@@ -120,7 +143,7 @@ const fetchProductsInCart = () => {
             }
             else {
                 console.log('data: ', data);
-                dispatch(fetchProductsInCartSuccess(data));
+                dispatch(fetchProductsInCartSuccess(dataProducts, dataCombos));
                 // console.log('>>> data cart: ', data);
             }
         } catch (error) {
@@ -292,6 +315,30 @@ const increaseOneQuantity = (cartId) => {
         }
     }
 };
+// Nhấn - => Giảm 1
+const decreaseOneQuantitySuccess = () => {
+    return {
+        type: types.DECREASE_ONE_QUANTITY_SUCCESS,
+    };
+};
+const decreaseOneQuantity = (cartId) => {
+    return async (dispatch, getState) => {
+        try {
+            const res = await decreaseOneQuantityService(cartId);
+            const isSuccess = res && res.data ? res.data.success : false;
+            if (isSuccess) {
+                dispatch(decreaseOneQuantitySuccess());
+                dispatch(fetchProductsInCart());
+                toast.success(res.data.message);
+            } else {
+                toast.error(res.data.message);
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error("Có lỗi ở Server!");
+        }
+    }
+};
 
 // Lấy tất cả orders
 const fetchAllOrdersSuccess = (data) => {
@@ -400,6 +447,7 @@ export {
     resetAllUser,
     removeProductInCart,
     increaseOneQuantity,
+    decreaseOneQuantity,
     fetchAllOrders,
     cancelOrder,
     reviewOrder,

@@ -54,7 +54,7 @@ const RouteMap = () => {
         }
       );
 
-      console.log('>>> check res: ', response);
+      // console.log('>>> check res: ', response);
 
       // Extract and display distance from API response
       if (

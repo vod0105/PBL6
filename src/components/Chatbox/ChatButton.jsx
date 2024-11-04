@@ -1,4 +1,4 @@
-import { useEffect, useState,useContext } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import './ChatButton.css';
 import { useDispatch, useSelector } from "react-redux";
 import ChatContent from './ChatContent';
@@ -9,22 +9,22 @@ import ChatContext from '../../context/showChat';
 
 const ChatButton = (props) => {
     const stores = useSelector((state) => state.stores.stores); // Lấy dữ liệu từ Redux store
-    const {product} = props;
+    const { product } = props;
     const [newMessagesCount, setNewMessagesCount] = useState(1);
-    const [unreadUsers,setUnreadUsers] = useState([]);
+    const [unreadUsers, setUnreadUsers] = useState([]);
     const dispatch = useDispatch();
-    const {showChat, setShowChat,selectedUser, setSelectedUser} = useContext(ChatContext);
+    const { showChat, setShowChat, selectedUser, setSelectedUser } = useContext(ChatContext);
 
     useEffect(() => {
         fetchAllStores();
         GetAllUnRead();
     }, []);
-    useEffect(()=>{
-        console.log("change new message count: ",newMessagesCount)
-    },[])
-    useEffect(()=>{
-        console.log("change new message count: ",newMessagesCount)
-    },[newMessagesCount])
+    useEffect(() => {
+        // console.log("change new message count: ",newMessagesCount)
+    }, [])
+    useEffect(() => {
+        // console.log("change new message count: ",newMessagesCount)
+    }, [newMessagesCount])
     // useEffect(() => {
     //     GetAllUnRead();
     // }, []); 
@@ -34,8 +34,8 @@ const ChatButton = (props) => {
         try {
             const res = await GetUnRead();
             if (res.data.EC === 0) {
-                console.log("Lấy tin nhắn chưa đọc thành công");
-                console.log("data unread: ", res);
+                // console.log("Lấy tin nhắn chưa đọc thành công");
+                // console.log("data unread: ", res);
                 // Lấy danh sách người dùng có is_online là false
                 const usersWithUnread = res.data.DT;
                 const unreadUserIds = usersWithUnread.map(user => user.id);
@@ -44,8 +44,8 @@ const ChatButton = (props) => {
                     setUnreadUsers(unreadUserIds);
                     dispatch(updateAllUserIsRead(usersWithUnread.map(user => user.id)));
 
-                  }, 2000);
-                  console.log("new unread chatbutoon: ",unreadUsers);
+                }, 2000);
+                //   console.log("new unread chatbutoon: ",unreadUsers);
             } else {
                 console.error("Lỗi khi lấy tin nhắn chưa đọc:", res);
             }
@@ -56,17 +56,17 @@ const ChatButton = (props) => {
 
     const fetchAllStores = async () => {
         try {
-            console.log("fetchData được gọi"); 
+            // console.log("fetchData được gọi"); 
             const res = await GetAllStoresChat();
-            console.log("dl trả về", res.data.DT);
+            // console.log("dl trả về", res.data.DT);
             if (res.data.EC === 0) {
                 const updatedStores = res.data.DT.map(store => ({
                     ...store,
                     online: false, // Giá trị mặc định cho thuộc tính `online`
-                    is_online:true
+                    is_online: true
                 }));
-                console.log("Đang cập nhật stores...");
-                console.log("update store but: ", stores)
+                // console.log("Đang cập nhật stores...");
+                // console.log("update store but: ", stores)
                 dispatch(fetchUpdate({ DT: updatedStores }));
             }
         } catch (error) {
@@ -91,11 +91,11 @@ const ChatButton = (props) => {
                     showChat={showChat}
                     setShowChat={setShowChat}
                     setNewMessagesCount={setNewMessagesCount}
-                    newMessagesCount ={newMessagesCount}
-                    product = {product}
-                    unreadUsers = {unreadUsers}
+                    newMessagesCount={newMessagesCount}
+                    product={product}
+                    unreadUsers={unreadUsers}
                     setUnreadUsers={setUnreadUsers}
-                    selectedUser ={selectedUser}
+                    selectedUser={selectedUser}
                     setSelectedUser={setSelectedUser}
                 />
             </div>

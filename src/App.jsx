@@ -22,8 +22,8 @@ const App = () => {
     <>
       <div className="app">
         <ChatProvider>
-        <Navbar />
-        <AppRoutes />
+          <Navbar />
+          <AppRoutes />
         </ChatProvider>
         {/* Redux -> Dùng Provider bọc Login/Register Modal => Bắt buộc Provider phải bọc Modal nếu không Modal sẽ không sử dụng được state Redux */}
         <LoginModal />
