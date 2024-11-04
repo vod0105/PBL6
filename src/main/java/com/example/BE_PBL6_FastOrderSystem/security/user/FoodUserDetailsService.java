@@ -14,6 +14,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class FoodUserDetailsService implements UserDetailsService {
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -23,7 +24,6 @@ public class FoodUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
-//        System.out.println("identifier: " + identifier);
         Optional<User> user = userRepository.findByUsernameOrSubOrFacebookId(identifier, identifier, identifier);
         if (user.isPresent()) {
             return FoodUserDetails.buildUserDetails(user.get());
@@ -31,6 +31,4 @@ public class FoodUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User Not Found with identifier: " + identifier);
         }
     }
-
-
 }

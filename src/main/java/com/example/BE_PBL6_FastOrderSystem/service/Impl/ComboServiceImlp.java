@@ -82,7 +82,6 @@ public class ComboServiceImlp implements IComboService {
         if (comboRepository.findById(comboId).isEmpty()) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "Combo not found", ""));
         }
-
         Combo combo = comboRepository.findById(comboId).get();
         combo.setComboName(comboRequest.getComboName());
         combo.setComboPrice(comboRequest.getPrice());
@@ -110,6 +109,22 @@ public class ComboServiceImlp implements IComboService {
         return ResponseEntity.ok(new APIRespone(true, "Combo deleted successfully", ""));
     }
 
+    @Override
+    public ResponseEntity<APIRespone> addProduct(Long comboId, Long productId) {
+        if (comboRepository.findById(comboId).isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "Combo not found", ""));
+        }
+        Combo combo = comboRepository.findById(comboId).get();
+        if (combo.getProducts().stream().anyMatch(product -> product.getProductId().equals(productId))) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "Product already exists in combo", ""));
+        }
+        if (productRepository.findById(productId).isEmpty()){
+            return ResponseEntity.badRequest().body(new APIRespone(false, "Product not found", ""));
+        }
+        combo.getProducts().add(productRepository.findById(productId).get());
+        comboRepository.save(combo);
+        return ResponseEntity.ok(new APIRespone(true, "Product added to combo successfully", ""));
+    }
     @Override
     public ResponseEntity<APIRespone> addProducts(Long comboId, List<Long> productIds) {
         if (comboRepository.findById(comboId).isEmpty()) {

@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-
 @Entity
+
 @Table(name = "chat")
 public class Chat {
     @Id
@@ -26,16 +26,13 @@ public class Chat {
     User receiver;
     String message;
     LocalDateTime local_time;
-
     @Column(nullable = false, columnDefinition = "boolean default false")
-    Boolean isRead = false; // Mặc định là false
-
+    Boolean isRead = false;
     @Lob
     @Column(columnDefinition = "LONGTEXT")
-    private String image; // Lưu ảnh dưới dạng chuỗi Base64
-
+    private String image;
     @PrePersist
     protected void onCreate() {
-        local_time = LocalDateTime.now(); // Thiết lập thời gian hiện tại
+        local_time = LocalDateTime.now();
     }
 }

@@ -32,4 +32,8 @@ build/
 ### VS Code ###
 .vscode/
 # .gitignore
+<<<<<<< HEAD
 #src/main/resources/application-secrets.properties
+=======
+src/main/resources/application-secrets.properties
+>>>>>>> origin/feature/backup-3

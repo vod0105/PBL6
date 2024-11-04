@@ -36,28 +36,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     private final FoodUserDetailsService userDetailsService;
     private final TokenRepository tokenRepository;
 
-//    @Override
-//    protected void doFilterInternal(HttpServletRequest request,
-//                                    HttpServletResponse response,
-//                                    FilterChain filterChain) throws ServletException, IOException {
-//        try {
-//            String jwt = parseJwt(request);
-//            if (jwt != null && jwtUtils.validateToken(jwt)) {
-//                String phone = jwtUtils.getUserNameFromToken(jwt);
-//                System.out.println("phone: " + phone);
-//
-//                if (phone != null) {
-//                    UserDetails userDetails = userDetailsService.loadUserByUsername(phone);
-//                    var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-//                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-//                    SecurityContextHolder.getContext().setAuthentication(authentication);
-//                }
-//            }
-//        } catch (Exception e) {
-//            System.out.println("Cannot set user authentication: " + e);
-//        }
-//        filterChain.doFilter(request, response);
-//    }
 @Override
 protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
         throws ServletException, IOException {

@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,20 +16,15 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cartId;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
     @ManyToOne
     @JoinColumn(name = "combo_id")
     private Combo combo;
-//    @ManyToOne
-//    @JoinColumn(name = "order_id")
-//    private Order order;
     private int quantity;
     private Double unitPrice;
     private Double totalPrice;
@@ -58,7 +52,6 @@ public class Cart {
         updatedAt = LocalDateTime.now();
     }
 
-
     @Override
     public String toString() {
         return "Cart{" +
@@ -66,7 +59,6 @@ public class Cart {
                 ", user=" + user +
                 ", product=" + product +
                 ", combo=" + combo +
-//                ", order=" + order +
                 ", quantity=" + quantity +
                 ", unitPrice=" + unitPrice +
                 ", totalPrice=" + totalPrice +

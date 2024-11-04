@@ -19,5 +19,4 @@ public class SocialConfig {
 
     @Value("${google.client.secret}")
     private String googleClientSecret;
-
 }

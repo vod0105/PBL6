@@ -34,6 +34,9 @@ public class OrderServiceImpl implements IOrderService {
     private final ShippingFeeRepository shippingFeeRepository;
     private final ShipperRepository shipperRepository;
     private final VoucherRepository discountCodeRepository;
+    private  final AnnounceRepository announceRepository;
+    private final UserVoucherRepository userVoucherRepository;
+
     public String generateUniqueOrderCode() {
         Random random = new Random();
         String orderCode;
@@ -174,6 +177,15 @@ public class OrderServiceImpl implements IOrderService {
         }
         order.setOrderDetails(orderDetails);
         orderRepository.save(order);
+        if (discountCode != null) {
+            UserVoucher userVoucher = userVoucherRepository.findByCode(discountCode);
+            if (userVoucher != null) {
+                userVoucher.setIsUsed(true);
+                userVoucherRepository.save(userVoucher);
+            }
+        }
+        AnnounceUser announceUser  = new AnnounceUser(userId,"Thông báo đơn hàng ","Bạn đặt hàng "+orderCode +" thành công . Tổng giá trị " + totalAmount);
+        announceRepository.save(announceUser);
         return ResponseEntity.ok(new APIRespone(true, "Order placed successfully", ""));
     }
 
@@ -299,7 +311,16 @@ public class OrderServiceImpl implements IOrderService {
         }
         order.setOrderDetails(orderDetails);
         orderRepository.save(order);
+        if (discountCode != null) {
+            UserVoucher userVoucher = userVoucherRepository.findByCode(discountCode);
+            if (userVoucher != null) {
+                userVoucher.setIsUsed(true);
+                userVoucherRepository.save(userVoucher);
+            }
 
+        }
+        AnnounceUser announceUser  = new AnnounceUser(userId,"Thông báo đơn hàng ","Bạn đặt hàng "+orderCode +" thành công . Tổng giá trị " + totalAmount);
+        announceRepository.save(announceUser);
         return ResponseEntity.ok(new APIRespone(true, "Order placed successfully", ""));
     }
     @Override
@@ -360,6 +381,8 @@ public class OrderServiceImpl implements IOrderService {
             }
             Voucher voucher1 = voucherOptional.get(0);
             totalAmount -= Math.round(totalAmount * voucher1.getDiscountPercent() / 100);
+            Voucher voucher = discountCodeRepository.findByCode(discountCode).orElseThrow();
+            totalAmount -= Math.round(totalAmount * voucher.getDiscountPercent() / 100);
         }
 
         // Tính phí giao hàng
@@ -390,6 +413,7 @@ public Long calculateOrderAmount(List<Long> cartIds, Double latitude, Double lon
     
     // Kiểm tra mã giảm giá
     if (discountCode != null) {
+
         LocalDateTime now = LocalDateTime.now();
         List<Voucher> voucherOptional = discountCodeRepository.findByStartDateBeforeAndEndDateAfter(now);
 
@@ -399,6 +423,9 @@ public Long calculateOrderAmount(List<Long> cartIds, Double latitude, Double lon
         } else {
             System.out.println("Discount code not found or expired");
         }
+
+        Voucher voucher = discountCodeRepository.findByCode(discountCode).orElseThrow();
+        totalAmount -= Math.round(totalAmount * voucher.getDiscountPercent() / 100);
     }
 
     // Group cart items by store

@@ -11,6 +11,7 @@ import com.example.BE_PBL6_FastOrderSystem.repository.VoucherRepository;
 import com.example.BE_PBL6_FastOrderSystem.request.VoucherRequest;
 import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
 import com.example.BE_PBL6_FastOrderSystem.response.VoucherResponse;
+import com.example.BE_PBL6_FastOrderSystem.response.VoucherUserResponse;
 import com.example.BE_PBL6_FastOrderSystem.service.IVoucherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -261,15 +262,19 @@ public class VoucherServiceImpl implements IVoucherService {
         if (user.isEmpty()) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "User not found", ""));
         }
-        List<VoucherResponse> voucherResponses = user.get().getVouchers().stream()
-                .map(userVoucher -> new VoucherResponse(
+
+
+
+        List<VoucherUserResponse> voucherResponses = user.get().getVouchers().stream()
+                .map(userVoucher -> new VoucherUserResponse(
                         userVoucher.getVoucher().getVoucherId(),
                         userVoucher.getVoucher().getStores().stream().map(Store::getStoreId).collect(Collectors.toList()),
                         userVoucher.getVoucher().getCode(),
                         userVoucher.getVoucher().getDiscountPercent(),
                         userVoucher.getVoucher().getDescription(),
                         userVoucher.getVoucher().getStartDate(),
-                        userVoucher.getVoucher().getEndDate()
+                        userVoucher.getVoucher().getEndDate(),
+                        userVoucher.getIsUsed()
                 ))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new APIRespone(true, "Success", voucherResponses));
