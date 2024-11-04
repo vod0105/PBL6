@@ -27,5 +27,6 @@ public class ProductStoreDTO {
         pro.setStockQuantity(stockQuantity);
         this.product = pro;
         this.stockQuantity = stockQuantity;
+
     }
 }
