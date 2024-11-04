@@ -2,13 +2,14 @@ package com.example.BE_PBL6_FastOrderSystem.service.Impl;
 
 import com.example.BE_PBL6_FastOrderSystem.entity.*;
 import com.example.BE_PBL6_FastOrderSystem.repository.*;
-import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
-import com.example.BE_PBL6_FastOrderSystem.response.OrderResponse;
-import com.example.BE_PBL6_FastOrderSystem.response.UserResponse;
+import com.example.BE_PBL6_FastOrderSystem.response.*;
 import com.example.BE_PBL6_FastOrderSystem.service.IOrderService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,11 +32,11 @@ public class OrderServiceImpl implements IOrderService {
     private final ProductStoreRepository productStoreRepository;
     private final SizeRepository sizeRepository;
     private final StatusOrderRepository statusOrderRepository;
-    private final ShippingFeeRepository shippingFeeRepository;
     private final ShipperRepository shipperRepository;
-    private final VoucherRepository discountCodeRepository;
-    private  final AnnounceRepository announceRepository;
+    private final ShippingFeeRepository shippingFeeRepository;
     private final UserVoucherRepository userVoucherRepository;
+    private  final AnnounceRepository announceRepository;
+    private final VoucherRepository discountCodeRepository;
 
     public String generateUniqueOrderCode() {
         Random random = new Random();
@@ -256,7 +257,7 @@ public class OrderServiceImpl implements IOrderService {
         orderDetail.setQuantity(quantity);
 
         if (product != null) {
-          Double unitPrice = getPriceBasedProductOnSize(product, s);
+            Double unitPrice = getPriceBasedProductOnSize(product, s);
             orderDetail.setUnitPrice(unitPrice);
             orderDetail.setTotalPrice(unitPrice * quantity);
         } else {
@@ -400,61 +401,61 @@ public class OrderServiceImpl implements IOrderService {
         }
         return totalAmount;
     }
-@Override
-public Long calculateOrderAmount(List<Long> cartIds, Double latitude, Double longitude, String discountCode) {
-    List<Cart> cartItems = cartIds.stream()
-            .flatMap(cartId -> getCartItemsByCartId(cartId).stream())
-            .toList();
+    @Override
+    public Long calculateOrderAmount(List<Long> cartIds, Double latitude, Double longitude, String discountCode) {
+        List<Cart> cartItems = cartIds.stream()
+                .flatMap(cartId -> getCartItemsByCartId(cartId).stream())
+                .toList();
 
-    long totalAmount = 0;
-    for (Cart item : cartItems) {
-        totalAmount += Math.round(item.getTotalPrice());
-    }
-    
-    // Kiểm tra mã giảm giá
-    if (discountCode != null) {
-
-        LocalDateTime now = LocalDateTime.now();
-        List<Voucher> voucherOptional = discountCodeRepository.findByStartDateBeforeAndEndDateAfter(now);
-
-        if (!voucherOptional.isEmpty()) {
-            Voucher voucher1 = voucherOptional.get(0);
-            totalAmount -= Math.round(totalAmount * voucher1.getDiscountPercent() / 100);
-        } else {
-            System.out.println("Discount code not found or expired");
+        long totalAmount = 0;
+        for (Cart item : cartItems) {
+            totalAmount += Math.round(item.getTotalPrice());
         }
 
-        Voucher voucher = discountCodeRepository.findByCode(discountCode).orElseThrow();
-        totalAmount -= Math.round(totalAmount * voucher.getDiscountPercent() / 100);
-    }
+        // Kiểm tra mã giảm giá
+        if (discountCode != null) {
 
-    // Group cart items by store
-    Map<Long, List<Cart>> itemsByStore = cartItems.stream()
-            .collect(Collectors.groupingBy(Cart::getStoreId));
+            LocalDateTime now = LocalDateTime.now();
+            List<Voucher> voucherOptional = discountCodeRepository.findByStartDateBeforeAndEndDateAfter(now);
 
-    // Calculate shipping fee for each store
-    double totalShippingFee = 0;
-    for (Map.Entry<Long, List<Cart>> entry : itemsByStore.entrySet()) {
-        Long storeId = entry.getKey();
-        Optional<Store> storeOptional = storeRepository.findById(storeId);
-        if (storeOptional.isPresent()) {
-            Store store = storeOptional.get();
-            Order dummyOrder = new Order();
-            dummyOrder.setLatitude(latitude);
-            dummyOrder.setLongitude(longitude);
-            Double shippingFee = calculateShippingFee(dummyOrder, store);
-            totalShippingFee += Math.round(shippingFee);
-        } else {
-            System.out.println("Store not found for storeId: " + storeId);
-            return 0L;
+            if (!voucherOptional.isEmpty()) {
+                Voucher voucher1 = voucherOptional.get(0);
+                totalAmount -= Math.round(totalAmount * voucher1.getDiscountPercent() / 100);
+            } else {
+                System.out.println("Discount code not found or expired");
+            }
+
+            Voucher voucher = discountCodeRepository.findByCode(discountCode).orElseThrow();
+            totalAmount -= Math.round(totalAmount * voucher.getDiscountPercent() / 100);
         }
+
+        // Group cart items by store
+        Map<Long, List<Cart>> itemsByStore = cartItems.stream()
+                .collect(Collectors.groupingBy(Cart::getStoreId));
+
+        // Calculate shipping fee for each store
+        double totalShippingFee = 0;
+        for (Map.Entry<Long, List<Cart>> entry : itemsByStore.entrySet()) {
+            Long storeId = entry.getKey();
+            Optional<Store> storeOptional = storeRepository.findById(storeId);
+            if (storeOptional.isPresent()) {
+                Store store = storeOptional.get();
+                Order dummyOrder = new Order();
+                dummyOrder.setLatitude(latitude);
+                dummyOrder.setLongitude(longitude);
+                Double shippingFee = calculateShippingFee(dummyOrder, store);
+                totalShippingFee += Math.round(shippingFee);
+            } else {
+                System.out.println("Store not found for storeId: " + storeId);
+                return 0L;
+            }
+        }
+
+        totalAmount += totalShippingFee;
+
+        System.out.println("Total amount sau khi tính toán: " + totalAmount);
+        return totalAmount;
     }
-
-    totalAmount += totalShippingFee;
-
-    System.out.println("Total amount sau khi tính toán: " + totalAmount);
-    return totalAmount;
-}
 
 
     @Transactional
@@ -551,6 +552,7 @@ public Long calculateOrderAmount(List<Long> cartIds, Double latitude, Double lon
 
     }
 
+
     @Override
     public ResponseEntity<APIRespone> getAllOrderDetailOfStore(Long ownerId) {
         List<Order> orders = orderRepository.findAll();
@@ -604,31 +606,57 @@ public Long calculateOrderAmount(List<Long> cartIds, Double latitude, Double lon
     }
 
 
-@Override
-public ResponseEntity<APIRespone> cancelOrder(String orderCode, Long userId) {
-    Optional<Order> orderOptional = orderRepository.findByOrderCode(orderCode);
-    if (orderOptional.isEmpty()) {
-        return ResponseEntity.badRequest().body(new APIRespone(false, "Order not found", ""));
+    @Override
+    public ResponseEntity<APIRespone> updateStatusDetail(String orderCode, Long OwnerId, String Status) {
+        Optional<Order> orderOptional = orderRepository.findByOrderCode(orderCode);
+        if (orderOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "Order code not found", ""));
+        }
+        // update status order detail
+        Order order = orderOptional.get();
+        List<OrderDetail> orderDetails = order.getOrderDetails();
+        StatusOrder statusOrder = statusOrderRepository.findByStatusName(Status);
+        if (statusOrder == null) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "Status not found", ""));
+        }
+        // tim tat ca store cua StoreId
+        List<Store> stores = storeRepository.findAllByManagerId(OwnerId);
+        if (stores.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "Store not found", ""));
+        }
+        if (orderDetails.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "Order detail not found", ""));
+        }
+        // tim tat ca order detail cua store
+        List<OrderDetail> orderDetails1 = orderDetails.stream()
+                .filter(orderDetail -> stores.contains(orderDetail.getStore()))
+                .collect(Collectors.toList());
+        if (orderDetails1.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "Order detail not found", ""));
+        }
+        orderDetails1.forEach(orderDetail -> orderDetail.setStatus(statusOrder));
+        orderDetailRepository.saveAll(orderDetails1);
+        orderRepository.save(order);
+        return ResponseEntity.ok(new APIRespone(true, "Status OrderDetail updated successfully", ""));
     }
-    Order order = orderOptional.get();
-    if (!order.getUser().getId().equals(userId)) {
-        return ResponseEntity.badRequest().body(new APIRespone(false, "Order does not belong to the specified user", ""));
-    }
-    if (order.getStatus().equals("Đơn hàng đã được xác nhận")) {
-        return ResponseEntity.badRequest().body(new APIRespone(false, "Order cannot be canceled", ""));
-    }
-    order.setStatus(statusOrderRepository.findByStatusName("Đơn hàng đã bị hủy"));
-    orderRepository.save(order);
 
-    // Retrieve and update the cart status
-//    List<Cart> carts = cartItemRepository.findByOrderId(order.getOrderId());
-//    for (Cart cart : carts) {
-//        cart.setStatus("Đã bị hủy");
-//        cartItemRepository.save(cart);
-//    }
-
-    return ResponseEntity.ok(new APIRespone(true, "Order and associated cart canceled successfully", ""));
-}
+    @Override
+    public ResponseEntity<APIRespone> cancelOrder(String orderCode, Long userId) {
+        Optional<Order> orderOptional = orderRepository.findByOrderCode(orderCode);
+        if (orderOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "Order not found", ""));
+        }
+        Order order = orderOptional.get();
+        if (!order.getUser().getId().equals(userId)) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "Order does not belong to the specified user", ""));
+        }
+        if (order.getStatus().equals("Đơn hàng đã được xác nhận")) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "Order cannot be canceled", ""));
+        }
+        order.setStatus(statusOrderRepository.findByStatusName("Đơn hàng đã bị hủy"));
+        orderRepository.save(order);
+        return ResponseEntity.ok(new APIRespone(true, "Order canceled successfully", ""));
+    }
 
     @Override
     public ResponseEntity<APIRespone> getOrdersByStatusAndUserId(String statusName, Long userId) {
@@ -645,6 +673,7 @@ public ResponseEntity<APIRespone> cancelOrder(String orderCode, Long userId) {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new APIRespone(true, "Success", orderResponses));
     }
+
     @Override
     public ResponseEntity<APIRespone> findOrderByOrderCodeAndUserId(String orderCode, Long userId) {
         Optional<Order> orderOptional = orderRepository.findByOrderCode(orderCode);
@@ -658,37 +687,12 @@ public ResponseEntity<APIRespone> cancelOrder(String orderCode, Long userId) {
         return ResponseEntity.ok(new APIRespone(true, "Success", new OrderResponse(order)));
     }
 
-    @Override
-    public ResponseEntity<APIRespone> getOrderByStatus(Long ownerId, String status) {
-        StatusOrder statusOrder = statusOrderRepository.findByStatusName(status);
-        if (statusOrder == null) {
-            return ResponseEntity.badRequest().body(new APIRespone(false, "Status not found", ""));
-        }
-        List<Order> orders = orderRepository.findAllByStatus(statusOrder);
-        if (orders.isEmpty()) {
-            return ResponseEntity.badRequest().body(new APIRespone(false, "No order found", ""));
-        }
-        List<Store> stores = storeRepository.findAllByManagerId(ownerId);
-        if (stores.isEmpty()) {
-            return ResponseEntity.badRequest().body(new APIRespone(false, "Store not found", ""));
-        }
-        List<Order> orders1 = orders.stream()
-                .filter(order -> order.getOrderDetails().stream().anyMatch(orderDetail -> stores.contains(orderDetail.getStore())))
-                .toList();
-        if (orders1.isEmpty()) {
-            return ResponseEntity.badRequest().body(new APIRespone(false, "No order found", ""));
-        }
-        List<OrderResponse> orderResponses = orders1.stream()
-                .map(OrderResponse::new)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(new APIRespone(true, "Success", orderResponses));
-    }
-
 
     @Override
     public List<Cart> getCartItemsByCartId(Long cartId) {
         return cartItemRepository.findByCartId(cartId);
     }
+
     @Transactional
     @Override
     public ResponseEntity<APIRespone> findOrderByOrderCode(String orderCode) {
@@ -727,6 +731,79 @@ public ResponseEntity<APIRespone> cancelOrder(String orderCode, Long userId) {
         }
         return ResponseEntity.ok(new APIRespone(true, "Success", new OrderResponse(order)));
     }
+
+    @Override
+    public ResponseEntity<APIRespone> getAllOrderByStatusOfStore(String statusName, Long ownerId) {
+        StatusOrder statusOrder = statusOrderRepository.findByStatusName(statusName);
+        List<Order> orders = orderRepository.findAll();
+        if (orders.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(true, "No order found", ""));
+        }
+        List<Store> stores = storeRepository.findAllByManagerId(ownerId);
+        if (stores.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "Store not found", ""));
+        }
+
+        // Kiểm tra xem có đơn hàng nào có chi tiết hợp lệ không
+        List<Order> orders1 = orders.stream()
+                .filter(order -> {
+                    if (order.getOrderDetails() != null && !order.getOrderDetails().isEmpty()) {
+                        return order.getOrderDetails().stream()
+                                .anyMatch(orderDetail -> orderDetail.getStore() != null && stores.contains(orderDetail.getStore()));
+                    }
+                    // Không in ra order nếu không có OrderDetail
+                    return false;
+                })
+                .toList();
+
+        if (orders1.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "No order found", ""));
+        }
+        Store store = stores.get(0);
+        List<OrderStore> orderStores = new ArrayList<>();
+        for (Order order : orders1) {
+            if (order.getOrderDetails() != null && !order.getOrderDetails().isEmpty()) {
+                Optional<List<OrderDetail>> orderDetails = orderRepository.findOrderDetailsByOrderCodeAndStore(order.getOrderCode(), store.getStoreId());
+                List<OrderDetail> orderDetailList = orderDetails.get();
+                OrderStore os = new OrderStore(orderDetailList);
+                orderStores.add(os);
+            }
+        }
+
+
+        orderStores.removeIf(os -> !os.getStatus().equals(statusName));
+
+        System.out.println(orderStores.size());
+        return ResponseEntity.ok(new APIRespone(true, "Success", orderStores));
+    }
+
+    @Override
+    public ResponseEntity<APIRespone> getOrderByStatus(Long ownerId, String status) {
+        StatusOrder statusOrder = statusOrderRepository.findByStatusName(status);
+        if (statusOrder == null) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "Status not found", ""));
+        }
+        List<Order> orders = orderRepository.findAllByStatus(statusOrder);
+        if (orders.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "No order found", ""));
+        }
+        List<Store> stores = storeRepository.findAllByManagerId(ownerId);
+        if (stores.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "Store not found", ""));
+        }
+        List<Order> orders1 = orders.stream()
+                .filter(order -> order.getOrderDetails().stream().anyMatch(orderDetail -> stores.contains(orderDetail.getStore())))
+                .toList();
+        if (orders1.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "No order found", ""));
+        }
+        List<OrderResponse> orderResponses = orders1.stream()
+                .map(OrderResponse::new)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(new APIRespone(true, "Success", orderResponses));
+    }
+
+
     @Override
     public ResponseEntity<APIRespone> updateStatusFeedBack(Long orderid){
         Order order = orderRepository.findById(orderid).get();
@@ -734,15 +811,347 @@ public ResponseEntity<APIRespone> cancelOrder(String orderCode, Long userId) {
         orderRepository.save(order);
         return ResponseEntity.ok(new APIRespone(true, "Success", ""));
     }
-    @Override
-    public ResponseEntity<APIRespone> getAllOrderByStatusOfStore(String statusName, Long OwnerId) {
-        StatusOrder statusOrder = statusOrderRepository.findByStatusName(statusName);
-        List<Store> stores = storeRepository.findAllByManagerId(OwnerId);
 
+    @Override
+    public ResponseEntity<APIRespone> getAllTotalAmountOrder() {
+        Long totalAmount = orderRepository.getTotalAmountForCompletedOrders();
+        return ResponseEntity.ok(new APIRespone(true, "Success", totalAmount));
+    }
+
+    @Override
+    public ResponseEntity<APIRespone> getCountOrderByMonth() {
+        LocalDateTime ldt = LocalDateTime.now();
+        Long totalAmount = orderRepository.countOrdersByMonth(ldt.getMonthValue(), ldt.getYear());
+        return ResponseEntity.ok(new APIRespone(true, "Success", totalAmount));
+
+    }
+
+    @Override
+    public ResponseEntity<APIRespone> getTotalAmountByMonth(int year) {
+        Map<String, Long> map = new LinkedHashMap<>();
+
+        for (int i = 0; i < 12; i++) {
+            // Lùi tháng
+            int month = i + 1;
+            Long totalAmount = orderRepository.getTotalAmountByMonth(month, year);
+            map.put("Tháng " + month + " Năm " + year, totalAmount);
+        }
+
+        return ResponseEntity.ok(new APIRespone(true, "Success", map));
+    }
+
+    @Override
+    public ResponseEntity<APIRespone> getTotalAmountByWeek() {
+        LocalDateTime ldt = LocalDateTime.now();
+        int currentMonth = ldt.getMonthValue();
+        int currentYear = ldt.getYear();
+        int currentDay = ldt.getDayOfMonth();
+        Map<String, Long> map = new LinkedHashMap<>();
+
+        for (int i = 0; i < 7; i++) {
+            int day = currentDay - i;
+            int month = currentMonth;
+            int year = currentYear;
+            if (day < 1) {
+                day += 7;
+                month -= 1;
+                if (month < 1) {
+                    month += 12;
+                    year -= 1;
+                }
+            }
+            Long totalAmount = orderRepository.getTotalAmountByWeek(day, month, year);
+            map.put("Ngày " + day + " Tháng " + month + " Năm " + year, totalAmount);
+        }
+        return ResponseEntity.ok(new APIRespone(true, "Success", map));
+    }
+
+    @Override
+    public ResponseEntity<APIRespone> getCountProductSole(String module) {
+        LocalDateTime ldt = LocalDateTime.now();
+        int currentMonth = ldt.getMonthValue();
+        int currentYear = ldt.getYear();
+        int currentDay = ldt.getDayOfMonth();
+        List<Product> products = productRepository.findAll();
+        Map<String, Long> map = new LinkedHashMap<>();
+        if (module.equals("day")) {
+            System.out.println("module: day");
+            for (Product product : products) {
+                Long q = orderDetailRepository.getCountProductSoldDay(currentDay, currentMonth, currentYear, product.getProductId());
+                if (q != null)
+                    map.put(product.getProductName(), q);
+            }
+            // Sắp xếp map theo giá trị giảm dần và lấy 10 phần tử đầu tiên
+            map = map.entrySet()
+                    .stream()
+                    .sorted(Map.Entry.<String, Long>comparingByValue().reversed()) // Sắp xếp theo giá trị giảm dần
+                    .limit(10) // Giới hạn 10 phần tử đầu tiên
+                    .collect(LinkedHashMap::new, (m, e) -> m.put(e.getKey(), e.getValue()), LinkedHashMap::putAll);
+            return ResponseEntity.ok(new APIRespone(true, "Success", map));
+
+        } else if (module.equals("month")) {
+            System.out.println("module: month");
+            for (Product product : products) {
+                Long q = orderDetailRepository.getCountProductSoldMonth(currentMonth, currentYear, product.getProductId());
+                if (q != null)
+                    map.put(product.getProductName(), q);
+            }
+            // Sắp xếp map theo giá trị giảm dần và lấy 10 phần tử đầu tiên
+            map = map.entrySet()
+                    .stream()
+                    .sorted(Map.Entry.<String, Long>comparingByValue().reversed()) // Sắp xếp theo giá trị giảm dần
+                    .limit(10) // Giới hạn 10 phần tử đầu tiên
+                    .collect(LinkedHashMap::new, (m, e) -> m.put(e.getKey(), e.getValue()), LinkedHashMap::putAll);
+            return ResponseEntity.ok(new APIRespone(true, "Success", map));
+
+        } else {
+            System.out.println("module: year");
+            for (Product product : products) {
+                Long q = orderDetailRepository.getCountProductSoldYear(currentYear, product.getProductId());
+                if (q != null)
+                    map.put(product.getProductName(), q);
+            }
+            // Sắp xếp map theo giá trị giảm dần và lấy 10 phần tử đầu tiên
+            map = map.entrySet()
+                    .stream()
+                    .sorted(Map.Entry.<String, Long>comparingByValue().reversed()) // Sắp xếp theo giá trị giảm dần
+                    .limit(10) // Giới hạn 10 phần tử đầu tiên
+                    .collect(LinkedHashMap::new, (m, e) -> m.put(e.getKey(), e.getValue()), LinkedHashMap::putAll);
+            return ResponseEntity.ok(new APIRespone(true, "Success", map));
+        }
+
+
+    }
+
+    @Override
+    public ResponseEntity<APIRespone> getAllTotalAmountOrderStore(Long ownerId) {
+        List<Store> stores = storeRepository.findAllByManagerId(ownerId);
+        Long totalAmount = orderRepository.getTotalAmountForCompletedOrdersStore(stores.get(0).getStoreId());
+        return ResponseEntity.ok(new APIRespone(true, "Success", totalAmount));
+    }
+
+    public ResponseEntity<APIRespone> getCountOrderByMonthStore(Long OwnerId) {
+        List<Store> stores = storeRepository.findAllByManagerId(OwnerId);
+        Long storeId = stores.get(0).getStoreId();
+        LocalDateTime ldt = LocalDateTime.now();
+        Long totalAmount = orderRepository.countOrdersByMonthStore(storeId, ldt.getMonthValue(), ldt.getYear());
+        return ResponseEntity.ok(new APIRespone(true, "Success", totalAmount));
+
+    }
+
+    @Override
+    public ResponseEntity<APIRespone> getTotalAmountByMonthStore(Long OwnerId, int year) {
+        Map<String, Long> map = new LinkedHashMap<>();
+        List<Store> stores = storeRepository.findAllByManagerId(OwnerId);
+        Long storeId = stores.get(0).getStoreId();
+        for (int i = 0; i < 12; i++) {
+            // Lùi tháng
+            int month = i + 1;
+            Long totalAmount = orderRepository.getTotalAmountByMonthStore(storeId, month, year);
+            map.put("Tháng " + month + " Năm " + year, totalAmount);
+        }
+
+        return ResponseEntity.ok(new APIRespone(true, "Success", map));
+    }
+
+    @Override
+    public ResponseEntity<APIRespone> getTotalAmountByWeekStore(Long OwnerId) {
+        List<Store> stores = storeRepository.findAllByManagerId(OwnerId);
+        Long storeId = stores.get(0).getStoreId();
+        LocalDateTime ldt = LocalDateTime.now();
+        int currentMonth = ldt.getMonthValue();
+        int currentYear = ldt.getYear();
+        int currentDay = ldt.getDayOfMonth();
+        Map<String, Long> map = new LinkedHashMap<>();
+
+        for (int i = 0; i < 7; i++) {
+            int day = currentDay - i;
+            int month = currentMonth;
+            int year = currentYear;
+            if (day < 1) {
+                day += 7;
+                month -= 1;
+                if (month < 1) {
+                    month += 12;
+                    year -= 1;
+                }
+            }
+            Long totalAmount = orderRepository.getTotalAmountByWeekStore(storeId, day, month, year);
+            map.put("Ngày " + day + " Tháng " + month + " Năm " + year, totalAmount);
+        }
+        return ResponseEntity.ok(new APIRespone(true, "Success", map));
+    }
+
+    @Override
+    public ResponseEntity<APIRespone> getCountProductSoleStore(Long OwnerId, String module) {
+        List<Store> stores = storeRepository.findAllByManagerId(OwnerId);
+        Long storeId = stores.get(0).getStoreId();
+        LocalDateTime ldt = LocalDateTime.now();
+        int currentMonth = ldt.getMonthValue();
+        int currentYear = ldt.getYear();
+        int currentDay = ldt.getDayOfMonth();
+        List<Product> products = productRepository.findAll();
+        Map<String, Long> map = new LinkedHashMap<>();
+        if (module.equals("day")) {
+            System.out.println("module: day");
+            for (Product product : products) {
+                Long q = orderDetailRepository.getCountProductSoldDayStore(storeId, currentDay, currentMonth, currentYear, product.getProductId());
+                if (q != null)
+                    map.put(product.getProductName(), q);
+            }
+            // Sắp xếp map theo giá trị giảm dần và lấy 10 phần tử đầu tiên
+            map = map.entrySet()
+                    .stream()
+                    .sorted(Map.Entry.<String, Long>comparingByValue().reversed()) // Sắp xếp theo giá trị giảm dần
+                    .limit(10) // Giới hạn 10 phần tử đầu tiên
+                    .collect(LinkedHashMap::new, (m, e) -> m.put(e.getKey(), e.getValue()), LinkedHashMap::putAll);
+            return ResponseEntity.ok(new APIRespone(true, "Success", map));
+
+        } else if (module.equals("month")) {
+            System.out.println("module: month");
+            for (Product product : products) {
+                Long q = orderDetailRepository.getCountProductSoldMonthStore(storeId, currentMonth, currentYear, product.getProductId());
+                if (q != null)
+                    map.put(product.getProductName(), q);
+            }
+            // Sắp xếp map theo giá trị giảm dần và lấy 10 phần tử đầu tiên
+            map = map.entrySet()
+                    .stream()
+                    .sorted(Map.Entry.<String, Long>comparingByValue().reversed()) // Sắp xếp theo giá trị giảm dần
+                    .limit(10) // Giới hạn 10 phần tử đầu tiên
+                    .collect(LinkedHashMap::new, (m, e) -> m.put(e.getKey(), e.getValue()), LinkedHashMap::putAll);
+            return ResponseEntity.ok(new APIRespone(true, "Success", map));
+
+        } else {
+            System.out.println("module: year");
+            for (Product product : products) {
+                Long q = orderDetailRepository.getCountProductSoldYearStore(storeId, currentYear, product.getProductId());
+                if (q != null)
+                    map.put(product.getProductName(), q);
+            }
+            // Sắp xếp map theo giá trị giảm dần và lấy 10 phần tử đầu tiên
+            map = map.entrySet()
+                    .stream()
+                    .sorted(Map.Entry.<String, Long>comparingByValue().reversed()) // Sắp xếp theo giá trị giảm dần
+                    .limit(10) // Giới hạn 10 phần tử đầu tiên
+                    .collect(LinkedHashMap::new, (m, e) -> m.put(e.getKey(), e.getValue()), LinkedHashMap::putAll);
+            return ResponseEntity.ok(new APIRespone(true, "Success", map));
+        }
+    }
+
+    @Override
+    public ResponseEntity<APIRespone> getOrderDetailOfStoreForOwner(Long ownerId, String orderCode) {
+        List<Store> stores = storeRepository.findAllByManagerId(ownerId);
         if (stores.isEmpty()) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "Store not found", ""));
         }
-        return ResponseEntity.badRequest().body(new APIRespone(false, "Store not found", ""));
+        Optional<List<OrderDetail>> orderOptional = orderRepository.findOrderDetailsByOrderCodeAndStore(orderCode, stores.get(0).getStoreId());
 
+        if (orderOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "Order code not found", ""));
+        }
+        List<OrderDetail> orderDetails = orderOptional.get();
+        OrderStore os = new OrderStore(orderDetails);
+        return ResponseEntity.ok(new APIRespone(true, "Success", os));
+    }
+
+    @Override
+    public ResponseEntity<APIRespone> getAllOrderDetailOfStoreForOwner(Long ownerId) {
+        List<Order> orders = orderRepository.findAll();
+        if (orders.isEmpty()) {
+            return ResponseEntity.ok(new APIRespone(true, "No order found", ""));
+        }
+        List<Store> stores = storeRepository.findAllByManagerId(ownerId);
+        if (stores.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "Store not found", ""));
+        }
+
+        // Kiểm tra xem có đơn hàng nào có chi tiết hợp lệ không
+        List<Order> orders1 = orders.stream()
+                .filter(order -> {
+                    if (order.getOrderDetails() != null && !order.getOrderDetails().isEmpty()) {
+                        return order.getOrderDetails().stream()
+                                .anyMatch(orderDetail -> orderDetail.getStore() != null && stores.contains(orderDetail.getStore()));
+                    }
+                    // Không in ra order nếu không có OrderDetail
+                    return false;
+                })
+                .toList();
+
+        if (orders1.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "No order found", ""));
+        }
+        Store store = stores.get(0);
+        List<OrderStore> orderStores = new ArrayList<>();
+        for (Order order : orders1) {
+            if (order.getOrderDetails() != null && !order.getOrderDetails().isEmpty()) {
+                Optional<List<OrderDetail>> orderDetails = orderRepository.findOrderDetailsByOrderCodeAndStore(order.getOrderCode(), store.getStoreId());
+                List<OrderDetail> orderDetailList = orderDetails.get();
+                OrderStore os = new OrderStore(orderDetailList);
+                orderStores.add(os);
+            }
+        }
+        return ResponseEntity.ok(new APIRespone(true, "Success", orderStores));
+    }
+
+    @Override
+    public ResponseEntity<APILazyOrders> getAllOrderByStatusOfStore1(String statusName, Long ownerId, int page, int size) {
+        System.out.println(page);
+        System.out.println((size));
+        StatusOrder statusOrder = statusOrderRepository.findByStatusName(statusName);
+
+        // Tìm các cửa hàng của chủ sở hữu
+        List<Store> stores = storeRepository.findAllByManagerId(ownerId);
+        if (stores.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APILazyOrders(false, 0, "Store not found", ""));
+        }
+        Store store = stores.get(0);
+        // Cấu hình phân trang
+        Pageable pageable = PageRequest.of(page, size);
+
+        // Tìm các đơn hàng với phân trang
+        Page<Order> pagedOrders = orderRepository.findOrdersWithStatusAndStores(store.getStoreId(), statusName, pageable);
+
+        if (pagedOrders.isEmpty()) {
+            return ResponseEntity.ok(new APILazyOrders(true, 0, "No order found", ""));
+        }
+        long totalElements = pagedOrders.getTotalElements(); // Tổng số bản ghi
+        int totalPages = pagedOrders.getTotalPages(); // Tổng số trang
+        List<OrderStore> orderStores = new ArrayList<>();
+        for (Order order : pagedOrders.getContent()) {
+            if (!order.getOrderDetails().isEmpty()) {
+                Optional<List<OrderDetail>> orderDetails = orderRepository.findOrderDetailsByOrderCodeAndStore(order.getOrderCode(), stores.get(0).getStoreId());
+                orderDetails.ifPresent(orderDetailList -> {
+                    OrderStore os = new OrderStore(orderDetailList);
+                    orderStores.add(os);
+                });
+            }
+        }
+
+//        orderStores.removeIf(os -> !os.getStatus().equals(statusName));
+
+        return ResponseEntity.ok(new APILazyOrders(true, totalPages, "Success", orderStores));
+    }
+
+    @Override
+    public ResponseEntity<APIRespone> getOrderDetails(Long ownerId,String order_code) {
+        Optional<Order> order = orderRepository.findByOrderCode(order_code);
+        if (order.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "No order found", ""));
+        }
+        Order or = order.get();
+        List<Store> stores = storeRepository.findAllByManagerId(ownerId);
+        if (stores.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "Store not found", ""));
+        }
+        Store store = stores.get(0);
+
+        List<OrderDetailResponse> orderDetailResponses =or.getOrderDetails().stream()
+                .filter(orderDetail -> orderDetail.getStore() != null && orderDetail.getStore().getStoreId().equals(store.getStoreId()))
+                .map(OrderDetailResponse::new)
+                .collect(Collectors.toList());
+
+        // Trả về kết quả
+        return ResponseEntity.ok(new APIRespone(true, "Success", orderDetailResponses));
     }
 }

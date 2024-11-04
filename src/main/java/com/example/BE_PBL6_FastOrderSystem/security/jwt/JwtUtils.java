@@ -153,7 +153,7 @@ public class JwtUtils {
         token.setUserId(((FoodUserDetails) authentication.getPrincipal()).getId());
         token.setCreatedAt(LocalDateTime.ofInstant(Instant.now(), ZoneId.systemDefault()));
         token.setExpiresAt(LocalDateTime.ofInstant(Instant.now().plus(jwtExpirationMs, ChronoUnit.SECONDS), ZoneId.systemDefault()));
-        token.setRevoked(false); // la chua bi thu hoi
+        token.setRevoked(false);
         tokenRepository.save(token);
         return jwt;
     }

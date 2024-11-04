@@ -475,5 +475,73 @@ public class ProductServiceImpl implements IProductService {
         return ResponseEntity.ok(new APIRespone(true, "Success", new ArrayList<>(productResponses)));
     }
 
+    public ResponseEntity<APIRespone> applyProductsToStores(List<Long> productIds, Long storeId, List<Integer> quantity) {
+        Optional<Store> stores = storeRepository.findByStoreId(storeId);
+        if (stores.isEmpty()) {
+            return new ResponseEntity<>(new APIRespone(false, "Store not found", ""), HttpStatus.NOT_FOUND);
+        }
+        List<Product> products = productRepository.findAllById(productIds);
+        if (products.isEmpty()) {
+            return new ResponseEntity<>(new APIRespone(false, "Product not found", ""), HttpStatus.NOT_FOUND);
+        }
 
+        List<ProductStore> productStores = new ArrayList<>();
+        Store store = stores.get();
+        for (int i = 0; i < quantity.size(); i++) {
+            Integer quantityToAdd = quantity.get(i);
+            Product product = products.get(i);
+            if (product != null) {
+                Optional<ProductStore> existingProductStore = productStoreRepository.findByProductIdAndStoreId(product.getProductId(), store.getStoreId());
+                if (existingProductStore.isPresent()) {
+                    // Nếu tồn tại, cập nhật số lượng
+                    ProductStore ps = existingProductStore.get();
+                    ps.setStockQuantity(ps.getStockQuantity() + quantityToAdd);
+                    productStoreRepository.save(ps);
+                } else {
+                    ProductStore productStore = new ProductStore();
+                    productStore.setProduct(product);
+                    productStore.setStore(store);
+                    productStore.setStockQuantity(quantityToAdd);
+                    productStores.add(productStore);
+                }
+            }
+        }
+        productStoreRepository.saveAll(productStores);
+        return new ResponseEntity<>(new APIRespone(true, "Products added successfully", ""), HttpStatus.OK);
+
+    }
+
+    @Override
+    public ResponseEntity<APIRespone> getProductsByStore(Long ownerId) {
+        List<Store> stores = storeRepository.findAllByManagerId(ownerId);
+        Long storeId = stores.get(0).getStoreId();
+        List<ProductResponse> productResponses = productRepository.findByStoreId(storeId).stream()
+                .map(ResponseConverter::convertToProductResponse)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(new APIRespone(true, "Success", productResponses), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<APIRespone> removeProductFromStoreId(Long ownerId, Long productId) {
+        List<Store> stores = storeRepository.findAllByManagerId(ownerId);
+        Store store = stores.get(0);
+        Optional<Product> productOptional = productRepository.findById(productId);
+        if (productOptional.isEmpty()) {
+            return new ResponseEntity<>(new APIRespone(false, "Product not found", ""), HttpStatus.NOT_FOUND);
+        }
+//        Store store = storeOptional.get();
+        Product product = productOptional.get();
+        List<ProductStore> productStores = product.getProductStores().stream()
+                .filter(productStore -> productStore.getStore().getStoreId().equals(store.getStoreId()))
+                .collect(Collectors.toList());
+        if (productStores.isEmpty()) {
+            return new ResponseEntity<>(new APIRespone(false, "Product not found in store", ""), HttpStatus.NOT_FOUND);
+        }
+        product.getProductStores().removeAll(productStores);
+        store.getProductStores().removeAll(productStores);
+        productStoreRepository.deleteAll(productStores);
+        productRepository.save(product);
+        storeRepository.save(store);
+        return new ResponseEntity<>(new APIRespone(true, "Product removed from store successfully", ""), HttpStatus.OK);
+    }
 }

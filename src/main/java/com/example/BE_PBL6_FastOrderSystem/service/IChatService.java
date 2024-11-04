@@ -3,6 +3,7 @@ package com.example.BE_PBL6_FastOrderSystem.service;
 import com.example.BE_PBL6_FastOrderSystem.entity.Chat;
 import com.example.BE_PBL6_FastOrderSystem.entity.User;
 import com.example.BE_PBL6_FastOrderSystem.request.ChatRequest;
+import com.example.BE_PBL6_FastOrderSystem.response.APIResponseChat;
 import com.example.BE_PBL6_FastOrderSystem.response.ChatResponse;
 import com.example.BE_PBL6_FastOrderSystem.response.UserResponse;
 
@@ -32,4 +33,6 @@ public interface IChatService {
     void markMessagesAsReadForUser(Long userId);
 
     List<UserResponse> getAllUsersByChatInteraction();
+
+    APIResponseChat<String> updateReadUser(Long userId);
 }

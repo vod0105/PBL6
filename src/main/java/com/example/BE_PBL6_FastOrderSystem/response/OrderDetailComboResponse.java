@@ -17,11 +17,11 @@ public class OrderDetailComboResponse {
     private List<Long> drinkId;
     private Long storeId;
     private String status;
+    private String image;
 
     public OrderDetailComboResponse(OrderDetail orderDetail) {
         this.orderDetailId = orderDetail.getOrderDetailId();
         this.comboId = orderDetail.getCombo().getComboId();
-        this.comboName = orderDetail.getCombo().getComboName();
         this.quantity = orderDetail.getQuantity();
         this.unitPrice = orderDetail.getUnitPrice();
         this.totalPrice = orderDetail.getTotalPrice();
@@ -29,5 +29,7 @@ public class OrderDetailComboResponse {
         this.drinkId = orderDetail.getDrinkProducts().stream().map(product -> product.getProductId()).toList();
         this.storeId = orderDetail.getStore() != null ? orderDetail.getStore().getStoreId() : null;
         this.status = orderDetail.getStatus().getStatusName();
+        this.image = orderDetail.getCombo().getImage();
+        this.comboName = orderDetail.getCombo().getComboName();
     }
 }

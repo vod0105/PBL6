@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -47,6 +48,7 @@ public class UserServiceImpl implements IUserService {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new APIRespone(true, "Success", userResponses));
     }
+
     @Override
     public ResponseEntity<APIRespone> getLocations(Long userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
@@ -83,6 +85,7 @@ public class UserServiceImpl implements IUserService {
         UserResponse userResponse = new UserResponse(user);
         return ResponseEntity.ok(new APIRespone(true, "Success", userResponse));
     }
+
     @Override
     public ResponseEntity<APIRespone> updateUser(Long id, UserRequest userRequest) {
         ResponseEntity<APIRespone> validationResponse = validateUserRequest(userRequest);
@@ -96,7 +99,7 @@ public class UserServiceImpl implements IUserService {
         }
         User existingUser = optionalUser.get();
         existingUser.setFullName(userRequest.getFullName());
-        if(userRequest.getAvatar() != null) {
+        if (userRequest.getAvatar() != null) {
             try {
                 InputStream imageInputStream = userRequest.getAvatar().getInputStream();
                 String base64Image = ImageGeneral.fileToBase64(imageInputStream);
@@ -110,6 +113,7 @@ public class UserServiceImpl implements IUserService {
         userRepository.save(existingUser);
         return ResponseEntity.ok(new APIRespone(true, "User updated susccessfully", ""));
     }
+
     @Override
     public ResponseEntity<APIRespone> updateUserV2(Long id, UserRequestV2 userRequest) {
 
@@ -120,7 +124,7 @@ public class UserServiceImpl implements IUserService {
         }
         User existingUser = optionalUser.get();
         existingUser.setFullName(userRequest.getFullName());
-        if(userRequest.getAvatar() != null) {
+        if (userRequest.getAvatar() != null) {
             existingUser.setAvatar(userRequest.getAvatar());
         }
         existingUser.setEmail(userRequest.getEmail());
@@ -190,6 +194,7 @@ public class UserServiceImpl implements IUserService {
         userRepository.save(user);
         return ResponseEntity.ok(new APIRespone(true, "Success", ""));
     }
+
     @Override
     public ResponseEntity<APIRespone> getByid(Long id){
         User user = userRepository.findByid(id);
@@ -209,5 +214,21 @@ public class UserServiceImpl implements IUserService {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new APIRespone(true, "Success", userResponses));
 
+    }
+    @Override
+    public ResponseEntity<APIRespone> countOrderByMonth(){
+        LocalDateTime now = LocalDateTime.now();
+        Long result = userRepository.getAllPeopleRegisterByMonth(now.getMonthValue(),now.getYear());
+        return  ResponseEntity.ok(new APIRespone(true, "Success", result));
+    }
+
+    @Override
+    public List<UserResponse> getSearchByPhoneNumber(String phoneNumber){
+        List<User> users = userRepository.SearchUsersByPhoneNumber(phoneNumber);
+
+        List<UserResponse> userResponses = users.stream()
+                .map(UserResponse::new)
+                .collect(Collectors.toList());
+        return userResponses;
     }
 }

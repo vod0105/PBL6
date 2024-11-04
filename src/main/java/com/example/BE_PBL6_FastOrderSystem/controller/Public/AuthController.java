@@ -164,8 +164,6 @@ public void handleCallback(HttpServletResponse response, @AuthenticationPrincipa
     @GetMapping("/user-info")
     public ResponseEntity<APIRespone> getUserInfo(@RequestHeader("Authorization") String token) {
         String jwt = token.substring(7);
-        System.out.println("JWT: " + jwt);
-
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(jwtUtils.key())
                 .build()
@@ -180,7 +178,7 @@ public void handleCallback(HttpServletResponse response, @AuthenticationPrincipa
             System.out.println("Sub: " + sub);
             optionalUser = userRepository.findBySub(sub);
         } else if (facebookId != null) {
-            System.out.println("Facebook ID: " + facebookId);
+            System.out.println("Facebook id: " + facebookId);
             optionalUser = userRepository.findByFacebookId(facebookId);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIRespone(false, "Invalid token", null));
