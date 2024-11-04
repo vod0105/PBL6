@@ -31,19 +31,19 @@ public class OwnerDisplayController {
         return orderService.getCountOrderByMonthStore(OwnerId);
     }
 
-    @GetMapping("total/year/{y}")
+    @GetMapping("/total/year/{y}")
     public ResponseEntity<APIRespone> totalYear(@PathVariable int y) {
         Long OwnerId = FoodUserDetails.getCurrentUserId();
         return orderService.getTotalAmountByMonthStore(OwnerId,y);
     }
 
-    @GetMapping("total/week")
+    @GetMapping("/total/week")
     public ResponseEntity<APIRespone> totalWeek() {
         Long OwnerId = FoodUserDetails.getCurrentUserId();
         return orderService.getTotalAmountByWeekStore(OwnerId);
     }
 
-    @GetMapping("count/products")
+    @GetMapping("/count/products")
     public ResponseEntity<APIRespone> countProducts(@RequestParam String module) {
         Long OwnerId = FoodUserDetails.getCurrentUserId();
         return orderService.getCountProductSoleStore(OwnerId,module);
