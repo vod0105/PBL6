@@ -38,4 +38,6 @@ public interface IProductService {
     ResponseEntity<APIRespone> removeProductFromStoreId(Long ownerId, Long productId);
     ResponseEntity<APIRespone> updateQuantityProductOfOwner(Long managerId, Long storeId, Long productId, int quantity);
     ResponseEntity<APIRespone> getDrinksByListStoreId(List<Long> storeIds);
+
+    ResponseEntity<APIRespone> addProductsToStore(List<Long> productIds, Long ownerId, List<Integer> quantity);
 }

@@ -6,7 +6,9 @@ import com.example.BE_PBL6_FastOrderSystem.repository.StoreRepository;
 import com.example.BE_PBL6_FastOrderSystem.repository.UserRepository;
 import com.example.BE_PBL6_FastOrderSystem.request.StoreRequest;
 import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
+import com.example.BE_PBL6_FastOrderSystem.response.APIResponseChat;
 import com.example.BE_PBL6_FastOrderSystem.response.StoreResponse;
+import com.example.BE_PBL6_FastOrderSystem.response.UserResponse;
 import com.example.BE_PBL6_FastOrderSystem.service.IStoreService;
 import com.example.BE_PBL6_FastOrderSystem.utils.ImageGeneral;
 import lombok.RequiredArgsConstructor;
@@ -341,6 +343,18 @@ public class StoreServiceImlp implements IStoreService {
         }
         storeRepository.deleteById(id);
         return ResponseEntity.ok(new APIRespone(true, "Delete store successfully", ""));
+    }
+
+    @Override
+    public APIResponseChat<UserResponse> getOwnerForStore(Long id) {
+        Optional<Store> store = storeRepository.findById(id);
+        if (store.isEmpty()) {
+            return new APIResponseChat<>(null,1,"Store not found");
+        }
+        Store store1 = store.get();
+        User owner = store1.getManager();
+        UserResponse ow = new UserResponse(owner);
+        return new APIResponseChat<>(ow,0,"Owner for store " + store1.getStoreName() + " is " + owner.getFullName());
     }
 
 }
