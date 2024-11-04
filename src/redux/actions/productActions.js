@@ -7,6 +7,7 @@ import {
     fetchComboByIdService,
     fetchProductsByIdStoreService,
     fetchRatingProductByIdService,
+    fetchAllDrinksService,
 
 } from "../../services/productService";
 import { fetchUserDetailByIdService } from "../../services/userService";
@@ -63,6 +64,26 @@ const fetchAllCombos = (id) => {
             const res = await fetchAllCombosService();
             const data = res && res.data ? res.data.data : [];
             dispatch(fetchAllCombosSuccess(data)); // // Chạy ở đây (2)
+            console.log(data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+};
+
+// fetch all combos
+const fetchAllDrinksSuccess = (data) => {
+    return {
+        type: types.FETCH_ALL_DRINK_SUCCESS,
+        dataDrinks: data
+    };
+};
+const fetchAllDrinks = (id) => {
+    return async (dispatch, getState) => {
+        try {
+            const res = await fetchAllDrinksService();
+            const data = res && res.data ? res.data.data : [];
+            dispatch(fetchAllDrinksSuccess(data)); // // Chạy ở đây (2)
             console.log(data);
         } catch (error) {
             console.log(error);
@@ -163,6 +184,7 @@ export {
     fetchProductsBestSale,
     fetchProductsByIdCategory,
     fetchAllCombos,
+    fetchAllDrinks,
     fetchProductById,
     fetchProductsByIdStore,
     fetchRatingProductById,

@@ -8,6 +8,7 @@ const INITIAL_STATE = {
     comboDetail: {},
     listProductsByIdStore: [],
     ratingProduct: [],
+    allDrinks: []
 
 };
 
@@ -27,6 +28,11 @@ const productReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 allCombos: action.dataCombos,
+            };
+        case types.FETCH_ALL_DRINK_SUCCESS:
+            return {
+                ...state,
+                allDrinks: action.dataDrinks,
             };
         case types.FETCH_PRODUCT_BY_ID_SUCCESS:
             return {

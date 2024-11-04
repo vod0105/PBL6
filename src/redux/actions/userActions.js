@@ -2,6 +2,7 @@ import types from "../types";
 import {
     updateProfileService,
     addProductToCartService,
+    addComboToCartService,
     fetchProductsInCartService,
     placeOrderBuyNowService,
     placeOrderAddToCartService,
@@ -66,7 +67,7 @@ const addToCartError = () => {
 };
 
 
-const addToCart = (productId, quantity, storeId, size, status) => {
+const addToCartProduct = (productId, quantity, storeId, size, status) => {
     return async (dispatch) => {
         try {
             const res = await addProductToCartService(productId, quantity, storeId, size, status);
@@ -87,6 +88,28 @@ const addToCart = (productId, quantity, storeId, size, status) => {
         }
     };
 }
+const addToCartCombo = (comboId, quantity, storeId, size, status, drinkId) => {
+    return async (dispatch) => {
+        try {
+            const res = await addComboToCartService(comboId, quantity, storeId, size, status, drinkId);
+            const isSuccess = res && res.data ? res.data.success : false;
+            if (isSuccess) {
+                dispatch(addToCartSuccess());
+                dispatch(fetchProductsInCart());
+                toast.success(res.data.message);
+            } else {
+                dispatch(addToCartError());
+                toast.error(res.data.message || "Thêm vào giỏ hàng không thành công!");
+            }
+        } catch (error) {
+            console.log(error);
+            const errorMessage = error.response && error.response.data ? error.response.data.message : "An error occurred.";
+            dispatch(addToCartError());
+            toast.error(errorMessage);
+        }
+    };
+}
+
 // fetch list products in cart
 const fetchProductsInCartSuccess = (dataProducts, dataCombos) => {
     return {
@@ -438,7 +461,8 @@ const fetchOrderInTransitByOrderCode = (orderCode) => {
 
 export {
     updateProfile,
-    addToCart,
+    addToCartProduct,
+    addToCartCombo,
     fetchProductsInCart,
     placeOrderUsingBuyNow,
     placeOrderUsingAddToCart,

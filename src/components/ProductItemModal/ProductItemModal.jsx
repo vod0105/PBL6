@@ -6,7 +6,7 @@ import StoreList from '../StoreList/StoreList';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllSizes } from "../../redux/actions/sizeActions";
 import { toast } from "react-toastify";
-import { addToCart, placeOrderUsingBuyNow } from "../../redux/actions/userActions";
+import { addToCartProduct, placeOrderUsingBuyNow } from "../../redux/actions/userActions";
 import { showLoginModal } from "../../redux/actions/modalActions";
 
 
@@ -90,7 +90,7 @@ const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, 
             toast.error("Số lượng sản phẩm vượt quy định!")
           }
           else { // Giả sử thêm vào thành công (Chưa xủ lý các điều kiện -> BE chưa làm)
-            dispatch(addToCart(product.productId, quantity, selectedStore.storeId, selectedSize, 'Pending'));
+            dispatch(addToCartProduct(product.productId, quantity, selectedStore.storeId, selectedSize, 'Pending'));
             handleModalClose();
           }
         }

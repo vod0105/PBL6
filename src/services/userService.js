@@ -26,6 +26,15 @@ const addProductToCartService = (productId, quantity, storeId, size, status) => 
         }
     });
 }
+const addComboToCartService = (comboId, quantity, storeId, size, status, drinkId) => {
+    return instance({
+        method: 'post',
+        url: '/api/v1/user/cart/add/combo',
+        data: {
+            comboId, quantity, storeId, size, status, drinkId: [...drinkId] //BE y/c truyền array drinks
+        }
+    });
+}
 const fetchProductsInCartService = () => {
     return instance({
         method: 'get',
@@ -174,6 +183,7 @@ const fetchUserDetailByIdService = (id) => {
 export {
     updateProfileService,
     addProductToCartService,
+    addComboToCartService,
     fetchProductsInCartService,
     placeOrderService,
     removeProductInCartService,

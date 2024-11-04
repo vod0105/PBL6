@@ -6,9 +6,10 @@ import StoreList from '../StoreList/StoreList';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllSizes } from "../../redux/actions/sizeActions";
 import { toast } from "react-toastify";
-import { addToCart, placeOrderUsingBuyNow } from "../../redux/actions/userActions";
+import { addToCartCombo, placeOrderUsingBuyNow } from "../../redux/actions/userActions";
 import { fetchAllStores } from "../../redux/actions/storeActions";
 import { showLoginModal } from "../../redux/actions/modalActions";
+import { fetchAllDrinks } from "../../redux/actions/productActions";
 
 import { Form } from 'react-bootstrap';
 
@@ -21,9 +22,11 @@ const ComboItemModal = ({ showModalCombo, handleCloseModalCombo, combo, stores, 
   // })
   // Size
   const listSizes = useSelector((state) => state.size.listSizes);
+  const allDrinks = useSelector((state) => state.product.allDrinks);
   const isLogin = useSelector((state) => state.auth.isAuthenticated);
   const [selectedSize, setSelectedSize] = useState(listSizes.length > 0 ? listSizes[0].name : "");
   const [selectedStore, setSelectedStore] = useState(null);
+  const [selectedDrink, setSelectedDrink] = useState("");
   const [finalPrice, setFinalPrice] = useState((combo?.price != null) ? combo.price : 0);
 
   // Optimize change size
@@ -53,10 +56,9 @@ const ComboItemModal = ({ showModalCombo, handleCloseModalCombo, combo, stores, 
   useEffect(() => {
     console.log('list stores: ', stores);
     dispatch(fetchAllSizes());
-    // console.log('combo: ', combo);
     dispatch(fetchAllStores());
+    dispatch(fetchAllDrinks());
   }, [dispatch]);
-
   // list sizes thay đổi -> Chọn size đầu tiên
   useEffect(() => {
     if (listSizes.length > 0) {
@@ -69,6 +71,12 @@ const ComboItemModal = ({ showModalCombo, handleCloseModalCombo, combo, stores, 
       setFinalPrice(combo.price);
     }
   }, [combo]);
+
+  useEffect(() => {
+    if (allDrinks && allDrinks.length > 0) {
+      setSelectedDrink(allDrinks[0].productId);
+    }
+  }, [allDrinks]);
 
 
   // ADD TO CART / BUY NOW
@@ -85,7 +93,7 @@ const ComboItemModal = ({ showModalCombo, handleCloseModalCombo, combo, stores, 
         toast.error('Vui lòng chọn cửa hàng');
       }
       else {
-        dispatch(addToCart(combo.comboId, quantity, selectedStore.storeId, selectedSize, 'Pending'));
+        dispatch(addToCartCombo(combo.comboId, quantity, selectedStore.storeId, selectedSize, 'Pending', selectedDrink));
         handleModalClose();
 
         // if (quantity > product.stockQuantity) {
@@ -200,13 +208,13 @@ const ComboItemModal = ({ showModalCombo, handleCloseModalCombo, combo, stores, 
                       <div className="list-drinks">
                         <Form.Select
                           className="drink-select"
+                          value={selectedDrink}
                           onChange={(e) => setSelectedDrink(e.target.value)}
                         >
-                          <option value="">Chọn nước</option>
                           {
-                            drinks.map((drink, index) => (
-                              <option key={index} value={drink.drinkId}>
-                                {drink.drinkName}
+                            allDrinks && allDrinks.length > 0 && allDrinks.map((drink, index) => (
+                              <option key={index} value={drink.productId}>
+                                {drink.productName}
                               </option>
                             ))
                           }

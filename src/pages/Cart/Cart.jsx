@@ -39,7 +39,7 @@ const Cart = () => {
     dispatch(increaseOneQuantity(item.cartId));
   };
   const handleDecreaseQuantity = (item) => {
-    if (item.product.quantity > 1) {
+    if ((item.product && item.product.quantity > 1) || (item.combo && item.combo.quantity > 1)) {
       dispatch(decreaseOneQuantity(item.cartId));
     }
   };
@@ -80,13 +80,17 @@ const Cart = () => {
     setSearchTerm(event.target.value); // Cập nhật từ khóa tìm kiếm khi nhập
   };
 
-  const filteredProducts = Array.isArray(listProductsInCart)
-    ? listProductsInCart.filter((item) => {
-      const isStoreMatch = selectedStore === "all" || +item.product.storeId === +selectedStore;
-      const isSearchMatch = item.product.productName.toLowerCase().includes(searchTerm.toLowerCase()); // Lọc theo tên sản phẩm
+  const filteredProducts = Array.isArray(listProductsInCart) && Array.isArray(listCombosInCart)
+    ? [
+      ...listProductsInCart,
+      ...listCombosInCart
+    ].filter((item) => {
+      const storeId = item.product ? item.product.storeId : item.combo.storeId;
+      const name = item.product ? item.product.productName : item.combo.comboName;
+      const isStoreMatch = selectedStore === "all" || +storeId === +selectedStore;
+      const isSearchMatch = name.toLowerCase().includes(searchTerm.toLowerCase());
       return isStoreMatch && isSearchMatch;
-    })
-    : [];
+    }) : [];
 
   // const filteredProducts = Array.isArray(listProductsInCart) ? listProductsInCart.filter((item) => {
   //   console.log('item.product.storeId: ', item.product.storeId);
@@ -125,15 +129,17 @@ const Cart = () => {
           >
             <option value="all">Tất cả cửa hàng</option>
             {
-              Array.isArray(listProductsInCart) && listProductsInCart
-                .map((item) => item.product.dataStore)
-                .filter((value, index, self) => self.findIndex(v => v.storeId === value.storeId) === index)
+              Array.isArray(listProductsInCart) && Array.isArray(listCombosInCart) &&
+              listProductsInCart.concat(listCombosInCart)
+                .map((item) => (item.product ? item.product.dataStore : item.combo.dataStore))
+                .filter((value, index, self) => value && self.findIndex(v => v.storeId === value.storeId) === index)
                 .map((store) => (
                   <option key={store.storeId} value={store.storeId}>
                     {store.storeName}
                   </option>
                 ))
             }
+
           </select>
         </div>
       </div>
@@ -152,40 +158,44 @@ const Cart = () => {
         <hr />
         {
           filteredProducts && filteredProducts.length > 0 ? (filteredProducts.map((item, index) => {
+            const isProduct = item.product !== null;
+            const data = isProduct ? item.product : item.combo;
+            const itemName = isProduct ? data.productName : data.comboName;
+            const itemImage = data.image; // Giả sử combo cũng có hình ảnh comboImage
+            const itemSize = data.size; // Combo không có size
+            const itemStoreName = data.dataStore ? data.dataStore.storeName : "N/A";
+            const itemUnitPrice = data.unitPrice;
+            const itemQuantity = data.quantity;
+            const itemTotalPrice = itemUnitPrice * itemQuantity;
             return (
               <div key={index}>
-                <div className="cart-items-title cart-items-item" key={index}>
-                  <Link to={`/product-detail/${item.product.productId}`}>
-                    <img src={'data:image/png;base64,' + item.product.image} alt="" />
+                <div className="cart-items-title cart-items-item">
+                  <Link to={isProduct ? `/product-detail/${data.productId}` : `/combo-detail/${data.comboId}`}>
+                    <img src={`data:image/png;base64,${itemImage}`} alt="" />
                   </Link>
-                  <p>{item.product.productName}</p>
-                  <p>{item.product.size}</p>
-                  <p>{item.product.dataStore.storeName}</p>
-                  <p>{Number(item.product.unitPrice).toLocaleString('vi-VN')} đ</p>
+                  <p>{itemName}</p>
+                  <p>{itemSize}</p>
+                  <p>{itemStoreName}</p>
+                  <p>{Number(itemUnitPrice).toLocaleString('vi-VN')} đ</p>
                   <div className="quantity-controls">
                     <button onClick={() => handleDecreaseQuantity(item)}> <i className="fa-solid fa-minus"></i></button>
-                    <p>{item.product.quantity}</p>
+                    <p>{itemQuantity}</p>
                     <button onClick={() => handleIncreaseQuantity(item)}><i className="fa-solid fa-plus"></i></button>
                   </div>
-                  <p>{Number(item.product.unitPrice * item.product.quantity).toLocaleString('vi-VN')} đ</p>
-                  <p
-                    onClick={() => {
-                      handleRemoveProductInCart(item.cartId);
-                    }}
-                  >
-                    <i className="fa-solid fa-trash action-delete" ></i>
+                  <p>{Number(itemTotalPrice).toLocaleString('vi-VN')} đ</p>
+                  <p onClick={() => handleRemoveProductInCart(item.cartId)}>
+                    <i className="fa-solid fa-trash action-delete"></i>
                   </p>
                 </div>
                 <hr />
               </div>
             );
-          }))
-            : (
-              <div className="no-product">
-                <span>Không có sản phẩm trong giỏ hàng</span>
-              </div>
-            )
-        }
+          })
+          ) : (
+            <div className="no-product">
+              <span>Không có sản phẩm trong giỏ hàng</span>
+            </div>
+          )}
       </div>
       <div className="cart-bottom">
         <div className="cart-total">

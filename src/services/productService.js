@@ -18,6 +18,12 @@ const fetchAllCombosService = () => {
         url: `/api/v1/public/combo/all`,
     });
 }
+const fetchAllDrinksService = () => {
+    return axios({
+        method: 'get',
+        url: `/api/v1/public/products/category/8`,
+    });
+}
 
 const fetchProductByIdService = (id) => {
     return axios({
@@ -48,6 +54,7 @@ export {
     fetchProductsBestSaleService,
     fetchProductsByIdCategoryService,
     fetchAllCombosService,
+    fetchAllDrinksService,
     fetchProductByIdService,
     fetchComboByIdService,
     fetchProductsByIdStoreService,
