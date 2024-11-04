@@ -4,10 +4,12 @@ import com.example.BE_PBL6_FastOrderSystem.model.Chat;
 import com.example.BE_PBL6_FastOrderSystem.model.User;
 import com.example.BE_PBL6_FastOrderSystem.repository.UserRepository;
 import com.example.BE_PBL6_FastOrderSystem.request.ChatRequest;
+import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
 import com.example.BE_PBL6_FastOrderSystem.response.APIResponseChat;
 import com.example.BE_PBL6_FastOrderSystem.response.ChatResponse;
 import com.example.BE_PBL6_FastOrderSystem.response.UserResponse;
 import com.example.BE_PBL6_FastOrderSystem.service.IChatService;
+import com.example.BE_PBL6_FastOrderSystem.service.IStoreService;
 import com.example.BE_PBL6_FastOrderSystem.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,8 @@ public class ChatController {
     private IChatService chatService;
     @Autowired
     private IUserService userService;
+    @Autowired
+    private IStoreService storeService;
 
     @GetMapping
     public ResponseEntity<APIResponseChat<List<Chat>>> getAllChats() {
@@ -121,6 +125,27 @@ public class ChatController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PostMapping("/saveMessage")
+    public ResponseEntity<APIResponseChat<String>> saveMessage(
+            @RequestParam("sender") Long sender,
+            @RequestParam("receiver") Long receiver,
+            @RequestParam(value = "mess", required = false) String mess, // Nhận file ảnh từ form
+            @RequestParam(value = "isRead", required = false) Boolean isRead) {
+
+        // Tạo ChatRequest từ dữ liệu nhận được
+        ChatRequest chatRequest = new ChatRequest();
+        chatRequest.setSender(sender);
+        chatRequest.setReceiver(receiver);
+        chatRequest.setMessage(null);
+        chatRequest.setIsRead(isRead != null ? isRead : false); // Mặc định là chưa đọc
+        chatRequest.setMessage(mess);
+
+        // Lưu thông tin chat bao gồm ảnh (nếu có)
+        chatService.saveChat(chatRequest);
+        APIResponseChat<String> response = new APIResponseChat<>("", 0, "Success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @GetMapping("/users-chat")
     public APIResponseChat<List<UserResponse>> getAllUsersChat() {
 
@@ -132,5 +157,10 @@ public class ChatController {
     public APIResponseChat<List<UserResponse>> getSearchByPhoneNumber(@PathVariable String phoneNumber) {
         List<UserResponse> users = userService.getSearchByPhoneNumber(phoneNumber);
         return new APIResponseChat<>(users, 0, "Data retrieved successfully");
+    }
+
+    @GetMapping("/search/owner/{idStore}")
+    public APIResponseChat<UserResponse> getOwnerForStore(@PathVariable Long idStore){
+        return storeService.getOwnerForStore(idStore);
     }
 }
