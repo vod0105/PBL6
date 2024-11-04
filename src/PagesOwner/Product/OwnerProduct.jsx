@@ -10,7 +10,9 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBackward } from "@fortawesome/free-solid-svg-icons";
 import { faForward } from "@fortawesome/free-solid-svg-icons";
-
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 const OwnerProduct = ({ url }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -186,11 +188,17 @@ const OwnerProduct = ({ url }) => {
 
                   <td>
                     <button
-                      type="button"
-                      className="btn btn-danger"
+                      style={{
+                        border: "2px solid gray",
+
+                        borderRadius: "50%",
+                      }}
+                      className="btndelete"
                       onClick={() => deleteProduct(data.productId)}
                     >
-                      DELETE
+                      <IconButton aria-label="delete" size="medium">
+                        <DeleteIcon />
+                      </IconButton>
                     </button>
                   </td>
                 </tr>
@@ -237,4 +245,3 @@ const OwnerProduct = ({ url }) => {
 };
 
 export default OwnerProduct;
-

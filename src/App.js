@@ -40,6 +40,7 @@ import AddStaff from "./PagesOwner/Staff/AddStaff";
 import UpdateStaff from "./PagesOwner/Staff/UpdateStaff";
 import StaffList from "./PagesOwner/Staff/Staff";
 import OwnerAddProductToStorev2 from "./PagesOwner/Product/OwnerAddproductToStore";
+import OrderDetail from "./PagesOwner/Order/OrderDetails";
 
 const App = () => {
   // const isAuthenticated = !!localStorage.getItem("access_token"); // Kiểm tra nếu có token
@@ -573,6 +574,24 @@ const App = () => {
                       <Sidebar />
                       <div className="dashboard-content">
                         <StaffList url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+
+            <Route
+              path="/owner/OrderDetails/:Id"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <OrderDetail url={url} />
                       </div>
                     </div>
                   </>

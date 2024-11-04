@@ -1,67 +1,50 @@
-/* .dashboard .content {
-  display: flex;
-  position: absolute;
-  bottom: 7%;
-  left: 0%;
-}*/
-
 .dashboard {
-    position: relative;
-  }
-  .content-header {
-    width: 1200px;
-    max-width: calc(100% - 48px);
-    margin: 0 auto;
-  }
-  .content-header .list {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    gap: 35px;
-  }
-  .content-header .list .item {
-    padding: 25px 10px;
-    background-color: white;
-    width: 22%;
-    border-radius: 25px;
-    border: 2px solid rgb(233, 228, 228);
-  }
-  .item img {
-    width: 70px;
-    border-radius: 70%;
-  }
-  .img-item {
-    border-radius: 50%;
-  }
-  .dashboard .list .item p {
-    font-size: 25px;
-  }
-  .img-item {
-    position: absolute;
-    right: 15px;
-    top: 35px;
-  }
-  .dashboard .item {
-    position: relative;
-  }
-  .content-body {
-    position: absolute;
-    display: flex;
-    left: 0px;
-    bottom: 50px;
-    align-items: center;
-  }
-  /* .content-body .chart-right {
-    margin-left: 200px;
-  
-    border: 2px solid rgb(233, 228, 228);
-  }
-  .content-body .chart-left {
-    border: 2px solid rgb(233, 228, 228);
-    padding: 20px 10px;
-  } */
-  .content-body .chart-right {
-    margin-left: 50px;
-    
-   
-  }
+  position: relative;
+}
+.content-header {
+  width: 1200px;
+  max-width: calc(100% - 48px);
+  margin: 0 auto;
+}
+.content-header .list {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 35px;
+}
+.content-header .list .item {
+  padding: 25px 10px;
+  background-color: white;
+  width: 22%;
+  border-radius: 25px;
+  border: 2px solid rgb(233, 228, 228);
+}
+.item img {
+  width: 70px;
+  border-radius: 70%;
+}
+.img-item {
+  border-radius: 50%;
+}
+.dashboard .list .item p {
+  font-size: 25px;
+}
+.img-item {
+  position: absolute;
+  right: 15px;
+  top: 35px;
+}
+.dashboard .item {
+  position: relative;
+}
+.content-body {
+  position: absolute;
+  display: flex;
+  left: 0px;
+  bottom: 50px;
+  align-items: center;
+}
+
+.content-body .chart-right {
+  margin-left: 50px;
+}

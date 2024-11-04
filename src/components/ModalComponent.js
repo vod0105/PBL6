@@ -1,41 +1,43 @@
-import { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+import React from "react";
 
-function Example() {
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
+const ModalComponent = ({ isOpen, handleClose, orderDetails }) => {
   return (
-    <>
-      <Button variant="primary" onClick={handleShow}>
-        Launch static backdrop modal
-      </Button>
-
-      <Modal
-        show={show}
-        onHide={handleClose}
-        backdrop="static"
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Modal title</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          I will not close if you click outside me. Do not even try to press
-          escape key.
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary">Understood</Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+    <div
+      className={`modal fade ${isOpen ? "show" : ""}`}
+      style={{ display: isOpen ? "block" : "none" }}
+      tabIndex="-1"
+      role="dialog"
+    >
+      <div className="modal-dialog" role="document">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">Order Details</h5>
+            <button type="button" className="close" onClick={handleClose}>
+              <span>&times;</span>
+            </button>
+          </div>
+          <div className="modal-body">
+            <p>
+              <strong>Order Code:</strong> {orderDetails.orderCode}
+            </p>
+            <p>
+              <strong>Total Price:</strong> {orderDetails.totalPrice}
+            </p>
+            {/* Thêm thông tin khác về đơn hàng tại đây */}
+          </div>
+          <div className="modal-footer">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={handleClose}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
-}
+};
 
-export default Example;
+export default ModalComponent;

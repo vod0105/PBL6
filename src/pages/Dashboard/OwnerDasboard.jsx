@@ -37,6 +37,55 @@ const OwnerDasboard = () => {
 
   const [ordermonth, setordermonth] = useState("");
   const [allbudger, setallbudger] = useState("");
+
+  const [registermonth, setregistermonth] = useState("");
+  const [listDataBudgetOfYear, setlistDataBudgetOfYear] = useState([]);
+  const [lineData, setLineData] = useState({
+    labels: [],
+    datasets: [
+      {
+        label: "Doanh thu",
+        data: [],
+        borderColor: "rgba(75,192,192,1)",
+        backgroundColor: "rgba(75,192,192,0.2)",
+        fill: true,
+      },
+    ],
+  });
+  const [barData, setBarData] = useState({
+    labels: [],
+    datasets: [
+      {
+        label: "Số lượng bán ra",
+        data: [],
+        backgroundColor: [
+          "rgba(255,99,132,0.2)",
+          "rgba(54,162,235,0.2)",
+          "rgba(255,206,86,0.2)",
+          "rgba(75,192,192,0.2)",
+          "rgba(153,102,255,0.2)",
+          "rgba(255,99,132,0.2)",
+          "rgba(54,162,235,0.2)",
+          "rgba(255,206,86,0.2)",
+          "rgba(75,192,192,0.2)",
+          "rgba(153,102,255,0.2)",
+        ],
+        borderColor: [
+          "rgba(255,99,132,1)",
+          "rgba(54,162,235,1)",
+          "rgba(255,206,86,1)",
+          "rgba(75,192,192,1)",
+          "rgba(153,102,255,1)",
+          "rgba(255,99,132,0.2)",
+          "rgba(54,162,235,0.2)",
+          "rgba(255,206,86,0.2)",
+          "rgba(75,192,192,0.2)",
+          "rgba(153,102,255,0.2)",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  });
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -47,7 +96,7 @@ const OwnerDasboard = () => {
         };
 
         const rsordermonth = await axios.get(
-          `${url}/api/v1/admin/display/order/month`,
+          `${url}/api/v1/owner/display/order/month`,
           { headers }
         );
 
@@ -61,6 +110,7 @@ const OwnerDasboard = () => {
   }, []);
 
   //all budget
+  //all budget
   useEffect(() => {
     const fetchData2 = async () => {
       try {
@@ -70,7 +120,7 @@ const OwnerDasboard = () => {
           "Content-Type": "application/json",
         };
 
-        const rs = await axios.get(`${url}/api/v1/admin/display/budget/all`, {
+        const rs = await axios.get(`${url}/api/v1/owner/display/budget/all`, {
           headers,
         });
 
@@ -83,53 +133,159 @@ const OwnerDasboard = () => {
     fetchData2();
   }, []);
 
+  // do thi 1
+  useEffect(() => {
+    const fetchData2 = async () => {
+      try {
+        const currentYear = new Date().getFullYear();
+        const tk = localStorage.getItem("access_token");
+        const headers = {
+          Authorization: `Bearer ${tk}`,
+          "Content-Type": "application/json",
+        };
+
+        const rs = await axios.get(
+          `${url}/api/v1/owner/display/total/year/${currentYear}`,
+          {
+            headers,
+          }
+        );
+        const labels = Object.keys(rs.data.data);
+        const data = Object.values(rs.data.data).map((value) =>
+          value === null ? 0 : value
+        );
+
+        setLineData({
+          labels,
+          datasets: [
+            {
+              label: "Doanh thu",
+              data,
+              borderColor: "rgba(75,192,192,1)",
+              backgroundColor: "rgba(75,192,192,0.2)",
+              fill: true,
+            },
+          ],
+        });
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu:", error);
+      }
+    };
+
+    fetchData2();
+  }, []);
+  // bieu do so 2
+
+  useEffect(() => {
+    const fetchData2 = async () => {
+      try {
+        const currentYear = new Date().getFullYear();
+        const tk = localStorage.getItem("access_token");
+        const headers = {
+          Authorization: `Bearer ${tk}`,
+          "Content-Type": "application/json",
+        };
+
+        const rs = await axios.get(
+          `${url}/api/v1/owner/display/count/products?module=year`,
+          {
+            headers,
+          }
+        );
+        const labels = Object.keys(rs.data.data);
+        const data = Object.values(rs.data.data).map((value) =>
+          value === null ? 0 : value
+        );
+
+        setBarData({
+          labels,
+          datasets: [
+            {
+              label: "Số lượng ",
+              data,
+              backgroundColor: [
+                "rgba(255, 99, 132, 0.5)", // Màu hồng
+                "rgba(54, 162, 235, 0.8)", // Màu xanh dương
+                "rgba(255, 206, 86, 0.7)", // Màu vàng
+                "rgba(75, 192, 192, 0.6)", // Màu xanh ngọc
+                "rgba(153, 102, 255, 0.4)", // Màu tím nhạt
+                "rgba(255, 159, 64, 0.3)", // Màu cam
+                "rgba(255, 99, 132, 0.2)", // Màu hồng nhạt
+                "rgba(54, 162, 235, 0.9)", // Màu xanh dương đậm
+                "rgba(75, 192, 192, 0.5)", // Màu xanh lục nhạt
+                "rgba(255, 206, 86, 0.1)",
+              ],
+              borderColor: [
+                "rgba(255, 99, 132, 0.5)", // Màu hồng
+                "rgba(54, 162, 235, 0.8)", // Màu xanh dương
+                "rgba(255, 206, 86, 0.7)", // Màu vàng
+                "rgba(75, 192, 192, 0.6)", // Màu xanh ngọc
+                "rgba(153, 102, 255, 0.4)", // Màu tím nhạt
+                "rgba(255, 159, 64, 0.3)", // Màu cam
+                "rgba(255, 99, 132, 0.2)", // Màu hồng nhạt
+                "rgba(54, 162, 235, 0.9)", // Màu xanh dương đậm
+                "rgba(75, 192, 192, 0.5)", // Màu xanh lục nhạt
+                "rgba(255, 206, 86, 0.1)",
+              ],
+              fill: true,
+            },
+          ],
+        });
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu:", error);
+      }
+    };
+
+    fetchData2();
+  }, []);
+
   // Dữ liệu cho biểu đồ đường
-  const lineData = {
-    labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Thán1"],
-    datasets: [
-      {
-        label: "Doanh thu",
-        data: [1200, 1900, 3000, 5000, 2400, 3500],
-        borderColor: "rgba(75,192,192,1)",
-        backgroundColor: "rgba(75,192,192,0.2)",
-        fill: true,
-      },
-    ],
-  };
+  // const lineData = {
+  //   labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Thán1"],
+  //   datasets: [
+  //     {
+  //       label: "Doanh thu",
+  //       data: [1200, 1900, 3000, 5000, 2400, 3500],
+  //       borderColor: "rgba(75,192,192,1)",
+  //       backgroundColor: "rgba(75,192,192,0.2)",
+  //       fill: true,
+  //     },
+  //   ],
+  // };
 
   // Dữ liệu cho biểu đồ cột
-  const barData = {
-    labels: [
-      "Sản phẩm A",
-      "Sản phẩm B",
-      "Sản phẩm C",
-      "Sản phẩm D",
-      "Sản phẩm E",
-      "Sản phẩm f",
-      "Sản phẩm g",
-    ],
-    datasets: [
-      {
-        label: "Số lượng bán ra",
-        data: [400, 300, 500, 200, 350],
-        backgroundColor: [
-          "rgba(255,99,132,0.2)",
-          "rgba(54,162,235,0.2)",
-          "rgba(255,206,86,0.2)",
-          "rgba(75,192,192,0.2)",
-          "rgba(153,102,255,0.2)",
-        ],
-        borderColor: [
-          "rgba(255,99,132,1)",
-          "rgba(54,162,235,1)",
-          "rgba(255,206,86,1)",
-          "rgba(75,192,192,1)",
-          "rgba(153,102,255,1)",
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
+  // const barData = {
+  //   labels: [
+  //     "Sản phẩm A",
+  //     "Sản phẩm B",
+  //     "Sản phẩm C",
+  //     "Sản phẩm D",
+  //     "Sản phẩm E",
+  //     "Sản phẩm f",
+  //     "Sản phẩm g",
+  //   ],
+  //   datasets: [
+  //     {
+  //       label: "Số lượng bán ra",
+  //       data: [400, 300, 500, 200, 350],
+  //       backgroundColor: [
+  //         "rgba(255,99,132,0.2)",
+  //         "rgba(54,162,235,0.2)",
+  //         "rgba(255,206,86,0.2)",
+  //         "rgba(75,192,192,0.2)",
+  //         "rgba(153,102,255,0.2)",
+  //       ],
+  //       borderColor: [
+  //         "rgba(255,99,132,1)",
+  //         "rgba(54,162,235,1)",
+  //         "rgba(255,206,86,1)",
+  //         "rgba(75,192,192,1)",
+  //         "rgba(153,102,255,1)",
+  //       ],
+  //       borderWidth: 1,
+  //     },
+  //   ],
+  // };
 
   // Dữ liệu cho biểu đồ tròn
   const pieData = {
@@ -173,7 +329,7 @@ const OwnerDasboard = () => {
                 style={{ objectFit: "cover", marginTop: "25px" }}
               />
             </div>
-            <h3>{allbudger == null ? 0 : Math.floor(allbudger / 1000000)}</h3>{" "}
+            <h3>{allbudger == null ? 0 : Math.floor(allbudger / 1)}</h3>{" "}
             <span>(triệu đồng)</span>
           </div>
           <div className="item">
@@ -187,14 +343,14 @@ const OwnerDasboard = () => {
             <h2>20</h2>
           </div>
           <div className="item">
-            <p>Total Sold items</p>
+            <p>Total Order items</p>
             <img
               src={assets.itemSold2}
               alt=""
               className="img-item"
               style={{ marginTop: "25px" }}
             />
-            <h2>999</h2>
+            <h2>{ordermonth}</h2>
           </div>
           <div className="item">
             <p style={{ fontSize: "23px" }}>Weekly Revenue</p>

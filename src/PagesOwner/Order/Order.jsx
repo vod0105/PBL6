@@ -2,94 +2,131 @@ import React, { useEffect, useState } from "react";
 import "../Order/Order.css";
 import axios from "axios";
 import LoadingSpinner from "../../Action/LoadingSpiner.js";
-import ModalComponent from "../../components/ModalComponent.js";
-import Example from "../../components/ModalComponent.js";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBackward } from "@fortawesome/free-solid-svg-icons";
-import { faForward } from "@fortawesome/free-solid-svg-icons";
+import { faBackward, faForward } from "@fortawesome/free-solid-svg-icons";
 
 const Order = ({ url }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState(""); // Trạng thái lưu từ khóa tìm kiếm
-  const itemsPerPage = 4; // Số lượng phần tử mỗi trang
+  const [searchTerm, setSearchTerm] = useState("");
+  const [orderStatus, setOrderStatus] = useState("Đơn hàng mới");
+  const [totalPages, setTotalPages] = useState(0);
+  const itemsPerPage = 6;
   const navigate = useNavigate();
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem("access_token");
-        const response = await axios.get(`${url}/api/v1/public/products/all`);
-        setData(response.data.data);
-      } catch (err) {
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
 
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData2 = async () => {
+  //     try {
+  //       const tk = localStorage.getItem("access_token");
+  //       const headers = {
+  //         Authorization: `Bearer ${tk}`,
+  //         "Content-Type": "application/json",
+  //       };
+  //       const response = await axios.get(
+  //         `${url}/api/v1/owner/order/order/status?status=${orderStatus}&page=0&size=6`,
+  //         { headers }
+  //       );
 
-  // delete store
-  const deleteProduct = async (productId) => {
+  //       setTotalPages(response.data.page); // Giả sử API trả về tổng số trang
+  //       console.log(response.data.page);
+  //       console.log(
+  //         `${url}/api/v1/owner/order/order/status?status=${orderStatus}&page=0&size=6`
+  //       );
+  //     } catch (err) {
+  //       setError(err);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   fetchData2();
+  // }, [orderStatus]);
+
+  const fetchData = async () => {
     try {
       const tk = localStorage.getItem("access_token");
       const headers = {
         Authorization: `Bearer ${tk}`,
         "Content-Type": "application/json",
       };
-      await axios.delete(`${url}/api/v1/admin/products/delete/${productId}`, {
-        headers,
-      });
-      setData(data.filter((cat) => cat.productId !== productId));
-      toast.success("Deleted Product Successful");
-    } catch (error) {
-      if (error.response) {
-        console.error("Error Response Data:", error.response.data);
-        toast.error(error.response.data.message || "Something went wrong.");
-      } else {
-        console.error("Error:", error.message);
-        toast.error("Something went wrong.");
-      }
+      const response = await axios.get(
+        `${url}/api/v1/owner/order/order/status?status=${orderStatus}&page=${
+          currentPage - 1
+        }&size=${itemsPerPage}`,
+        { headers }
+      );
+
+      console.log(
+        `${url}/api/v1/owner/order/order/status?status=${orderStatus}&page=${
+          currentPage - 1
+        }&size=${itemsPerPage}`
+      );
+      setData(response.data.data);
+      setTotalPages(response.data.page); 
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
     }
   };
-  // chuyen huong update store
-  const handleUpdateClick = (productId) => {
-    // navigate(`admin/UpdateCategory/${cateId}`);
-    navigate(`/admin/UpdateProduct/${productId}`);
+
+  useEffect(() => {
+    fetchData();
+  }, [currentPage, orderStatus]); // Fetch lại dữ liệu khi trang hoặc trạng thái đơn hàng thay đổi
+
+  const handleRedirect = (Id) => {
+    navigate(`/owner/OrderDetails/${Id}`);
   };
-  //
+
+  const handleAcceptClick = async (orderCode) => {
+    if (orderStatus !== "Đơn hàng mới") {
+      toast.warning("Chỉ có thể chấp nhận đơn hàng mới.");
+      return;
+    }
+    try {
+      const tk = localStorage.getItem("access_token");
+      const headers = {
+        Authorization: `Bearer ${tk}`,
+        "Content-Type": "application/json",
+      };
+
+      const response = await axios.put(
+        `${url}/api/v1/owner/order/update-status`,
+        null,
+        {
+          headers: headers,
+          params: {
+            status: "Đơn hàng đã được xác nhận",
+            orderCode: orderCode,
+          },
+        }
+      );
+
+      toast.success("Cập nhật trạng thái đơn hàng thành công");
+      fetchData(); // Fetch lại dữ liệu sau khi cập nhật trạng thái
+    } catch (err) {
+      console.error("Error:", err.response?.data || err.message);
+      toast.error("Cập nhật trạng thái đơn hàng thất bại");
+    }
+  };
 
   if (loading) {
-    return (
-      <p>
-        <LoadingSpinner />
-      </p>
-    );
+    return <LoadingSpinner />;
   }
 
   if (error) {
     return <p>Error: {error.message}</p>;
   }
 
-  // Xử lý từ khóa tìm kiếm
-  const filteredData = data.filter((item) =>
-    item.productName.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  // Xác định các phần tử cần hiển thị trên trang hiện tại
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
-
-  // Tính toán số trang
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-
+  // Lọc dữ liệu theo searchTerm
+  const filteredData = Array.isArray(data)
+    ? data.filter((item) =>
+        item.orderCode.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : [];
   return (
     <div className="product">
       <div className="content">
@@ -99,120 +136,106 @@ const Order = ({ url }) => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            width: "100%",
           }}
         >
           <h1 className="h-product">List Order</h1>
           <div className="order__action">
-            <section className="order__action--cover" s>
+            <section className="order__action--cover">
               <label htmlFor="">Tìm kiếm</label>
               <input
                 type="text"
                 placeholder="Search Name Product"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                style={{
-                  padding: "5px 15px",
-                  outlineColor: "tomato",
-                }}
+                style={{ padding: "5px 15px", outlineColor: "tomato" }}
               />
             </section>
-            <select name="order_select" id="" className="order_select">
-              <option value="">---Chọn-----</option>
-              <option value="">Đơn hàng đang chờ</option>
-              <option value="">Lịch sử xác nhận</option>
-              <option value="">Đơn hàng đã hủy</option>
+            <select
+              name="order_select"
+              className="order_select"
+              value={orderStatus}
+              onChange={(e) => setOrderStatus(e.target.value)}
+            >
+              <option value="Đơn hàng mới">Đơn hàng đang chờ</option>
+              <option value="Đơn hàng đã được xác nhận">
+                Lịch sử xác nhận
+              </option>
+              <option value="Đơn hàng đã bị hủy">Đơn hàng đã hủy</option>
             </select>
           </div>
         </div>
+
         <table
           className="table table-hover text-center align-items-center tb-product"
-          style={{
-            backgroundColor: "red",
-            tableLayout: "fixed",
-            textAlign: "center",
-            verticalAlign: "center",
-            boxShadow: "0 0.1rem 0.4rem #0002",
-          }}
+          style={{ width: "80%", margin: "0 auto", marginTop: "20px" }}
         >
-          <thead
-            className="table-danger text-center"
-            style={{
-              whiteSpace: "nowrap",
-              textAlign: "center",
-              verticalAlign: "center",
-            }}
-          >
+          <thead className="table-danger text-center">
             <tr>
-              <th scope="col">Product Id</th>
+              <th scope="col">Order Code</th>
               <th scope="col">Image</th>
-              <th scope="col">Name</th>
-              <th scope="col">Description</th>
-              <th scope="col">Price</th>
-              <th scope="col">Category Name</th>
-              <th scope="col">Stock Quantity</th>
-              <th scope="col">Best Sale</th>
-              <th scope="col">Sửa</th>
-              <th scope="col">Xóa</th>
+              <th scope="col">Full Name</th>
+              <th scope="col">Total Price</th>
+              {orderStatus === "Đơn hàng mới" && <th scope="col">Action</th>}
+              <th scope="col">Details</th>
             </tr>
           </thead>
           <tbody className="align-middle">
-            {currentItems.length > 0 ? (
-              currentItems.map((data) => (
+            {filteredData.length > 0 ? (
+              filteredData.map((order) => (
                 <tr
-                  key={data.productId}
+                  key={order.orderCode}
                   style={{ borderBottom: "2px solid rgb(228, 223, 223)" }}
                 >
-                  <td>{data.productId}</td>
+                  <td>{order.orderCode}</td>
                   <td>
                     <img
-                      src={`data:image/jpeg;base64,${data.image}`}
-                      className="img-product"
+                      src={`data:image/jpeg;base64,${order.imageUser}`}
+                      className="img-cate"
                       alt="Image cate"
                       style={{
-                        height: "100px",
-                        width: "100px",
+                        width: "75px",
+                        height: "75px",
                         objectFit: "contain",
                       }}
                     />
                   </td>
-                  <td>{data.productName}</td>
-                  <td>{data.description}</td>
+                  <td>{order.fullName}</td>
+                  <td>{order.totalPrice}</td>
+                  {orderStatus === "Đơn hàng mới" && (
+                    <td>
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={() => handleAcceptClick(order.orderCode)}
+                      >
+                        Accept
+                      </button>
+                    </td>
+                  )}
 
-                  <td>{data.price}</td>
-                  <td>{data.category.categoryName}</td>
-                  <td>{data.stockQuantity}</td>
-                  <td>{data.bestSale ? "Best sales" : "Normal"}</td>
-
-                  <td>
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      onClick={() => handleUpdateClick(data.productId)}
-                    >
-                      UPDATE
-                    </button>
-                  </td>
                   <td>
                     <button
                       type="button"
                       className="btn btn-danger"
-                      onClick={() => deleteProduct(data.productId)}
+                      onClick={() => handleRedirect(order.orderCode)}
                     >
-                      DELETE
+                      Detail
                     </button>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="8">No data available</td>
+                <td colSpan="6">No data available</td>
               </tr>
             )}
           </tbody>
         </table>
+
         <div
           className="pagination pagenigate-pd pd"
-          style={{ marginTop: "80px" }}
+          style={{ marginTop: "80px", marginLeft: "-100px" }}
         >
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}

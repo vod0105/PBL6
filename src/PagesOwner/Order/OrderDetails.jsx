@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../Combo/Combo.css";
+
 import axios from "axios";
 import LoadingSpinner from "../../Action/LoadingSpiner.js";
 import ModalComponent from "../../components/ModalComponent.js";
@@ -10,12 +10,10 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBackward } from "@fortawesome/free-solid-svg-icons";
 import { faForward } from "@fortawesome/free-solid-svg-icons";
+import { useParams } from "react-router-dom";
 
-import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-
-const Combo = ({ url }) => {
+const OrderDetail = ({ url }) => {
+  const { Id } = useParams();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,8 +24,18 @@ const Combo = ({ url }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem("access_token");
-        const response = await axios.get(`${url}/api/v1/public/combo/all`);
+        const tk = localStorage.getItem("access_token");
+        const headers = {
+          Authorization: `Bearer ${tk}`,
+          "Content-Type": "application/json",
+        };
+        const response = await axios.get(
+          `${url}/api/v1/owner/order/get/details?orderCode=${Id}`,
+          { headers }
+        );
+        console.log("vao day");
+
+        console.log("res", response.data.data);
         setData(response.data.data);
       } catch (err) {
         setError(err);
@@ -40,18 +48,18 @@ const Combo = ({ url }) => {
   }, []);
 
   // delete store
-  const deleteComboid = async (comboId) => {
+  const deleteProduct = async (productId) => {
     try {
       const tk = localStorage.getItem("access_token");
       const headers = {
         Authorization: `Bearer ${tk}`,
         "Content-Type": "application/json",
       };
-      await axios.delete(`${url}/api/v1/admin/combo/delete/${comboId}`, {
+      await axios.delete(`${url}/api/v1/admin/products/delete/${productId}`, {
         headers,
       });
-      setData(data.filter((cat) => cat.comboId !== comboId));
-      toast.success("Deleted Comboid Successful");
+      setData(data.filter((cat) => cat.productId !== productId));
+      toast.success("Deleted Product Successful");
     } catch (error) {
       if (error.response) {
         console.error("Error Response Data:", error.response.data);
@@ -63,9 +71,9 @@ const Combo = ({ url }) => {
     }
   };
   // chuyen huong update store
-  const handleUpdateClick = (id) => {
+  const handleUpdateClick = (productId) => {
     // navigate(`admin/UpdateCategory/${cateId}`);
-    navigate(`/admin/UpdateCombo/${id}`);
+    navigate(`/admin/UpdateProduct/${productId}`);
   };
   //
 
@@ -76,23 +84,6 @@ const Combo = ({ url }) => {
       </p>
     );
   }
-
-  if (error) {
-    return <p>Error: {error.message}</p>;
-  }
-
-  // Xử lý từ khóa tìm kiếm
-  const filteredData = data.filter((item) =>
-    item.comboName.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  // Xác định các phần tử cần hiển thị trên trang hiện tại
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
-
-  // Tính toán số trang
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   return (
     <div className="product">
@@ -105,7 +96,7 @@ const Combo = ({ url }) => {
             alignItems: "center",
           }}
         >
-          <h1 className="h-product">List Comnbo</h1>
+          <h2 className="h-product">List Product Of Orders</h2>
           <div className="store-search">
             <input
               type="text"
@@ -138,72 +129,55 @@ const Combo = ({ url }) => {
             }}
           >
             <tr>
-              <th scope="col" style={{ width: "10%" }}>
-                Id
-              </th>
-              <th scope="col">Image</th>
+              <th scope="col">orderDetailId</th>
+              {/* <th scope="col">totalPrice</th> */}
+              {/* <th scope="col">Combo Id</th> */}
               <th scope="col">Name</th>
-
+              <th scope="col">Image</th>
+              <th scope="col">Id</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Unit Price</th>
+              <th scope="col">Total Price</th>
+              <th scope="col">Size</th>
+              {/* <th scope="col">Description</th>
               <th scope="col">Price</th>
-              <th scope="col">Description</th>
-              <th scope="col">Food</th>
-              <th scope="col">Action</th>
+              <th scope="col">Category Name</th>
+              <th scope="col">Stock Quantity</th>
+              <th scope="col">Best Sale</th>
+              <th scope="col">Sửa</th>
+              <th scope="col">Xóa</th> */}
             </tr>
           </thead>
-          <tbody className="align-middle">
-            {currentItems.length > 0 ? (
-              currentItems.map((data) => (
+          {/* <tbody className="align-middle">
+            {data.length > 0 ? (
+              data.map((data) => (
+              
+                
                 <tr
-                  key={data.comboId}
+                  key={data.comboDetail.orderDetailId}
                   style={{ borderBottom: "2px solid rgb(228, 223, 223)" }}
                 >
-                  <td>{data.comboId}</td>
+                  <td>{data.comboDetail.orderDetailId}</td>
+                  <td>{data.comboDetail.comboName}</td>
                   <td>
                     <img
-                      src={`data:image/jpeg;base64,${data.image}`}
+                      src={`data:image/jpeg;base64,${data.comboDetail.image}`}
                       className="img-product"
                       alt="Image cate"
                       style={{
                         height: "100px",
                         width: "100px",
                         objectFit: "contain",
-                        borderRadius: "5px",
+                        // borderRadius: "50%",
                       }}
                     />
                   </td>
-                  <td>{data.comboName}</td>
-                  <td>{data.price}</td>
+                  <td>{data.comboDetail.comboId}</td>
+                  <td>{data.comboDetail.quantity}</td>
 
-                  <td>{data.description}</td>
-                  <td>A</td>
-                  <td>
-                    <button
-                      style={{
-                        border: "2px solid gray",
-                        marginRight: "5px",
-                        borderRadius: "50%",
-                      }}
-                      className="btndelete"
-                      onClick={() => handleUpdateClick(data.comboId)}
-                    >
-                      <IconButton aria-label="delete" size="medium">
-                        <EditIcon />
-                      </IconButton>
-                    </button>
-                    <button
-                      style={{
-                        border: "2px solid gray",
-
-                        borderRadius: "50%",
-                      }}
-                      className="btndelete"
-                      onClick={() => deleteComboid(data.comboId)}
-                    >
-                      <IconButton aria-label="delete" size="medium">
-                        <DeleteIcon />
-                      </IconButton>
-                    </button>
-                  </td>
+                  <td>{data.comboDetail.unitPrice}</td>
+                  <td>{data.comboDetail.totalPrice}</td>
+                  <td>{data.comboDetail.size}</td>
                 </tr>
               ))
             ) : (
@@ -211,9 +185,70 @@ const Combo = ({ url }) => {
                 <td colSpan="8">No data available</td>
               </tr>
             )}
-          </tbody>
+          </tbody> */}
+          <tbody className="align-middle">
+  {data.length > 0 ? (
+    data.map((item) => (
+      <tr
+        key={item.comboDetail?.orderDetailId || item.productDetail?.orderDetailId}
+        style={{ borderBottom: "2px solid rgb(228, 223, 223)" }}
+      >
+        {/* Kiểm tra loại dữ liệu là combo hay product và hiển thị tương ứng */}
+        {item.type === "combo" ? (
+          <>
+            <td>{item.comboDetail.orderDetailId}</td>
+            <td>{item.comboDetail.comboName}</td>
+            <td>
+              <img
+                src={`data:image/jpeg;base64,${item.comboDetail.image}`}
+                className="img-product"
+                alt="Combo Image"
+                style={{
+                  height: "100px",
+                  width: "100px",
+                  objectFit: "contain",
+                }}
+              />
+            </td>
+            <td>{item.comboDetail.comboId}</td>
+            <td>{item.comboDetail.quantity}</td>
+            <td>{item.comboDetail.unitPrice}</td>
+            <td>{item.comboDetail.totalPrice}</td>
+            <td>{item.comboDetail.size}</td>
+          </>
+        ) : (
+          <>
+            <td>{item.productDetail.orderDetailId}</td>
+            <td>{item.productDetail.productName}</td>
+            <td>
+              <img
+                src={`data:image/jpeg;base64,${item.productDetail.image}`}
+                className="img-product"
+                alt="Product Image"
+                style={{
+                  height: "100px",
+                  width: "100px",
+                  objectFit: "contain",
+                }}
+              />
+            </td>
+            <td>{item.productDetail.productId}</td>
+            <td>{item.productDetail.quantity}</td>
+            <td>{item.productDetail.unitPrice}</td>
+            <td>{item.productDetail.totalPrice}</td>
+            <td>{item.productDetail.size}</td>
+          </>
+        )}
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan="8">No data available</td>
+    </tr>
+  )}
+</tbody>
         </table>
-        <div
+        {/* <div
           className="pagination pagenigate-pd pd"
           style={{ marginTop: "80px" }}
         >
@@ -241,10 +276,10 @@ const Combo = ({ url }) => {
             <FontAwesomeIcon icon={faForward} />
           </button>
           <ToastContainer />
-        </div>
+        </div> */}
       </div>
     </div>
   );
 };
 
-export default Combo;
+export default OrderDetail;

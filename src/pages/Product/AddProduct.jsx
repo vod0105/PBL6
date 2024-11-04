@@ -3,8 +3,11 @@ import "./AddProduct.css";
 import { assets } from "../../assets/assets.js";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-
+import { useTimeout } from "@mui/x-data-grid/internals";
+import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const AddProduct = ({ url }) => {
+  const navigate = useNavigate();
   const [image, setImage] = useState(false);
   const [data, setData] = useState({
     categoryName: "",
@@ -90,6 +93,10 @@ const AddProduct = ({ url }) => {
         });
         setImage(null);
         toast.success("Added Product Success");
+        setTimeout(() => {
+      
+          navigate("/admin/product");
+        }, 1000);
       } else {
         toast.error(response.data.message);
       }

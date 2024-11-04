@@ -12,10 +12,12 @@
 .product table tbody tr td {
   font-weight: 500;
 }
-.pagination.pd button{
+.pagination.pd button {
   border: none;
   padding-left: 10px;
   padding-right: 8px;
   font-weight: 600;
-  
+}
+.btndelete:hover {
+  background-color: rgb(166, 159, 159);
 }

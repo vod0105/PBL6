@@ -6,6 +6,14 @@ import ModalComponent from "../../components/ModalComponent.js";
 import Example from "../../components/ModalComponent.js";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBackward } from "@fortawesome/free-solid-svg-icons";
+import { faForward } from "@fortawesome/free-solid-svg-icons";
+
 const Store = ({ url }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -101,7 +109,7 @@ const Store = ({ url }) => {
             />
           </div>
         </div>
-        <table className="table text-center">
+        {/* <table className="table text-center">
           <thead className="table-dark">
             <tr>
               <th scope="col">storeId</th>
@@ -162,13 +170,105 @@ const Store = ({ url }) => {
               </tr>
             )}
           </tbody>
+        </table> */}
+        <table
+          className="table table-hover text-center align-items-center tb-product"
+          style={{
+            backgroundColor: "red",
+            tableLayout: "fixed",
+            textAlign: "center",
+            verticalAlign: "center",
+            boxShadow: "0 0.1rem 0.4rem #0002",
+          }}
+        >
+          <thead
+            className="table-danger text-center"
+            style={{
+              whiteSpace: "nowrap",
+              textAlign: "center",
+              verticalAlign: "center",
+            }}
+          >
+            <tr>
+              <th scope="col">storeId</th>
+              <th scope="col">Image</th>
+              <th scope="col">storeName</th>
+              <th scope="col">location</th>
+              <th scope="col">managerName</th>
+              <th scope="col">numberPhone</th>
+              <th scope="col">openingTime</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody className="align-middle">
+            {currentItems.length > 0 ? (
+              currentItems.map((store) => (
+                <tr key={store.storeId}>
+                  <td>{store.storeId}</td>
+                  <td>
+                    <img
+                      src={`data:image/jpeg;base64,${store.image}`}
+                      className="img-product"
+                      alt="Image cate"
+                      style={{
+                        height: "80px",
+                        width: "80px",
+                        objectFit: "cover",
+                        borderRadius: "50%",
+                      }}
+                    />
+                  </td>
+                  <td>{store.storeName}</td>
+                  <td>{store.location}</td>
+                  <td>{store.managerName}</td>
+                  <td>{store.numberPhone}</td>
+                  <td>{store.openingTime}</td>
+                  <td>
+                    <button
+                      style={{
+                        border: "2px solid gray",
+                        marginRight: "5px",
+                        borderRadius: "50%",
+                      }}
+                      className="btndelete"
+                      onClick={() => handleUpdateClick(store.storeId)}
+                    >
+                      <IconButton aria-label="delete" size="medium">
+                        <EditIcon />
+                      </IconButton>
+                    </button>
+                    <button
+                      style={{
+                        border: "2px solid gray",
+
+                        borderRadius: "50%",
+                      }}
+                      className="btndelete"
+                      onClick={() => deleteStore(store.storeId)}
+                    >
+                      <IconButton aria-label="delete" size="medium">
+                        <DeleteIcon />
+                      </IconButton>
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="8">No data available</td>
+              </tr>
+            )}
+          </tbody>
         </table>
-        <div className="pagination">
+        <div
+          className="pagination pagenigate-pd pd"
+          style={{ marginTop: "80px" }}
+        >
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
           >
-            Previous
+            <FontAwesomeIcon icon={faBackward} />
           </button>
           {Array.from({ length: totalPages }, (_, index) => (
             <button
@@ -185,7 +285,7 @@ const Store = ({ url }) => {
             }
             disabled={currentPage === totalPages}
           >
-            Next
+            <FontAwesomeIcon icon={faForward} />
           </button>
           <ToastContainer />
         </div>

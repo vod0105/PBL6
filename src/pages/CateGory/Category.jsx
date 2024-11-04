@@ -10,6 +10,9 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBackward } from "@fortawesome/free-solid-svg-icons";
 import { faForward } from "@fortawesome/free-solid-svg-icons";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
 const Category = ({ url }) => {
   const [data, setData] = useState([]);
@@ -128,8 +131,7 @@ const Category = ({ url }) => {
               <th scope="col">Image</th>
               <th scope="col">Category Name</th>
               <th scope="col">Description</th>
-              <th scope="col">Sửa</th>
-              <th scope="col">Xóa</th>
+              <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody className="align-middle">
@@ -146,9 +148,10 @@ const Category = ({ url }) => {
                       className="img-cate"
                       alt="Image cate"
                       style={{
-                        width: "75px",
-                        height: "75px",
-                        objectFit: "contain",
+                        height: "80px",
+                        width: "80px",
+                        objectFit: "cover",
+                        borderRadius: "50%",
                       }}
                     />
                   </td>
@@ -156,20 +159,30 @@ const Category = ({ url }) => {
                   <td>{data.description}</td>
                   <td>
                     <button
-                      type="button"
-                      className="btn btn-primary"
+                      style={{
+                        border: "2px solid gray",
+                        marginRight: "5px",
+                        borderRadius: "50%",
+                      }}
+                      className="btndelete"
                       onClick={() => handleUpdateClick(data.categoryId)}
                     >
-                      Update
+                      <IconButton aria-label="delete" size="medium">
+                        <EditIcon />
+                      </IconButton>
                     </button>
-                  </td>
-                  <td>
                     <button
-                      type="button"
-                      className="btn btn-danger"
+                      style={{
+                        border: "2px solid gray",
+
+                        borderRadius: "50%",
+                      }}
+                      className="btndelete"
                       onClick={() => deleteStore(data.categoryId)}
                     >
-                      Delete
+                      <IconButton aria-label="delete" size="medium">
+                        <DeleteIcon />
+                      </IconButton>
                     </button>
                   </td>
                 </tr>
