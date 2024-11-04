@@ -6,6 +6,9 @@ import ModalComponent from "../../components/ModalComponent.js";
 import Example from "../../components/ModalComponent.js";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 const Promotion = ({ url }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,6 +16,7 @@ const Promotion = ({ url }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState(""); // Trạng thái lưu từ khóa tìm kiếm
   const itemsPerPage = 4; // Số lượng phần tử mỗi trang
+
   const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
@@ -134,10 +138,8 @@ const Promotion = ({ url }) => {
               <th scope="col">Discount Percentage</th>
               <th scope="col">Start Date</th>
               <th scope="col">End Date</th>
-              <th scope="col">Sửa</th>
-              <th scope="col">Xóa</th>
+              <th scope="col">Action</th>
             </tr>
-          
           </thead>
           <tbody className="align-middle">
             {currentItems.length > 0 ? (
@@ -147,15 +149,16 @@ const Promotion = ({ url }) => {
                   style={{ borderBottom: "2px solid rgb(228, 223, 223)" }}
                 >
                   <td>{data.id}</td>
-                    <td>
+                  <td>
                     <img
                       src={`data:image/jpeg;base64,${data.image}`}
                       className="img-product"
                       alt="Image cate"
                       style={{
-                        height: "100px",
-                        width: "100px",
-                        objectFit: "contain",
+                        height: "80px",
+                        width: "80px",
+                        objectFit: "cover",
+                        borderRadius: "50%",
                       }}
                     />
                   </td>
@@ -165,22 +168,33 @@ const Promotion = ({ url }) => {
 
                   <td>{data.startDate}</td>
                   <td>{data.endDate}</td>
+
                   <td>
                     <button
-                      type="button"
-                      className="btn btn-primary"
+                      style={{
+                        border: "2px solid gray",
+                        marginRight: "5px",
+                        borderRadius: "50%",
+                      }}
+                      className="btndelete"
                       onClick={() => handleUpdateClick(data.id)}
                     >
-                      Update
+                      <IconButton aria-label="delete" size="medium">
+                        <EditIcon />
+                      </IconButton>
                     </button>
-                  </td>
-                  <td>
                     <button
-                      type="button"
-                      className="btn btn-danger"
+                      style={{
+                        border: "2px solid gray",
+
+                        borderRadius: "50%",
+                      }}
+                      className="btndelete"
                       onClick={() => deleteProduct(data.id)}
                     >
-                      Delete
+                      <IconButton aria-label="delete" size="medium">
+                        <DeleteIcon />
+                      </IconButton>
                     </button>
                   </td>
                 </tr>

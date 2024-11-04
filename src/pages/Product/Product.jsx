@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../Product/Product2.css";
 import axios from "axios";
+
 import LoadingSpinner from "../../Action/LoadingSpiner.js";
 import ModalComponent from "../../components/ModalComponent.js";
 import Example from "../../components/ModalComponent.js";
@@ -10,6 +11,9 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBackward } from "@fortawesome/free-solid-svg-icons";
 import { faForward } from "@fortawesome/free-solid-svg-icons";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
 const Product = ({ url }) => {
   const [data, setData] = useState([]);
@@ -142,8 +146,7 @@ const Product = ({ url }) => {
               <th scope="col">Category Name</th>
               <th scope="col">Stock Quantity</th>
               <th scope="col">Best Sale</th>
-              <th scope="col">Sửa</th>
-              <th scope="col">Xóa</th>
+              <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody className="align-middle">
@@ -160,9 +163,10 @@ const Product = ({ url }) => {
                       className="img-product"
                       alt="Image cate"
                       style={{
-                        height: "100px",
-                        width: "100px",
-                        objectFit: "contain",
+                        height: "80px",
+                        width: "80px",
+                        objectFit: "cover",
+                        borderRadius: "50%",
                       }}
                     />
                   </td>
@@ -176,20 +180,30 @@ const Product = ({ url }) => {
 
                   <td>
                     <button
-                      type="button"
-                      className="btn btn-primary"
+                      style={{
+                        border: "2px solid gray",
+                        marginRight: "5px",
+                        borderRadius: "50%",
+                      }}
+                      className="btndelete"
                       onClick={() => handleUpdateClick(data.productId)}
                     >
-                      UPDATE
+                      <IconButton aria-label="delete" size="medium">
+                        <EditIcon />
+                      </IconButton>
                     </button>
-                  </td>
-                  <td>
                     <button
-                      type="button"
-                      className="btn btn-danger"
+                      style={{
+                        border: "2px solid gray",
+
+                        borderRadius: "50%",
+                      }}
+                      className="btndelete"
                       onClick={() => deleteProduct(data.productId)}
                     >
-                      DELETE
+                      <IconButton aria-label="delete" size="medium">
+                        <DeleteIcon />
+                      </IconButton>
                     </button>
                   </td>
                 </tr>
@@ -201,7 +215,10 @@ const Product = ({ url }) => {
             )}
           </tbody>
         </table>
-        <div className="pagination pagenigate-pd pd" style={{ marginTop: "80px" }}>
+        <div
+          className="pagination pagenigate-pd pd"
+          style={{ marginTop: "80px" }}
+        >
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
@@ -233,3 +250,167 @@ const Product = ({ url }) => {
 };
 
 export default Product;
+
+// import * as React from "react";
+// import { useEffect, useState } from "react";
+// import { DataGrid, GridColDef } from "@mui/x-data-grid";
+// import Paper from "@mui/material/Paper";
+// import axios from "axios";
+// import IconButton from "@mui/material/IconButton";
+// import DeleteIcon from "@mui/icons-material/Delete";
+// import EditIcon from "@mui/icons-material/Edit";
+// import LoadingSpinner from "../../Action/LoadingSpiner.js";
+// import { ToastContainer, toast } from "react-toastify";
+// import { useNavigate } from "react-router-dom";
+
+// const Product = ({ url }) => {
+//   const [data, setData] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+//   const [searchTerm, setSearchTerm] = useState("");
+//   const [paginationModel, setPaginationModel] = useState({
+//     page: 0,
+//     pageSize: 5,
+//   });
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const response = await axios.get(`${url}/api/v1/public/products/all`);
+//         setData(response.data.data);
+//       } catch (err) {
+//         setError(err);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchData();
+//   }, [url]);
+
+//   const deleteProduct = async (productId) => {
+//     try {
+//       const headers = {
+//         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+//         "Content-Type": "application/json",
+//       };
+//       await axios.delete(`${url}/api/v1/admin/products/delete/${productId}`, {
+//         headers,
+//       });
+//       setData(data.filter((item) => item.productId !== productId));
+//       toast.success("Deleted Product Successfully");
+//     } catch (error) {
+//       toast.error("Error deleting product");
+//     }
+//   };
+
+//   const handleUpdateClick = (productId) => {
+//     navigate(`/admin/UpdateProduct/${productId}`);
+//   };
+
+//   const filteredData = data.filter((item) =>
+//     item.productName.toLowerCase().includes(searchTerm.toLowerCase())
+//   );
+
+//   const columns = [
+//     { field: "productId", headerName: "Product ID", width: 100 },
+//     {
+//       field: "image",
+//       headerName: "Image",
+//       width: 100,
+//       renderCell: (params) => (
+//         <img
+//           src={`data:image/jpeg;base64,${params.value}`}
+//           alt="Product"
+//           style={{
+//             height: "50px",
+//             width: "50px",
+//             objectFit: "cover",
+//             borderRadius: "50%",
+//           }}
+//         />
+//       ),
+//     },
+//     { field: "productName", headerName: "Name", width: 150 },
+//     { field: "description", headerName: "Description", width: 200 },
+//     { field: "price", headerName: "Price", width: 100 },
+//     { field: "category.categoryName", headerName: "Category", width: 150 },
+//     { field: "stockQuantity", headerName: "Stock Quantity", width: 130 },
+//     {
+//       field: "bestSale",
+//       headerName: "Best Sale",
+//       width: 120,
+//       renderCell: (params) => (params.value ? "Best Sale" : "Normal"),
+//     },
+//     {
+//       field: "actions",
+//       headerName: "Actions",
+//       width: 150,
+//       renderCell: (params) => (
+//         <>
+//           <IconButton onClick={() => handleUpdateClick(params.row.productId)}>
+//             <EditIcon />
+//           </IconButton>
+//           <IconButton onClick={() => deleteProduct(params.row.productId)}>
+//             <DeleteIcon />
+//           </IconButton>
+//         </>
+//       ),
+//       sortable: false,
+//     },
+//   ];
+
+//   return (
+//     <div className="product">
+//       <div className="content">
+//         <Paper sx={{ height: 540, width: "100%" }}>
+//           {loading ? (
+//             <LoadingSpinner />
+//           ) : error ? (
+//             <p>Error: {error.message}</p>
+//           ) : (
+//             <>
+//               <div style={{ padding: "16px" }}>
+//                 <input
+//                   type="text"
+//                   placeholder="Search Product Name"
+//                   value={searchTerm}
+//                   onChange={(e) => setSearchTerm(e.target.value)}
+//                   style={{
+//                     padding: "8px",
+//                     outlineColor: "tomato",
+//                     width: "100%",
+//                     maxWidth: "300px",
+//                   }}
+//                 />
+//               </div>
+//               <DataGrid
+//                 rows={filteredData}
+//                 columns={columns}
+//                 getRowId={(row) => row.productId}
+//                 paginationModel={paginationModel}
+//                 onPaginationModelChange={setPaginationModel}
+//                 pageSizeOptions={[5, 10]}
+//                 checkboxSelection
+//                 sx={{
+//                   "& .MuiDataGrid-row": {
+//                     marginBottom: "8px",
+//                     padding: "8px",
+//                   },
+//                   "& .MuiDataGrid-columnHeaders": {
+//                     backgroundColor: "green", // Change header background color
+//                     color: "black", // Change header text color
+//                   },
+//                 }}
+//               />
+//               <ToastContainer />
+//             </>
+//           )}
+//         </Paper>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Product;

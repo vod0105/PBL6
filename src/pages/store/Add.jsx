@@ -3,8 +3,9 @@ import "./adddemo.css";
 import { assets } from "../../assets/assets.js";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-
+import { useNavigate } from "react-router-dom";
 const Add = ({ url }) => {
+  const navigate = useNavigate();
   const [image, setImage] = useState(false);
   const [data, setData] = useState({
     storeName: "",
@@ -96,6 +97,9 @@ const Add = ({ url }) => {
         });
         setImage(null);
         toast.success("Added Store");
+        setTimeout(() => {
+          navigate("/admin/product");
+        }, 1000);
       } else {
         toast.error(response.data.message);
       }

@@ -10,7 +10,9 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBackward } from "@fortawesome/free-solid-svg-icons";
 import { faForward } from "@fortawesome/free-solid-svg-icons";
-
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 const StaffList = ({ url }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -146,8 +148,7 @@ const StaffList = ({ url }) => {
               <th scope="col">Department</th>
               <th scope="col">Store Id</th>
 
-              <th scope="col">Sửa</th>
-              <th scope="col">Xóa</th>
+              <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody className="align-middle">
@@ -178,20 +179,30 @@ const StaffList = ({ url }) => {
 
                   <td>
                     <button
-                      type="button"
-                      className="btn btn-primary"
+                      style={{
+                        border: "2px solid gray",
+                        marginRight: "5px",
+                        borderRadius: "50%",
+                      }}
+                      className="btndelete"
                       onClick={() => handleUpdateClick(data.id)}
                     >
-                      UPDATE
+                      <IconButton aria-label="delete" size="medium">
+                        <EditIcon />
+                      </IconButton>
                     </button>
-                  </td>
-                  <td>
                     <button
-                      type="button"
-                      className="btn btn-danger"
+                      style={{
+                        border: "2px solid gray",
+
+                        borderRadius: "50%",
+                      }}
+                      className="btndelete"
                       onClick={() => deleteProduct(data.id)}
                     >
-                      DELETE
+                      <IconButton aria-label="delete" size="medium">
+                        <DeleteIcon />
+                      </IconButton>
                     </button>
                   </td>
                 </tr>
