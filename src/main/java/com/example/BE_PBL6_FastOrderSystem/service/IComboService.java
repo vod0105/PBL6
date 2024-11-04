@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface IComboService {
     ResponseEntity<APIRespone> getAllCombos();
+
     ResponseEntity<APIRespone> getProductsByComboId(Long comboId);
 
     ResponseEntity<APIRespone> getCombosByStoreId(Long storeId);
@@ -17,8 +18,6 @@ public interface IComboService {
     ResponseEntity<APIRespone> updateCombo(Long comboId, ComboRequest comboRequest);
 
     ResponseEntity<APIRespone> deleteCombo(Long comboId);
-
-    ResponseEntity<APIRespone> addProduct(Long comboId, Long productId);
 
     ResponseEntity<APIRespone> addProducts(Long comboId, List<Long> productIds);
 

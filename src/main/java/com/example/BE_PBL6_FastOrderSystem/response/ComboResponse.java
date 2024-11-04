@@ -16,5 +16,6 @@ public class ComboResponse {
     private double averageRate;
     private String image;
     private String description;
+    private int numberDrinks;
     private List<ProductResponse> products;
 }

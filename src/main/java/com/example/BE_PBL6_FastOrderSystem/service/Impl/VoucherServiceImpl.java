@@ -107,7 +107,6 @@ public class VoucherServiceImpl implements IVoucherService {
         while (discountCodeRepository.findByCode(code).isPresent()) {
             code = generateRandomCode();
         }
-
         Voucher voucher = new Voucher();
         voucher.setCode(code);
         voucher.setDiscountPercent(voucherRequest.getDiscountPercent());
@@ -115,7 +114,6 @@ public class VoucherServiceImpl implements IVoucherService {
         voucher.setStartDate(voucherRequest.getStartDate());
         voucher.setEndDate(voucherRequest.getEndDate());
         discountCodeRepository.save(voucher);
-
         return ResponseEntity.ok(new APIRespone(true, "Discount code added successfully", ""));
     }
 
@@ -133,7 +131,6 @@ public class VoucherServiceImpl implements IVoucherService {
         }
         return code.toString();
     }
-
     public ResponseEntity<APIRespone> delete(Long id) {
         if (discountCodeRepository.findById(id).isEmpty()) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "Discount code not found", ""));
@@ -163,7 +160,6 @@ public class VoucherServiceImpl implements IVoucherService {
                 voucher.getStores().add(store1);
                 store.get().getVouchers().add(voucher);
             }
-
         }
         if (count == vouchers.size()) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "All discount codes are already applied to the store", alreadyAppliedVouchers));
@@ -236,7 +232,6 @@ public class VoucherServiceImpl implements IVoucherService {
         }
         List<String> alreadyAppliedVouchers = new ArrayList<>();
         int count = 0;
-
         // Create a map of existing UserVoucher objects by voucher ID
         Map<Long, UserVoucher> existingUserVouchers = user1.getVouchers().stream()
                 .collect(Collectors.toMap(uv -> uv.getVoucher().getVoucherId(), uv -> uv));
