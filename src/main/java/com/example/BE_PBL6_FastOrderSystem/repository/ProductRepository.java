@@ -1,6 +1,8 @@
 package com.example.BE_PBL6_FastOrderSystem.repository;
 
 import com.example.BE_PBL6_FastOrderSystem.entity.Product;
+import com.example.BE_PBL6_FastOrderSystem.response.ProductStoreDTO;
+import org.jooq.Select;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -25,5 +27,11 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByStoreId(@Param("storeId") Long storeId);
     Optional<Product> findByProductId(Long productId);
 
+    @Query("SELECT new com.example.BE_PBL6_FastOrderSystem.response.ProductStoreDTO(p, ps.stockQuantity) " +
+            "FROM Product p " +
+            "JOIN p.productStores ps " +
+            "JOIN ps.store s " +
+            "WHERE s.storeId = :storeId")
+    List<ProductStoreDTO> findByStoreOwnerId(@Param("storeId") Long storeId);
 
 }

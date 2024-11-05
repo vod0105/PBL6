@@ -565,7 +565,6 @@ public class ProductServiceImpl implements IProductService {
         if (productOptional.isEmpty()) {
             return new ResponseEntity<>(new APIRespone(false, "Product not found", ""), HttpStatus.NOT_FOUND);
         }
-//        Store store = storeOptional.get();
         Product product = productOptional.get();
         List<ProductStore> productStores = product.getProductStores().stream()
                 .filter(productStore -> productStore.getStore().getStoreId().equals(store.getStoreId()))
@@ -580,4 +579,15 @@ public class ProductServiceImpl implements IProductService {
         storeRepository.save(store);
         return new ResponseEntity<>(new APIRespone(true, "Product removed from store successfully", ""), HttpStatus.OK);
     }
+//    @Override
+//    public ResponseEntity<APIRespone> getProductsByStoreId(Long storeId) {
+//        Optional<Store> store = storeRepository.findById(storeId);
+//        if (store.isEmpty()) {
+//            return new ResponseEntity<>(new APIRespone(false, "Store not found", ""), HttpStatus.NOT_FOUND);
+//        }
+//        List<ProductResponse> productResponses = productRepository.findByStoreOwnerId(storeId).stream()
+//                .map(productStoreDTO -> ResponseConverter.convertToProductResponse(productStoreDTO.getProduct()))
+//                .collect(Collectors.toList());
+//        return new ResponseEntity<>(new APIRespone(true, "Success", productResponses), HttpStatus.OK);
+//    }
 }

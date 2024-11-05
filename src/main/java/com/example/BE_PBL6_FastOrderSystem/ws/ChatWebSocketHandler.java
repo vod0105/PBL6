@@ -1,5 +1,7 @@
 package com.example.BE_PBL6_FastOrderSystem.ws;
 
+import com.example.BE_PBL6_FastOrderSystem.repository.AnnounceRepository;
+import com.example.BE_PBL6_FastOrderSystem.repository.UserRepository;
 import com.example.BE_PBL6_FastOrderSystem.request.ChatRequest;
 import com.example.BE_PBL6_FastOrderSystem.service.IChatService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,6 +11,7 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+import com.example.BE_PBL6_FastOrderSystem.entity.*;
 
 import java.io.IOException;
 import java.util.*;
@@ -20,7 +23,12 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
+    UserRepository userRepository;
+
+    @Autowired
     private IChatService chatService;
+    @Autowired
+    private AnnounceRepository announceRepository;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws IOException {
@@ -62,7 +70,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
                     }
                 }
 
-// Kiểm tra nếu người gửi và người nhận không phải là cùng một người
+            // Kiểm tra nếu người gửi và người nhận không phải là cùng một người
                 if (!receiverI.equals(Long.valueOf(payload.get("sender").toString()))) {
                     List<WebSocketSession> listSessionsByUser = userSessions.get(Long.valueOf(payload.get("sender").toString()));
                     if (listSessionsByUser != null) {
@@ -79,8 +87,10 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             Long receiverId = Long.valueOf(payload.get("receiver").toString());
             Long senderId = Long.valueOf(payload.get("sender").toString());
             String chatMessage = payload.containsKey("message") ? payload.get("message").toString() : null;
-
+            User user = userRepository.findByid(senderId);
             chatService.saveChat(new ChatRequest(senderId, receiverId, chatMessage,null,false));
+            AnnounceUser announceUser = new AnnounceUser(receiverId,"Thông báo", "Bạn có tin nhắn mới từ "+user.getFullName());
+            announceRepository.save(announceUser);
             List<WebSocketSession> receiverSessions = userSessions.get(receiverId);
             if (receiverSessions != null) {
                 for (WebSocketSession receiverSession : receiverSessions) {

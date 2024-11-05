@@ -2,6 +2,8 @@ package com.example.BE_PBL6_FastOrderSystem.response;
 
 import com.example.BE_PBL6_FastOrderSystem.entity.Product;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
 public class ProductStoreDTO {
