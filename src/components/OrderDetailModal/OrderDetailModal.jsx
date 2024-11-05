@@ -16,9 +16,11 @@ const OrderDetailModal = ({ showModal, handleClose, orderDetails, statusOrderInt
     setPreviewImage('');
   };
   const [listProducts, setListProducts] = useState([]);
+  const [listCombos, setListCombos] = useState([]);
   useEffect(() => {
     if (orderDetails) {
-      setListProducts(orderDetails.orderDetails);
+      setListProducts(orderDetails.orderDetails.filter(item => item.type === 'product'));
+      setListCombos(orderDetails.orderDetails.filter(item => item.type === 'combo'));
       // console.log('>>> check list products: ', listProducts);
     }
   }, [orderDetails]);
@@ -111,7 +113,7 @@ const OrderDetailModal = ({ showModal, handleClose, orderDetails, statusOrderInt
             </div>
             <div className="order-detail-product">
               {
-                listProducts && listProducts.length > 0 ? (listProducts.map((item, index) => {
+                listProducts && listProducts.length > 0 && (listProducts.map((item, index) => {
                   return (
                     <div className="order-detail-product-item" key={index}>
                       <div className="product-item-image">
@@ -143,9 +145,40 @@ const OrderDetailModal = ({ showModal, handleClose, orderDetails, statusOrderInt
                     </div>
                   )
                 }))
-                  : (
-                    <div>Không có sản phẩm nào</div>
+              }
+              {
+                listCombos && listCombos.length > 0 && (listCombos.map((item, index) => {
+                  return (
+                    <div className="order-detail-product-item" key={index}>
+                      <div className="product-item-image">
+                        {/* <img src={'data:image/png;base64,' + item.productDetail.productImage} alt="" /> */}
+                        <img
+                          src={'data:image/png;base64,' + item.comboDetail?.image} // note: Trả image nựa trời
+                          alt='Ảnh combo'
+                        // onClick={() => handleImageClick('data:image/png;base64,' + item.comboDetail.productImage)} // Gọi modal preview
+                        />
+                      </div>
+                      <div className="product-item-infor">
+                        <p className="infor-name">{item.comboDetail.comboName} + Nước ({item.comboDetail.size})</p>
+                        <div className="infor-price-quantity">
+                          <p className="infor-price">
+                            {Number(item.comboDetail.unitPrice).toLocaleString('vi-VN')} đ
+                          </p>
+                          <p className="px-2">
+                            x
+                          </p>
+                          <p className="infor-quantity">
+                            {item.comboDetail.quantity}
+                          </p>
+
+                        </div>
+                        <p className="infor-store">
+                          Cửa hàng: {item.comboDetail.storeId}
+                        </p>
+                      </div>
+                    </div>
                   )
+                }))
               }
             </div>
             {/* Modal preview ảnh */}

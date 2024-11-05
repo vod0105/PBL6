@@ -162,11 +162,11 @@ const fetchProductsInCart = () => {
             );
             // Kiểm tra nếu giỏ hàng rỗng
             if (data.length === 0) {
-                console.log("Giỏ hàng trống");
+                // console.log("Giỏ hàng trống");
                 dispatch(fetchProductsInCartSuccess([]));  // Gửi array rỗng đến redux
             }
             else {
-                console.log('data: ', data);
+                // console.log('data: ', data);
                 dispatch(fetchProductsInCartSuccess(dataProducts, dataCombos));
                 // console.log('>>> data cart: ', data);
             }
@@ -233,7 +233,8 @@ const placeOrderBuyNow = (paymentMethod, productDetailBuyNow, address, longitude
                 }
             }
             else { // ZALOPAY
-                const zalopayUrl = res && res.data ? res.data.data.orderurl : '';
+                // navigate('/order-complete');
+                const zalopayUrl = res && res.data && res.data.data ? res.data.data.orderurl : '';
                 if (zalopayUrl) {
                     window.location.href = zalopayUrl; // Chuyển hướng sang URL thanh toán của ZaloPay
                 } else {
@@ -253,7 +254,7 @@ const placeOrderComboBuyNow = (paymentMethod, comboDetailBuyNow, address, longit
             // dispatch(placeOrderBuyNowSuccess());
 
             const res = await placeOrderComboBuyNowService(paymentMethod, comboDetailBuyNow, address, longitude, latitude);
-            console.log('>>> res: ', res);
+            // console.log('>>> res: ', res);
             if (paymentMethod === 'CASH') {
                 const isSuccess = res && res.data ? res.data.success : false;
                 if (isSuccess) {
@@ -267,7 +268,8 @@ const placeOrderComboBuyNow = (paymentMethod, comboDetailBuyNow, address, longit
                 }
             }
             else { // ZALOPAY
-                const zalopayUrl = res && res.data ? res.data.data.orderurl : '';
+                // navigate('/order-complete');
+                const zalopayUrl = res && res.data && res.data.data ? res.data.data.orderurl : '';
                 if (zalopayUrl) {
                     window.location.href = zalopayUrl; // Chuyển hướng sang URL thanh toán của ZaloPay
                 } else {
@@ -485,7 +487,7 @@ const fetchOrderInTransitByOrderCodeSuccess = (data) => {
 const fetchOrderInTransitByOrderCode = (orderCode) => {
     return async (dispatch, getState) => {
         try {
-            console.log('orderCode: ', orderCode);
+            // console.log('orderCode: ', orderCode);
             const resOrder = await fetchOrderInTransitByOrderCodeService(orderCode);
             const dataOrderDetail = resOrder && resOrder.data ? resOrder.data.data : {};
             if (dataOrderDetail.shipperId !== 0) {
@@ -493,7 +495,7 @@ const fetchOrderInTransitByOrderCode = (orderCode) => {
                 const dataShipperDetail = resShipper && resShipper.data ? resShipper.data.data : {};
                 dataOrderDetail['shipperDetail'] = dataShipperDetail;
             }
-            console.log('>>> đơn hàng đang giao: ', dataOrderDetail)
+            // console.log('>>> đơn hàng đang giao: ', dataOrderDetail)
             dispatch(fetchOrderInTransitByOrderCodeSuccess(dataOrderDetail));
         } catch (error) {
             console.log(error);

@@ -58,8 +58,8 @@ const Cart = () => {
     return total;
   }
   const handlePlaceOrder = () => {
-    console.log('listProductsInCart: ', listProductsInCart);
-    console.log('listCombosInCart: ', listCombosInCart);
+    // console.log('listProductsInCart: ', listProductsInCart);
+    // console.log('listCombosInCart: ', listCombosInCart);
     if (!listProductsInCart && !Array.isArray(listProductsInCart) && listProductsInCart.length === 0 && !listCombosInCart && !Array.isArray(listCombosInCart) && listCombosInCart.length === 0) { // -> Xử lý thêm trường hợp listProducts ko phải là Array
       toast.error('Không có sản phẩm trong giỏ hàng!');
     }

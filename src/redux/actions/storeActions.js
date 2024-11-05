@@ -34,7 +34,7 @@ const fetchStoreById = (id) => {
             const res = await fetchStoreByIdService(id);
             const data = res && res.data ? res.data.data : {};
             dispatch(fetchStoreByIdSuccess(data));
-            console.log(data);
+            // console.log(data);
         } catch (error) {
             console.log(error);
         }

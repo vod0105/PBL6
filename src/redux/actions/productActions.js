@@ -45,7 +45,7 @@ const fetchProductsByIdCategory = (id) => {
             const res = await fetchProductsByIdCategoryService(id);
             const data = res && res.data ? res.data.data : [];
             dispatch(fetchProductsByIdCategorySuccess(data)); // // Chạy ở đây (2)
-            console.log(data);
+            // console.log(data);
         } catch (error) {
             console.log(error);
         }
@@ -64,7 +64,7 @@ const fetchAllCombos = (id) => {
             const res = await fetchAllCombosService();
             const data = res && res.data ? res.data.data : [];
             dispatch(fetchAllCombosSuccess(data)); // // Chạy ở đây (2)
-            console.log(data);
+            // console.log(data);
         } catch (error) {
             console.log(error);
         }
@@ -84,7 +84,7 @@ const fetchAllDrinks = (id) => {
             const res = await fetchAllDrinksService();
             const data = res && res.data ? res.data.data : [];
             dispatch(fetchAllDrinksSuccess(data)); // // Chạy ở đây (2)
-            console.log(data);
+            // console.log(data);
         } catch (error) {
             console.log(error);
         }
@@ -104,7 +104,7 @@ const fetchProductById = (id) => {
             const res = await fetchProductByIdService(id);
             const data = res && res.data ? res.data.data[0] : {};
             dispatch(fetchProductByIdSuccess(data)); // // Chạy ở đây (2)
-            console.log(data);
+            // console.log(data);
         } catch (error) {
             console.log(error);
         }
@@ -123,7 +123,7 @@ const fetchComboById = (id) => {
             const res = await fetchComboByIdService(id);
             const data = res && res.data ? res.data.data[0] : {};
             dispatch(fetchComboByIdSuccess(data)); // // Chạy ở đây (2)
-            console.log(data);
+            // console.log(data);
         } catch (error) {
             console.log(error);
         }

@@ -33,7 +33,7 @@ const fetchPromotionById = (id) => {
             const res = await fetchPromotionByIdService(id);
             const data = res && res.data ? res.data.data : {};
             dispatch(fetchPromotionByIdSuccess(data)); // // Chạy ở đây (2)
-            console.log(data);
+            // console.log(data);
         } catch (error) {
             console.log(error);
         }

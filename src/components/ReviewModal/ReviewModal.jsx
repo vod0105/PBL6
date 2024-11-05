@@ -8,6 +8,7 @@ import { reviewOrder } from '../../redux/actions/userActions';
 
 const ReviewModal = ({ showModal, handleClose, orderDetails }) => {
   const [listProducts, setListProducts] = useState([]);
+  const [listCombos, setListCombos] = useState([]);
   const [rating, setRating] = useState(5);  // Số lượng sao được chọn
   const [ratingQuality, setRatingQuality] = useState('Tuyệt vời');
   const [images, setImages] = useState([]);  // Các image đã chọn
@@ -15,7 +16,9 @@ const ReviewModal = ({ showModal, handleClose, orderDetails }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (orderDetails) {
-      setListProducts(orderDetails.orderDetails);
+      setListProducts(orderDetails.orderDetails.filter(item => item.type === 'product'));
+      setListCombos(orderDetails.orderDetails.filter(item => item.type === 'combo'));
+      // console.log('>>> check list products: ', listProducts);
     }
   }, [orderDetails]);
 
@@ -89,10 +92,10 @@ const ReviewModal = ({ showModal, handleClose, orderDetails }) => {
                 listProducts.map((item, index) => (
                   <div className="order-detail-product-item" key={index}>
                     <div className="product-item-image">
-                      <img src={'data:image/png;base64,' + item.productDetail.productImage} alt="" />
+                      <img src={'data:image/png;base64,' + item.productDetail?.productImage} alt="" />
                     </div>
                     <div className="product-item-infor">
-                      <p className="infor-name">{item.productDetail.productName} ({item.productDetail.size})</p>
+                      <p className="infor-name">{item.productDetail?.productName} ({item.productDetail.size})</p>
                       <div className="infor-price-quantity">
                         <p className="infor-price">
                           {Number(item.productDetail.unitPrice).toLocaleString('vi-VN')} đ

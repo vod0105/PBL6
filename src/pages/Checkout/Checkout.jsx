@@ -317,44 +317,44 @@ const Checkout = () => {
                                         <div className="order-detail-product-item">
                                             <div className="product-item-infor">
                                                 <div className="product-item-image">
-                                                    <img src={'data:image/png;base64,' + productDetailBuyNow.product.image} alt="" />
+                                                    <img src={'data:image/png;base64,' + productDetailBuyNow?.product?.image} alt="Ảnh sản phẩm" />
                                                 </div>
                                                 <div className="product-item-infor">
-                                                    <p className="infor-name">{productDetailBuyNow.product.productName} ({productDetailBuyNow.size})</p>
+                                                    <p className="infor-name">{productDetailBuyNow?.product?.productName} ({productDetailBuyNow?.product?.size})</p>
                                                     <div className="infor-price-quantity">
                                                         <p className="infor-price">
-                                                            {Number(productDetailBuyNow.product.discountedPrice).toLocaleString('vi-VN')} đ
+                                                            {Number(productDetailBuyNow?.product?.discountedPrice).toLocaleString('vi-VN')} đ
                                                         </p>
                                                         <p className="px-2">x</p>
-                                                        <p className="infor-quantity">{productDetailBuyNow.quantity}</p>
+                                                        <p className="infor-quantity">{productDetailBuyNow?.product?.quantity}</p>
                                                     </div>
-                                                    <p className="infor-store">Cửa hàng: {productDetailBuyNow.store.storeName}</p>
+                                                    <p className="infor-store">Cửa hàng: {productDetailBuyNow?.product?.store?.storeName}</p>
                                                 </div>
                                             </div>
                                             <div className="product-item-totalprice">
-                                                <span>{Number(productDetailBuyNow.product.discountedPrice * productDetailBuyNow.quantity).toLocaleString('vi-VN')} đ</span>
+                                                <span>{Number(productDetailBuyNow?.product?.discountedPrice * productDetailBuyNow?.quantity).toLocaleString('vi-VN')} đ</span>
                                             </div>
                                         </div>
                                     ) : ( // Mua ngay trong COMBO
                                         <div className="order-detail-product-item">
                                             <div className="product-item-infor">
                                                 <div className="product-item-image">
-                                                    <img src={'data:image/png;base64,' + comboDetailBuyNow.combo.image} alt="" />
+                                                    <img src={'data:image/png;base64,' + comboDetailBuyNow?.combo?.image} alt="" />
                                                 </div>
                                                 <div className="product-item-infor">
-                                                    <p className="infor-name">{comboDetailBuyNow.combo.comboName} + {comboDetailBuyNow.drink.productName} ({comboDetailBuyNow.size})</p>
+                                                    <p className="infor-name">{comboDetailBuyNow?.combo?.comboName} + {comboDetailBuyNow?.drink?.productName} ({comboDetailBuyNow?.size})</p>
                                                     <div className="infor-price-quantity">
                                                         <p className="infor-price">
-                                                            {Number(comboDetailBuyNow.unitPrice).toLocaleString('vi-VN')} đ
+                                                            {Number(comboDetailBuyNow?.unitPrice).toLocaleString('vi-VN')} đ
                                                         </p>
                                                         <p className="px-2">x</p>
-                                                        <p className="infor-quantity">{comboDetailBuyNow.quantity}</p>
+                                                        <p className="infor-quantity">{comboDetailBuyNow?.quantity}</p>
                                                     </div>
-                                                    <p className="infor-store">Cửa hàng: {comboDetailBuyNow.store.storeName}</p>
+                                                    <p className="infor-store">Cửa hàng: {comboDetailBuyNow?.store?.storeName}</p>
                                                 </div>
                                             </div>
                                             <div className="product-item-totalprice">
-                                                <span>{Number(comboDetailBuyNow.unitPrice * comboDetailBuyNow.quantity).toLocaleString('vi-VN')} đ</span>
+                                                <span>{Number(comboDetailBuyNow?.unitPrice * comboDetailBuyNow?.quantity).toLocaleString('vi-VN')} đ</span>
                                             </div>
                                         </div>
                                     )
@@ -368,9 +368,9 @@ const Checkout = () => {
                                     (isBuyNow === false && isBuyNowCombo === false)
                                         ? Number(getTotalPriceInCart()).toLocaleString('vi-VN')
                                         : (isBuyNow === false && isBuyNowCombo === true)
-                                            ? Number(comboDetailBuyNow.unitPrice * comboDetailBuyNow.quantity).toLocaleString('vi-VN')
+                                            ? Number(comboDetailBuyNow?.unitPrice * comboDetailBuyNow?.quantity).toLocaleString('vi-VN')
                                             : (isBuyNow === true && isBuyNowCombo === false)
-                                                ? Number(productDetailBuyNow.product.discountedPrice * productDetailBuyNow.quantity).toLocaleString('vi-VN')
+                                                ? Number(productDetailBuyNow?.product?.discountedPrice * productDetailBuyNow?.quantity).toLocaleString('vi-VN')
                                                 : null
                                 } đ
                             </span>
@@ -419,9 +419,9 @@ const Checkout = () => {
                             <span>
                                 {
                                     isBuyNow === true && isBuyNowCombo === false
-                                        ? Number(productDetailBuyNow.product.discountedPrice * productDetailBuyNow.quantity).toLocaleString('vi-VN')
+                                        ? Number(productDetailBuyNow?.product?.discountedPrice * productDetailBuyNow?.quantity).toLocaleString('vi-VN')
                                         : isBuyNow === false && isBuyNowCombo === true
-                                            ? Number(comboDetailBuyNow.unitPrice * comboDetailBuyNow.quantity).toLocaleString('vi-VN')
+                                            ? Number(comboDetailBuyNow?.unitPrice * comboDetailBuyNow?.quantity).toLocaleString('vi-VN')
                                             : Number(getTotalPriceInCart()).toLocaleString('vi-VN')
                                 } đ
                             </span>

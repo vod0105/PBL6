@@ -20,7 +20,7 @@ import { fetchUpdate } from '../../redux/actions/chatStoreAction';
 
 
 const StoreDetail = () => {
-  const {setShowChat,setSelectedUser } = useContext(ChatContext);
+  const { setShowChat, setSelectedUser } = useContext(ChatContext);
   const { id } = useParams();
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -36,50 +36,50 @@ const StoreDetail = () => {
     return state.product.listProductsByIdStore;
   })
 
-  const handleClickChatStore = async() => {
+  const handleClickChatStore = async () => {
     const on = await SearchOwner();
-    console.log("Onn: ",on)
-    const index = stores.findIndex(u =>u.id === on.id);
-    if(index === -1){
+    // console.log("Onn: ",on)
+    const index = stores.findIndex(u => u.id === on.id);
+    if (index === -1) {
       saveMessage(on.id);
       setTimeout(() => {
         loadStoreAgain();
-      },1000);
-      
+      }, 1000);
+
     }
-    
-    if(on!=null){
+
+    if (on != null) {
       setSelectedUser(on);
       setShowChat(true);
     }
-    
+
   }
 
   const loadStoreAgain = async () => {
     try {
-        console.log("Loading stores again...");
+      // console.log("Loading stores again...");
 
-        const previousOnlineUsers = stores
-            .filter(user => user.online === true)
-            .map(user => user.id);
+      const previousOnlineUsers = stores
+        .filter(user => user.online === true)
+        .map(user => user.id);
 
-        const res = await GetAllStoresChat();
+      const res = await GetAllStoresChat();
 
-        if (res.data.EC === 0 && res.data.DT) {
-            const updatedStores = res.data.DT.map(store => ({
-                ...store,
-                online: previousOnlineUsers.includes(store.id) // Dựa trên danh sách online trước đó
-            }));
-            dispatch(fetchUpdate({ DT: updatedStores }));
-        } else {
-            console.error("Lỗi khi tải lại stores:", res);
-        }
+      if (res.data.EC === 0 && res.data.DT) {
+        const updatedStores = res.data.DT.map(store => ({
+          ...store,
+          online: previousOnlineUsers.includes(store.id) // Dựa trên danh sách online trước đó
+        }));
+        dispatch(fetchUpdate({ DT: updatedStores }));
+      } else {
+        console.error("Lỗi khi tải lại stores:", res);
+      }
     } catch (error) {
-        console.error("Lỗi khi thực hiện loadStoreAgain:", error);
+      console.error("Lỗi khi thực hiện loadStoreAgain:", error);
     }
-};
+  };
 
-  const saveMessage = async(idOwner) =>{
+  const saveMessage = async (idOwner) => {
     const sender = idOwner;
     const receiver = Number(idU);
     const isRead = false;
@@ -87,14 +87,14 @@ const StoreDetail = () => {
     try {
       let res = await PostSaveMess(sender, receiver, isRead, mess);
       console.log(res);
-  } catch (exception) {
+    } catch (exception) {
       console.error('Error sending image:', exception);
-  }
+    }
   }
 
   const SearchOwner = async () => {
     const res = await searchOwnerForStore(id);
-    console.log("owner: ",res)
+    console.log("owner: ", res)
     if (res.data.EC === 0) {
       return res.data.DT;
     }
@@ -136,7 +136,7 @@ const StoreDetail = () => {
                 {
                   isAuthenticated === true
                   &&
-                  <button onClick={()=>handleClickChatStore()} className='chat-store'>Chat với của hàng</button>
+                  <button onClick={() => handleClickChatStore()} className='chat-store'>Chat với của hàng</button>
                 }
               </div>
             </div>

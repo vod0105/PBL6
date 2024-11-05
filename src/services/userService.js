@@ -27,7 +27,7 @@ const addProductToCartService = (productId, quantity, storeId, size, status) => 
     });
 }
 const addComboToCartService = (comboId, quantity, storeId, size, status, drinkIdAction) => {
-    console.log('drinkdjfsjfs:', drinkIdAction);
+    // console.log('drinkd:', drinkIdAction);
     return instance({
         method: 'post',
         url: '/api/v1/user/cart/add/combo',
@@ -89,22 +89,25 @@ const placeOrderBuyNowService = (paymentMethod, productDetailBuyNow, address, lo
         });
     }
     else { // ZALOPAY
-        return axios({
+        return instance({
             method: 'post',
-            url: `https://pbl6-fastordersystem.onrender.com/api/v1/zalopay/create-order`,
+            url: `/api/v1/user/order/create/now`,
             data: {
-                amount: 20000,
-                orderId: '3',
-                orderInfo: 'Payment for order with id=3',
-                lang: 'en',
-                extraData: 'additional data'
+                paymentMethod,
+                productId: productDetailBuyNow.product.productId,
+                storeId: productDetailBuyNow.store.storeId,
+                quantity: productDetailBuyNow.quantity,
+                size: productDetailBuyNow.size,
+                deliveryAddress: address,
+                longitude,
+                latitude
             }
         });
     }
 }
 const placeOrderComboBuyNowService = (paymentMethod, comboDetailBuyNow, address, longitude, latitude) => {
     if (paymentMethod === 'CASH') {
-        console.log('>>> mua gio hang moi combo: ', comboDetailBuyNow);
+        // console.log('>>> mua gio hang moi combo: ', comboDetailBuyNow);
         return instance({
             method: 'post',
             url: `/api/v1/user/order/create/now`,
@@ -122,15 +125,19 @@ const placeOrderComboBuyNowService = (paymentMethod, comboDetailBuyNow, address,
         });
     }
     else { // ZALOPAY
-        return axios({
+        return instance({
             method: 'post',
-            url: `https://pbl6-fastordersystem.onrender.com/api/v1/zalopay/create-order`,
+            url: `/api/v1/user/order/create/now`,
             data: {
-                amount: 20000,
-                orderId: '3',
-                orderInfo: 'Payment for order with id=3',
-                lang: 'en',
-                extraData: 'additional data'
+                paymentMethod,
+                comboId: comboDetailBuyNow.combo.comboId,
+                drinkId: [comboDetailBuyNow.drink.productId],
+                storeId: comboDetailBuyNow.store.storeId,
+                quantity: comboDetailBuyNow.quantity,
+                size: comboDetailBuyNow.size,
+                deliveryAddress: address,
+                longitude,
+                latitude
             }
         });
     }
@@ -150,15 +157,15 @@ const placeOrderAddToCartService = (paymentMethod, cartIds, address, longitude, 
         });
     }
     else { // ZALOPAY
-        return axios({
+        return instance({
             method: 'post',
-            url: `https://pbl6-fastordersystem.onrender.com/api/v1/zalopay/create-order`,
+            url: `/api/v1/user/order/create`,
             data: {
-                amount: 20000,
-                orderId: '3',
-                orderInfo: 'Payment for order with id=3',
-                lang: 'en',
-                extraData: 'additional data'
+                cartIds,
+                deliveryAddress: address,
+                longitude,
+                latitude,
+                paymentMethod
             }
         });
     }

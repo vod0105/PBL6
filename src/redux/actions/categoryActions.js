@@ -27,7 +27,7 @@ const fetchAllCategories = () => {
         try {
             const res = await fetchAllCategoriesService();
             const data = res && res.data ? res.data.data : [];
-            console.log(data);
+            // console.log(data);
             dispatch(fetchCategoriesSuccess(data)); // // Chạy ở đây (2)
         } catch (error) {
             console.log(error);
