@@ -124,7 +124,7 @@ const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, 
             toast.error("Số lượng sản phẩm vượt quy định!");
           }
           else { // Giả sử thêm vào thành công (Chưa xủ lý các điều kiện -> BE chưa làm)
-            dispatch(placeOrderUsingBuyNow(product, quantity, selectedStore, selectedSize));
+            dispatch(placeOrderUsingBuyNow(product, finalPrice, quantity, selectedStore, selectedSize));
             navigate('/checkout');
             handleModalClose();
           }

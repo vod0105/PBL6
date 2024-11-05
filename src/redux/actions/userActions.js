@@ -14,7 +14,8 @@ import {
     cancelOrderService,
     reviewOrderService,
     fetchOrderInTransitByOrderCodeService,
-    fetchShipperDetailByIdService
+    fetchShipperDetailByIdService,
+    fetchVouchersService
 } from "../../services/userService";
 import { fetchStoreByIdService } from "../../services/storeService";
 import { fetchProductByIdService } from "../../services/productService";
@@ -179,10 +180,10 @@ const fetchProductsInCart = () => {
 };
 
 // Nhấn MUA NGAY trong Modal -> Chuyển đến Check out
-const placeOrderUsingBuyNow = (product, quantity, store, size) => {
+const placeOrderUsingBuyNow = (product, finalPrice, quantity, store, size) => {
     return {
         type: types.BUY_NOW_OPTION,
-        productDetail: { product, quantity, store, size }
+        productDetail: { product, finalPrice, quantity, store, size }
     };
 };
 
@@ -213,12 +214,12 @@ const placeOrderBuyNowError = () => {
     };
 };
 
-const placeOrderBuyNow = (paymentMethod, productDetailBuyNow, address, longitude, latitude, navigate) => {
+const placeOrderBuyNow = (paymentMethod, productDetailBuyNow, address, longitude, latitude, navigate, voucher) => {
     return async (dispatch) => {
         try {
             // dispatch(placeOrderBuyNowSuccess());
 
-            const res = await placeOrderBuyNowService(paymentMethod, productDetailBuyNow, address, longitude, latitude);
+            const res = await placeOrderBuyNowService(paymentMethod, productDetailBuyNow, address, longitude, latitude, voucher);
             // console.log('>>> res: ', res);
             if (paymentMethod === 'CASH') {
                 const isSuccess = res && res.data ? res.data.success : false;
@@ -248,12 +249,12 @@ const placeOrderBuyNow = (paymentMethod, productDetailBuyNow, address, longitude
         }
     };
 }
-const placeOrderComboBuyNow = (paymentMethod, comboDetailBuyNow, address, longitude, latitude, navigate) => {
+const placeOrderComboBuyNow = (paymentMethod, comboDetailBuyNow, address, longitude, latitude, navigate, voucher) => {
     return async (dispatch) => {
         try {
             // dispatch(placeOrderBuyNowSuccess());
 
-            const res = await placeOrderComboBuyNowService(paymentMethod, comboDetailBuyNow, address, longitude, latitude);
+            const res = await placeOrderComboBuyNowService(paymentMethod, comboDetailBuyNow, address, longitude, latitude, voucher);
             // console.log('>>> res: ', res);
             if (paymentMethod === 'CASH') {
                 const isSuccess = res && res.data ? res.data.success : false;
@@ -295,10 +296,10 @@ const placeOrderAddToCartError = () => {
     };
 };
 
-const placeOrderAddToCart = (paymentMethod, cartIds, address, longitude, latitude, navigate) => {
+const placeOrderAddToCart = (paymentMethod, cartIds, address, longitude, latitude, navigate, voucher) => {
     return async (dispatch) => {
         try {
-            const res = await placeOrderAddToCartService(paymentMethod, cartIds, address, longitude, latitude);
+            const res = await placeOrderAddToCartService(paymentMethod, cartIds, address, longitude, latitude, voucher);
             // console.log('>>> res: ', res);
             if (paymentMethod === 'CASH') {
                 const isSuccess = res && res.data ? res.data.success : false;
@@ -502,7 +503,26 @@ const fetchOrderInTransitByOrderCode = (orderCode) => {
         }
     }
 };
-
+// Lấy tất cả vouchers
+const fetchVouchersSuccess = (data) => {
+    return {
+        type: types.FETCH_VOUCHER_SUCCESS,
+        dataVouchers: data
+    };
+};
+const fetchVouchers = () => {
+    return async (dispatch, getState) => {
+        try {
+            const res = await fetchVouchersService();
+            const data = res && res.data && res.data.data ? res.data.data : [];
+            let listVoucherUnUsed = data.filter(voucher => voucher.used === false);
+            dispatch(fetchVouchersSuccess(listVoucherUnUsed));
+        } catch (error) {
+            console.log(error);
+            // toast.error('Có lỗi ở Server!');  // BE return status=400 -> Lỗi do BE nên chạy vô catch error ni
+        }
+    }
+};
 
 export {
     updateProfile,
@@ -522,5 +542,6 @@ export {
     fetchAllOrders,
     cancelOrder,
     reviewOrder,
-    fetchOrderInTransitByOrderCode
+    fetchOrderInTransitByOrderCode,
+    fetchVouchers
 };

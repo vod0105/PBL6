@@ -71,104 +71,138 @@ const decreaseOneQuantityService = (cartId) => {
 // note: Mua ngay -> status = 3: Đơn hàng đã được xác nhận
 //       Giỏ hàng -> status = 1: Đơn hàng mới
 // => Phân biệt rứa à bay??
-const placeOrderBuyNowService = (paymentMethod, productDetailBuyNow, address, longitude, latitude) => {
-    if (paymentMethod === 'CASH') {
-        return instance({
-            method: 'post',
-            url: `/api/v1/user/order/create/now`,
-            data: {
-                paymentMethod,
-                productId: productDetailBuyNow.product.productId,
-                storeId: productDetailBuyNow.store.storeId,
-                quantity: productDetailBuyNow.quantity,
-                size: productDetailBuyNow.size,
-                deliveryAddress: address,
-                longitude,
-                latitude
-            }
-        });
-    }
-    else { // ZALOPAY
-        return instance({
-            method: 'post',
-            url: `/api/v1/user/order/create/now`,
-            data: {
-                paymentMethod,
-                productId: productDetailBuyNow.product.productId,
-                storeId: productDetailBuyNow.store.storeId,
-                quantity: productDetailBuyNow.quantity,
-                size: productDetailBuyNow.size,
-                deliveryAddress: address,
-                longitude,
-                latitude
-            }
-        });
-    }
+const placeOrderBuyNowService = (paymentMethod, productDetailBuyNow, address, longitude, latitude, voucher) => {
+    // if (paymentMethod === 'CASH') {
+    const data = {
+        paymentMethod,
+        productId: productDetailBuyNow.product.productId,
+        storeId: productDetailBuyNow.store.storeId,
+        quantity: productDetailBuyNow.quantity,
+        size: productDetailBuyNow.size,
+        deliveryAddress: address,
+        longitude,
+        latitude,
+        ...(voucher && { discountCode: voucher.code })
+    };
+
+    return instance({
+        method: 'post',
+        url: `/api/v1/user/order/create/now`,
+        data
+    });
+    // }
+    // else { // ZALOPAY
+    //     return instance({
+    //         method: 'post',
+    //         url: `/api/v1/user/order/create/now`,
+    //         data: {
+    //             paymentMethod,
+    //             productId: productDetailBuyNow.product.productId,
+    //             storeId: productDetailBuyNow.store.storeId,
+    //             quantity: productDetailBuyNow.quantity,
+    //             size: productDetailBuyNow.size,
+    //             deliveryAddress: address,
+    //             longitude,
+    //             latitude
+    //         }
+    //     });
+    // }
 }
-const placeOrderComboBuyNowService = (paymentMethod, comboDetailBuyNow, address, longitude, latitude) => {
-    if (paymentMethod === 'CASH') {
-        // console.log('>>> mua gio hang moi combo: ', comboDetailBuyNow);
-        return instance({
-            method: 'post',
-            url: `/api/v1/user/order/create/now`,
-            data: {
-                paymentMethod,
-                comboId: comboDetailBuyNow.combo.comboId,
-                drinkId: [comboDetailBuyNow.drink.productId],
-                storeId: comboDetailBuyNow.store.storeId,
-                quantity: comboDetailBuyNow.quantity,
-                size: comboDetailBuyNow.size,
-                deliveryAddress: address,
-                longitude,
-                latitude
-            }
-        });
+const placeOrderComboBuyNowService = (paymentMethod, comboDetailBuyNow, address, longitude, latitude, voucher) => {
+    const data = {
+        paymentMethod,
+        comboId: comboDetailBuyNow.combo.comboId,
+        drinkId: [comboDetailBuyNow.drink.productId],
+        storeId: comboDetailBuyNow.store.storeId,
+        quantity: comboDetailBuyNow.quantity,
+        size: comboDetailBuyNow.size,
+        deliveryAddress: address,
+        longitude,
+        latitude,
+        ...(voucher && { discountCode: voucher.code })
     }
-    else { // ZALOPAY
-        return instance({
-            method: 'post',
-            url: `/api/v1/user/order/create/now`,
-            data: {
-                paymentMethod,
-                comboId: comboDetailBuyNow.combo.comboId,
-                drinkId: [comboDetailBuyNow.drink.productId],
-                storeId: comboDetailBuyNow.store.storeId,
-                quantity: comboDetailBuyNow.quantity,
-                size: comboDetailBuyNow.size,
-                deliveryAddress: address,
-                longitude,
-                latitude
-            }
-        });
-    }
+    return instance({
+        method: 'post',
+        url: `/api/v1/user/order/create/now`,
+        data
+    });
+    // if (paymentMethod === 'CASH') {
+    //     // console.log('>>> mua gio hang moi combo: ', comboDetailBuyNow);
+    //     return instance({
+    //         method: 'post',
+    //         url: `/api/v1/user/order/create/now`,
+    //         data: {
+    //             paymentMethod,
+    //             comboId: comboDetailBuyNow.combo.comboId,
+    //             drinkId: [comboDetailBuyNow.drink.productId],
+    //             storeId: comboDetailBuyNow.store.storeId,
+    //             quantity: comboDetailBuyNow.quantity,
+    //             size: comboDetailBuyNow.size,
+    //             deliveryAddress: address,
+    //             longitude,
+    //             latitude
+    //         }
+    //     });
+    // }
+    // else { // ZALOPAY
+    //     return instance({
+    //         method: 'post',
+    //         url: `/api/v1/user/order/create/now`,
+    //         data: {
+    //             paymentMethod,
+    //             comboId: comboDetailBuyNow.combo.comboId,
+    //             drinkId: [comboDetailBuyNow.drink.productId],
+    //             storeId: comboDetailBuyNow.store.storeId,
+    //             quantity: comboDetailBuyNow.quantity,
+    //             size: comboDetailBuyNow.size,
+    //             deliveryAddress: address,
+    //             longitude,
+    //             latitude
+    //         }
+    //     });
+    // }
 }
-const placeOrderAddToCartService = (paymentMethod, cartIds, address, longitude, latitude) => {
-    if (paymentMethod === 'CASH') {
-        return instance({
-            method: 'post',
-            url: `/api/v1/user/order/create`,
-            data: {
-                cartIds,
-                deliveryAddress: address,
-                longitude,
-                latitude,
-                paymentMethod
-            }
-        });
+const placeOrderAddToCartService = (paymentMethod, cartIds, address, longitude, latitude, voucher) => {
+    const data = {
+        cartIds,
+        deliveryAddress: address,
+        longitude,
+        latitude,
+        paymentMethod,
+        ...(voucher && { discountCode: voucher.code })
     }
-    else { // ZALOPAY
-        return instance({
-            method: 'post',
-            url: `/api/v1/user/order/create`,
-            data: {
-                cartIds,
-                deliveryAddress: address,
-                longitude,
-                latitude,
-                paymentMethod
-            }
-        });
-    }
+    return instance({
+        method: 'post',
+        url: `/api/v1/user/order/create`,
+        data
+    });
+
+    // if (paymentMethod === 'CASH') {
+    //     return instance({
+    //         method: 'post',
+    //         url: `/api/v1/user/order/create`,
+    //         data: {
+    //             cartIds,
+    //             deliveryAddress: address,
+    //             longitude,
+    //             latitude,
+    //             paymentMethod
+    //         }
+    //     });
+    // }
+    // else { // ZALOPAY
+    //     return instance({
+    //         method: 'post',
+    //         url: `/api/v1/user/order/create`,
+    //         data: {
+    //             cartIds,
+    //             deliveryAddress: address,
+    //             longitude,
+    //             latitude,
+    //             paymentMethod
+    //         }
+    //     });
+    // }
 }
 const fetchAllOrdersService = () => {
     return instance({
@@ -219,6 +253,12 @@ const fetchUserDetailByIdService = (id) => {
         url: `/api/v1/public/user/${id}`,
     });
 }
+const fetchVouchersService = () => {
+    return instance({
+        method: 'get',
+        url: `/api/v1/user/voucher/get`,
+    });
+}
 
 
 export {
@@ -239,5 +279,5 @@ export {
     fetchShipperDetailByIdService,
     fetchUserDetailByIdService,
     decreaseOneQuantityService,
-
+    fetchVouchersService,
 }

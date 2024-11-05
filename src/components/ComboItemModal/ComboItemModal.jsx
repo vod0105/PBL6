@@ -78,11 +78,11 @@ const ComboItemModal = ({ showModalCombo, handleCloseModalCombo, combo, stores, 
     }
   }, [allDrinks]);
   // Cập nhật selectedDrink mỗi khi selectedDrinkId thay đổi
-  // useEffect(() => {
-  //   const drink = allDrinks.find(drink => +drink.productId === +selectedDrinkId);
-  //   setSelectedDrink(drink);
-  //   console.log('>>> selectedDrink: ', selectedDrink);
-  // }, [selectedDrinkId, allDrinks]);
+  useEffect(() => {
+    const drink = allDrinks.find(drink => +drink.productId === +selectedDrinkId);
+    setSelectedDrink(drink);
+    // console.log('>>> selectedDrink: ', selectedDrink);
+  }, [selectedDrinkId, allDrinks]);
 
   // ADD TO CART / BUY NOW
   const handleAddToCart = async () => {

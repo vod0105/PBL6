@@ -7,7 +7,8 @@ const initialState = {
     productDetailBuyNow: {},
     comboDetailBuyNow: {},
     allOrders: {},
-    orderInTransit: {}
+    orderInTransit: {},
+    listVouchers: {},
 };
 
 const userReducer = (state = initialState, action) => {
@@ -94,6 +95,11 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 orderInTransit: action.dataOrderDetail
+            };
+        case 'FETCH_VOUCHER_SUCCESS':
+            return {
+                ...state,
+                listVouchers: action.dataVouchers
             };
         default:
             return state;

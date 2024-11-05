@@ -146,7 +146,11 @@
                   margin-left: 10px;
               }
           }
-
+          .voucher-container{
+            .voucher-select{
+                max-width: 100%;
+            }
+          }
           .order-totalprice {
               margin-top: 20px;
               display: flex;

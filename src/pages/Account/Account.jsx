@@ -46,18 +46,18 @@ const Account = () => {
             </li>
             <li>
               <NavLink
-                to='change-password'
-                className={({ isActive }) => (isActive ? 'active' : '')}
-              >
-                Đổi mật khẩu
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
                 to='orders'
                 className={({ isActive }) => (isActive ? 'active' : '')}
               >
                 Đơn hàng của bạn
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to='change-password'
+                className={({ isActive }) => (isActive ? 'active' : '')}
+              >
+                Đổi mật khẩu
               </NavLink>
             </li>
             <li>

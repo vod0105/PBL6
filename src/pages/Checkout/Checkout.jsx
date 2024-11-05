@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import "./Checkout.scss";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { placeOrderBuyNow, placeOrderComboBuyNow, placeOrderAddToCart } from "../../redux/actions/userActions";
+import { placeOrderBuyNow, placeOrderComboBuyNow, placeOrderAddToCart, fetchVouchers } from "../../redux/actions/userActions";
 import { toast } from "react-toastify";
+import { Form } from 'react-bootstrap';
 
 //MAP
 import axios from 'axios';
@@ -34,6 +35,20 @@ const Checkout = () => {
     const accountInfo = useSelector((state) => {
         return state.auth.account;
     });
+    // Voucher
+    const listVouchers = useSelector((state) => state.user.listVouchers);
+    const [selectedVoucherId, setSelectedVoucherId] = useState("");
+    const [selectedVoucher, setSelectedVoucher] = useState(null);
+    useEffect(() => {
+        if (listVouchers && listVouchers.length > 0) {
+            setSelectedVoucherId(listVouchers[0].voucherId);
+        }
+    }, [listVouchers]);
+    useEffect(() => {
+        const voucher = listVouchers && listVouchers.length > 0 ? listVouchers.find(voucher => voucher.voucherId === selectedVoucherId) : {};
+        setSelectedVoucher(voucher ? voucher : {});
+        // console.log('>>> selectedDrink: ', selectedDrink);
+    }, [selectedVoucherId, listVouchers]);
 
     const [fullname, setFullname] = useState(accountInfo.fullName);
     const [phonenumber, setPhonenumber] = useState(accountInfo.phoneNumber);
@@ -71,10 +86,10 @@ const Checkout = () => {
                     break;
             }
             if (isBuyNow === true && isBuyNowCombo === false) { // Mua ngay PRODUCT
-                dispatch(placeOrderBuyNow(method, productDetailBuyNow, address, addressCoords[1], addressCoords[0], navigate));
+                dispatch(placeOrderBuyNow(method, productDetailBuyNow, address, addressCoords[1], addressCoords[0], navigate, selectedVoucher));
             }
             else if (isBuyNow === false && isBuyNowCombo === true) { // Mua ngay COMBO
-                dispatch(placeOrderComboBuyNow(method, comboDetailBuyNow, address, addressCoords[1], addressCoords[0], navigate));
+                dispatch(placeOrderComboBuyNow(method, comboDetailBuyNow, address, addressCoords[1], addressCoords[0], navigate, selectedVoucher));
             }
             else { // Mua ở giỏ hàng
                 const cartIds = [
@@ -82,8 +97,9 @@ const Checkout = () => {
                     ...(listCombosInCart && listCombosInCart.length > 0 ? listCombosInCart.map(item => item.cartId) : [])
                 ];
 
-                dispatch(placeOrderAddToCart(method, cartIds, address, addressCoords[1], addressCoords[0], navigate));
+                dispatch(placeOrderAddToCart(method, cartIds, address, addressCoords[1], addressCoords[0], navigate, selectedVoucher));
             }
+            dispatch(fetchVouchers());
         }
     };
 
@@ -159,6 +175,7 @@ const Checkout = () => {
 
     // Mới vô -> Hiển thị trên input + map => Vị trí hiện tại
     useEffect(() => {
+        dispatch(fetchVouchers());
         getCurrentCoors();
         // fetchAddressFromCoordinates(addressCoords[0], addressCoords[1]);  // (lat, lon)
     }, []);
@@ -323,16 +340,16 @@ const Checkout = () => {
                                                     <p className="infor-name">{productDetailBuyNow?.product?.productName} ({productDetailBuyNow?.product?.size})</p>
                                                     <div className="infor-price-quantity">
                                                         <p className="infor-price">
-                                                            {Number(productDetailBuyNow?.product?.discountedPrice).toLocaleString('vi-VN')} đ
+                                                            {Number(productDetailBuyNow?.finalPrice).toLocaleString('vi-VN')} đ
                                                         </p>
                                                         <p className="px-2">x</p>
-                                                        <p className="infor-quantity">{productDetailBuyNow?.product?.quantity}</p>
+                                                        <p className="infor-quantity">{productDetailBuyNow?.quantity}</p>
                                                     </div>
-                                                    <p className="infor-store">Cửa hàng: {productDetailBuyNow?.product?.store?.storeName}</p>
+                                                    <p className="infor-store">Cửa hàng: {productDetailBuyNow?.store?.storeName}</p>
                                                 </div>
                                             </div>
                                             <div className="product-item-totalprice">
-                                                <span>{Number(productDetailBuyNow?.product?.discountedPrice * productDetailBuyNow?.quantity).toLocaleString('vi-VN')} đ</span>
+                                                <span>{Number(productDetailBuyNow?.finalPrice * productDetailBuyNow?.quantity).toLocaleString('vi-VN')} đ</span>
                                             </div>
                                         </div>
                                     ) : ( // Mua ngay trong COMBO
@@ -370,7 +387,7 @@ const Checkout = () => {
                                         : (isBuyNow === false && isBuyNowCombo === true)
                                             ? Number(comboDetailBuyNow?.unitPrice * comboDetailBuyNow?.quantity).toLocaleString('vi-VN')
                                             : (isBuyNow === true && isBuyNowCombo === false)
-                                                ? Number(productDetailBuyNow?.product?.discountedPrice * productDetailBuyNow?.quantity).toLocaleString('vi-VN')
+                                                ? Number(productDetailBuyNow?.finalPrice * productDetailBuyNow?.quantity).toLocaleString('vi-VN')
                                                 : null
                                 } đ
                             </span>
@@ -413,13 +430,35 @@ const Checkout = () => {
                                 <label htmlFor="momo">Momo</label>
                             </div>
                         </div>
+                        <div className="voucher-container">
+                            <h3>Chọn mã khuyến mãi</h3>
+                            <Form.Select
+                                className="voucher-select"
+                                value={selectedVoucherId}
+                                onChange={(e) => {
+                                    setSelectedVoucherId(e.target.value);
+                                    const voucher = listVouchers && listVouchers.length > 0 ? listVouchers.find(voucher => voucher.voucherId === e.target.value) : '';
+                                    setSelectedVoucher(voucher);
+                                }}
+                            >
+                                {/* <option value="">Không có mã khuyến mãi</option> */}
+                                {
+                                    listVouchers && listVouchers.length > 0 && listVouchers.map((voucher, index) => (
+                                        <option key={index} value={voucher.voucherId}>
+                                            {voucher.code}
+                                        </option>
+                                    ))
+                                }
+                            </Form.Select>
 
+                        </div>
+                        <hr />
                         <div className="order-item">
-                            <span>Tổng đơn hàng</span>
+                            <span>Tổng đơn hàng (Chưa bao gồm phí ship)</span>
                             <span>
                                 {
                                     isBuyNow === true && isBuyNowCombo === false
-                                        ? Number(productDetailBuyNow?.product?.discountedPrice * productDetailBuyNow?.quantity).toLocaleString('vi-VN')
+                                        ? Number(productDetailBuyNow?.finalPrice * productDetailBuyNow?.quantity).toLocaleString('vi-VN')
                                         : isBuyNow === false && isBuyNowCombo === true
                                             ? Number(comboDetailBuyNow?.unitPrice * comboDetailBuyNow?.quantity).toLocaleString('vi-VN')
                                             : Number(getTotalPriceInCart()).toLocaleString('vi-VN')

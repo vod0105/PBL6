@@ -103,7 +103,7 @@ const Navbar = () => {
                 to={`/combo`}
                 className={({ isActive }) => (isActive ? "active-category-item" : "")}
               >
-                <img src={cate_1} alt="" />
+                <img src={cate_1} alt="Ảnh combo" />
                 <p>Combo</p>
               </NavLink>
             </li>
