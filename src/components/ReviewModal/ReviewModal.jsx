@@ -65,11 +65,13 @@ const ReviewModal = ({ showModal, handleClose, orderDetails }) => {
     // console.log('>>> order detail đây nè: ', orderDetails);
     const listProductIds = listProducts.map((product) => product.productDetail.productId)
       .join(',');
+    const listComboIds = listCombos.map((combo) => combo.comboDetail.comboId)
+      .join(',');
     const rate = rating;
     const listImageFiles = images.filter((image) => image && image.file) // Lọc ra những phần tử có file
       .map((image) => image.file);  // Trả về chỉ file gốc
     const comment = commentContent;
-    dispatch(reviewOrder(listProductIds, rate, listImageFiles, comment));
+    dispatch(reviewOrder(listProductIds, listComboIds, rate, listImageFiles, comment));
     handleClose();
     dispatch(fetchAllOrders()); // fetch lại list orders
   }
@@ -88,34 +90,56 @@ const ReviewModal = ({ showModal, handleClose, orderDetails }) => {
         <div className='review-order-modal'>
           <div className="order-detail-product">
             {
-              listProducts && listProducts.length > 0 ? (
-                listProducts.map((item, index) => (
-                  <div className="order-detail-product-item" key={index}>
-                    <div className="product-item-image">
-                      <img src={'data:image/png;base64,' + item.productDetail?.productImage} alt="" />
-                    </div>
-                    <div className="product-item-infor">
-                      <p className="infor-name">{item.productDetail?.productName} ({item.productDetail.size})</p>
-                      <div className="infor-price-quantity">
-                        <p className="infor-price">
-                          {Number(item.productDetail.unitPrice).toLocaleString('vi-VN')} đ
-                        </p>
-                        <p className="px-2">
-                          x
-                        </p>
-                        <p className="infor-quantity">
-                          {item.productDetail.quantity}
-                        </p>
-                      </div>
-                      <p className="infor-store">
-                        Cửa hàng: {item.productDetail.storeId}
+              listProducts && listProducts.length > 0 && listProducts.map((item, index) => (
+                <div className="order-detail-product-item" key={index}>
+                  <div className="product-item-image">
+                    <img src={'data:image/png;base64,' + item.productDetail?.productImage} alt="" />
+                  </div>
+                  <div className="product-item-infor">
+                    <p className="infor-name">{item.productDetail?.productName} ({item.productDetail.size})</p>
+                    <div className="infor-price-quantity">
+                      <p className="infor-price">
+                        {Number(item.productDetail.unitPrice).toLocaleString('vi-VN')} đ
+                      </p>
+                      <p className="px-2">
+                        x
+                      </p>
+                      <p className="infor-quantity">
+                        {item.productDetail.quantity}
                       </p>
                     </div>
+                    <p className="infor-store">
+                      Cửa hàng: {item.productDetail.storeId}
+                    </p>
                   </div>
-                ))
-              ) : (
-                <div>Không có sản phẩm nào</div>
-              )
+                </div>
+              ))
+            }
+            {
+              listCombos && listCombos.length > 0 && listCombos.map((item, index) => (
+                <div className="order-detail-product-item" key={index}>
+                  <div className="product-item-image">
+                    <img src={'data:image/png;base64,' + item.comboDetail?.comboImage} alt="Ảnh combo" />
+                  </div>
+                  <div className="product-item-infor">
+                    <p className="infor-name">{item.comboDetail?.comboName} ({item.comboDetail.size})</p>
+                    <div className="infor-price-quantity">
+                      <p className="infor-price">
+                        {Number(item.comboDetail.unitPrice).toLocaleString('vi-VN')} đ
+                      </p>
+                      <p className="px-2">
+                        x
+                      </p>
+                      <p className="infor-quantity">
+                        {item.comboDetail.quantity}
+                      </p>
+                    </div>
+                    <p className="infor-store">
+                      Cửa hàng: {item.comboDetail.storeId}
+                    </p>
+                  </div>
+                </div>
+              ))
             }
           </div>
           <div className="rating-container">

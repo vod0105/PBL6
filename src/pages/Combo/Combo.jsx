@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllCombos } from "../../redux/actions/productActions";
 import Pagination from 'react-bootstrap/Pagination';
 import ComboItem from "../../components/ComboItem/ComboItem";
+import axios from 'axios';
 
 export default function Combo() {
   const dispatch = useDispatch();
@@ -14,8 +15,9 @@ export default function Combo() {
   const [activePage, setActivePage] = useState(1);
   const itemsPerPage = 8; // Số sản phẩm mỗi trang
   const totalPages = Math.ceil(allCombos.length / itemsPerPage); // Tổng số trang
-  // State cho tìm kiếm và sắp xếp
+  // State cho AI + search + select
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchTermAI, setSearchTermAI] = useState('');
   const [selectedSort, setSelectedSort] = useState("default");
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -34,13 +36,16 @@ export default function Combo() {
     setActivePage(1); // Reset về trang 1 khi thay đổi sắp xếp
   };
 
-  // Lọc và sắp xếp sản phẩm theo từ khóa và giá
+  // Lọc và sắp xếp sản phẩm theo search (input) + AI(file) và giá (select)
   const filteredProducts = allCombos
-    .filter((combo) => combo.comboName.toLowerCase().includes(searchTerm.toLowerCase()))
+    .filter((combo) =>
+      combo.comboName.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      combo.comboName.toLowerCase().includes(searchTermAI.toLowerCase())
+    )
     .sort((a, b) => {
       if (selectedSort === "asc") return a.price - b.price;
       if (selectedSort === "desc") return b.price - a.price;
-      return 0; // Mặc định
+      return 0;
     });
 
   // Lấy sản phẩm cho trang hiện tại
@@ -67,12 +72,59 @@ export default function Combo() {
       setActivePage(activePage + 1);
     }
   };
-
-
+  // AI file upload
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    return new Promise((resolve, reject) => {
+      if (file) {
+        const reader = new FileReader(); // FileReader hoạt động Asynchronous
+        reader.onloadend = () => {
+          const base64String = reader.result.split(",")[1]; // Chuyển thành base64
+          resolve(base64String); // Trả về chuỗi base64
+        };
+        reader.onerror = (error) => reject(error);
+        reader.readAsDataURL(file); // Đọc file dưới dạng chuỗi base64
+      } else {
+        reject("No file selected");
+      }
+    });
+  };
+  const onFileSelected = async (event) => {
+    try {
+      const base64FileImage = await handleFileChange(event);
+      // console.log("Chuỗi base64:", base64FileImage);
+      // AI: Tìm product bằng AI -> upload file
+      try {
+        const responseAI = await axios.post(`http://127.0.0.1:5000/predict`, {
+          image: base64FileImage
+        });
+        console.log("response AI:", responseAI);
+        if (responseAI?.data) {
+          const nameProduct = responseAI.data;
+          setSearchTermAI(nameProduct);
+        }
+      } catch (err) {
+        console.error("Error details: ", err);
+      }
+    } catch (error) {
+      console.error("Error converting file to base64:", error);
+    }
+  };
 
   return (
-    <div className="page-category">
+    <div className="page-combo">
       <div className="search-filter-container">
+        {/* AI */}
+        <div className="file-upload-AI-container">
+          <input
+            type="file"
+            id="file-input"
+            onChange={onFileSelected}
+            style={{ display: "none" }}
+          />
+          <label htmlFor="file-input">Tìm hình bằng AI</label>
+        </div>
+
         <div className="search-container">
           <div className="row">
             <div className="col-md-12">
@@ -110,7 +162,7 @@ export default function Combo() {
       <div
         className={`${allCombos && allCombos.length > 0 ? 'has-products' : ''}`}
       >
-        <div className="category-list-products">
+        <div className="combo-list-products">
           {
             currentCombos && currentCombos.length > 0 ? (
               currentCombos.map((combo, index) => (

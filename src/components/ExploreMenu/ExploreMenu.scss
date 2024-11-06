@@ -4,6 +4,7 @@
   flex-direction: column;
   gap: 20px;
   text-align: center;
+  
 
   h1 {
     color: #da3333;
@@ -22,11 +23,13 @@
     align-items: center;
     gap: 40px;
     text-align: center;
-    margin: 20px 150px;
-    overflow: auto;
+    margin: 20px 0; // Bỏ margin hai bên để thanh cuộn dễ thấy
+    overflow-x: auto; // Cho phép cuộn ngang
+    overflow-y: hidden; // Ngăn cuộn dọc
+    white-space: nowrap; // Ngăn văn bản xuống dòng
 
     &::-webkit-scrollbar {
-      display: none;
+      display: block; // Hiển thị thanh cuộn
     }
 
     .explore-menu-list-item {

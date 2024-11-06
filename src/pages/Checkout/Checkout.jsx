@@ -337,7 +337,7 @@ const Checkout = () => {
                                                     <img src={'data:image/png;base64,' + productDetailBuyNow?.product?.image} alt="Ảnh sản phẩm" />
                                                 </div>
                                                 <div className="product-item-infor">
-                                                    <p className="infor-name">{productDetailBuyNow?.product?.productName} ({productDetailBuyNow?.product?.size})</p>
+                                                    <p className="infor-name">{productDetailBuyNow?.product?.productName} ({productDetailBuyNow?.size})</p>
                                                     <div className="infor-price-quantity">
                                                         <p className="infor-price">
                                                             {Number(productDetailBuyNow?.finalPrice).toLocaleString('vi-VN')} đ

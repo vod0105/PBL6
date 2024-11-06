@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProductsByIdCategory } from "../../redux/actions/productActions";
 import Pagination from 'react-bootstrap/Pagination';
+import axios from 'axios';
 
 export default function Category() {
   const { id } = useParams();
@@ -15,9 +16,11 @@ export default function Category() {
   const [activePage, setActivePage] = useState(1);
   const itemsPerPage = 8; // Số sản phẩm mỗi trang
   const totalPages = Math.ceil(listProducts.length / itemsPerPage); // Tổng số trang
-  // State cho tìm kiếm và sắp xếp
+  // State cho AI + search + select
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchTermAI, setSearchTermAI] = useState('');
   const [selectedSort, setSelectedSort] = useState("default");
+
   useEffect(() => {
     window.scrollTo(0, 0);
     dispatch(fetchProductsByIdCategory(id));
@@ -37,7 +40,10 @@ export default function Category() {
 
   // Lọc và sắp xếp sản phẩm theo từ khóa và giá
   const filteredProducts = listProducts
-    .filter((product) => product.productName.toLowerCase().includes(searchTerm.toLowerCase()))
+    .filter((product) =>
+      product.productName.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      product.productName.toLowerCase().includes(searchTermAI.toLowerCase())
+    )
     .sort((a, b) => {
       if (selectedSort === "asc") return a.discountedPrice - b.discountedPrice;
       if (selectedSort === "desc") return b.discountedPrice - a.discountedPrice;
@@ -69,9 +75,60 @@ export default function Category() {
     }
   };
 
+  // AI file upload
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    return new Promise((resolve, reject) => {
+      if (file) {
+        const reader = new FileReader(); // FileReader hoạt động Asynchronous
+        reader.onloadend = () => {
+          const base64String = reader.result.split(",")[1]; // Chuyển thành base64
+          resolve(base64String); // Trả về chuỗi base64
+        };
+        reader.onerror = (error) => reject(error);
+        reader.readAsDataURL(file); // Đọc file dưới dạng chuỗi base64
+      } else {
+        reject("No file selected");
+      }
+    });
+  };
+  const onFileSelected = async (event) => {
+    try {
+      const base64FileImage = await handleFileChange(event);
+      // console.log("Chuỗi base64:", base64FileImage);
+      // AI: Tìm product bằng AI -> upload file
+      try {
+        const responseAI = await axios.post(`http://127.0.0.1:5000/predict`, {
+          image: base64FileImage
+        });
+        console.log("response AI:", responseAI);
+        if (responseAI?.data) {
+          const nameProduct = responseAI.data;
+          setSearchTermAI(nameProduct);
+        }
+      } catch (err) {
+        console.error("Error details: ", err);
+      }
+    } catch (error) {
+      console.error("Error converting file to base64:", error);
+    }
+  };
+
   return (
     <div className="page-category">
       <div className="search-filter-container">
+
+        {/* AI */}
+        <div className="file-upload-AI-container">
+          <input
+            type="file"
+            id="file-input"
+            onChange={onFileSelected}
+            style={{ display: "none" }}
+          />
+          <label htmlFor="file-input">Tìm hình bằng AI</label>
+        </div>
+
         <div className="search-container">
           <div className="row">
             <div className="col-md-12">
@@ -81,7 +138,7 @@ export default function Category() {
                   type="search"
                   value={searchTerm}
                   onChange={handleSearchChange}
-                  placeholder="Tìm kiếm sản phẩm"
+                  placeholder="Tìm kiếm tên sản phẩm"
                 />
 
                 <span className="input-group-append">

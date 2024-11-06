@@ -216,9 +216,11 @@ const cancelOrderService = (orderCode) => {
         url: `/api/v1/user/order/cancel/${orderCode}`,
     });
 }
-const reviewOrderService = (listProductIds, rate, listImageFiles, comment) => {
+const reviewOrderService = (listProductIds, listComboIds, rate, listImageFiles, comment) => {
     const formData = new FormData();
     formData.append('productId', listProductIds);
+    formData.append('comboIds', listComboIds);
+    console.log('listComboIds', listComboIds);
     formData.append('rate', rate);
     // formData.append('imageFiles', listImageFiles);
     listImageFiles.forEach((file, index) => {

@@ -6,6 +6,37 @@
     justify-content: flex-end;
     margin-bottom: 50px;
     margin-right: 200px;
+    .file-upload-AI-container {
+      position: relative;
+      display: inline-block;
+      margin-right: 20px;
+      cursor: pointer;
+    
+      input[type="file"] {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0; /* Ẩn input file */
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+      }
+    
+      label {
+        color: black; /* Màu chữ */
+        border: 1px solid black;
+        padding: 5px 10px; /* Khoảng cách trong nút */
+        border-radius: 5px; /* Bo góc */
+        cursor: pointer; /* Con trỏ chuột thành tay khi hover */
+        display: inline-block;
+        font-weight: 500;
+        &:hover {
+          border: 1px solid red; /* Đổi màu viền khi hover */
+        }
+      }
+    }
+    
+  
     .search-container{
       margin-right: 30px;
     }

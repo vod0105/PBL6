@@ -460,10 +460,10 @@ const reviewOrderSuccess = () => {
         type: types.REVIEW_ORDER_SUCCESS,
     };
 };
-const reviewOrder = (listProductIds, rate, listImageFiles, comment) => {
+const reviewOrder = (listProductIds, listComboIds, rate, listImageFiles, comment) => {
     return async (dispatch) => {
         try {
-            const res = await reviewOrderService(listProductIds, rate, listImageFiles, comment);
+            const res = await reviewOrderService(listProductIds, listComboIds, rate, listImageFiles, comment);
             const isSuccess = res && res.data ? res.data.success : false;
             if (isSuccess) {
                 dispatch(reviewOrderSuccess());
