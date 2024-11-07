@@ -8,8 +8,9 @@ const INITIAL_STATE = {
     comboDetail: {},
     listProductsByIdStore: [],
     ratingProduct: [],
-    allDrinks: []
-
+    allDrinks: [],
+    listSimilarProducts: [], // Danh sách sản phẩm cùng Category với product detail hiện tại
+    listSimilarCombos: [], // Danh sách combo với combo detail hiện tại
 };
 
 const productReducer = (state = INITIAL_STATE, action) => {
@@ -53,6 +54,16 @@ const productReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 ratingProduct: action.dataRatingProduct,
+            };
+        case types.FETCH_SIMILAR_PRODUCT_SUCCESS:
+            return {
+                ...state,
+                listSimilarProducts: action.dataProducts,
+            };
+        case types.FETCH_SIMILAR_COMBO_SUCCESS:
+            return {
+                ...state,
+                listSimilarCombos: action.dataCombos,
             };
         default: return state;
 

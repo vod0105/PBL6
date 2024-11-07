@@ -8,7 +8,7 @@ import store4 from "../../assets/image_gg/introduce_4.png";
 import store5 from "../../assets/image_gg/introduce_5.png";
 import ProductItemModal from '../ProductItemModal/ProductItemModal';
 
-const FoodItem = ({ product }) => {
+const FoodItem = ({ product }) => { // product => combo/product
   // Modal
   const [showModalProduct, setShowModalProduct] = useState(false);
   const [isAddToCart, setIsAddToCart] = useState(false);

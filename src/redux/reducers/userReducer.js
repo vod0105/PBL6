@@ -9,6 +9,8 @@ const initialState = {
     allOrders: {},
     orderInTransit: {},
     listVouchers: {},
+    listFavouriteProducts: [], // list sản phẩm yêu thích của user => Nếu login mới có
+
 };
 
 const userReducer = (state = initialState, action) => {
@@ -100,6 +102,11 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 listVouchers: action.dataVouchers
+            };
+        case 'FETCH_FAVOURITE_PRODUCT_SUCCESS':
+            return {
+                ...state,
+                listFavouriteProducts: action.dataProducts
             };
         default:
             return state;

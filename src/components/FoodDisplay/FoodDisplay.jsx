@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import './FoodDisplay.scss';
 import FoodItem from '../FoodItem/FoodItem';
 import Pagination from 'react-bootstrap/Pagination';
+import FoodItemCombo from "../FoodItem/FoodItemCombo";
 
-const FoodDisplay = ({ listProducts, itemsPerPage = 8 }) => {
+const FoodDisplay = ({ listProducts, itemsPerPage = 4 }) => {
   const [activePage, setActivePage] = useState(1);
 
   // Tính toán số trang dựa trên danh sách sản phẩm và số sản phẩm mỗi trang
@@ -40,7 +41,12 @@ const FoodDisplay = ({ listProducts, itemsPerPage = 8 }) => {
         {
           currentProducts && currentProducts.length > 0 ? (
             currentProducts.map((product, index) => (
-              <FoodItem key={index} product={product} />
+              product && product.productId ? (
+                <FoodItem key={index} product={product} />
+              )
+                : (
+                  <FoodItemCombo key={index} combo={product} />
+                )
             ))
           ) : (
             <div className="no-product">Không có sản phẩm</div>

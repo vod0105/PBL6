@@ -261,7 +261,12 @@ const fetchVouchersService = () => {
         url: `/api/v1/user/voucher/get`,
     });
 }
-
+const fetchFavouriteProducsService = (idUser) => {
+    return axios({
+        method: 'get',
+        url: `http://127.0.0.1:5000/cross-sell/${idUser}`,
+    });
+}
 
 export {
     updateProfileService,
@@ -282,4 +287,6 @@ export {
     fetchUserDetailByIdService,
     decreaseOneQuantityService,
     fetchVouchersService,
+    fetchFavouriteProducsService,
+
 }

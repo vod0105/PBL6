@@ -58,7 +58,7 @@ const fetchAllCombosSuccess = (data) => {
         dataCombos: data
     };
 };
-const fetchAllCombos = (id) => {
+const fetchAllCombos = () => {
     return async (dispatch, getState) => {
         try {
             const res = await fetchAllCombosService();
@@ -105,6 +105,57 @@ const fetchProductById = (id) => {
             const data = res && res.data ? res.data.data[0] : {};
             dispatch(fetchProductByIdSuccess(data)); // // Chạy ở đây (2)
             // console.log(data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+};
+
+// Product Detail -> list similar products
+const fetchSimilarProductsSuccess = (data) => {
+    return {
+        type: types.FETCH_SIMILAR_PRODUCT_SUCCESS,
+        dataProducts: data
+    };
+};
+const fetchSimilarProducts = (idProduct) => {
+    return async (dispatch, getState) => {
+        try {
+            const resPro = await fetchProductByIdService(+idProduct); // Lấy thông tin chi tiết sp
+            const dataPro = resPro && resPro.data ? resPro.data.data[0] : {};
+
+            const resCate = await fetchProductsByIdCategoryService(+dataPro.category.categoryId); // Tìm danh sách sản phẩm cùng danh mục với sản phẩm này
+            const dataCate = resCate && resCate.data ? resCate.data.data : [];
+            // Lọc các sản phẩm có productId khác idProduct truyền vào
+            let filteredData = dataCate.filter(product => +product.productId !== +idProduct);
+            // Lấy 4 sản phẩm đầu tiên
+            let dataSimilarProducts = filteredData.slice(0, 5);
+            // Update listSimilarProducts trong product reducer
+            dispatch(fetchSimilarProductsSuccess(dataSimilarProducts));
+        } catch (error) {
+            console.log(error);
+        }
+    }
+};
+
+// Product Detail -> list similar products
+const fetchSimilarCombosSuccess = (data) => {
+    return {
+        type: types.FETCH_SIMILAR_COMBO_SUCCESS,
+        dataCombos: data
+    };
+};
+const fetchSimilarCombos = (idCombo) => {
+    return async (dispatch, getState) => {
+        try {
+            const resCombo = await fetchAllCombosService(); // Tìm all combo
+            const dataCombo = resCombo?.data?.data ? resCombo.data.data : [];
+            console.log('dataCombo: ', dataCombo);
+            // Lọc các combo có comboId khác idCombo truyền vào
+            let filteredData = dataCombo.filter(combo => +combo.comboId !== +idCombo);
+            // Lấy 5 combo đầu tiên
+            let dataSimilarCombos = filteredData.slice(0, 5);
+            dispatch(fetchSimilarCombosSuccess(dataSimilarCombos));
         } catch (error) {
             console.log(error);
         }
@@ -173,7 +224,7 @@ const fetchRatingProductById = (id) => {
                 })
             );
             dispatch(fetchRatingProductByIdSuccess(dataRating));
-            console.log('dataRating: ', dataRating);
+            // console.log('dataRating: ', dataRating);
         } catch (error) {
             console.log(error);
             toast.error('Không lấy được đánh giá sản phẩm!')
@@ -189,5 +240,6 @@ export {
     fetchProductsByIdStore,
     fetchRatingProductById,
     fetchComboById,
-
+    fetchSimilarProducts,
+    fetchSimilarCombos,
 }

@@ -8,9 +8,10 @@ import StoreList from '../StoreList/StoreList';
 import ImagePreviewModal from '../ImagePreviewModal/ImagePreviewModal'
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchComboById, fetchRatingProductById } from "../../redux/actions/productActions";
+import { fetchComboById, fetchRatingProductById, fetchSimilarCombos } from "../../redux/actions/productActions";
 import { fetchAllStores } from "../../redux/actions/storeActions";
 import ComboItemModal from '../ComboItemModal/ComboItemModal'
+import FoodDisplay from '../FoodDisplay/FoodDisplay'
 
 
 const ComboItemDetail = () => {
@@ -56,12 +57,14 @@ const ComboItemDetail = () => {
   };
 
   // API
-  const { id } = useParams();
+  const { id } = useParams(); // id combo
   const dispatch = useDispatch();
   const comboDetail = useSelector((state) => {
     return state.product.comboDetail;
   })
-
+  const listSimilarCombos = useSelector((state) => {
+    return state.product.listSimilarCombos;
+  })
   // Tìm store chứa tất cả product trong combo
   const filterStoresWithAllComboProducts = (combo) => {
     if (!combo || !combo.products || combo.products.length === 0) return [];
@@ -92,6 +95,7 @@ const ComboItemDetail = () => {
   useEffect(() => {
     dispatch(fetchComboById(id));
     dispatch(fetchAllStores());
+    dispatch(fetchSimilarCombos(id));
     // dispatch(fetchRatingProductById(id));
 
   }, [id]);
@@ -187,6 +191,12 @@ const ComboItemDetail = () => {
             />
           </div>
         </div>
+
+        <div className="similar-combos-container">
+          <h2>DANH SÁCH COMBO KHÁC</h2>
+          <FoodDisplay listProducts={listSimilarCombos} />
+        </div>
+
         {/* <div className="product-detail-comment">
           <h2>Bài viết đánh giá</h2>
           {ratingProduct && ratingProduct.length > 0 ? (

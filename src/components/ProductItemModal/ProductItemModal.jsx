@@ -72,6 +72,12 @@ const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, 
     }
   }, [listSizes]);
 
+  // Xử lý trường hợp nhấn sang product detail khác, nhấn vô Modal mà FinalPrice vẫn lấy của product trước
+  useEffect(() => {
+    const basePrice = product?.discountedPrice || 0;
+    setFinalPrice(basePrice);
+  }, [product]);
+
   // ADD TO CART / BUY NOW
   const handleAddToCart = async () => {
     if (isLogin === false) { // chưa login
@@ -139,6 +145,9 @@ const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, 
     setSelectedStore(null); // Reset cửa hàng về null -> Ko chọn cửa hàng nào
     setSelectedSize(listSizes.length > 0 ? listSizes[0].name : ""); // Reset kích thước về kích thước đầu tiên
     handleCloseModalProduct();
+    // setTimeout(() => {
+    //   setFinalPrice(product?.discountedPrice);
+    // }, 500);
   };
   return (
     <Modal

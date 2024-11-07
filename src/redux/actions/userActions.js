@@ -15,7 +15,8 @@ import {
     reviewOrderService,
     fetchOrderInTransitByOrderCodeService,
     fetchShipperDetailByIdService,
-    fetchVouchersService
+    fetchVouchersService,
+    fetchFavouriteProducsService
 } from "../../services/userService";
 import { fetchStoreByIdService } from "../../services/storeService";
 import { fetchProductByIdService } from "../../services/productService";
@@ -523,7 +524,40 @@ const fetchVouchers = () => {
         }
     }
 };
-
+// list sản phẩm yêu thích -> Nếu đã login
+const fetchFavouriteProducsSuccess = (data) => {
+    return {
+        type: types.FETCH_FAVOURITE_PRODUCT_SUCCESS,
+        dataProducts: data
+    };
+};
+const fetchFavouriteProducs = (idUser) => {
+    return async (dispatch, getState) => {
+        try {
+            const res = await fetchFavouriteProducsService(idUser);
+            const data = res && res.data ? res.data : []; // list productIds
+            if (data) {
+                // Sử dụng Promise.all -> call API cho mỗi productId
+                const listProductDetails = await Promise.all(
+                    data.map(async (productId) => {
+                        const productRes = await fetchProductByIdService(productId);
+                        return productRes?.data?.data ? productRes.data.data[0] : null;
+                    })
+                );
+                // Lọc bỏ những phần tử null nếu có lỗi trong khi fetch product detail
+                const validProducts = listProductDetails.filter(product => product !== null);
+                console.log('validProducts: ', validProducts);
+                // Dispatch action với danh sách sản phẩm
+                dispatch(fetchFavouriteProducsSuccess(validProducts));
+            }
+            else {
+                dispatch(fetchFavouriteProducsSuccess({}));
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+};
 export {
     updateProfile,
     addToCartProduct,
@@ -543,5 +577,6 @@ export {
     cancelOrder,
     reviewOrder,
     fetchOrderInTransitByOrderCode,
-    fetchVouchers
+    fetchVouchers,
+    fetchFavouriteProducs
 };

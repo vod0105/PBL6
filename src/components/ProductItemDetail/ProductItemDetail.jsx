@@ -9,7 +9,8 @@ import ProductItemModal from '../ProductItemModal/ProductItemModal';
 import ImagePreviewModal from '../ImagePreviewModal/ImagePreviewModal'
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProductById, fetchRatingProductById } from "../../redux/actions/productActions";
+import { fetchProductById, fetchRatingProductById, fetchSimilarProducts } from "../../redux/actions/productActions";
+import FoodDisplay from '../FoodDisplay/FoodDisplay'
 
 
 const ProductItemDetail = () => {
@@ -60,12 +61,16 @@ const ProductItemDetail = () => {
   const productDetail = useSelector((state) => {
     return state.product.productDetail;
   })
+  const listSimilarProducts = useSelector((state) => {
+    return state.product.listSimilarProducts;
+  })
   const ratingProduct = useSelector((state) => {
     return state.product.ratingProduct;
   })
   useEffect(() => {
     dispatch(fetchProductById(id));
     dispatch(fetchRatingProductById(id));
+    dispatch(fetchSimilarProducts(id));
   }, [id]);
 
   if (!productDetail) {
@@ -133,6 +138,12 @@ const ProductItemDetail = () => {
             />
           </div>
         </div>
+
+        <div className="similar-products-container">
+          <h2>SẢN PHẨM CÙNG DANH MỤC</h2>
+          <FoodDisplay listProducts={listSimilarProducts} />
+        </div>
+
         <div className="product-detail-comment">
           <h2>Bài viết đánh giá</h2>
           {ratingProduct && ratingProduct.length > 0 ? (

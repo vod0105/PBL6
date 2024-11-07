@@ -8,6 +8,7 @@ import BannerWelcome from '../../components/BannerWelcome/BannerWelcome'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProductsBestSale } from "../../redux/actions/productActions";
+import { fetchFavouriteProducs } from "../../redux/actions/userActions";
 
 const Home = () => {
   // fetch product best sale
@@ -15,10 +16,25 @@ const Home = () => {
   const listProductsBestSale = useSelector((state) => {
     return state.product.listProductsBestSale;
   })
+  const isAuthenticated = useSelector((state) => {
+    return state.auth.isAuthenticated;
+  })
+  const account = useSelector((state) => {
+    return state.auth.account;
+  })
+  const listFavouriteProducts = useSelector((state) => {
+    console.log("Favourite Products:", state.user.listFavouriteProducts);
+    return state.user.listFavouriteProducts;
+  })
 
   useEffect(() => {
     dispatch(fetchProductsBestSale());
   }, []);
+  useEffect(() => {
+    if (account) {
+      dispatch(fetchFavouriteProducs(account.id));
+    }
+  }, [account, dispatch]);
 
   // Image -> base64
   const convertToBase64 = (file) => {
@@ -55,6 +71,19 @@ const Home = () => {
       <Service />
       <h2>SẢN PHẨM BÁN CHẠY</h2>
       <FoodDisplay listProducts={listProductsBestSale} />
+      {
+        isAuthenticated && (
+          <>
+            <h2>SẢN PHẨM BẠN YÊU THÍCH</h2>
+            {
+              listFavouriteProducts && (
+                <FoodDisplay listProducts={listFavouriteProducts} />
+              )
+            }
+          </>
+        )
+      }
+
     </div>
   )
 }
