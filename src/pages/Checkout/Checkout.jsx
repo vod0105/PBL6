@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { placeOrderBuyNow, placeOrderComboBuyNow, placeOrderAddToCart, fetchVouchers } from "../../redux/actions/userActions";
 import { toast } from "react-toastify";
 import { Form } from 'react-bootstrap';
-
+import L from 'leaflet';
+import iconStore from '../../assets/logo/map_store.png'
 //MAP
 import axios from 'axios';
 import { MapContainer, TileLayer, Polyline, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
@@ -52,7 +53,7 @@ const Checkout = () => {
 
     const [fullname, setFullname] = useState(accountInfo.fullName);
     const [phonenumber, setPhonenumber] = useState(accountInfo.phoneNumber);
-    const [address, setAddress] = useState("hehehe");
+    const [address, setAddress] = useState("Địa chỉ của bạn");
     const [note, setNote] = useState("");
     const [paymentMethod, setPaymentMethod] = useState("Thanh toán khi nhận hàng");
 
@@ -173,18 +174,55 @@ const Checkout = () => {
         }
     };
 
+    // Tính phí giao hàng dựa vào khoảng cách (đường chim bay)
+    const [shippingFee, setShippingFee] = useState(0);
+    const [distance, setDistance] = useState(0);
+    function toRad(deg) {
+        return deg * (Math.PI / 180);
+    }
+    function getDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // bán kính trái đất tính bằng km
+        const dLat = toRad(lat2 - lat1);
+        const dLon = toRad(lon2 - lon1);
+        const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const distance = R * c; // khoảng cách tính bằng km
+        return distance.toFixed(2); // km
+    }
+    const customIconStore = new L.Icon({
+        iconUrl: iconStore,
+        iconSize: [40, 40],       // Kích thước icon
+        iconAnchor: [20, 40],     // Điểm gắn icon
+        popupAnchor: [0, -40],    // Điểm gắn Popup
+    });
+
     // Mới vô -> Hiển thị trên input + map => Vị trí hiện tại
     useEffect(() => {
         dispatch(fetchVouchers());
         getCurrentCoors();
+
         // fetchAddressFromCoordinates(addressCoords[0], addressCoords[1]);  // (lat, lon)
+
     }, []);
 
     // Click chuột -> Tọa độ thay đổi -> Input thay đổi
     useEffect(() => {
         if (addressCoords) {
-            // console.log('>>> comboDetailBuyNow: ', comboDetailBuyNow);
+
             // fetchAddressFromCoordinates(addressCoords[0], addressCoords[1]);  // Gọi hàm với tọa độ mới
+
+            let distance = getDistance(addressCoords[0], addressCoords[1], 16.0471, 108.2068); // note: thay tọa độ sau bằng tọa độ cửa hàng
+            setDistance(distance);
+            if (distance > 1.5) {
+                setShippingFee(distance * 10000);
+            }
+            else {
+                setShippingFee(0);
+            }
         }
     }, [addressCoords]);
     return (
@@ -250,6 +288,11 @@ const Checkout = () => {
                                         </Popup>
                                     </Marker>
                                 )}
+
+                                {/* note: thay tọa độ sau bằng tọa độ cửa hàng */}
+                                <Marker position={[16.0471, 108.2068]} icon={customIconStore}>
+                                    <Popup>Vị trí của cửa hàng</Popup>
+                                </Marker>
                                 {/* {clickedCoords && (
                                     <Marker position={clickedCoords}>
                                         <Popup>
@@ -450,18 +493,29 @@ const Checkout = () => {
                                     ))
                                 }
                             </Form.Select>
-
+                        </div>
+                        <div className="shipping-fee-container">
+                            <h3>Phí giao hàng</h3>
+                            <div className="distance-container">
+                                <span>Khoảng cách: </span>
+                                <span>{distance} (km)</span>
+                            </div>
+                            <div className="fee-container">
+                                <span>Chi phí: </span>
+                                <span>{Number(shippingFee).toLocaleString('vi-VN')} đ</span>
+                            </div>
                         </div>
                         <hr />
                         <div className="order-item">
-                            <span>Tổng đơn hàng (Chưa bao gồm phí ship)</span>
+
+                            <span>Tổng đơn hàng</span>
                             <span>
                                 {
                                     isBuyNow === true && isBuyNowCombo === false
-                                        ? Number(productDetailBuyNow?.finalPrice * productDetailBuyNow?.quantity).toLocaleString('vi-VN')
+                                        ? Number((productDetailBuyNow?.finalPrice * productDetailBuyNow?.quantity) + shippingFee).toLocaleString('vi-VN')
                                         : isBuyNow === false && isBuyNowCombo === true
-                                            ? Number(comboDetailBuyNow?.unitPrice * comboDetailBuyNow?.quantity).toLocaleString('vi-VN')
-                                            : Number(getTotalPriceInCart()).toLocaleString('vi-VN')
+                                            ? Number((comboDetailBuyNow?.unitPrice * comboDetailBuyNow?.quantity) + shippingFee).toLocaleString('vi-VN')
+                                            : Number((getTotalPriceInCart()) + shippingFee).toLocaleString('vi-VN')
                                 } đ
                             </span>
                         </div>

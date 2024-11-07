@@ -74,6 +74,23 @@
           }
         }
       }
+      .btn-redirect-checkout {
+        i{
+          margin-right: 5px;
+        }
+        border: 1px solid #e3000e;
+        color: white;
+        background: #e3000e;
+        width: 120px;
+        padding: 12px 0;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        &:hover {
+          color: #e3000e;
+          background: transparent;
+        }
+      }
     }
     hr {
       background-color: grey;
@@ -83,16 +100,17 @@
     }
   
     .cart-bottom {
-      margin-top: 80px;
+      // margin-top: 80px;
       display: flex;
       justify-content: space-between;
       gap: max(12vw, 20px);
-  
+      width: 20%;
+      // margin: 80px auto;
       .cart-total {
         flex: 1;
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        // gap: 20px;
   
         .cart-total-details {
           display: flex;
@@ -121,38 +139,38 @@
         }
       }
   
-      .cart-promocode {
-        flex: 1;
+      // .cart-promocode {
+      //   flex: 1;
   
-        p {
-          color: #555;
-        }
+      //   p {
+      //     color: #555;
+      //   }
   
-        .cart-promocode-input {
-          display: flex;
-          margin-top: 10px;
-          justify-content: space-between;
-          align-items: center;
-          background-color: #eaeaea;
-          border-radius: 4px;
+      //   .cart-promocode-input {
+      //     display: flex;
+      //     margin-top: 10px;
+      //     justify-content: space-between;
+      //     align-items: center;
+      //     background-color: #eaeaea;
+      //     border-radius: 4px;
   
-          input {
-            background: transparent;
-            border: none;
-            outline: none;
-            padding-left: 10px;
-          }
+      //     input {
+      //       background: transparent;
+      //       border: none;
+      //       outline: none;
+      //       padding-left: 10px;
+      //     }
   
-          button {
-            width: max(10vw, 150px);
-            padding: 12px 5px;
-            background-color: black;
-            border: none;
-            color: white;
-            border-radius: 4px;
-          }
-        }
-      }
+      //     button {
+      //       width: max(10vw, 150px);
+      //       padding: 12px 5px;
+      //       background-color: black;
+      //       border: none;
+      //       color: white;
+      //       border-radius: 4px;
+      //     }
+      //   }
+      // }
     }
   
     @media (max-width: 750px) {

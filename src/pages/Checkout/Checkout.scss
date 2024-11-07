@@ -151,6 +151,18 @@
                 max-width: 100%;
             }
           }
+
+          .shipping-fee-container{
+            margin-top: 20px;
+            .distance-container{
+                display: flex;
+                justify-content: space-between;
+            }
+            .fee-container{
+                display: flex;
+                justify-content: space-between;
+            }
+          }
           .order-totalprice {
               margin-top: 20px;
               display: flex;

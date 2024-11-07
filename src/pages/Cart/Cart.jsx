@@ -198,43 +198,31 @@ const Cart = () => {
               <span>Không có sản phẩm trong giỏ hàng</span>
             </div>
           )}
+        {
+          filteredProducts && filteredProducts.length > 0 && (
+            <div>
+              <div className="cart-items-title cart-items-item">
+                <span></span>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p>Tổng tiền giỏ hàng: </p>
+                <p>
+                  {Number(getTotalPriceInCart()).toLocaleString('vi-VN')} đ
+                </p>
+                <button className="btn-redirect-checkout"
+                  onClick={handlePlaceOrder}
+                >
+                  <i className="fa-solid fa-file-invoice-dollar"></i>
+                  Thanh toán
+                </button>
+              </div>
+            </div>
+          )
+        }
       </div>
-      <div className="cart-bottom">
-        <div className="cart-total">
-          <h2>Giỏ hàng của bạn</h2>
-          <div>
-            <div className="cart-total-details">
-              <p>Tổng đơn hàng</p>
-              <p>
-                {Number(getTotalPriceInCart()).toLocaleString('vi-VN')} đ
-              </p>
-            </div>
-            <div className="cart-total-details">
-              <p>Phí giao hàng</p>
-              <p>0 đ</p>
-            </div>
-            <hr />
-            <div className="cart-total-details">
-              <p>Tổng cộng</p>
-              <b>{Number(getTotalPriceInCart()).toLocaleString('vi-VN')} đ</b>
-            </div>
-          </div>
-          <button
-            onClick={handlePlaceOrder}
-          >
-            Thanh toán
-          </button>
-        </div>
-        <div className="cart-promocode">
-          <div>
-            <p>Nhập mã khuyến mãi<i></i></p>
-            <div className="cart-promocode-input">
-              <input type="text" placeholder="Mã khuyến mãi" />
-              <button>Xác nhận</button>
-            </div>
-          </div>
-        </div>
-      </div>
+
     </div>
   );
 };
