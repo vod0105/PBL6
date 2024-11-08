@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchProductsByIdCategory } from "../../redux/actions/productActions";
 import Pagination from 'react-bootstrap/Pagination';
 import axios from 'axios';
+import { toast } from "react-toastify";
 
 export default function Category() {
   const { id } = useParams();
@@ -107,6 +108,7 @@ export default function Category() {
           setSearchTermAI(nameProduct);
         }
       } catch (err) {
+        toast.error('Có lỗi ở Server!');
         console.error("Error details: ", err);
       }
     } catch (error) {
@@ -126,7 +128,10 @@ export default function Category() {
             onChange={onFileSelected}
             style={{ display: "none" }}
           />
-          <label htmlFor="file-input">Tìm hình bằng AI</label>
+          <label htmlFor="file-input">
+            <i className="fa-solid fa-robot"></i>
+            Tìm hình bằng AI
+          </label>
         </div>
 
         <div className="search-container">

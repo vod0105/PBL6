@@ -21,17 +21,20 @@
           height: 100%;
           cursor: pointer;
         }
-      
         label {
+          i{
+            margin-right: 5px;
+          }
           color: black; /* Màu chữ */
           border: 1px solid black;
           padding: 5px 10px; /* Khoảng cách trong nút */
           border-radius: 5px; /* Bo góc */
           cursor: pointer; /* Con trỏ chuột thành tay khi hover */
           display: inline-block;
-          font-weight: 500;
+          font-weight: 400;
           &:hover {
             border: 1px solid red; /* Đổi màu viền khi hover */
+            color: red;
           }
         }
       }

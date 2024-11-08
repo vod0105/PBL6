@@ -1,7 +1,10 @@
 // reducers/authReducer.js
 const initialState = {
-    listProductsInCart: {}, // fetch từ server
+    listProductsInCart: {}, // list products ở giỏ hàng khách hàng => fetch từ BE
     listCombosInCart: {},
+
+    listProductsSelectInCart: {}, // list products chọn để mua ở trang Cart -> checkout
+    listCombosSelectInCart: {}, // list combos chọn để mua ở trang Cart -> checkout
     isBuyNow: false,
     isBuyNowCombo: false,
     productDetailBuyNow: {},
@@ -46,6 +49,8 @@ const userReducer = (state = initialState, action) => {
         case 'ADD_TO_CART_OPTION': // Nhấn thanh toán trong Cart
             return {
                 ...state,
+                listProductsSelectInCart: action.dataProducts,
+                listCombosSelectInCart: action.dataCombos,
                 isBuyNow: false,
                 isBuyNowCombo: false,
             }
@@ -61,8 +66,8 @@ const userReducer = (state = initialState, action) => {
         case 'PLACE_ORDER_ADD_TO_CART_SUCCESS':
             return {
                 ...state,
-                listProductsInCart: {},
-                listCombosInCart: {}
+                listProductsSelectInCart: {},
+                listCombosSelectInCart: {}
             }
         case 'PLACE_ORDER_ADD_TO_CART_ERROR':
             return {

@@ -31,8 +31,8 @@ const Checkout = () => {
     const isBuyNowCombo = useSelector((state) => state.user.isBuyNowCombo);
     const productDetailBuyNow = useSelector((state) => state.user.productDetailBuyNow);
     const comboDetailBuyNow = useSelector((state) => state.user.comboDetailBuyNow);
-    const listProductsInCart = useSelector((state) => state.user.listProductsInCart);
-    const listCombosInCart = useSelector((state) => state.user.listCombosInCart);
+    const listProductsSelectInCart = useSelector((state) => state.user.listProductsSelectInCart);
+    const listCombosSelectInCart = useSelector((state) => state.user.listCombosSelectInCart);
     const accountInfo = useSelector((state) => {
         return state.auth.account;
     });
@@ -59,11 +59,11 @@ const Checkout = () => {
 
     const getTotalPriceInCart = () => {
         let total = 0;
-        for (let i = 0; i < listProductsInCart.length; i++) {
-            total += (listProductsInCart[i].product.unitPrice * listProductsInCart[i].product.quantity);
+        for (let i = 0; i < listProductsSelectInCart.length; i++) {
+            total += (listProductsSelectInCart[i].product.unitPrice * listProductsSelectInCart[i].product.quantity);
         }
-        for (let i = 0; i < listCombosInCart.length; i++) {
-            total += (listCombosInCart[i].combo.unitPrice * listCombosInCart[i].combo.quantity);
+        for (let i = 0; i < listCombosSelectInCart.length; i++) {
+            total += (listCombosSelectInCart[i].combo.unitPrice * listCombosSelectInCart[i].combo.quantity);
         }
         return total;
     }
@@ -94,8 +94,8 @@ const Checkout = () => {
             }
             else { // Mua ở giỏ hàng
                 const cartIds = [
-                    ...(listProductsInCart && listProductsInCart.length > 0 ? listProductsInCart.map(item => item.cartId) : []),
-                    ...(listCombosInCart && listCombosInCart.length > 0 ? listCombosInCart.map(item => item.cartId) : [])
+                    ...(listProductsSelectInCart && listProductsSelectInCart.length > 0 ? listProductsSelectInCart.map(item => item.cartId) : []),
+                    ...(listCombosSelectInCart && listCombosSelectInCart.length > 0 ? listCombosSelectInCart.map(item => item.cartId) : [])
                 ];
 
                 dispatch(placeOrderAddToCart(method, cartIds, address, addressCoords[1], addressCoords[0], navigate, selectedVoucher));
@@ -325,7 +325,7 @@ const Checkout = () => {
                             {
                                 isBuyNow === false && isBuyNowCombo === false ? ( // Mua trong giỏ hàng
                                     <>
-                                        {listProductsInCart && listProductsInCart.length > 0 && listProductsInCart.map((item, index) => (
+                                        {listProductsSelectInCart && listProductsSelectInCart.length > 0 && listProductsSelectInCart.map((item, index) => (
                                             <div className="order-detail-product-item" key={index}>
                                                 <div className="product-item-infor">
                                                     <div className="product-item-image">
@@ -348,7 +348,7 @@ const Checkout = () => {
                                                 </div>
                                             </div>
                                         ))}
-                                        {listCombosInCart && listCombosInCart.length > 0 && listCombosInCart.map((item, index) => (
+                                        {listCombosSelectInCart && listCombosSelectInCart.length > 0 && listCombosSelectInCart.map((item, index) => (
                                             <div className="order-detail-product-item" key={index}>
                                                 <div className="product-item-infor">
                                                     <div className="product-item-image">

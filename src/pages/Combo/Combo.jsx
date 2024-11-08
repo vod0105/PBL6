@@ -101,7 +101,8 @@ export default function Combo() {
         console.log("response AI:", responseAI);
         if (responseAI?.data) {
           const nameProduct = responseAI.data;
-          setSearchTermAI(nameProduct);
+          // setSearchTermAI(nameProduct);
+          setSearchTerm(nameProduct);
         }
       } catch (err) {
         console.error("Error details: ", err);
@@ -122,7 +123,10 @@ export default function Combo() {
             onChange={onFileSelected}
             style={{ display: "none" }}
           />
-          <label htmlFor="file-input">Tìm hình bằng AI</label>
+          <label htmlFor="file-input">
+            <i className="fa-solid fa-robot"></i>
+            Tìm hình bằng AI
+          </label>
         </div>
 
         <div className="search-container">

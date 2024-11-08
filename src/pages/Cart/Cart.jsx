@@ -12,8 +12,8 @@ import {
 } from "../../redux/actions/userActions";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-const Cart = () => {
 
+const Cart = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -24,62 +24,104 @@ const Cart = () => {
   const listCombosInCart = useSelector((state) => {
     return state.user.listCombosInCart;
   })
+
+  // State to track checked items in the cart
+  const [checkedItems, setCheckedItems] = useState([]); // Added state for tracking selected items
+
   useEffect(() => {
     dispatch(fetchProductsInCart());
   }, [dispatch]);
-  // Tăng/giảm slsp
-  const handleIncreaseQuantity = (item) => {
-    // note: BE thêm stockQuantity ở mỗi sản phẩm trong giỏ hàng khi trả về data
-    // if (item.product.quantity < item.product.stockQuantity) {
-    //   increaseOneQuantity(item.cartId);
-    // }
-    // else {
-    //   toast.error('Sản phẩm vượt quá số lượng!')
-    // }
-    dispatch(increaseOneQuantity(item.cartId));
+
+  // Handle checkbox toggle for each cart item
+  const handleCheckboxChange = (cartId) => {
+    setCheckedItems((prevCheckedItems) =>
+      prevCheckedItems.includes(cartId)
+        ? prevCheckedItems.filter((id) => id !== cartId)
+        : [...prevCheckedItems, cartId]
+    );
   };
-  const handleDecreaseQuantity = (item) => {
-    if ((item.product && item.product.quantity > 1) || (item.combo && item.combo.quantity > 1)) {
-      dispatch(decreaseOneQuantity(item.cartId));
+
+  const handleIncreaseQuantity = (item) => {
+    if (item) {
+      let quantity;
+      if (item.product) { // Row là product
+        quantity = +item.product.quantity;
+      }
+      else { // Row là combo
+        quantity = +item.combo.quantity;
+      }
+      dispatch(increaseOneQuantity(item.cartId, quantity + 1));
     }
   };
-  // Xóa sản phẩm khỏi giỏ hàng
+
+  const handleDecreaseQuantity = (item) => {
+    if ((item.product && item.product.quantity > 1) || (item.combo && item.combo.quantity > 1)) {
+      let quantity;
+      if (item.product) {
+        quantity = +item.product.quantity;
+      }
+      else {
+        quantity = +item.combo.quantity;
+      }
+      dispatch(decreaseOneQuantity(item.cartId, quantity - 1));
+    }
+  };
+
   const handleRemoveProductInCart = (cartId) => {
     dispatch(removeProductInCart(cartId));
   };
+
   const getTotalPriceInCart = () => {
     let total = 0;
     for (let i = 0; i < listProductsInCart?.length; i++) {
-      total += (listProductsInCart[i].product.unitPrice * listProductsInCart[i].product.quantity);
+      const item = listProductsInCart[i];
+      // Only add to total if item is checked
+      if (checkedItems.includes(item.cartId)) { // Added filter based on checkbox selection
+        total += (item.product.unitPrice * item.product.quantity);
+      }
     }
     for (let i = 0; i < listCombosInCart?.length; i++) {
-      total += (listCombosInCart[i].combo.unitPrice * listCombosInCart[i].combo.quantity);
+      const item = listCombosInCart[i];
+      // Only add to total if item is checked
+      if (checkedItems.includes(item.cartId)) { // Added filter based on checkbox selection
+        total += (item.combo.unitPrice * item.combo.quantity);
+      }
     }
     return total;
-  }
+  };
+
   const handlePlaceOrder = () => {
-    // console.log('listProductsInCart: ', listProductsInCart);
-    // console.log('listCombosInCart: ', listCombosInCart);
     if (!listProductsInCart && !Array.isArray(listProductsInCart) && listProductsInCart.length === 0 && !listCombosInCart && !Array.isArray(listCombosInCart) && listCombosInCart.length === 0) { // -> Xử lý thêm trường hợp listProducts ko phải là Array
       toast.error('Không có sản phẩm trong giỏ hàng!');
     }
     else {
-      dispatch(placeOrderUsingAddToCart());
-      navigate('/checkout');
-    }
-  }
+      if (checkedItems.length === 0) {
+        toast.error('Chọn ít nhất một sản phẩm để thanh toán!');
+      } else {
+        // Filter the items in the cart by those that are checked
+        const selectedProducts = listProductsInCart.filter((item) =>
+          checkedItems.includes(item.cartId)
+        );
+        const selectedCombos = listCombosInCart.filter((item) =>
+          checkedItems.includes(item.cartId)
+        );
 
-  // select -> filter
+        // Send only selected items for order placement
+        dispatch(placeOrderUsingAddToCart(selectedProducts, selectedCombos)); // Modified to pass selected items
+        navigate('/checkout');
+      }
+    }
+  };
+
   const [selectedStore, setSelectedStore] = useState("all");
-  const [searchTerm, setSearchTerm] = useState(""); // Thêm state lưu từ khóa tìm kiếm
+  const [searchTerm, setSearchTerm] = useState("");
+
   const handleStoreChange = (event) => {
-    // console.log('storeId đang chọn: ', selectedStore);
     setSelectedStore(event.target.value);
-    // console.log('storeId đang chọn: ', selectedStore);
   };
 
   const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value); // Cập nhật từ khóa tìm kiếm khi nhập
+    setSearchTerm(event.target.value);
   };
 
   const filteredProducts = Array.isArray(listProductsInCart) && Array.isArray(listCombosInCart)
@@ -89,15 +131,11 @@ const Cart = () => {
     ].filter((item) => {
       const storeId = item.product ? item.product.storeId : item.combo.storeId;
       const name = item.product ? item.product.productName : item.combo.comboName;
-      const isStoreMatch = selectedStore === "all" || +storeId === +selectedStore;
-      const isSearchMatch = name.toLowerCase().includes(searchTerm.toLowerCase());
+      const isStoreMatch = selectedStore === "all" || +storeId === +selectedStore; // select cửa hàng
+      const isSearchMatch = name.toLowerCase().includes(searchTerm.toLowerCase()); // input search
       return isStoreMatch && isSearchMatch;
     }) : [];
 
-  // const filteredProducts = Array.isArray(listProductsInCart) ? listProductsInCart.filter((item) => {
-  //   console.log('item.product.storeId: ', item.product.storeId);
-  //   return selectedStore === "all" || +item.product.storeId === +selectedStore;
-  // }) : [];
   return (
     <div className="page-cart">
       <div className="search-filter-container">
@@ -108,11 +146,10 @@ const Cart = () => {
                 <input
                   className="form-control border-end-0 border"
                   type="search"
-                  value={searchTerm} // Hiển thị từ khóa trong ô input
-                  onChange={handleSearchChange} // Xử lý khi người dùng nhập
+                  value={searchTerm}
+                  onChange={handleSearchChange}
                   placeholder="Tìm kiếm sản phẩm"
                 />
-
                 <span className="input-group-append">
                   <button className="btn btn-outline-secondary bg-white border ms-n5" type="button">
                     <i className="fa fa-search"></i>
@@ -141,12 +178,12 @@ const Cart = () => {
                   </option>
                 ))
             }
-
           </select>
         </div>
       </div>
       <div className="cart-items">
         <div className="cart-items-title">
+          <p>Chọn</p>
           <p>Sản phẩm</p>
           <p>Tên</p>
           <p>Kích cỡ</p>
@@ -159,19 +196,25 @@ const Cart = () => {
         <br />
         <hr />
         {
-          filteredProducts && filteredProducts.length > 0 ? (filteredProducts.map((item, index) => {
+          filteredProducts && filteredProducts.length > 0 ? (filteredProducts.map((item, index) => { // Xử lý mỗi row có thể là product/combo => Đặt biến chung cho mỗi key trong object
             const isProduct = item.product !== null;
             const data = isProduct ? item.product : item.combo;
             const itemName = isProduct ? data.productName : data.comboName;
-            const itemImage = data.image; // Giả sử combo cũng có hình ảnh comboImage
-            const itemSize = data.size; // Combo không có size
+            const itemImage = data.image;
+            const itemSize = data.size;
             const itemStoreName = data.dataStore ? data.dataStore.storeName : "N/A";
             const itemUnitPrice = data.unitPrice;
             const itemQuantity = data.quantity;
             const itemTotalPrice = itemUnitPrice * itemQuantity;
+
             return (
               <div key={index}>
                 <div className="cart-items-title cart-items-item">
+                  <input
+                    type="checkbox"
+                    checked={checkedItems.includes(item.cartId)} // Checked if item is in checkedItems
+                    onChange={() => handleCheckboxChange(item.cartId)} // Toggles item selection
+                  />
                   <Link to={isProduct ? `/product-detail/${data.productId}` : `/combo-detail/${data.comboId}`}>
                     <img src={`data:image/png;base64,${itemImage}`} alt="" />
                   </Link>
@@ -202,7 +245,8 @@ const Cart = () => {
           filteredProducts && filteredProducts.length > 0 && (
             <div>
               <div className="cart-items-title cart-items-item">
-                <span></span>
+                <p></p>
+                <p></p>
                 <p></p>
                 <p></p>
                 <p></p>
@@ -214,17 +258,14 @@ const Cart = () => {
                 <button className="btn-redirect-checkout"
                   onClick={handlePlaceOrder}
                 >
-                  <i className="fa-solid fa-file-invoice-dollar"></i>
-                  Thanh toán
+                  <i className="fa fa-credit-card"></i> Thanh toán
                 </button>
               </div>
             </div>
-          )
-        }
+          )}
       </div>
-
     </div>
-  );
-};
+  )
+}
 
 export default Cart;

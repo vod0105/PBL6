@@ -1,5 +1,5 @@
 .page-cart {
-    width: 80%;
+    width: 90%;
     margin: 20px auto;
     border-top: 1px solid #E7E7E7;
     .search-filter-container{
@@ -20,7 +20,7 @@
       } 
       .cart-items-title {
         display: grid;
-        grid-template-columns: 0.5fr 1.3fr 0.5fr 0.8fr 0.8fr 0.8fr 0.8fr 0.6fr;
+        grid-template-columns: 0.5fr 0.5fr 1.3fr 0.5fr 0.8fr 0.8fr 0.8fr 0.8fr 0.6fr;
         align-items: center;
         justify-content: center;
         text-align: center;

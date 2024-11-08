@@ -197,9 +197,11 @@ const placeOrderComboUsingBuyNow = (combo, unitPrice, quantity, store, size, dri
 };
 
 // Nhấn THANH TOÁN trong Cart -> Chuyển đến Check out
-const placeOrderUsingAddToCart = () => {
+const placeOrderUsingAddToCart = (dataProducts, dataCombos) => {
     return {
         type: types.ADD_TO_CART_OPTION,
+        dataProducts: dataProducts,
+        dataCombos: dataCombos
     };
 };
 
@@ -367,10 +369,10 @@ const increaseOneQuantitySuccess = () => {
         type: types.INCREASE_ONE_QUANTITY_SUCCESS,
     };
 };
-const increaseOneQuantity = (cartId) => {
+const increaseOneQuantity = (cartId, quantity) => {
     return async (dispatch, getState) => {
         try {
-            const res = await increaseOneQuantityService(cartId);
+            const res = await increaseOneQuantityService(cartId, quantity);
             const isSuccess = res && res.data ? res.data.success : false;
             if (isSuccess) {
                 dispatch(increaseOneQuantitySuccess());
@@ -391,10 +393,10 @@ const decreaseOneQuantitySuccess = () => {
         type: types.DECREASE_ONE_QUANTITY_SUCCESS,
     };
 };
-const decreaseOneQuantity = (cartId) => {
+const decreaseOneQuantity = (cartId, quantity) => {
     return async (dispatch, getState) => {
         try {
-            const res = await decreaseOneQuantityService(cartId);
+            const res = await decreaseOneQuantityService(cartId, quantity);
             const isSuccess = res && res.data ? res.data.success : false;
             if (isSuccess) {
                 dispatch(decreaseOneQuantitySuccess());

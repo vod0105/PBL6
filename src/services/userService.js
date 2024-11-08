@@ -54,16 +54,16 @@ const removeProductInCartService = (cartId) => {
         url: `/api/v1/user/cart/delete/${cartId}`,
     });
 }
-const increaseOneQuantityService = (cartId) => {
+const increaseOneQuantityService = (cartId, quantity) => {
     return instance({
         method: 'put',
-        url: `/api/v1/user/cart/update?cartId=${cartId}&quantity=1`,
+        url: `/api/v1/user/cart/update?cartId=${cartId}&quantity=${quantity}`,
     });
 }
-const decreaseOneQuantityService = (cartId) => {
+const decreaseOneQuantityService = (cartId, quantity) => {
     return instance({
         method: 'put',
-        url: `/api/v1/user/cart/update?cartId=${cartId}&quantity=-1`,
+        url: `/api/v1/user/cart/update?cartId=${cartId}&quantity=${quantity}`,
     });
 }
 
