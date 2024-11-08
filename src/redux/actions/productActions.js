@@ -8,6 +8,7 @@ import {
     fetchProductsByIdStoreService,
     fetchRatingProductByIdService,
     fetchAllDrinksService,
+    fetchRatingComboByIdService
 
 } from "../../services/productService";
 import { fetchUserDetailByIdService } from "../../services/userService";
@@ -231,6 +232,37 @@ const fetchRatingProductById = (id) => {
         }
     }
 };
+
+// rating combo by id
+const fetchRatingComboByIdSuccess = (data) => {
+    return {
+        type: types.FETCH_RATING_COMBO_BY_ID_SUCCESS,
+        dataRatingCombo: data
+    };
+};
+const fetchRatingComboById = (id) => {
+    return async (dispatch, getState) => {
+        try {
+            const resRating = await fetchRatingComboByIdService(id);
+            let dataRating = resRating && resRating.data ? resRating.data.data : [];
+            // Lấy thêm avatar + fullname User cho từng phần tử trong dataRating
+            dataRating = await Promise.all(
+                dataRating.map(async (rating) => {
+                    const resUser = await fetchUserDetailByIdService(rating.userId);
+                    const dataUser = resUser && resUser.data ? resUser.data.data : {};
+                    return {
+                        ...rating,
+                        dataUser: dataUser,
+                    };
+                })
+            );
+            dispatch(fetchRatingComboByIdSuccess(dataRating));
+        } catch (error) {
+            console.log(error);
+            toast.error('Không lấy được đánh giá combo!')
+        }
+    }
+};
 export {
     fetchProductsBestSale,
     fetchProductsByIdCategory,
@@ -242,4 +274,5 @@ export {
     fetchComboById,
     fetchSimilarProducts,
     fetchSimilarCombos,
+    fetchRatingComboById
 }

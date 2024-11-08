@@ -64,14 +64,25 @@ const ProductItemDetail = () => {
   const listSimilarProducts = useSelector((state) => {
     return state.product.listSimilarProducts;
   })
-  const ratingProduct = useSelector((state) => {
+  const ratingProduct = useSelector((state) => { // All số bài đánh giá sản phẩm (Ko phải số sao)
     return state.product.ratingProduct;
   })
+
+  const account = useSelector((state) => state.auth.account); // Khách hàng đã đánh giá sản phẩm ni -> Vô coi đánh giá sản phẩm -> hiện "Bạn"
   useEffect(() => {
     dispatch(fetchProductById(id));
     dispatch(fetchRatingProductById(id));
     dispatch(fetchSimilarProducts(id));
   }, [id]);
+
+  // Select -> Lọc số sao ở review
+  const [selectedRating, setSelectedRating] = useState("0"); // Lọc số sao sản phẩm, Mặc định là "Tất cả đánh giá"
+  const filteredReviews = Array.isArray(ratingProduct) ? ratingProduct.filter(review =>
+    selectedRating === "0" || +review.rate === +selectedRating
+  ) : [];
+  const handleFilterRatingChange = (event) => {
+    setSelectedRating(event.target.value);
+  };
 
   if (!productDetail) {
     return <div>Không có thông tin sản phẩm.</div>;
@@ -92,7 +103,11 @@ const ProductItemDetail = () => {
 
             <div className="infor-right-name">{productDetail.productName}</div>
             <div className="infor-right-review">
-              <img src={assets.rating_starts} alt="" />
+              <span>
+                {productDetail?.averageRate ? +productDetail.averageRate.toFixed(1) : "0"} / 5
+                <img src={logoStar} alt="" />
+              </span>
+              <span>({ratingProduct.length} đánh giá)</span>
             </div>
             <hr />
             <div className="infor-right-price-container">
@@ -143,11 +158,27 @@ const ProductItemDetail = () => {
           <h2>SẢN PHẨM CÙNG DANH MỤC</h2>
           <FoodDisplay listProducts={listSimilarProducts} />
         </div>
-
         <div className="product-detail-comment">
           <h2>Bài viết đánh giá</h2>
-          {ratingProduct && ratingProduct.length > 0 ? (
-            ratingProduct.map((comment, index) => { // comment: 1 đánh giá của sp (bởi 1 user)
+          <div class="filter-wrapper">
+            <div className="filter-container">
+              <select
+                className="form-select"
+                value={selectedRating}
+                onChange={handleFilterRatingChange}
+                aria-label="Default select example"
+              >
+                <option value="0" selected>Tất cả đánh giá</option>
+                <option value="1">Đánh giá 1 sao</option>
+                <option value="2">Đánh giá 2 sao</option>
+                <option value="3">Đánh giá 3 sao</option>
+                <option value="4">Đánh giá 4 sao</option>
+                <option value="5">Đánh giá 5 sao</option>
+              </select>
+            </div>
+          </div>
+          {filteredReviews && filteredReviews.length > 0 ? (
+            filteredReviews.map((comment, index) => { // comment: 1 đánh giá của sp (bởi 1 user)
               return (
                 <div className="comment-container" key={index}>
                   <div className="avatar-username-star-container">
@@ -163,7 +194,10 @@ const ProductItemDetail = () => {
                     <div className="username-star">
                       <span className="username-user">
                         {
-                          comment && comment.dataUser && comment.dataUser.fullName ? comment.dataUser.fullName : 'Khách hàng'
+                          // Xử lý trường hợp là bạn luôn => id user
+                          comment?.userId && account && +comment.userId === +account.id ? "Bạn" : (
+                            comment?.dataUser?.fullName ? comment.dataUser.fullName : 'Khách hàng'
+                          )
                         }
                       </span>
                       <div className="star-container">
@@ -202,7 +236,7 @@ const ProductItemDetail = () => {
               );
             })
           ) : (
-            <div className='no-comment'>Không có bình luận</div>
+            <div className='no-comment'>Không có đánh giá</div>
           )}
         </div>
         {/* Modal preview ảnh */}

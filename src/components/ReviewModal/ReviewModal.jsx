@@ -4,7 +4,7 @@ import './ReviewModal.scss'
 import logoStar from '../../assets/logo/star.png'
 import logoStarNobgColor from '../../assets/logo/star_no_bgcolor.png'
 import { useDispatch, useSelector } from 'react-redux';
-import { reviewOrder } from '../../redux/actions/userActions';
+import { reviewOrder, fetchAllOrders } from '../../redux/actions/userActions';
 
 const ReviewModal = ({ showModal, handleClose, orderDetails }) => {
   const [listProducts, setListProducts] = useState([]);

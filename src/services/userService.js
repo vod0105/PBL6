@@ -219,8 +219,7 @@ const cancelOrderService = (orderCode) => {
 const reviewOrderService = (listProductIds, listComboIds, rate, listImageFiles, comment) => {
     const formData = new FormData();
     formData.append('productId', listProductIds);
-    formData.append('comboIds', listComboIds);
-    console.log('listComboIds', listComboIds);
+    formData.append('comboId', listComboIds);
     formData.append('rate', rate);
     // formData.append('imageFiles', listImageFiles);
     listImageFiles.forEach((file, index) => {
@@ -229,7 +228,7 @@ const reviewOrderService = (listProductIds, listComboIds, rate, listImageFiles, 
     formData.append('comment', comment);
     return instance({
         method: 'post',
-        url: `/api/v1/user/product/rating`,
+        url: `/api/v1/user/product/rating`, // Đánh giá luôn cho cả product + combo
         data: formData,
         headers: {
             'Content-Type': 'multipart/form-data'

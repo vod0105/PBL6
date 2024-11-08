@@ -69,7 +69,7 @@ const DeliveryMap = () => {
 
   //   }
   // }, [orderInTransit]);
-  const [orderCoords, setOrderCoords] = useState(null); // [lon, lat]: Tọa độ nhận hàng
+  const [orderCoords, setOrderCoords] = useState([107.9006, 16.2554]); // [lon, lat]: Tọa độ nhận hàng
   const [shipperCoords, setShipperCoords] = useState(null); // Tọa độ hiện tại của Shipper
   useEffect(() => {
     // console.log('orderCode: ', orderCode);
@@ -80,6 +80,7 @@ const DeliveryMap = () => {
     if (orderInTransit && orderInTransit.shipperDetail) { // Có shipper nhận hàng
       const newOrderCoords = [orderInTransit.longitude, orderInTransit.latitude];
       const newShipperCoords = [orderInTransit.shipperDetail.longitude, orderInTransit.shipperDetail.latitude];
+      console.log('newShipperCoords: ', newShipperCoords);
       setOrderCoords(newOrderCoords);
       setShipperCoords(newShipperCoords);
       // fetchRoute(); => Chưa cập nhật kịp
@@ -197,6 +198,7 @@ const DeliveryMap = () => {
         setDistance((routeDistance / 1000).toFixed(2)); // m -> km
         setDuration((routeDuration / 60).toFixed(2));   // Chuyển đổi sang phút
         // console.log('>>> res 2 điểm trên map: ', response);
+        console.log('>>> tọa độ nhận hàng: ', orderCoords);
         console.log('Số km: ', distance);
         const decodedPath = decodePolyline(response.data.routes[0].geometry);
         // console.log('>>> geometry -> route?: ', decodedPath); // Array các điểm -> Nối lại có đường đi với mỗi điểm: [lat, lng]
@@ -299,8 +301,8 @@ const DeliveryMap = () => {
           <div className="infor-right">
             <div className="infor-right-ggmap-container">
               <MapContainer
-                center={[16.2554, 107.9006]}
-                zoom={9}
+                center={[orderCoords[1], orderCoords[0]]} // [lat, lon]
+                zoom={6}
                 style={{ height: '80vh', width: '100%' }}
                 onClick={handleMapClick} //
               >
