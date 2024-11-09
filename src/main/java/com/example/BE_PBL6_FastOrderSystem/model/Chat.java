@@ -26,7 +26,8 @@ public class Chat {
     @JoinColumn(name = "receiver", nullable = false)
     User receiver;
     String message;
-    LocalDateTime local_time;
+    @Column(name = "local_time")
+    LocalDateTime localTime;
 
     @Column(nullable = false, columnDefinition = "boolean default false")
     Boolean isRead = false; // Mặc định là false
@@ -37,6 +38,6 @@ public class Chat {
 
     @PrePersist
     protected void onCreate() {
-        local_time = LocalDateTime.now(); // Thiết lập thời gian hiện tại
+        localTime = LocalDateTime.now(); // Thiết lập thời gian hiện tại
     }
 }

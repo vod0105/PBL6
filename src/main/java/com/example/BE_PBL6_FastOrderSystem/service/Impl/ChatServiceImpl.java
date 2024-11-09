@@ -1,8 +1,10 @@
 package com.example.BE_PBL6_FastOrderSystem.service.Impl;
 
 import com.example.BE_PBL6_FastOrderSystem.model.Chat;
+import com.example.BE_PBL6_FastOrderSystem.model.Store;
 import com.example.BE_PBL6_FastOrderSystem.model.User;
 import com.example.BE_PBL6_FastOrderSystem.repository.ChatRepository;
+import com.example.BE_PBL6_FastOrderSystem.repository.StoreRepository;
 import com.example.BE_PBL6_FastOrderSystem.repository.UserRepository;
 import com.example.BE_PBL6_FastOrderSystem.request.ChatRequest;
 import com.example.BE_PBL6_FastOrderSystem.response.APIResponseChat;
@@ -27,6 +29,8 @@ public class ChatServiceImpl implements IChatService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private StoreRepository storeRepository;
     @Override
     public List<Chat> getAllChats() {
         return chatRepository.findAll();
@@ -55,14 +59,14 @@ public class ChatServiceImpl implements IChatService {
         User receiver = userRepository.findById(receiverId).orElse(null);
 
         if (sender != null && receiver != null) {
-            List<Chat> chats =  chatRepository.findAllBySenderAndReceiverOrSenderAndReceiver(sender,receiver,receiver,sender);
+            List<Chat> chats =  chatRepository.findAllBySenderAndReceiverOrSenderAndReceiverOrderByLocalTime(sender,receiver,receiver,sender);
             // Chuyển đổi danh sách Chat thành ChatResponse
             return chats.stream().map(chat -> {
                 ChatResponse response = new ChatResponse();
                 response.setMessage(chat.getMessage());
                 response.setSender(chat.getSender().getId());
                 response.setReceiver(chat.getReceiver().getId());
-                response.setLocal_time(chat.getLocal_time());
+                response.setLocal_time(chat.getLocalTime());
                 response.setImage(chat.getImage());
                 return response;
             }).collect(Collectors.toList());
@@ -95,7 +99,7 @@ public class ChatServiceImpl implements IChatService {
         Chat chat = Chat.builder()
                 .sender(sender)
                 .receiver(receiver)
-                .local_time(LocalDateTime.now())
+                .localTime(LocalDateTime.now())
                 .message(chatRequest.getMessage())
                 .isRead(chatRequest.getIsRead())
                 .image(base64Image) // Gán ảnh nếu có
@@ -190,5 +194,21 @@ public class ChatServiceImpl implements IChatService {
         } catch (Exception e) {
             return new APIResponseChat<>(e.getMessage(), 1, "Update failed");
         }
+    }
+
+    @Override
+    public  APIResponseChat<List<Long>> allIdOwnerOfStores(){
+        List<Long> ids = chatRepository.getOwnerOfStoreIds();
+        return new APIResponseChat<>(ids,0,"success");
+    }
+
+    @Override
+    public APIResponseChat<Long> findStoreByOwner(Long idOwner){
+        List<Store> stores = storeRepository.findAllByManagerId(idOwner);
+        if (stores.isEmpty()){
+            return new APIResponseChat<>(null,1,"Error");
+        }
+        Long idStore = stores.get(0).getStoreId();
+        return new APIResponseChat<>(idStore,0,"Success");
     }
 }

@@ -13,7 +13,9 @@ import java.util.List;
 public interface ChatRepository extends JpaRepository<Chat, Long> {
     List<Chat> findAllBySender(User sender);
     List<Chat> findAllByReceiver(User receiver);
-    List<Chat> findAllBySenderAndReceiverOrSenderAndReceiver(User sender1, User receiver1, User sender2, User receiver2);
+
+//    @Query("SELECT c FROM Chat c WHERE (c.sender = ?1 AND c.receiver = ?2) OR (c.sender = ?3 AND c.receiver = ?4)")
+    List<Chat> findAllBySenderAndReceiverOrSenderAndReceiverOrderByLocalTime(User sender1, User receiver1, User sender2, User receiver2);
 
     @Query("SELECT u FROM User u WHERE u.id IN (" +
             "SELECT DISTINCT c.receiver.id FROM Chat c WHERE c.sender.id = :userId " +
@@ -21,7 +23,7 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
             "SELECT DISTINCT c.sender.id FROM Chat c WHERE c.receiver.id = :userId " +
             ") " +
             "ORDER BY (" +
-            "SELECT MAX(c.local_time) FROM Chat c " +
+            "SELECT MAX(c.localTime) FROM Chat c " +
             "WHERE (c.sender.id = u.id AND c.receiver.id = :userId) " +
             "   OR (c.sender.id = :userId AND c.receiver.id = u.id) " +
             ") DESC")
@@ -39,4 +41,7 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
     @Transactional
     @Query("UPDATE Chat m SET m.isRead = true WHERE m.isRead = false AND m.receiver.id = :sender AND m.sender.id= :user")
     int updateMessagesToOnline(@Param("sender") Long sender,@Param("user") Long user);
+
+    @Query ("SELECT st.manager.id from Store st")
+    List<Long> getOwnerOfStoreIds();
 }

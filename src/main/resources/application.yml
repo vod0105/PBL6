@@ -5,10 +5,10 @@ spring:
   application:
     name: BE_PBL6_FastOrderSystem
   datasource:
-    url: jdbc:mysql://localhost:3306/web_thuc_an
+    url: jdbc:mysql://localhost:3307/web_thuc_an
 #    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password:
+    username: Duc
+    password: 12345
   servlet:
     multipart:
       max-file-size: 10MB
