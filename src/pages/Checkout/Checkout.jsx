@@ -38,13 +38,16 @@ const Checkout = () => {
     });
     // Voucher
     const listVouchers = useSelector((state) => state.user.listVouchers);
-    const [selectedVoucherId, setSelectedVoucherId] = useState("");
+    const [selectedVoucherId, setSelectedVoucherId] = useState("0");
     const [selectedVoucher, setSelectedVoucher] = useState(null);
-    useEffect(() => {
-        if (listVouchers && listVouchers.length > 0) {
-            setSelectedVoucherId(listVouchers[0].voucherId);
-        }
-    }, [listVouchers]);
+    const [promotion, setPromotion] = useState(0);
+
+    // useEffect(() => { // Mới vô chọn mã đầu tiên
+    //     if (listVouchers && listVouchers.length > 0) {
+    //         setSelectedVoucherId(listVouchers[0].voucherId);
+    //     }
+    // }, [listVouchers]);
+
     useEffect(() => {
         const voucher = listVouchers && listVouchers.length > 0 ? listVouchers.find(voucher => voucher.voucherId === selectedVoucherId) : {};
         setSelectedVoucher(voucher ? voucher : {});
@@ -480,15 +483,23 @@ const Checkout = () => {
                                 value={selectedVoucherId}
                                 onChange={(e) => {
                                     setSelectedVoucherId(e.target.value);
-                                    const voucher = listVouchers && listVouchers.length > 0 ? listVouchers.find(voucher => voucher.voucherId === e.target.value) : '';
-                                    setSelectedVoucher(voucher);
+                                    const voucher = listVouchers && listVouchers.length > 0 ? listVouchers.find(voucher => +voucher.voucherId === +e.target.value) : null;
+                                    if (voucher) {
+                                        setSelectedVoucher(voucher);
+                                        setPromotion(+voucher.discountPercent);
+                                        // console.log('giảm giá: ', voucher.discountPercent);
+                                    } else { // Không chọn mã
+                                        // console.log('giảm giá: 0');
+                                        setSelectedVoucher(null);
+                                        setPromotion(0);
+                                    }
                                 }}
                             >
-                                {/* <option value="">Không có mã khuyến mãi</option> */}
+                                <option value="0">Không chọn</option>
                                 {
                                     listVouchers && listVouchers.length > 0 && listVouchers.map((voucher, index) => (
                                         <option key={index} value={voucher.voucherId}>
-                                            {voucher.code}
+                                            {voucher.code} ({Number(voucher.discountPercent)}%)
                                         </option>
                                     ))
                                 }
@@ -504,6 +515,10 @@ const Checkout = () => {
                                 <span>Chi phí: </span>
                                 <span>{Number(shippingFee).toLocaleString('vi-VN')} đ</span>
                             </div>
+                            <div className="promotion-container">
+                                <span>Giảm giá: </span>
+                                <span>{Number(promotion)}%</span>
+                            </div>
                         </div>
                         <hr />
                         <div className="order-item">
@@ -512,10 +527,10 @@ const Checkout = () => {
                             <span>
                                 {
                                     isBuyNow === true && isBuyNowCombo === false
-                                        ? Number((productDetailBuyNow?.finalPrice * productDetailBuyNow?.quantity) + shippingFee).toLocaleString('vi-VN')
+                                        ? Number(((productDetailBuyNow?.finalPrice * productDetailBuyNow?.quantity) + shippingFee) * ((100 - promotion) / 100)).toLocaleString('vi-VN')
                                         : isBuyNow === false && isBuyNowCombo === true
-                                            ? Number((comboDetailBuyNow?.unitPrice * comboDetailBuyNow?.quantity) + shippingFee).toLocaleString('vi-VN')
-                                            : Number((getTotalPriceInCart()) + shippingFee).toLocaleString('vi-VN')
+                                            ? Number(((comboDetailBuyNow?.unitPrice * comboDetailBuyNow?.quantity) + shippingFee) * ((100 - promotion) / 100)).toLocaleString('vi-VN')
+                                            : Number(((getTotalPriceInCart()) + shippingFee) * ((100 - promotion) / 100)).toLocaleString('vi-VN')
                                 } đ
                             </span>
                         </div>

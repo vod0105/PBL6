@@ -23,7 +23,7 @@ const Home = () => {
     return state.auth.account;
   })
   const listFavouriteProducts = useSelector((state) => {
-    console.log("Favourite Products:", state.user.listFavouriteProducts);
+    // console.log("Favourite Products:", state.user.listFavouriteProducts);
     return state.user.listFavouriteProducts;
   })
 

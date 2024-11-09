@@ -236,13 +236,22 @@ const placeOrderBuyNow = (paymentMethod, productDetailBuyNow, address, longitude
                     toast.error(res.data.message || "Đặt hàng không thành công!");
                 }
             }
-            else { // ZALOPAY
+            else if (paymentMethod === 'ZALOPAY') { // ZALOPAY
                 // navigate('/order-complete');
                 const zalopayUrl = res && res.data && res.data.data ? res.data.data.orderurl : '';
                 if (zalopayUrl) {
                     window.location.href = zalopayUrl; // Chuyển hướng sang URL thanh toán của ZaloPay
                 } else {
                     toast.error("Không thể thanh toán đơn hàng với ZaloPay!");
+                }
+            }
+            else if (paymentMethod === 'MOMO') { // MOMO
+                // navigate('/order-complete');
+                const momoUrl = res?.data?.data?.payUrl ? res.data.data.payUrl : '';
+                if (momoUrl) {
+                    window.location.href = momoUrl; // Chuyển hướng sang URL thanh toán của momo
+                } else {
+                    toast.error("Không thể thanh toán đơn hàng với Momo!");
                 }
             }
         } catch (error) {
@@ -258,7 +267,6 @@ const placeOrderComboBuyNow = (paymentMethod, comboDetailBuyNow, address, longit
             // dispatch(placeOrderBuyNowSuccess());
 
             const res = await placeOrderComboBuyNowService(paymentMethod, comboDetailBuyNow, address, longitude, latitude, voucher);
-            // console.log('>>> res: ', res);
             if (paymentMethod === 'CASH') {
                 const isSuccess = res && res.data ? res.data.success : false;
                 if (isSuccess) {
@@ -271,13 +279,20 @@ const placeOrderComboBuyNow = (paymentMethod, comboDetailBuyNow, address, longit
                     toast.error(res.data.message || "Đặt hàng không thành công!");
                 }
             }
-            else { // ZALOPAY
-                // navigate('/order-complete');
+            else if (paymentMethod === 'ZALOPAY') { // ZALOPAY
                 const zalopayUrl = res && res.data && res.data.data ? res.data.data.orderurl : '';
                 if (zalopayUrl) {
                     window.location.href = zalopayUrl; // Chuyển hướng sang URL thanh toán của ZaloPay
                 } else {
                     toast.error("Không thể thanh toán đơn hàng với ZaloPay!");
+                }
+            }
+            else if (paymentMethod === 'MOMO') { // MOMO
+                const momoUrl = res?.data?.data?.payUrl ? res.data.data.payUrl : '';
+                if (momoUrl) {
+                    window.location.href = momoUrl; // Chuyển hướng sang URL thanh toán của MOMO
+                } else {
+                    toast.error("Không thể thanh toán đơn hàng với Momo!");
                 }
             }
         } catch (error) {
@@ -316,12 +331,20 @@ const placeOrderAddToCart = (paymentMethod, cartIds, address, longitude, latitud
                     toast.error(res.data.message || "Đặt hàng không thành công!");
                 }
             }
-            else {// ZALOPAY
+            else if (paymentMethod === 'ZALOPAY') { // ZALOPAY
                 const zalopayUrl = res && res.data ? res.data.data.orderurl : '';
                 if (zalopayUrl) {
                     window.location.href = zalopayUrl; // Chuyển hướng sang URL thanh toán của ZaloPay
                 } else {
                     toast.error("Không thể thanh toán đơn hàng với ZaloPay!");
+                }
+            }
+            else if (paymentMethod === 'MOMO') { // MOMO
+                const momoUrl = res?.data?.data?.payUrl ? res.data.data.payUrl : '';
+                if (momoUrl) {
+                    window.location.href = momoUrl; // Chuyển hướng sang URL thanh toán của MOMO
+                } else {
+                    toast.error("Không thể thanh toán đơn hàng với Momo!");
                 }
             }
         } catch (error) {

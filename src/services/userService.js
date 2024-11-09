@@ -82,9 +82,8 @@ const placeOrderBuyNowService = (paymentMethod, productDetailBuyNow, address, lo
         deliveryAddress: address,
         longitude,
         latitude,
-        ...(voucher && { discountCode: voucher.code })
+        ...(voucher && { discountCode: voucher.code }) // Có voucher mới thêm vô body
     };
-
     return instance({
         method: 'post',
         url: `/api/v1/user/order/create/now`,
