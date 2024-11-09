@@ -49,6 +49,17 @@
     /* background-color: #1d8ecd !important; */
 }
 
+.other-message {
+    /* background-color: #24c57c !important; */
+    text-align: left !important; /* Đặt căn từ trái sang phải */
+    float: right; /* Căn toàn bộ khung từ phải */
+    clear: both;
+    max-width: 320px !important;
+}
+.chat .chat-history .my-message {
+    background: #efefef;
+    max-width: 320px !important;
+}
   .container-chat{
     max-height: 800px;
     max-width: 800px;

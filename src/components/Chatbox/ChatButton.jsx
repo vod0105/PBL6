@@ -3,7 +3,7 @@ import './ChatButton.css';
 import { useDispatch, useSelector } from "react-redux";
 import ChatContent from './ChatContent';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import { GetAllStoresChat, GetUnRead } from '../../services/chat';
+import { GetAllOwner, GetAllStoresChat, GetUnRead } from '../../services/chat';
 import { fetchUpdate, updateAllUserIsRead } from '../../redux/actions/chatStoreAction';
 import ChatContext from '../../context/showChat';
 
@@ -13,22 +13,43 @@ const ChatButton = (props) => {
     const [newMessagesCount, setNewMessagesCount] = useState(1);
     const [unreadUsers, setUnreadUsers] = useState([]);
     const dispatch = useDispatch();
-    const { showChat, setShowChat, selectedUser, setSelectedUser } = useContext(ChatContext);
+    const {showChat, setShowChat,selectedUser, setSelectedUser,owner,setOwner} = useContext(ChatContext);
 
     useEffect(() => {
         fetchAllStores();
         GetAllUnRead();
+        GetAllIdOwner();
     }, []);
-    useEffect(() => {
-        // console.log("change new message count: ",newMessagesCount)
-    }, [])
-    useEffect(() => {
-        // console.log("change new message count: ",newMessagesCount)
-    }, [newMessagesCount])
+
+    useEffect(()=>{
+        console.log("change new message count: ",newMessagesCount)
+    },[])
+    useEffect(()=>{
+        console.log("change new message count: ",newMessagesCount)
+    },[newMessagesCount])
     // useEffect(() => {
     //     GetAllUnRead();
     // }, []); 
     // Chạy lại khi stores thay đổi
+
+    const GetAllIdOwner = async() => {
+        try {
+            const res = await GetAllOwner();
+            if (res.data.EC === 0) {
+                console.log("Lấy Owner thành công");
+                console.log("data Owner: ", res);
+                // Lấy danh sách người dùng có is_online là false
+                setTimeout(() => {
+                    setOwner(res.data.DT);
+                  }, 1000);
+                // console.log("owner tại chathbutton: ",owner)
+            } else {
+                console.error("Lỗi khi lấy owner:", res);
+            }
+        } catch (error) {
+            console.error("Lỗi khi thực hiện GetAllUnƠner:", error);
+        }
+    }
 
     const GetAllUnRead = async () => {
         try {

@@ -9,7 +9,7 @@ import ChatContext from '../../context/showChat';
 
 const ChatContent = (props) => {
     const stores = useSelector((state) => state.stores.stores); // Lấy dữ liệu từ Redux store
-    const { setNewMessagesCount, newMessagesCount, setShowChat, product, st, unreadUsers, setUnreadUsers, selectedUser, setSelectedUser } = props;
+    const { setNewMessagesCount, newMessagesCount, setShowChat, product, st, unreadUsers, setUnreadUsers,selectedUser, setSelectedUser,onwer } = props;
     const [searchTerm, setSearchTerm] = useState("");
     const [search, setSearch] = useState(false);
     const [users, setUsers] = useState([]);
@@ -293,6 +293,7 @@ const ChatContent = (props) => {
                             st={st}
                             unreadUsers={unreadUsers}
                             setUnreadUsers={setUnreadUsers}
+                            onwer= {onwer}
                         />
                     </div>
                 </div>

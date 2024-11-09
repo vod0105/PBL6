@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useContext } from "react";
 // import { store } from "../../redux/store";
 import { format, parseISO } from 'date-fns';
 import 'react-image-lightbox/style.css';
@@ -8,13 +8,16 @@ import axios from "axios";
 import './ChatButton.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { updateAllUserStatus, updateUserStatus } from "../../redux/actions/chatStoreAction";
-import { GetChatHistory, PostImageChat } from "../../services/chat";
+import { findStoreByOwner, GetChatHistory, PostImageChat } from "../../services/chat";
+import { flushSync } from 'react-dom';
+import ChatContext from '../../context/showChat';
+
 
 const ChatHistory = (props) => {
     const dispatch = useDispatch();
     const stores = useSelector((state) => state.stores.stores); // Lấy dữ liệu từ Redux store
     const u = useSelector((state) => state.auth.account)
-    const { selectedUser, changeUserLocation, setNewMessagesCount, newMessagesCount, product, st, url, unreadUsers, setUnreadUsers } = props;
+    const { selectedUser, changeUserLocation, setNewMessagesCount, newMessagesCount, product, st, unreadUsers, setUnreadUsers } = props;
     const [chatHistory, setChatHistory] = useState([]);
     const [inputMessage, setInputMessage] = useState('');
     const [ws, setWs] = useState(null);
@@ -26,16 +29,19 @@ const ChatHistory = (props) => {
     const idU = u.id;
     const [image, setImage] = useState("");
     const [imagePreview, setImagePreview] = useState("");
+    const { owner, setOwner } = useContext(ChatContext);
 
-    useEffect(() => {
-        // console.log("idu", idU);
-        // console.log("u: ", u);
-    })
     // đó ko có giá trị
     const unreadRef = useRef(unreadUsers);
     const storesRef = useRef(stores);
     const newMessagesCountRef = useRef(newMessagesCount);
     const prevselectedUser = useRef(selectedUser);
+    const ownerRef = useRef(owner);
+
+    useEffect(() => {
+        ownerRef.current = owner;
+    }, [owner]);
+
     useEffect(() => {
         newMessagesCountRef.current = newMessagesCount;
     }, [newMessagesCount]);
@@ -185,7 +191,7 @@ const ChatHistory = (props) => {
 
     const fetchChatHistory = async () => {
         const res = await GetChatHistory(prevselectedUser.current.id);
-        // console.log(res);
+        console.log("data chathistory: ", res);
         if (res.data.EC === 0) {
             setChatHistory(res.data.DT);
         }
@@ -204,11 +210,68 @@ const ChatHistory = (props) => {
 
             ws.send(JSON.stringify(messagePayload));
             setInputMessage('');
-
+            console.log("Owner trước khi includes: ", owner)
+            if (owner.includes(selectedUser.id)) {
+                console.log("dava")
+                setTimeout(() => {
+                    sendData(idU,selectedUser.id, inputMessage);
+                }, 2000); // Chờ 2000ms (2 giây)
+            }
             // if (loadStores) handleLoadStores();
         }
     };
 
+    const sendData = async (send, receive, question) => {
+        try {
+            const res = await findStoreByOwner(receive);
+            if (res.data.EC === 0) {
+                const data = {
+                    storeId: res.data.DT,
+                    question: question
+                };
+                try {
+                    const response = await fetch("http://localhost:5000/intent-detection", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+
+                    const result = await response.json();
+                    // const formattedMessage = result.replace(/\n/g, "\n");
+                    const formattedMessage = result;
+
+                    if (result != null) {
+                        const currentTime = new Date().toISOString(); // Get current time in ISO string
+                        if (ws) {
+                            const messagePayload = {
+                                sender: receive,
+                                receiver: send,
+                                message: formattedMessage,
+                                local_time: currentTime // Add time to payload
+                            };
+                            console.log("meeagePay: ", messagePayload)
+                            setTimeout(() => {
+                                ws.send(JSON.stringify(messagePayload));
+                            }, 2000);
+                        }
+                    }
+                } catch (error) {
+                    console.error("Error sending data:", error);
+                    return null
+                }
+            }
+        } catch (error) {
+            console.error("Looix ",error);
+        }
+
+
+    };
     const handleQuestionClick = (question) => {
         // Gửi tin nhắn tới hệ thống chat (hoặc xử lý theo yêu cầu của bạn)
         sendMessageToChat(question);

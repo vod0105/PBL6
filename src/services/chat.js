@@ -41,7 +41,7 @@ const PostImageChat = (sender, receiver, isRead, image) => {
 }
 
 const searchOwnerForStore = (idStore) => {
-    return axios.get(`api/chats/search/owner/${idStore}`);
+    return axios.get(`api/chats/searchOwner/${idStore}`);
 }
 
 const PostSaveMess = (sender, receiver, isRead, mess) => {
@@ -53,4 +53,10 @@ const PostSaveMess = (sender, receiver, isRead, mess) => {
     return axios.post('api/chats/saveMessage', data);
 }
 
-export { PostSaveMess, searchOwnerForStore, searchUsers, PutUpdateRead, PostImageChat, GetUnRead, GetMarkMessagesAsRead, GetAllStoresChat, GetChatHistory, GetAllStores }
+const GetAllOwner = () => {
+    return axios.get(`api/chats/all/owner/store`);
+}
+const findStoreByOwner = (id) => {
+    return axios.get(`api/chats/findStore/${id}`);
+}
+export {findStoreByOwner,GetAllOwner,PostSaveMess,searchOwnerForStore,searchUsers,PutUpdateRead,PostImageChat,GetUnRead,GetMarkMessagesAsRead, GetAllStoresChat,GetChatHistory,GetAllStores}
