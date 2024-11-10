@@ -53,17 +53,17 @@ public class ProductServiceImpl implements IProductService {
     }
 
 
-    @Override
-    public ResponseEntity<APIRespone> getProductsByStoreId(Long storeId) {
-        Optional<Store> store = storeRepository.findById(storeId);
-        if (store.isEmpty()) {
-            return new ResponseEntity<>(new APIRespone(false, "Store not found", ""), HttpStatus.NOT_FOUND);
-        }
-        List<ProductResponse> productResponses = productRepository.findByStoreId(storeId).stream()
-                .map(ResponseConverter::convertToProductResponse)
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(new APIRespone(true, "Success", productResponses), HttpStatus.OK);
-    }
+//    @Override
+//    public ResponseEntity<APIRespone> getProductsByStoreId(Long storeId) {
+//        Optional<Store> store = storeRepository.findById(storeId);
+//        if (store.isEmpty()) {
+//            return new ResponseEntity<>(new APIRespone(false, "Store not found", ""), HttpStatus.NOT_FOUND);
+//        }
+//        List<ProductResponse> productResponses = productRepository.findByStoreId(storeId).stream()
+//                .map(ResponseConverter::convertToProductResponse)
+//                .collect(Collectors.toList());
+//        return new ResponseEntity<>(new APIRespone(true, "Success", productResponses), HttpStatus.OK);
+//    }
     @Override
     public ResponseEntity<APIRespone> getProductsByStore_CategoryId(Long storeId,Long categoryId) {
         Optional<Store> store = storeRepository.findById(storeId);
@@ -548,11 +548,13 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public ResponseEntity<APIRespone> getProductsByStore(Long ownerId) {
-        List<Store> stores = storeRepository.findAllByManagerId(ownerId);
-        Long storeId = stores.get(0).getStoreId();
-        List<ProductResponse> productResponses = productRepository.findByStoreId(storeId).stream()
-                .map(ResponseConverter::convertToProductResponse)
+    public ResponseEntity<APIRespone> getProductsByStoreId(Long storeId) {
+        Optional<Store> store = storeRepository.findById(storeId);
+        if (store.isEmpty()) {
+            return new ResponseEntity<>(new APIRespone(false, "Store not found", ""), HttpStatus.NOT_FOUND);
+        }
+        List<ProductResponse> productResponses = productRepository.findByStoreOwnerId(storeId).stream()
+                .map(productStoreDTO -> ResponseConverter.convertToProductResponse(productStoreDTO.getProduct()))  // Chỉ lấy đối tượng Product
                 .collect(Collectors.toList());
         return new ResponseEntity<>(new APIRespone(true, "Success", productResponses), HttpStatus.OK);
     }
@@ -578,6 +580,15 @@ public class ProductServiceImpl implements IProductService {
         productRepository.save(product);
         storeRepository.save(store);
         return new ResponseEntity<>(new APIRespone(true, "Product removed from store successfully", ""), HttpStatus.OK);
+    }
+    @Override
+    public ResponseEntity<APIRespone> getProductsByStore(Long ownerId) {
+        List<Store> stores = storeRepository.findAllByManagerId(ownerId);
+        Long storeId = stores.get(0).getStoreId();
+        List<ProductResponse> productResponses = productRepository.findByStoreOwnerId(storeId).stream()
+                .map(productStoreDTO -> ResponseConverter.convertToProductResponse(productStoreDTO.getProduct()))  // Chỉ lấy đối tượng Product
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(new APIRespone(true, "Success", productResponses), HttpStatus.OK);
     }
 //    @Override
 //    public ResponseEntity<APIRespone> getProductsByStoreId(Long storeId) {

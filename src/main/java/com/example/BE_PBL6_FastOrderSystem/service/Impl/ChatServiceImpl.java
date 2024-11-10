@@ -55,14 +55,14 @@ public class ChatServiceImpl implements IChatService {
         User receiver = userRepository.findById(receiverId).orElse(null);
 
         if (sender != null && receiver != null) {
-            List<Chat> chats =  chatRepository.findAllBySenderAndReceiverOrSenderAndReceiver(sender,receiver,receiver,sender);
+            List<Chat> chats =  chatRepository.findAllBySenderAndReceiverOrSenderAndReceiverOrderByLocalTime(sender,receiver,receiver,sender);
             // Chuyển đổi danh sách Chat thành ChatResponse
             return chats.stream().map(chat -> {
                 ChatResponse response = new ChatResponse();
                 response.setMessage(chat.getMessage());
                 response.setSender(chat.getSender().getId());
                 response.setReceiver(chat.getReceiver().getId());
-                response.setLocal_time(chat.getLocal_time());
+                response.setLocal_time(chat.getLocalTime());
                 response.setImage(chat.getImage());
                 return response;
             }).collect(Collectors.toList());
@@ -95,7 +95,7 @@ public class ChatServiceImpl implements IChatService {
         Chat chat = Chat.builder()
                 .sender(sender)
                 .receiver(receiver)
-                .local_time(LocalDateTime.now())
+                .localTime(LocalDateTime.now())
                 .message(chatRequest.getMessage())
                 .isRead(chatRequest.getIsRead())
                 .image(base64Image) // Gán ảnh nếu có
