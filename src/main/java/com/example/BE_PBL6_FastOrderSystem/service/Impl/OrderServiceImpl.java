@@ -37,7 +37,11 @@ public class OrderServiceImpl implements IOrderService {
     private final UserVoucherRepository userVoucherRepository;
     private  final AnnounceRepository announceRepository;
     private final VoucherRepository discountCodeRepository;
+    private final PaymentRepository paymentRepository;
 
+    public OrderResponse getOrderResponse(Order order) {
+        return new OrderResponse(order, paymentRepository);
+    }
     public String generateUniqueOrderCode() {
         Random random = new Random();
         String orderCode;
@@ -610,7 +614,7 @@ public class OrderServiceImpl implements IOrderService {
 
         // Chuyển đổi các đơn hàng thành OrderResponse
         List<OrderResponse> orderResponses = orders1.stream()
-                .map(OrderResponse::new)
+                .map(order -> new OrderResponse(order, paymentRepository))
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(new APIRespone(true, "Success", orderResponses));
@@ -630,7 +634,7 @@ public class OrderServiceImpl implements IOrderService {
         if (order.getOrderDetails().stream().noneMatch(orderDetail -> stores.contains(orderDetail.getStore()))) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "Order does not belong to the specified store", ""));
         }
-        return ResponseEntity.ok(new APIRespone(true, "Success", new OrderResponse(order)));
+        return ResponseEntity.ok(new APIRespone(true, "Success", new OrderResponse(order, paymentRepository)));
     }
 
 
@@ -697,7 +701,7 @@ public class OrderServiceImpl implements IOrderService {
             return ResponseEntity.badRequest().body(new APIRespone(false, "No orders found for the specified status and user", ""));
         }
         List<OrderResponse> orderResponses = orders.stream()
-                .map(OrderResponse::new)
+                .map(order -> new OrderResponse(order, paymentRepository))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new APIRespone(true, "Success", orderResponses));
     }
@@ -712,7 +716,7 @@ public class OrderServiceImpl implements IOrderService {
         if (!order.getUser().getId().equals(userId)) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "Order does not belong to the specified user", ""));
         }
-        return ResponseEntity.ok(new APIRespone(true, "Success", new OrderResponse(order)));
+        return ResponseEntity.ok(new APIRespone(true, "Success", new OrderResponse(order, paymentRepository)));
     }
 
 
@@ -729,7 +733,7 @@ public class OrderServiceImpl implements IOrderService {
             return ResponseEntity.badRequest().body(new APIRespone(false, "Order not found", ""));
         }
         Order order = orderOptional.get();
-        OrderResponse orderResponse = new OrderResponse(order);
+        OrderResponse orderResponse = new OrderResponse(order, paymentRepository);
         return ResponseEntity.ok(new APIRespone(true, "Success", orderResponse));
     }
 
@@ -740,7 +744,7 @@ public class OrderServiceImpl implements IOrderService {
         if (orders.isEmpty()) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "No order found", ""));
         }
-        List<OrderResponse> orderResponses = orders.stream().map(OrderResponse::new).collect(Collectors.toList());
+        List<OrderResponse> orderResponses = orders.stream().map(order -> new OrderResponse(order, paymentRepository)).collect(Collectors.toList());
         return ResponseEntity.ok(new APIRespone(true, "Success", orderResponses));
     }
 
@@ -757,7 +761,7 @@ public class OrderServiceImpl implements IOrderService {
         if (order.getOrderDetails().stream().noneMatch(orderDetail -> order.getUser().getId().equals(userId))) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "Order does not belong to the specified user", ""));
         }
-        return ResponseEntity.ok(new APIRespone(true, "Success", new OrderResponse(order)));
+        return ResponseEntity.ok(new APIRespone(true, "Success", new OrderResponse(order, paymentRepository)));
     }
 
     @Override
@@ -826,7 +830,7 @@ public class OrderServiceImpl implements IOrderService {
             return ResponseEntity.badRequest().body(new APIRespone(false, "No order found", ""));
         }
         List<OrderResponse> orderResponses = orders1.stream()
-                .map(OrderResponse::new)
+                .map(order -> new OrderResponse(order, paymentRepository))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new APIRespone(true, "Success", orderResponses));
     }

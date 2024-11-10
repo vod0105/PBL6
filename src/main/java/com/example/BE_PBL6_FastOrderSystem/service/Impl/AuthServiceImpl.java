@@ -13,6 +13,8 @@ import com.example.BE_PBL6_FastOrderSystem.security.user.FoodUserDetails;
 import com.example.BE_PBL6_FastOrderSystem.security.user.FoodUserDetailsService;
 import com.example.BE_PBL6_FastOrderSystem.service.IAuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +25,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StreamUtils;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @Service
@@ -37,6 +45,7 @@ public class AuthServiceImpl implements IAuthService {
     private final RoleRepository roleRepository;
     private final EmailServiceImpl emailService;
     private final OTPServiceImpl otpService;
+    private final ResourceLoader resourceLoader;
 
     @Override
     public ResponseEntity<APIRespone> authenticateUser(String username, String password) {
@@ -230,8 +239,21 @@ public class AuthServiceImpl implements IAuthService {
         }
         user.get().setId(user.get().getId());
         String otp = otpService.generateOTP(email, user.get().getId());
-        emailService.sendEmail(email, "Password reset request", "OTP: " + otp);
+        String template = loadHtmlTemplate("classpath:templates/otp-template.html");
+        String emailContent = template.replace("${otp}", otp).replace("${email}", email);
+        emailService.sendEmail(email, "Lấy lại mật khẩu", emailContent);
         return ResponseEntity.ok(new APIRespone(true, "Success", ""));
+    }
+
+    private String loadHtmlTemplate(String templatePath) {
+        try {
+            Resource resource = resourceLoader.getResource(templatePath);
+            try (InputStream inputStream = resource.getInputStream()) {
+                return StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException("Failed to load template: " + templatePath, e);
+        }
     }
 
     @Override
