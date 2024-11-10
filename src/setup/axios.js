@@ -56,6 +56,7 @@ instance.interceptors.response.use(function (response) {
         // Bắt đầu refresh token nếu chưa refresh
         isRefreshing = true;
         const refreshToken = localStorage.getItem("token"); // Lấy refresh token từ localStorage -> token cũ
+        // localStorage.removeItem('token');
 
         try {
             const response = await axios.post('http://localhost:8080/auth/refresh', { refreshToken });

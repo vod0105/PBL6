@@ -40,11 +40,13 @@ const authReducer = (state = initialState, action) => {
             avatar = action.accountInfo.avatar;
             email = action.accountInfo.email;
             address = action.accountInfo.address;
-            return { ...state, isAuthenticated: true, account: { ...account,id, phoneNumber, fullName, avatar, email, address } };
+            return { ...state, isAuthenticated: true, account: { ...account, id, phoneNumber, fullName, avatar, email, address } };
         case 'SENT_OTP_SUCCESS':
             return { ...state, isSentOTP: true };
         case 'VERIFY_OTP_SUCCESS':
             return { ...state, isVerifyOTPSuccess: true };
+        case 'CHANGE_PASSWORD_USER_SUCCESS':
+            return { ...state };
         default:
             return state;
     }

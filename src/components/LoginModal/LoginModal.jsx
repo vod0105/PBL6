@@ -66,8 +66,8 @@ const LoginModal = () => {
 
   // GG + FB
   const handleSuccessGoogle = async (credentialResponse) => {
-    // dispatch(loginGoogle(credentialResponse.credential));
-    window.location.href = 'https://pbl6-fastordersystem.onrender.com/oauth2/authorization/google';
+    dispatch(loginGoogle(credentialResponse.credential));
+    // window.location.href = 'https://pbl6-fastordersystem.onrender.com/oauth2/authorization/google';
   }
   const handleErrorGoogle = () => {
     alert('Lỗi tùm lum');

@@ -7,6 +7,7 @@ import {
     getUserAccountService,
     sendOTPService,
     verifyOTPService,
+    changePasswordUserService
 
 } from "../../services/authService";
 import { toast } from "react-toastify";
@@ -140,16 +141,16 @@ const loginGoogle = (tokenGoogle) => {
         try {
             console.log('>>> check token: ', tokenGoogle);
 
-            // const res = await loginGoogleService(tokenGoogle);
-            // const isSuccess = res && res.data ? res.data.success : false;
-            // if (isSuccess) {
-            //     dispatch(loginGoogleSuccess());
-            //     localStorage.setItem("token", res.data.data.token);
-            //     toast.success(res.data.message);
-            // } else {
-            //     toast.error(res.data.message || "Đăng nhập thất bại.");
-            //     dispatch(loginGoogleError());
-            // }
+            const res = await loginGoogleService(tokenGoogle);
+            const isSuccess = res && res.data ? res.data.success : false;
+            if (isSuccess) {
+                dispatch(loginGoogleSuccess());
+                localStorage.setItem("token", res.data.data.token);
+                toast.success(res.data.message);
+            } else {
+                toast.error(res.data.message || "Đăng nhập thất bại.");
+                dispatch(loginGoogleError());
+            }
         } catch (error) {
             console.log(error);
             const errorMessage = error.response && error.response.data
@@ -242,7 +243,36 @@ const verifyOTP = (email, otp, newPassword) => {
     };
 };
 
+// Change password
+const changePasswordUserSuccess = () => {
+    return {
+        type: types.CHANGE_PASSWORD_USER_SUCCESS,
+    };
+};
 
+const changePasswordUser = (oldPassword, newPassword) => {
+    return async (dispatch) => {
+        try {
+            const res = await changePasswordUserService(oldPassword, newPassword);
+            const isSuccess = res && res.data ? res.data.success : false;
+            if (isSuccess) {
+                dispatch(changePasswordUserSuccess());
+                toast.success(res.data.message);
+            } else {
+                toast.error(res.data.message || "Thay đổi mật khẩu thất bại.");
+            }
+        } catch (error) {
+            console.log(error);
+            // Xử lý thông báo lỗi nếu có phản hồi từ server
+            const errorMessage = error.response && error.response.data
+                ? error.response.data.message
+                : "Đã xảy ra lỗi khi đổi mật khẩu.";
+
+            // Hiển thị thông báo lỗi
+            toast.error(errorMessage);
+        }
+    };
+};
 export {
     registerNewUser,
     loginUser,
@@ -252,5 +282,6 @@ export {
     getUserAccount,
     sendOTP,
     verifyOTP,
+    changePasswordUser
 
 };

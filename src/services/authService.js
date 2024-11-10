@@ -1,7 +1,7 @@
-import axios from "../setup/axios";
+import instance from "../setup/axios";
 
 const registerNewUserService = (fullName, password, phoneNumber, email, address) => {
-    return axios({ // return response: Object
+    return instance({ // return response: Object
         method: 'post',
         url: '/api/v1/auth/register-user',
         data: {
@@ -10,7 +10,7 @@ const registerNewUserService = (fullName, password, phoneNumber, email, address)
     });
 }
 const loginUserService = (numberPhone, password) => {
-    return axios({ // return response: Object
+    return instance({ // return response: Object
         method: 'post',
         url: '/api/v1/auth/login',
         data: {
@@ -19,13 +19,13 @@ const loginUserService = (numberPhone, password) => {
     });
 }
 const logoutUserService = () => {
-    return axios({
+    return instance({
         method: 'post',
         url: `/api/v1/auth/logout`,
     });
 }
 const loginGoogleService = (tokenGoogle) => {
-    return axios({
+    return instance({
         method: 'post',
         url: `/api/v1/auth/login/google`,
         data: {
@@ -34,22 +34,28 @@ const loginGoogleService = (tokenGoogle) => {
     });
 }
 const getUserAccountService = () => {  // Lấy account infor => Xử lý khi Refresh Page
-    return axios({
+    return instance({
         method: 'get',
         url: `/api/v1/user/auth/profile`,
     });
 }
 // forget password
 const sendOTPService = (email) => {
-    return axios({
+    return instance({
         method: 'post',
         url: `/api/v1/auth/send-otp?email=${email}`,
     });
 }
 const verifyOTPService = (email, otp, newPassword) => {
-    return axios({
+    return instance({
         method: 'post',
         url: `/api/v1/auth/confirm-otp?email=${email}&otp=${otp}&newPassword=${newPassword}`,
+    });
+}
+const changePasswordUserService = (oldPassword, newPassword) => {
+    return instance({
+        method: 'post',
+        url: `/api/v1/user/auth/reset-password?oldPassword=${oldPassword}&newPassword=${newPassword}`,
     });
 }
 
@@ -61,6 +67,7 @@ export {
     getUserAccountService,
     sendOTPService,
     verifyOTPService,
+    changePasswordUserService,
 
 
 }
