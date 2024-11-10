@@ -134,7 +134,7 @@ const AddPromotionToStore = ({ url }) => {
         formData,
         { headers }
       );
-      if (response.data.status) {
+      if (response.data.message) {
         toast.success(response.data.message);
         setTimeout(() => {
           setSelectedStoreId([]); // Đặt lại thành chuỗi rỗng
@@ -142,7 +142,7 @@ const AddPromotionToStore = ({ url }) => {
           navigate("/admin/promotion");
         }, 1500);
       } else {
-        toast.error("aa");
+        toast.error(response.data.message);
       }
     } catch (error) {
       if (error.response) {

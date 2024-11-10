@@ -133,7 +133,7 @@ const AddProducToComBo = ({ url }) => {
         formData,
         { headers }
       );
-      if (response.data.status) {
+      if (response.data.message) {
         toast.success("Add products to combo success  !");
         setTimeout(() => {
           navigate("/admin/Combo");

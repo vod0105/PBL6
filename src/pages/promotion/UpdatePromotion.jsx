@@ -78,7 +78,7 @@ const UpdatePromotion = ({ url }) => {
         formData,
         { headers }
       );
-      if (response.data.status) {
+      if (response.data.message) {
         setData({
           promotionName: "",
           discount: "",

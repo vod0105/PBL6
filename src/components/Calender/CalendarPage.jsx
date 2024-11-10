@@ -10,6 +10,7 @@ import CalendarModalEdit from "./CalendarModalEdit";
 import { StoreContext } from "../../context/StoreContext";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import SoundNotification from "../Notify/Notify";
 
 const convertShiftsToEvents = (shifts) => {
   const staffColors = {
@@ -70,10 +71,9 @@ const CalendarPage = () => {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         };
-        const response = await axios.get(
-          `${url}/api/v1/owner/schedule/store`,
-          { headers }
-        );
+        const response = await axios.get(`${url}/api/v1/owner/schedule/store`, {
+          headers,
+        });
         const fetchedData = response.data.data;
 
         const updatedShifts = fetchedData.map((value) => ({
@@ -189,6 +189,7 @@ const CalendarPage = () => {
   return (
     <div className="x_content">
       {/* Dropdown để chọn nhân viên */}
+      <SoundNotification url={url} />
 
       <div className="calendar-controls" style={{ marginBottom: "20px" }}>
         <div>

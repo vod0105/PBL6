@@ -10,8 +10,7 @@ const Login = ({ url }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const { setIsAuthenticated, setUserData, setIdU } =
-    useContext(StoreContext);
+  const { setIsAuthenticated, setUserData, setIdU } = useContext(StoreContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -20,18 +19,21 @@ const Login = ({ url }) => {
         numberPhone,
         password,
       });
+
       console.log("REsponse OWNER:", response);
       const access_token = response.data.data.token;
       const role = response.data.data.roles[0];
       const id = response.data.data.id;
       localStorage.setItem("access_token", access_token);
       localStorage.setItem("role", role);
-      localStorage.setItem("id",id);
-      setIdU(id);
+      localStorage.setItem("id", id);
+
       setIsAuthenticated(true);
-      setUserData(response.data.data.roles[0]);
+
+      setUserData(role);
+
       // console.log("userData", userData);
-      if (role === "ROLE_ADMIN") navigate("/admin/dashboard");
+      if (role === "ROLE_ADMIN") console.log("Vao if role admin ");
       else if (role === "ROLE_OWNER") navigate("/owner/dashboard");
     } catch (err) {
       setError(

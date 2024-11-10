@@ -5,6 +5,7 @@ import { assets } from "../../assets/assets.js";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useParams } from "react-router-dom";
+import SoundNotification from "../../components/Notify/Notify.jsx";
 const UpdateStaff = ({ url }) => {
   const [image, setImage] = useState(false);
   const [data, setData] = useState({
@@ -78,12 +79,12 @@ const UpdateStaff = ({ url }) => {
     formData.append("storeId", data.storeId);
 
     try {
-      const response = await axios.post(
-        `${url}/api/v1/owner/staff/create`,
+      const response = await axios.put(
+        `${url}/api/v1/owner/staff/update/${id}`,
         formData,
         { headers }
       );
-      if (response.data.status) {
+      if (response.data.message) {
         setData({
           employeeName: "",
           staff_code: "",
@@ -118,7 +119,7 @@ const UpdateStaff = ({ url }) => {
   return (
     <div className="add add-product">
       <div className="cover-left1">
-        <h2 className="">Add Staff </h2>
+        <h2 className="">Update Staff </h2>
         <form className="flex-col" onSubmit={onSubmitHandler}>
           <table className="form-table">
             <tbody>
@@ -199,13 +200,7 @@ const UpdateStaff = ({ url }) => {
           </button>
         </form>
       </div>
-      <div className="cover-right">
-        <img
-          className="img-uploa  d"
-          src={image ? URL.createObjectURL(image) : assets.upload_area}
-          alt=""
-        />
-      </div>
+
       <ToastContainer />
     </div>
   );

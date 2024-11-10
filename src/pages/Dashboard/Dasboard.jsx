@@ -16,6 +16,7 @@ import {
   Legend,
 } from "chart.js";
 import { assets } from "../../assets/assets";
+import Load from "../../components/Load/Load";
 
 // Đăng ký các thành phần biểu đồ
 ChartJS.register(

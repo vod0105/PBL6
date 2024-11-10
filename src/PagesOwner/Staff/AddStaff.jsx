@@ -6,6 +6,7 @@ import "../Staff/AddStaff.css";
 import { assets } from "../../assets/assets.js";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import SoundNotification from "../../components/Notify/Notify.jsx";
 
 const AddStaff = ({ url }) => {
   const [image, setImage] = useState(false);
@@ -56,7 +57,7 @@ const AddStaff = ({ url }) => {
         formData,
         { headers }
       );
-      if (response.data.status) {
+      if (response.data.message) {
         setData({
           employeeName: "",
           staff_code: "",
@@ -90,6 +91,7 @@ const AddStaff = ({ url }) => {
 
   return (
     <div className="add add-product">
+   
       <div className="cover-left1">
         <h2 className="">Add Staff </h2>
         <form className="flex-col" onSubmit={onSubmitHandler}>

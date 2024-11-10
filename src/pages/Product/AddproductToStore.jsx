@@ -200,7 +200,7 @@ const AddProducToStore = ({ url }) => {
         },
         { headers }
       );
-      if (response.data.status) {
+      if (response.data.message) {
         toast.success("Add Product Success!");
         setTimeout(() => {
           setSelectedStoreId("");

@@ -61,7 +61,7 @@ const ChatContent = (props) => {
                 'Authorization': `Bearer ${token}`  // Thêm token vào header
             }
         });
-        if (res.data.status === true) {
+        if (res.data.message === true) {
             setUsers(res.data.data);
             console.log(res.data.data)
         }

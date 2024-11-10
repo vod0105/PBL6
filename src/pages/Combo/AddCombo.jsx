@@ -63,7 +63,7 @@ const AddCombo = ({ url }) => {
         formData,
         { headers }
       );
-      if (response.data.status) {
+      if (response.data.message) {
         setData({
           comboName: "",
           price: "",

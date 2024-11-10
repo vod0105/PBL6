@@ -587,6 +587,7 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBackward, faForward } from "@fortawesome/free-solid-svg-icons";
 import "react-toastify/dist/ReactToastify.css";
+import SoundNotification from "../../components/Notify/Notify";
 
 const OwnerAddProductToStorev2 = ({ url }) => {
   const [data, setData] = useState([]); // Dữ liệu cửa hàng
@@ -781,13 +782,13 @@ const OwnerAddProductToStorev2 = ({ url }) => {
         },
         { headers }
       );
-      if (response.data.status) {
+      if (response.data.message) {
         toast.success("Add Product Success!");
         setTimeout(() => {
           setSelectedStoreId("");
           setSelectedIds([]);
           setSelectedQuantity({});
-          navigate("/admin/product");
+          navigate("/owner/product");
         }, 1500);
       } else {
         toast.error(response.data.message || "Có lỗi xảy ra o else1 .");
@@ -850,6 +851,7 @@ const OwnerAddProductToStorev2 = ({ url }) => {
   return (
     <div className="add-productToStore1">
       {/* Cửa hàng (left) */}
+   
       <div className="left">
         <form onSubmit={onSubmitHandler}>
           <div className="search-store">

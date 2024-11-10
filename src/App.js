@@ -7,7 +7,7 @@ import Login from "./pages/Login/Login";
 import "./App.css";
 import Register from "./pages/Register/Register";
 import { StoreContext } from "./context/StoreContext";
-import ChatButton from "./pages/Chatbox/ChatButton"
+import ChatButton from "./pages/Chatbox/ChatButton";
 import Store from "./pages/store/Store";
 
 import Add from "./pages/store/Add";
@@ -41,7 +41,9 @@ import UpdateStaff from "./PagesOwner/Staff/UpdateStaff";
 import StaffList from "./PagesOwner/Staff/Staff";
 import OwnerAddProductToStorev2 from "./PagesOwner/Product/OwnerAddproductToStore";
 import OrderDetail from "./PagesOwner/Order/OrderDetails";
+import SoundNotification from "./components/Notify/Notify";
 
+const notificationSound = new Audio("/sound/tingting.mp3");
 const App = () => {
   const [showChat, setShowChat] = useState(false);
   const [product, setProduct] = useState(null);
@@ -66,19 +68,21 @@ const App = () => {
   return (
     <div className="app">
       <AutoLogout />
-      {
-        isAuthenticated &&(
-          <ChatButton 
-          showChat = {showChat}
-          setShowChat = {setShowChat}
-          product = {product}
-          setProduct = {setProduct}
-          st = {st}
+      {isAuthenticated && (
+        <ChatButton
+          showChat={showChat}
+          setShowChat={setShowChat}
+          product={product}
+          setProduct={setProduct}
+          st={st}
           url={url}
-          />
-        )
-      }
+        />
+      )}
       <Routes>
+        {/* <Route
+          path="/register"
+          element={!isAuthenticated ? <Register /> : <Navigate to="/" />}
+        /> */}
         {userRole === "ROLE_ADMIN" && (
           <>
             <Route
@@ -102,6 +106,7 @@ const App = () => {
                     <div className="dashboard">
                       {/* <div className="side-bar collapse"><Sidebar /></div> */}
                       <Sidebar />
+                     
                       <div className="dashboard-content">
                         <Dashboard />
                       </div>
@@ -109,10 +114,6 @@ const App = () => {
                   </>
                 )
               }
-            />
-            <Route
-              path="/register"
-              element={!isAuthenticated ? <Register /> : <Navigate to="/" />}
             />
 
             {/* Store  */}
@@ -457,6 +458,7 @@ const App = () => {
             )
           }
         />
+
         {userRole === "ROLE_OWNER" && (
           <>
             <Route
@@ -468,6 +470,7 @@ const App = () => {
                   <>
                     <div className="dashboard">
                       <Sidebar />
+                      
                       <div className="dashboard-content">
                         <OwnerDasboard />
                       </div>

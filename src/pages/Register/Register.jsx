@@ -1,6 +1,6 @@
 import React from "react";
 import "../../styles/Login.css";
-const Register = () => {
+const Register = ({ url }) => {
   return (
     <div>
       <div>

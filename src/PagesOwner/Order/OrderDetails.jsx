@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBackward } from "@fortawesome/free-solid-svg-icons";
 import { faForward } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
+import SoundNotification from "../../components/Notify/Notify.jsx";
 
 const OrderDetail = ({ url }) => {
   const { Id } = useParams();
@@ -87,6 +88,7 @@ const OrderDetail = ({ url }) => {
 
   return (
     <div className="product">
+   
       <div className="content">
         <div
           className="heading"

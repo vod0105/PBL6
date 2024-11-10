@@ -13,6 +13,7 @@ import { faForward } from "@fortawesome/free-solid-svg-icons";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import SoundNotification from "../../components/Notify/Notify.jsx";
 const OwnerProduct = ({ url }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -104,6 +105,7 @@ const OwnerProduct = ({ url }) => {
 
   return (
     <div className="product">
+      
       <div className="content">
         <div
           className="heading"

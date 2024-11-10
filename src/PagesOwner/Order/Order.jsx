@@ -6,7 +6,8 @@ import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBackward, faForward } from "@fortawesome/free-solid-svg-icons";
-
+import SoundNotification from "../../components/Notify/Notify.jsx";
+const notificationSound = new Audio("/sound/tingting.mp3");
 const Order = ({ url }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,33 +18,6 @@ const Order = ({ url }) => {
   const [totalPages, setTotalPages] = useState(0);
   const itemsPerPage = 6;
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   const fetchData2 = async () => {
-  //     try {
-  //       const tk = localStorage.getItem("access_token");
-  //       const headers = {
-  //         Authorization: `Bearer ${tk}`,
-  //         "Content-Type": "application/json",
-  //       };
-  //       const response = await axios.get(
-  //         `${url}/api/v1/owner/order/order/status?status=${orderStatus}&page=0&size=6`,
-  //         { headers }
-  //       );
-
-  //       setTotalPages(response.data.page); // Giả sử API trả về tổng số trang
-  //       console.log(response.data.page);
-  //       console.log(
-  //         `${url}/api/v1/owner/order/order/status?status=${orderStatus}&page=0&size=6`
-  //       );
-  //     } catch (err) {
-  //       setError(err);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   fetchData2();
-  // }, [orderStatus]);
 
   const fetchData = async () => {
     try {
@@ -65,7 +39,7 @@ const Order = ({ url }) => {
         }&size=${itemsPerPage}`
       );
       setData(response.data.data);
-      setTotalPages(response.data.page); 
+      setTotalPages(response.data.page);
     } catch (err) {
       setError(err);
     } finally {
@@ -73,9 +47,31 @@ const Order = ({ url }) => {
     }
   };
 
+  //
+  useEffect(() => {
+    // Thiết lập hẹn giờ để phát âm thanh sau 3 giây
+    const timer = setTimeout(() => {
+      const speech = new SpeechSynthesisUtterance("Có đơn hàng mới");
+      speech.lang = "vi-VN";
+      window.speechSynthesis.speak(speech);
+      notificationSound.play().catch((error) => {
+        console.error("Lỗi phát âm thanh:", error);
+      });
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
+  //
+
+  //thong bao don hang
+
+  useEffect(() => {});
+
+  //
+
   useEffect(() => {
     fetchData();
-  }, [currentPage, orderStatus]); // Fetch lại dữ liệu khi trang hoặc trạng thái đơn hàng thay đổi
+  }, [currentPage, orderStatus]);
 
   const handleRedirect = (Id) => {
     navigate(`/owner/OrderDetails/${Id}`);
@@ -129,6 +125,7 @@ const Order = ({ url }) => {
     : [];
   return (
     <div className="product">
+      <SoundNotification url={url} />
       <div className="content">
         <div
           className="heading"
@@ -268,3 +265,25 @@ const Order = ({ url }) => {
 };
 
 export default Order;
+// import React, { useEffect } from "react";
+
+// // Khởi tạo đối tượng Audio
+// const notificationSound = new Audio("/sound/tingting.mp3");
+
+// const Order = () => {
+//   useEffect(() => {
+//     // Thiết lập hẹn giờ để phát âm thanh sau 3 giây
+//     const timer = setTimeout(() => {
+//       notificationSound.play().catch((error) => {
+//         console.error("Lỗi phát âm thanh:", error);
+//       });
+//     }, 3000);
+
+//     // Hủy timer nếu component bị unmount
+//     return () => clearTimeout(timer);
+//   }, []);
+
+//   return <div>Đang phát âm thanh sau 3 giây...</div>;
+// };
+
+// export default Order;

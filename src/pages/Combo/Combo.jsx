@@ -14,6 +14,7 @@ import { faForward } from "@fortawesome/free-solid-svg-icons";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import Load from "../../components/Load/Load.jsx";
 
 const Combo = ({ url }) => {
   const [data, setData] = useState([]);
@@ -72,7 +73,7 @@ const Combo = ({ url }) => {
   if (loading) {
     return (
       <p>
-        <LoadingSpinner />
+        <Load />
       </p>
     );
   }

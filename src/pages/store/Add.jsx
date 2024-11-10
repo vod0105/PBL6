@@ -4,6 +4,7 @@ import { assets } from "../../assets/assets.js";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+
 const Add = ({ url }) => {
   const navigate = useNavigate();
   const [image, setImage] = useState(false);
@@ -85,7 +86,7 @@ const Add = ({ url }) => {
         formData,
         { headers }
       );
-      if (response.data.status) {
+      if (response.data.message) {
         setData({
           name: "",
           PhoneNumber: "",
@@ -245,14 +246,7 @@ const Add = ({ url }) => {
           </button>
         </form>
       </div>
-      <div className="cover-right">
-        {/* <img src={assets.store} alt="" /> */}
-        <img
-          className="img-upload"
-          src={image ? URL.createObjectURL(image) : assets.upload_area}
-          alt=""
-        />
-      </div>
+      <div className="cover-right"></div>
 
       <ToastContainer />
     </div>

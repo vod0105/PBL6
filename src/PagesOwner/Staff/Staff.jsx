@@ -13,6 +13,7 @@ import { faForward } from "@fortawesome/free-solid-svg-icons";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import SoundNotification from "../../components/Notify/Notify.jsx";
 const StaffList = ({ url }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,9 +22,35 @@ const StaffList = ({ url }) => {
   const [searchTerm, setSearchTerm] = useState(""); // Trạng thái lưu từ khóa tìm kiếm
   const itemsPerPage = 4; // Số lượng phần tử mỗi trang
   const navigate = useNavigate();
+
+  const API_KEY = "5b3ce3597851110001cf62481607a0c61799494f8d6079e5c19daa68";
+
+  const getRoute = async () => {
+    try {
+      const response = await axios.post(
+        "https://api.openrouteservice.org/v2/directions/driving-car",
+        {
+          coordinates: [
+            [-0.1278, 51.5074], // London (longitude, latitude)
+            [-0.1537, 51.5174], // Location khác
+          ],
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${API_KEY}`,
+          },
+        }
+      );
+      console.log(response.data); // In ra kết quả từ API
+    } catch (error) {
+      console.error("Error fetching route:", error);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
+        getRoute();
         const token = localStorage.getItem("access_token");
         const headers = {
           Authorization: `Bearer ${token}`,
@@ -100,6 +127,7 @@ const StaffList = ({ url }) => {
 
   return (
     <div className="product">
+     
       <div className="content">
         <div
           className="heading"

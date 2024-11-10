@@ -17,6 +17,7 @@ import {
   Legend,
 } from "chart.js";
 import { assets } from "../../assets/assets";
+import SoundNotification from "../../components/Notify/Notify";
 
 // Đăng ký các thành phần biểu đồ
 ChartJS.register(
@@ -317,6 +318,7 @@ const OwnerDasboard = () => {
 
   return (
     <div className="dashboard">
+      <SoundNotification url={url} />
       <div className="content-header">
         <div className="list">
           <div className="item">

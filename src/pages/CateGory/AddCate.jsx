@@ -69,7 +69,7 @@ const AddCate = ({ url }) => {
         formData,
         { headers }
       );
-      if (response.data.status) {
+      if (response.data.success) {
         setData({
           categoryName: "",
           description: "",
