@@ -5,13 +5,13 @@ server:
       multipart-enabled: true
       max-file-size: 10MB
       max-request-size: 10MB
-  address: 10.10.26.244
+  address: 192.168.1.30
 
 spring:
   application:
     name: BE_PBL6_FastOrderSystem
   datasource:
-    url: jdbc:mysql://localhost:3306/nhat
+    url: jdbc:mysql://localhost:3306/db_pbl6
     username: root
     password: 123456789
     driver-class-name: com.mysql.cj.jdbc.Driver

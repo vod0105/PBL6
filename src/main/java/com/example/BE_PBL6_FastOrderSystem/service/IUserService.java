@@ -33,7 +33,6 @@ public interface IUserService {
     ResponseEntity<APIRespone> searchByName(String name);
     ResponseEntity<APIRespone> getByid(Long id);
     ResponseEntity<APIRespone> countOrderByMonth();
-
     List<UserResponse> getSearchByPhoneNumber(String phoneNumber);
-
+    ResponseEntity<APIRespone> resetPassword(Long userId, String oldPassword, String newPassword);
 }

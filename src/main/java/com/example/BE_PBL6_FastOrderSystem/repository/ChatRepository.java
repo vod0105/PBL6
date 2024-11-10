@@ -13,6 +13,7 @@ import java.util.List;
 public interface ChatRepository extends JpaRepository<Chat, Long> {
     List<Chat> findAllBySender(User sender);
     List<Chat> findAllByReceiver(User receiver);
+    @Query("SELECT c FROM Chat c WHERE (c.sender = ?1 AND c.receiver = ?2) OR (c.sender = ?3 AND c.receiver = ?4)")
     List<Chat> findAllBySenderAndReceiverOrSenderAndReceiver(User sender1, User receiver1, User sender2, User receiver2);
 
     @Query("SELECT u FROM User u WHERE u.id IN (" +

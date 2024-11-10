@@ -231,4 +231,19 @@ public class UserServiceImpl implements IUserService {
                 .collect(Collectors.toList());
         return userResponses;
     }
+
+    @Override
+    public ResponseEntity<APIRespone> resetPassword(Long userId, String oldPassword, String newPassword) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "User not found", ""));
+        }
+        User user = optionalUser.get();
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "Old password is incorrect", ""));
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        return ResponseEntity.ok(new APIRespone(true, "Password reset successfully", ""));
+    }
 }

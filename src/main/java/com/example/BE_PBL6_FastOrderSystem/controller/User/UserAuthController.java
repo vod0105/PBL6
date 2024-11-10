@@ -34,6 +34,12 @@ public class UserAuthController {
         UserRequest userRequest1 = new UserRequest(fullName, avatar, email, address);
         return userService.updateUser(userId, userRequest1);
     }
+    @PostMapping("/reset-password")
+    public ResponseEntity<APIRespone> resetPassword(@RequestParam("oldPassword") String oldPassword,
+                                                    @RequestParam("newPassword") String newPassword) {
+        Long userId = FoodUserDetails.getCurrentUserId();
+        return userService.resetPassword(userId, oldPassword, newPassword);
+    }
 
     @PutMapping("/profiles/updates")
     public ResponseEntity<APIRespone> updateUsers(@RequestBody UserRequestV2 userRequest) {
