@@ -40,7 +40,7 @@ public class OrderResponse {
         this.createdAt = order.getCreatedAt();
         this.updatedAt = order.getUpdatedAt();
         this.discountCode = (order.getVoucher() != null) ? order.getVoucher().getCode() : "Unknown Discount Code";
-        this.isFeedBack = order.getFeedBack();
+        this.isFeedBack = order.getFeedback();
         this.orderDetails = order.getOrderDetails().stream().map(OrderDetailResponse::new).collect(Collectors.toList());
     }
 }

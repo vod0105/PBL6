@@ -5,7 +5,7 @@ server:
       multipart-enabled: true
       max-file-size: 10MB
       max-request-size: 10MB
-  address: 192.168.1.30
+  address: 192.168.1.17
 
 spring:
   application:

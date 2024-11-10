@@ -82,7 +82,7 @@ public class RateServiceImpl implements IRateService {
                 }
 
                 orders.forEach(order -> {
-                    order.setFeedBack(true);
+                    order.setFeedback(true);
                     orderRepository.save(order);
                 });
 
@@ -132,7 +132,7 @@ public class RateServiceImpl implements IRateService {
                 }
 
                 orders.forEach(order -> {
-                    order.setFeedBack(true);
+                    order.setFeedback(true);
                     orderRepository.save(order);
                 });
 

@@ -30,8 +30,8 @@ public class Order {
     private Double latitude;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    @Column(name = "feed_back")
-    private Boolean feedBack;
+    @Column(name = "feed_back",nullable = false)
+    private Boolean feedback = false;
     @ManyToOne
     @JoinColumn(name = "discount_code_id")
     private Voucher voucher;
@@ -61,7 +61,7 @@ public class Order {
                 ", latitude=" + latitude +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
-                ", feedBack=" + feedBack +
+                ", feedBack=" + feedback +
                 ", voucher=" + voucher +
                 '}';
     }
