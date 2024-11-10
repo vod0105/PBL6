@@ -37,12 +37,12 @@ public class User {
     @Column(name = "is_approved")
     private Boolean isApproved = (Boolean) false;
     @Column(name = "is_active")
-    private Boolean isActive;
+    private Boolean isActive = (Boolean) true;
     @Column(name = "is_busy")
     private Boolean isBusy = (Boolean) false;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private Boolean accountLocked;
+    private Boolean accountLocked = (Boolean) false;
     private Integer rewardPoints;
     @OneToMany(mappedBy = "user")
     private List<UserVoucher> vouchers;

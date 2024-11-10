@@ -21,7 +21,7 @@ public class OTP {
     private LocalDateTime updatedAt;
 
     @OneToOne
-    @JoinColumn(name = "user_id", insertable = false, updatable = false) // để tránh việc tạo cột user_id trong bảng OTP
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
 
     @PrePersist

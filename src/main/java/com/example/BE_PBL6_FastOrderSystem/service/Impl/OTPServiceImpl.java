@@ -1,6 +1,8 @@
 package com.example.BE_PBL6_FastOrderSystem.service.Impl;
 
+import com.example.BE_PBL6_FastOrderSystem.entity.CodeShipper;
 import com.example.BE_PBL6_FastOrderSystem.entity.OTP;
+import com.example.BE_PBL6_FastOrderSystem.repository.CodeShipperRepository;
 import com.example.BE_PBL6_FastOrderSystem.repository.OTPRepository;
 import com.example.BE_PBL6_FastOrderSystem.service.IOTPService;
 import com.example.BE_PBL6_FastOrderSystem.utils.OTPGenerator;
@@ -13,9 +15,11 @@ import java.util.Optional;
 @Service
 public class OTPServiceImpl implements IOTPService {
     private final OTPRepository otpRepository;
+    private final CodeShipperRepository codeShipperRepository;
 
-    public OTPServiceImpl(OTPRepository otpRepository) {
+    public OTPServiceImpl(OTPRepository otpRepository, CodeShipperRepository codeShipperRepository) {
         this.otpRepository = otpRepository;
+        this.codeShipperRepository = codeShipperRepository;
     }
 
     @Override
@@ -54,5 +58,29 @@ public class OTPServiceImpl implements IOTPService {
         }
         return false;
     }
-
+    @Override
+    public String generateCodeShipper() {
+        String code = OTPGenerator.generateOTP(6);
+        return code;
+    }
+    @Override
+    public boolean verifyCodeShipper(String code) {
+        Optional<CodeShipper> codeShipperOptional = codeShipperRepository.findByCode(code);
+        if (codeShipperOptional.isPresent()) {
+            CodeShipper codeShipper = codeShipperOptional.get();
+            if (codeShipper.getStatus()) {
+                return true;
+            }
+        }
+        return false;
+    }
+   @Override
+   public void useCodeShipper(String code) {
+        Optional<CodeShipper> codeShipperOptional = codeShipperRepository.findByCode(code);
+        if (codeShipperOptional.isPresent()) {
+            CodeShipper codeShipper = codeShipperOptional.get();
+            codeShipper.setStatus(false);
+            codeShipperRepository.save(codeShipper);
+        }
+    }
 }

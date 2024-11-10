@@ -2,8 +2,10 @@ package com.example.BE_PBL6_FastOrderSystem.service.Impl;
 
 import com.example.BE_PBL6_FastOrderSystem.entity.Role;
 import com.example.BE_PBL6_FastOrderSystem.entity.User;
+import com.example.BE_PBL6_FastOrderSystem.repository.CodeShipperRepository;
 import com.example.BE_PBL6_FastOrderSystem.repository.RoleRepository;
 import com.example.BE_PBL6_FastOrderSystem.repository.UserRepository;
+import com.example.BE_PBL6_FastOrderSystem.request.ShipperRequest;
 import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
 import com.example.BE_PBL6_FastOrderSystem.response.JwtResponse;
 import com.example.BE_PBL6_FastOrderSystem.security.jwt.JwtUtils;
@@ -35,7 +37,6 @@ public class AuthServiceImpl implements IAuthService {
     private final RoleRepository roleRepository;
     private final EmailServiceImpl emailService;
     private final OTPServiceImpl otpService;
-    private final FoodUserDetailsService userDetailsService;
 
     @Override
     public ResponseEntity<APIRespone> authenticateUser(String username, String password) {
@@ -104,40 +105,58 @@ public class AuthServiceImpl implements IAuthService {
         return ResponseEntity.ok(new APIRespone(true, "Success", ""));
     }
     @Override
-    public ResponseEntity<APIRespone> registerShipper(User user) {
-        if (userRepository.existsByPhoneNumber(user.getPhoneNumber())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new APIRespone(false, user.getPhoneNumber() + " already exists", ""));
+    public ResponseEntity<APIRespone> registerShipper(ShipperRequest shipperRequest) {
+        String code = shipperRequest.getCode();
+        boolean verifiedCode = otpService.verifyCodeShipper(code);
+        if (!verifiedCode) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIRespone(false, "Invalid verification code", ""));
         }
-        if (userRepository.existsByEmail(user.getEmail())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new APIRespone(false, user.getEmail() + " already exists", ""));
+
+        String numberPhone = shipperRequest.getPhoneNumber();
+
+        if (userRepository.existsByPhoneNumber(numberPhone)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new APIRespone(false, numberPhone + " already exists", ""));
         }
-        if (user.getPhoneNumber() == null || !user.getPhoneNumber().matches("\\d{10}") || user.getPhoneNumber().indexOf("0") != 0) {
+        String email = shipperRequest.getEmail();
+        if (userRepository.existsByEmail(email)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new APIRespone(false, email + " already exists", ""));
+        }
+        if (numberPhone == null || !numberPhone.matches("\\d{10}") || numberPhone.indexOf("0") != 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIRespone(false, "Phone number is required", ""));
         }
-        if (user.getPassword() == null || user.getPassword().length() < 8) {
+        String password = shipperRequest.getPassword();
+        if (password == null || password.length() < 8) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIRespone(false, "Password must be at least 8 characters long", ""));
         }
-        if (user.getFullName() == null) {
+        String fullName = shipperRequest.getFullName();
+        if (fullName == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIRespone(false, "Full name is required", ""));
         }
-        if (user.getEmail() == null || !user.getEmail().matches("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@([a-zA-Z0-9-]+\\.)+(com|net|org|edu|gov|mil|int)$")) {
+        if (email == null || !email.matches("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@([a-zA-Z0-9-]+\\.)+(com|net|org|edu|gov|mil|int)$")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIRespone(false, "Email is required", ""));
         }
-        if (user.getAddress() == null || !user.getAddress().matches("^[\\p{L}0-9\\s,.-]+$")) {
+        String address = shipperRequest.getAddress();
+        if (address == null || !address.matches("^[\\p{L}0-9\\s,.-]+$")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIRespone(false, "Address is required and must contain only letters, numbers, spaces, commas, periods, and hyphens", ""));
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User user = new User();
+        user.setFullName(fullName);
+        user.setEmail(email);
+        user.setPhoneNumber(numberPhone);
+        user.setAddress(address);
+        user.setPassword(passwordEncoder.encode(password));
         Optional<Role> optionalRole = roleRepository.findByName("ROLE_SHIPPER");
         if (optionalRole.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIRespone(false, "ROLE_SHIPPER not found", ""));
         }
         Role userRole = optionalRole.get();
         user.setRole(userRole);
-        user.setIsApproved(Boolean.valueOf(false));
         userRepository.save(user);
+        // set code is used
+        otpService.useCodeShipper(code);
+
         return ResponseEntity.ok(new APIRespone(true, "Success", ""));
     }
-
     @Override
     public ResponseEntity<APIRespone> registerAdmin(User user) {
         if (userRepository.existsByPhoneNumber(user.getPhoneNumber())) {
