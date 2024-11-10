@@ -13,8 +13,7 @@ import java.util.List;
 public interface ChatRepository extends JpaRepository<Chat, Long> {
     List<Chat> findAllBySender(User sender);
     List<Chat> findAllByReceiver(User receiver);
-    @Query("SELECT c FROM Chat c WHERE (c.sender = ?1 AND c.receiver = ?2) OR (c.sender = ?3 AND c.receiver = ?4)")
-    List<Chat> findAllBySenderAndReceiverOrSenderAndReceiver(User sender1, User receiver1, User sender2, User receiver2);
+    List<Chat> findAllBySenderAndReceiverOrSenderAndReceiverOrderByLocalTime(User sender1, User receiver1, User sender2, User receiver2);
 
     @Query("SELECT u FROM User u WHERE u.id IN (" +
             "SELECT DISTINCT c.receiver.id FROM Chat c WHERE c.sender.id = :userId " +
@@ -22,7 +21,7 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
             "SELECT DISTINCT c.sender.id FROM Chat c WHERE c.receiver.id = :userId " +
             ") " +
             "ORDER BY (" +
-            "SELECT MAX(c.local_time) FROM Chat c " +
+            "SELECT MAX(c.localTime) FROM Chat c " +
             "WHERE (c.sender.id = u.id AND c.receiver.id = :userId) " +
             "   OR (c.sender.id = :userId AND c.receiver.id = u.id) " +
             ") DESC")

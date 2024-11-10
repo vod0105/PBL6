@@ -103,9 +103,6 @@ private final StoreRepository storeRepository;
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIRespone(false, "Staff not found", null));
         }
         staff.setEmployeeName(request.getEmployeeName());
-        if (staffRepository.findByStaff_code(request.getStaff_code()).isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIRespone(false, "Staff code already exists", null));
-        }
         staff.setStaff_code(request.getStaff_code());
         staff.setDepartment(request.getDepartment());
         List<Store> stores = storeRepository.findAllByManagerId(OnerId);

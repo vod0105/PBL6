@@ -25,7 +25,7 @@ public class Chat {
     @JoinColumn(name = "receiver", nullable = false)
     User receiver;
     String message;
-    LocalDateTime local_time;
+    LocalDateTime localTime;
     @Column(nullable = false, columnDefinition = "boolean default false")
     Boolean isRead = false;
     @Lob
@@ -33,6 +33,6 @@ public class Chat {
     private String image;
     @PrePersist
     protected void onCreate() {
-        local_time = LocalDateTime.now();
+        localTime = LocalDateTime.now();
     }
 }

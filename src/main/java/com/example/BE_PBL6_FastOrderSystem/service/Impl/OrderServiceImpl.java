@@ -189,6 +189,11 @@ public class OrderServiceImpl implements IOrderService {
         }
         AnnounceUser announceUser  = new AnnounceUser(userId,"Thông báo đơn hàng ","Bạn đặt hàng "+orderCode +" thành công . Tổng giá trị " + totalAmount);
         announceRepository.save(announceUser);
+        for (Store  store : stores){
+            User owner = storeRepository.findById(store.getStoreId()).get().getManager();
+            AnnounceUser announceUser1  = new AnnounceUser(owner.getId(),"Thông báo xác nhận đơn hàng đơn hàng ","Có đơn hàng mới và bạn cần xác nhận đơn đặt hàng "+orderCode +" của khách hàng .");
+            announceRepository.save(announceUser1);
+        }
         return ResponseEntity.ok(new APIRespone(true, "Order placed successfully", ""));
     }
 
@@ -332,6 +337,9 @@ public class OrderServiceImpl implements IOrderService {
         }
         AnnounceUser announceUser  = new AnnounceUser(userId,"Thông báo đơn hàng ","Bạn đặt hàng "+orderCode +" thành công . Tổng giá trị " + totalAmount);
         announceRepository.save(announceUser);
+        User owner = storeRepository.findById(storeId).get().getManager();
+        AnnounceUser announceUser1  = new AnnounceUser(owner.getId(),"Thông báo xác nhận đơn hàng đơn hàng ","Có đơn hàng mới và bạn cần xác nhận đơn đặt hàng "+orderCode +" của khách hàng .");
+        announceRepository.save(announceUser1);
         return ResponseEntity.ok(new APIRespone(true, "Order placed successfully", ""));
     }
 
@@ -1113,7 +1121,6 @@ public class OrderServiceImpl implements IOrderService {
         }
         return ResponseEntity.ok(new APIRespone(true, "Success", orderStores));
     }
-
     @Override
     public ResponseEntity<APILazyOrders> getAllOrderByStatusOfStore1(String statusName, Long ownerId, int page, int size) {
         System.out.println(page);
