@@ -43,7 +43,7 @@ public class OrderResponse {
         this.totalAmount = order.getTotalAmount();
         this.paymentRepository = paymentRepository;
         Optional<Payment> payment = paymentRepository.findByOrderCode(order.getOrderCode());
-        if (payment != null) {
+        if (payment.isPresent()) {
             this.paymentMethod = payment.get().getPaymentMethod().getName();
             this.statusPayment = payment.get().getStatus();
         } else {
