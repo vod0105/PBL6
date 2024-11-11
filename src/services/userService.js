@@ -265,6 +265,13 @@ const fetchFavouriteProducsService = (idUser) => {
         url: `http://127.0.0.1:5000/cross-sell/${idUser}`,
     });
 }
+const saveVoucherService = (voucherId) => {
+    return instance({
+        method: 'post',
+        url: `/api/v1/user/voucher/apply?voucherId=${voucherId}`,
+    });
+}
+
 
 export {
     updateProfileService,
@@ -286,5 +293,5 @@ export {
     decreaseOneQuantityService,
     fetchVouchersService,
     fetchFavouriteProducsService,
-
+    saveVoucherService,
 }

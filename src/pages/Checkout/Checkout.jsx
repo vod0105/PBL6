@@ -36,32 +36,61 @@ const Checkout = () => {
     const listCombosSelectInCart = useSelector((state) => state.user.listCombosSelectInCart);
     const selectedStore = useSelector((state) => state.user.selectedStore);
 
-    // useEffect(() => { 
-    //     if (listVouchers && listVouchers.length > 0) {
-    //         setSelectedVoucherId(listVouchers[0].voucherId);
-    //     }
-    // }, [listVouchers]);
-
     const accountInfo = useSelector((state) => {
         return state.auth.account;
     });
     // Voucher
-    const listVouchers = useSelector((state) => state.user.listVouchers);
+    const listVouchersUser = useSelector((state) => state.user.listVouchersUser);
     const [selectedVoucherId, setSelectedVoucherId] = useState("0");
     const [selectedVoucher, setSelectedVoucher] = useState(null);
     const [promotion, setPromotion] = useState(0);
 
-    // useEffect(() => { // Mới vô chọn mã đầu tiên
-    //     if (listVouchers && listVouchers.length > 0) {
-    //         setSelectedVoucherId(listVouchers[0].voucherId);
+    // Lọc các voucher hợp lệ theo điều kiện selectedStore và used = false
+    const [filteredVouchers, setFilteredVouchers] = useState([]);
+    useEffect(() => {
+        // console.log('listVouchersUser: ', listVouchersUser);
+        if (listVouchersUser && listVouchersUser.length > 0) {
+            const vouchers = listVouchersUser ? (listVouchersUser.filter(
+                (voucher) => voucher.storeId.includes(+selectedStore.storeId) && !voucher.used
+            )) : [];
+            // console.log('vouchers: ', vouchers);
+            setFilteredVouchers(vouchers)
+        }
+    }, [listVouchersUser]);
+    // const filteredVouchers = listVouchersUser ? (listVouchersUser.filter(
+    //     (voucher) => voucher.storeId.includes(selectedStore.storeId) && !voucher.used
+    // )) : [];
+
+    // useEffect(() => {
+    //     // Nếu có voucher hợp lệ, chọn mã đầu tiên từ `filteredVouchers`
+    //     if (filteredVouchers && filteredVouchers.length > 0) {
+    //         setSelectedVoucherId(filteredVouchers[0].voucherId);
+    //         setSelectedVoucher(filteredVouchers[0]);
+    //         setPromotion(+filteredVouchers[0].discountPercent);
+    //     } else {
+    //         // Nếu không có voucher hợp lệ, đặt các giá trị về mặc định
+    //         setSelectedVoucherId("0");
+    //         setSelectedVoucher(null);
+    //         setPromotion(0);
     //     }
-    // }, [listVouchers]);
+    // }, [filteredVouchers]);
 
     useEffect(() => {
-        const voucher = listVouchers && listVouchers.length > 0 ? listVouchers.find(voucher => voucher.voucherId === selectedVoucherId) : {};
-        setSelectedVoucher(voucher ? voucher : {});
-        // console.log('>>> selectedDrink: ', selectedDrink);
-    }, [selectedVoucherId, listVouchers]);
+        // Cập nhật `selectedVoucher` và `promotion` khi `selectedVoucherId` thay đổi
+        const voucher = filteredVouchers.find(voucher => voucher.voucherId === +selectedVoucherId);
+        if (voucher) {
+            setSelectedVoucher(voucher);
+            setPromotion(+voucher.discountPercent);
+        } else { //Ko chọn voucher
+            setSelectedVoucher(null);
+            setPromotion(0);
+        }
+    }, [selectedVoucherId, filteredVouchers]);
+    // useEffect(() => { // Mới vô chọn mã đầu tiên
+    //     if (listVouchersUser && listVouchersUser.length > 0) {
+    //         setSelectedVoucherId(listVouchersUser[0].voucherId);
+    //     }
+    // }, [listVouchersUser]);
 
     const [fullname, setFullname] = useState(accountInfo.fullName);
     const [phonenumber, setPhonenumber] = useState(accountInfo.phoneNumber);
@@ -484,19 +513,17 @@ const Checkout = () => {
                             </div>
                         </div>
                         <div className="voucher-container">
-                            <h3>Chọn mã khuyến mãi</h3>
+                            <h3>Chọn voucher</h3>
                             <Form.Select
                                 className="voucher-select"
                                 value={selectedVoucherId}
                                 onChange={(e) => {
                                     setSelectedVoucherId(e.target.value);
-                                    const voucher = listVouchers && listVouchers.length > 0 ? listVouchers.find(voucher => +voucher.voucherId === +e.target.value) : null;
+                                    const voucher = filteredVouchers.find(voucher => +voucher.voucherId === +e.target.value);
                                     if (voucher) {
                                         setSelectedVoucher(voucher);
                                         setPromotion(+voucher.discountPercent);
-                                        // console.log('giảm giá: ', voucher.discountPercent);
                                     } else { // Không chọn mã
-                                        // console.log('giảm giá: 0');
                                         setSelectedVoucher(null);
                                         setPromotion(0);
                                     }
@@ -504,7 +531,7 @@ const Checkout = () => {
                             >
                                 <option value="0">Không chọn</option>
                                 {
-                                    listVouchers && listVouchers.length > 0 && listVouchers.map((voucher, index) => (
+                                    filteredVouchers && filteredVouchers.length > 0 && filteredVouchers.map((voucher, index) => (
                                         <option key={index} value={voucher.voucherId}>
                                             {voucher.code} ({Number(voucher.discountPercent)}%)
                                         </option>
@@ -519,7 +546,7 @@ const Checkout = () => {
                                 <span>{distance} (km)</span>
                             </div>
                             <div className="fee-container">
-                                <span>Chi phí: </span>
+                                <span>Chi phí giao hàng: </span>
                                 <span>{Number(shippingFee).toLocaleString('vi-VN')} đ</span>
                             </div>
                             <div className="promotion-container">

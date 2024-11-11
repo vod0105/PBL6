@@ -36,7 +36,6 @@ const Cart = () => {
   useEffect(() => {
     if (Array.isArray(listProductsInCart) && Array.isArray(listCombosInCart)) {
       const allItems = [...listProductsInCart, ...listCombosInCart];
-      console.log('allItems: ', allItems);
 
       if (allItems.length > 0) {
         const firstStore = allItems.find((item) => item.product || item.combo);
@@ -113,10 +112,7 @@ const Cart = () => {
 
   const handlePlaceOrder = () => {
     if (
-      !Array.isArray(listProductsInCart) ||
-      listProductsInCart.length === 0 ||
-      !Array.isArray(listCombosInCart) ||
-      listCombosInCart.length === 0
+      !Array.isArray(listProductsInCart) && listProductsInCart.length === 0 && !Array.isArray(listCombosInCart) && listCombosInCart.length === 0
     ) {
       toast.error('Không có sản phẩm trong giỏ hàng!');
     } else {

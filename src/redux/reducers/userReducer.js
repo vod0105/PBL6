@@ -12,7 +12,7 @@ const initialState = {
     comboDetailBuyNow: {},
     allOrders: {},
     orderInTransit: {},
-    listVouchers: {},
+    listVouchersUser: {},
     listFavouriteProducts: [], // list sản phẩm yêu thích của user => Nếu login mới có
 
 };
@@ -37,6 +37,7 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 productDetailBuyNow: action.productDetail,
+                selectedStore: action.dataSelectedStore,
                 isBuyNow: true,
                 isBuyNowCombo: false,
             }
@@ -44,6 +45,7 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 comboDetailBuyNow: action.comboDetail,
+                selectedStore: action.dataSelectedStore,
                 isBuyNow: false,
                 isBuyNowCombo: true,
             }
@@ -109,12 +111,16 @@ const userReducer = (state = initialState, action) => {
         case 'FETCH_VOUCHER_SUCCESS':
             return {
                 ...state,
-                listVouchers: action.dataVouchers
+                listVouchersUser: action.dataVouchers
             };
         case 'FETCH_FAVOURITE_PRODUCT_SUCCESS':
             return {
                 ...state,
                 listFavouriteProducts: action.dataProducts
+            };
+        case 'SAVE_VOUCHER_SUCCESS':
+            return {
+                ...state,
             };
         default:
             return state;

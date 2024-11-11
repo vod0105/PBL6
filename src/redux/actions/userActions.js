@@ -16,7 +16,8 @@ import {
     fetchOrderInTransitByOrderCodeService,
     fetchShipperDetailByIdService,
     fetchVouchersService,
-    fetchFavouriteProducsService
+    fetchFavouriteProducsService,
+    saveVoucherService
 } from "../../services/userService";
 import { fetchStoreByIdService } from "../../services/storeService";
 import { fetchProductByIdService } from "../../services/productService";
@@ -184,7 +185,8 @@ const fetchProductsInCart = () => {
 const placeOrderUsingBuyNow = (product, finalPrice, quantity, store, size) => {
     return {
         type: types.BUY_NOW_OPTION,
-        productDetail: { product, finalPrice, quantity, store, size }
+        productDetail: { product, finalPrice, quantity, store, size },
+        dataSelectedStore: store
     };
 };
 
@@ -192,7 +194,8 @@ const placeOrderUsingBuyNow = (product, finalPrice, quantity, store, size) => {
 const placeOrderComboUsingBuyNow = (combo, unitPrice, quantity, store, size, drink) => {
     return {
         type: types.BUY_NOW_COMBO_OPTION,
-        comboDetail: { combo, unitPrice, quantity, store, size, drink }
+        comboDetail: { combo, unitPrice, quantity, store, size, drink },
+        dataSelectedStore: store
     };
 };
 
@@ -239,6 +242,7 @@ const placeOrderBuyNowError = () => {
 
 const placeOrderBuyNow = (paymentMethod, productDetailBuyNow, address, longitude, latitude, navigate, voucher) => {
     return async (dispatch) => {
+        console.log('>>> voucher: ', voucher);
         try {
             // dispatch(placeOrderBuyNowSuccess());
 
@@ -283,6 +287,7 @@ const placeOrderBuyNow = (paymentMethod, productDetailBuyNow, address, longitude
 }
 const placeOrderComboBuyNow = (paymentMethod, comboDetailBuyNow, address, longitude, latitude, navigate, voucher) => {
     return async (dispatch) => {
+        console.log('>>> voucher: ', voucher);
         try {
             // dispatch(placeOrderBuyNowSuccess());
 
@@ -603,6 +608,33 @@ const fetchFavouriteProducs = (idUser) => {
         }
     }
 };
+
+// save voucher
+const saveVoucherSuccess = () => {
+    return {
+        type: types.SAVE_VOUCHER_SUCCESS,
+    };
+};
+const saveVoucher = (voucherId) => {
+    return async (dispatch, getState) => {
+        try {
+            const res = await saveVoucherService(voucherId);
+            const isSuccess = res?.data?.success ? res.data.success : false;
+            if (isSuccess) {
+                dispatch(fetchVouchers());
+                dispatch(saveVoucherSuccess());
+                toast.success(res.data.message);
+            }
+            else {
+                toast.error(res.data.message);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+};
+
+
 export {
     updateProfile,
     addToCartProduct,
@@ -623,5 +655,6 @@ export {
     reviewOrder,
     fetchOrderInTransitByOrderCode,
     fetchVouchers,
-    fetchFavouriteProducs
+    fetchFavouriteProducs,
+    saveVoucher
 };
