@@ -35,12 +35,21 @@ public class OrderServiceImpl implements IOrderService {
     private final ShipperRepository shipperRepository;
     private final ShippingFeeRepository shippingFeeRepository;
     private final UserVoucherRepository userVoucherRepository;
-    private  final AnnounceRepository announceRepository;
+    private final AnnounceRepository announceRepository;
     private final VoucherRepository discountCodeRepository;
     private final PaymentRepository paymentRepository;
 
-    public OrderResponse getOrderResponse(Order order) {
-        return new OrderResponse(order, paymentRepository);
+    public OrderResponse getOrderResponse(Long orderId) {
+        Optional<Order> orderOptional = orderRepository.findById(orderId);
+        if (orderOptional.isPresent()) {
+            Order order = orderOptional.get();
+            Optional<Payment> paymentOptional = paymentRepository.findByOrderCode(order.getOrderCode());
+            String paymentMethod = paymentOptional.map(payment -> payment.getPaymentMethod().getName()).orElse("Unknown");
+            String statusPayment = paymentOptional.map(Payment::getStatus).orElse("Unknown");
+            return new OrderResponse(order, paymentMethod, statusPayment);
+        } else {
+            throw new RuntimeException("Order not found");
+        }
     }
     public String generateUniqueOrderCode() {
         Random random = new Random();
@@ -185,7 +194,7 @@ public class OrderServiceImpl implements IOrderService {
         order.setOrderDetails(orderDetails);
         orderRepository.save(order);
         if (discountCode != null) {
-            UserVoucher userVoucher = userVoucherRepository.findByCode(discountCode);
+            UserVoucher userVoucher = userVoucherRepository.findByCode(discountCode,userId);
             if (userVoucher != null) {
                 userVoucher.setIsUsed(true);
                 userVoucherRepository.save(userVoucher);
@@ -332,7 +341,7 @@ public class OrderServiceImpl implements IOrderService {
         order.setOrderDetails(orderDetails);
         orderRepository.save(order);
         if (discountCode != null) {
-            UserVoucher userVoucher = userVoucherRepository.findByCode(discountCode);
+            UserVoucher userVoucher = userVoucherRepository.findByCode(discountCode,userId);
             if (userVoucher != null) {
                 userVoucher.setIsUsed(true);
                 userVoucherRepository.save(userVoucher);
@@ -614,7 +623,12 @@ public class OrderServiceImpl implements IOrderService {
 
         // Chuyển đổi các đơn hàng thành OrderResponse
         List<OrderResponse> orderResponses = orders1.stream()
-                .map(order -> new OrderResponse(order, paymentRepository))
+                .map(order -> {
+                    Optional<Payment> paymentOptional = paymentRepository.findByOrderCode(order.getOrderCode());
+                    String paymentMethod = paymentOptional.map(payment -> payment.getPaymentMethod().getName()).orElse("Unknown");
+                    String statusPayment = paymentOptional.map(Payment::getStatus).orElse("Unknown");
+                    return new OrderResponse(order, paymentMethod, statusPayment);
+                })
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(new APIRespone(true, "Success", orderResponses));
@@ -634,7 +648,11 @@ public class OrderServiceImpl implements IOrderService {
         if (order.getOrderDetails().stream().noneMatch(orderDetail -> stores.contains(orderDetail.getStore()))) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "Order does not belong to the specified store", ""));
         }
-        return ResponseEntity.ok(new APIRespone(true, "Success", new OrderResponse(order, paymentRepository)));
+        Optional<Payment> paymentOptional = paymentRepository.findByOrderCode(order.getOrderCode());
+        String paymentMethod = paymentOptional.map(payment -> payment.getPaymentMethod().getName()).orElse("Unknown");
+        String statusPayment = paymentOptional.map(Payment::getStatus).orElse("Unknown");
+
+        return ResponseEntity.ok(new APIRespone(true, "Success", new OrderResponse(order, paymentMethod, statusPayment)));
     }
 
 
@@ -701,8 +719,14 @@ public class OrderServiceImpl implements IOrderService {
             return ResponseEntity.badRequest().body(new APIRespone(false, "No orders found for the specified status and user", ""));
         }
         List<OrderResponse> orderResponses = orders.stream()
-                .map(order -> new OrderResponse(order, paymentRepository))
+                .map(order -> {
+                    Optional<Payment> paymentOptional = paymentRepository.findByOrderCode(order.getOrderCode());
+                    String paymentMethod = paymentOptional.map(payment -> payment.getPaymentMethod().getName()).orElse("Unknown");
+                    String statusPayment = paymentOptional.map(Payment::getStatus).orElse("Unknown");
+                    return new OrderResponse(order, paymentMethod, statusPayment);
+                })
                 .collect(Collectors.toList());
+
         return ResponseEntity.ok(new APIRespone(true, "Success", orderResponses));
     }
 
@@ -716,7 +740,11 @@ public class OrderServiceImpl implements IOrderService {
         if (!order.getUser().getId().equals(userId)) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "Order does not belong to the specified user", ""));
         }
-        return ResponseEntity.ok(new APIRespone(true, "Success", new OrderResponse(order, paymentRepository)));
+        Optional<Payment> paymentOptional = paymentRepository.findByOrderCode(orderCode);
+        String paymentMethod = paymentOptional.map(payment -> payment.getPaymentMethod().getName()).orElse("Unknown");
+        String statusPayment = paymentOptional.map(Payment::getStatus).orElse("Unknown");
+        return ResponseEntity.ok(new APIRespone(true, "Success", new OrderResponse(order, paymentMethod, statusPayment)));
+
     }
 
 
@@ -733,8 +761,10 @@ public class OrderServiceImpl implements IOrderService {
             return ResponseEntity.badRequest().body(new APIRespone(false, "Order not found", ""));
         }
         Order order = orderOptional.get();
-        OrderResponse orderResponse = new OrderResponse(order, paymentRepository);
-        return ResponseEntity.ok(new APIRespone(true, "Success", orderResponse));
+        Optional<Payment> paymentOptional = paymentRepository.findByOrderCode(orderCode);
+        String paymentMethod = paymentOptional.map(payment -> payment.getPaymentMethod().getName()).orElse("Unknown");
+        String statusPayment = paymentOptional.map(Payment::getStatus).orElse("Unknown");
+        return ResponseEntity.ok(new APIRespone(true, "Success", new OrderResponse(order, paymentMethod, statusPayment)));
     }
 
 
@@ -745,8 +775,15 @@ public class OrderServiceImpl implements IOrderService {
         if (orders.isEmpty()) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "No order found", ""));
         }
-        List<OrderResponse> orderResponses = orders.stream().map(order -> new OrderResponse(order, paymentRepository)).collect(Collectors.toList());
-        System.out.println("Lenght order response "+  orderResponses.size());
+        List<OrderResponse> orderResponses = orders.stream()
+                .map(order -> {
+                    Optional<Payment> paymentOptional = paymentRepository.findByOrderCode(order.getOrderCode());
+                    String paymentMethod = paymentOptional.map(payment -> payment.getPaymentMethod().getName()).orElse("Unknown");
+                    String statusPayment = paymentOptional.map(Payment::getStatus).orElse("Unknown");
+                    return new OrderResponse(order, paymentMethod, statusPayment);
+                })
+                .collect(Collectors.toList());
+
         return ResponseEntity.ok(new APIRespone(true, "Success", orderResponses));
     }
 
@@ -763,7 +800,10 @@ public class OrderServiceImpl implements IOrderService {
         if (order.getOrderDetails().stream().noneMatch(orderDetail -> order.getUser().getId().equals(userId))) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "Order does not belong to the specified user", ""));
         }
-        return ResponseEntity.ok(new APIRespone(true, "Success", new OrderResponse(order, paymentRepository)));
+        Optional<Payment> paymentOptional = paymentRepository.findByOrderCode(orderCode);
+        String paymentMethod = paymentOptional.map(payment -> payment.getPaymentMethod().getName()).orElse("Unknown");
+        String statusPayment = paymentOptional.map(Payment::getStatus).orElse("Unknown");
+        return ResponseEntity.ok(new APIRespone(true, "Success", new OrderResponse(order, paymentMethod, statusPayment)));
     }
 
     @Override
@@ -832,7 +872,12 @@ public class OrderServiceImpl implements IOrderService {
             return ResponseEntity.badRequest().body(new APIRespone(false, "No order found", ""));
         }
         List<OrderResponse> orderResponses = orders1.stream()
-                .map(order -> new OrderResponse(order, paymentRepository))
+                .map(order -> {
+                    Optional<Payment> paymentOptional = paymentRepository.findByOrderCode(order.getOrderCode());
+                    String paymentMethod = paymentOptional.map(payment -> payment.getPaymentMethod().getName()).orElse("Unknown");
+                    String statusPayment = paymentOptional.map(Payment::getStatus).orElse("Unknown");
+                    return new OrderResponse(order, paymentMethod, statusPayment);
+                })
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new APIRespone(true, "Success", orderResponses));
     }

@@ -26,13 +26,11 @@ public class OrderResponse {
     private LocalDateTime updatedAt;
     private String discountCode;
     private boolean isFeedBack;
-    private Double latitude;;
+    private Double latitude;
     private Double longitude;
     private List<OrderDetailResponse> orderDetails;
 
-    private PaymentRepository paymentRepository;
-
-    public OrderResponse(Order order, PaymentRepository paymentRepository) {
+    public OrderResponse(Order order, String paymentMethod, String statusPayment) {
         this.orderId = order.getOrderId();
         this.longitude = order.getLongitude();
         this.latitude = order.getLatitude();
@@ -41,15 +39,8 @@ public class OrderResponse {
         this.userId = order.getUser().getId();
         this.orderDate = order.getOrderDate();
         this.totalAmount = order.getTotalAmount();
-        this.paymentRepository = paymentRepository;
-        Optional<Payment> payment = paymentRepository.findByOrderCode(order.getOrderCode());
-        if (payment.isPresent()) {
-            this.paymentMethod = payment.get().getPaymentMethod().getName();
-            this.statusPayment = payment.get().getStatus();
-        } else {
-            this.paymentMethod = "Unknown";
-            this.statusPayment = "Unknown";
-        }
+        this.paymentMethod = paymentMethod;
+        this.statusPayment = statusPayment;
         this.status = (order.getStatus() != null) ? order.getStatus().getStatusName() : "Unknown Status";
         this.deliveryAddress = order.getDeliveryAddress();
         this.createdAt = order.getCreatedAt();
