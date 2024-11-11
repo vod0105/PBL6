@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllOrders, cancelOrder } from "../../redux/actions/userActions";
 import ReviewModal from "../ReviewModal/ReviewModal";
 import Pagination from 'react-bootstrap/Pagination';
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 // const _ = require('lodash'); // copy object
 const Orders = () => {
   const dispatch = useDispatch();
@@ -205,7 +205,12 @@ const Orders = () => {
             }
           </tbody>
         </table>
-        <button className="btn btn-dark btn-return-homepage">TRỞ LẠI TRANG CHỦ</button>
+        <NavLink
+          to="/"
+          end
+        >
+          <button className="btn btn-dark btn-return-homepage">TRỞ LẠI TRANG CHỦ</button>
+        </NavLink>
         {/* Phân trang */}
         <div className="pagination-container">
           <Pagination>

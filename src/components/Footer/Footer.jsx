@@ -6,10 +6,13 @@ const Footer = () => {
     <div className="footer" id="footer">
       <div className="footer-content">
         <div className="footer-content-left">
-          {/* <img src={assets.logo} alt="" /> */}
-          <p>
-            Hehehe
-          </p>
+          <div className="footer-contact-container">
+            {/* <p className="title">Liên hệ chúng tôi</p> */}
+            <h2>Liên hệ</h2>
+            <p className="item">Email: FOS_store@gmail.com</p>
+            <p className="item">Số điện thoại: 0902857284</p>
+            <p className="item">Địa chỉ: 54 NLB - Đà Nẵng</p>
+          </div>
           <div className="footer-social-icons">
             <img src={assets.facebook_icon} alt="" />
             <img src={assets.twitter_icon} alt="" />
@@ -17,18 +20,20 @@ const Footer = () => {
           </div>
         </div>
         <div className="footer-content-center">
+          <h2>Về chúng tôi</h2>
           <ul>
-            <li>Home</li>
-            <li>About</li>
-            <li>Chính sách giao hàng</li>
-            <li>Chính sách riêng tư</li>
+            <li>Trang chủ</li>
+            <li>Giới thiệu</li>
+            <li>Thực đơn</li>
+            <li>Cửa hàng</li>
           </ul>
         </div>
         <div className="footer-content-right">
-          <h2>GET IN TOUCH</h2>
+          <h2>Các chính sách</h2>
           <ul>
-            <li>hehe</li>
-            <li>hehe</li>
+            <li>Chính sách giao hàng</li>
+            <li>Chính sách bảo mật</li>
+            <li>Câu hỏi thường gặp</li>
           </ul>
         </div>
 

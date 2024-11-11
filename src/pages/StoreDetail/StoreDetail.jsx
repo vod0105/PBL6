@@ -225,7 +225,7 @@ const StoreDetail = () => {
                 src={`https://www.google.com/maps?q=${storeDetail.latitude},${storeDetail.longitude}&hl=vi&z=18&output=embed`}
                 // width="600"
                 // height="450"
-                style={{ border: 0, width: '100%', height: '80vh' }}
+                style={{ border: 0, width: '100%', height: '82vh' }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"

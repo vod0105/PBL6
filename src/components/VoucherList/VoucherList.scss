@@ -28,10 +28,11 @@
     }
     .left-container{
       display: flex;
+      align-items: center;
       .voucher-image {
         width: 50px;
         height: 50px;
-        object-fit: cover;
+        object-fit: contain;
         margin-right: 10px;
       }
       .voucher-info {
@@ -50,18 +51,38 @@
       }
     }
     .right-container{
-      button{
+      .saved{
         background-color: transparent;
         outline: none;
         padding: 5px 10px;
         font-weight: 400;
         border-radius: 8px;
-        border: 1px solid red;
+        border: 1px solid #1010104D;
+        &:hover{
+          cursor: not-allowed;
+        }
       }
-      &:hover{
+      .unsaved{
         background-color: red;
+        outline: none;
+        padding: 5px 10px;
+        font-weight: 400;
         border-radius: 8px;
+        border: 1px solid red;
+        color: white;
+        &:hover{
+          background-color: transparent;
+          color: red;
+          border-radius: 8px;
+          cursor: pointer;
+
+        }
       }
     }
+  }
+  .no-voucher{
+    text-align: center;
+    font-weight: bold;
+    font-size: 30px;
   }
 }

@@ -14,7 +14,7 @@ const VoucherList = ({ vouchers, handleSaveVoucher }) => {
         vouchers.map((voucher, index) => (
           <div
             key={index}
-            className={`voucher-item`}
+            className='voucher-item'
           // onClick={() => onSelectStore(store)}
           >
             <div className="left-container">
@@ -28,18 +28,18 @@ const VoucherList = ({ vouchers, handleSaveVoucher }) => {
             <div className="right-container">
               {
                 voucher.userHas ? ( // User đã lưu
-                  <button disabled>Đã lưu</button>
+                  <button className='saved' disabled>Đã lưu</button>
                 )
                   : (
                     // <button onClick={handleSaveVoucher(voucher.voucherId)}>Lưu</button> => note: Viết ri => Tự động gọi đến component cha => Loop vô hạn luôn trời (ko cần Click mà tự gọi)
-                    <button onClick={() => handleSaveVoucher(voucher.voucherId)}>Lưu</button> // Cách 
+                    <button className='unsaved' onClick={() => handleSaveVoucher(voucher.voucherId)}>Lưu</button> // Cách 
                   )
               }
             </div>
           </div>
         ))
       ) : (
-        <div>Không có voucher</div>
+        <div className='no-voucher'>Không có voucher</div>
       )}
     </div>
   );

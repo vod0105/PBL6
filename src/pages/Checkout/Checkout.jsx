@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { Form } from 'react-bootstrap';
 import L from 'leaflet';
 import iconStore from '../../assets/logo/map_store.png'
+import iconOrder from '../../assets/logo/map_order.png'
 //MAP
 import axios from 'axios';
 import { MapContainer, TileLayer, Polyline, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
@@ -146,7 +147,8 @@ const Checkout = () => {
     };
 
     // MAP: OpenRouteService
-    const [addressCoords, setAddressCoords] = useState([16.075966, 108.149805]); // Tọa độ hiện tại của mình -> Trên Map
+    const [addressCoords, setAddressCoords] = useState([16.075966, 108.149805]); // Tọa độ click -> Chọn giao hàng ở đó -> Trên Map
+    const [currentCoords, setCurrentCoords] = useState([16.075966, 108.149805]); // Tọa độ hiện tại của mình
     // const [error, setError] = useState(null);
     // const [clickedCoords, setClickedCoords] = useState(null); // Tọa độ click
     const apiKey = '5b3ce3597851110001cf6248d480712f52d0466d8d71a3927b194e84Y';
@@ -162,6 +164,7 @@ const Checkout = () => {
                     // console.log("Current Longitude:", longitude);
                     const latLon = [latitude, longitude];
                     setAddressCoords(latLon);
+                    setCurrentCoords(latLon);
                 },
                 (error) => {
                     console.error("Error getting location:", error);
@@ -240,7 +243,13 @@ const Checkout = () => {
         iconAnchor: [20, 40],     // Điểm gắn icon
         popupAnchor: [0, -40],    // Điểm gắn Popup
     });
-
+    // Customize icon markup
+    const customIconOrder = new L.Icon({
+        iconUrl: iconOrder,
+        iconSize: [60, 60],       // Kích thước icon
+        iconAnchor: [20, 40],     // Điểm gắn icon
+        popupAnchor: [0, -40],    // Điểm gắn Popup
+    });
     // Mới vô -> Hiển thị trên input + map => Vị trí hiện tại
     useEffect(() => {
         dispatch(fetchVouchers());
@@ -321,9 +330,17 @@ const Checkout = () => {
                                     <Polyline positions={route} color="blue" />
                                 )} */}
                                 {addressCoords && (
-                                    <Marker position={addressCoords}>
+                                    <Marker position={addressCoords} icon={customIconOrder}>
                                         <Popup>
-                                            Vị trí bạn chọn
+                                            Vị trí giao hàng
+                                        </Popup>
+                                    </Marker>
+                                )}
+
+                                {currentCoords && (
+                                    <Marker position={currentCoords}>
+                                        <Popup>
+                                            Vị trí hiện tại của bạn
                                         </Popup>
                                     </Marker>
                                 )}
