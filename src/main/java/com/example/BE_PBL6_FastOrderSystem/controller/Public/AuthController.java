@@ -3,12 +3,9 @@ package com.example.BE_PBL6_FastOrderSystem.controller.Public;
 
 import com.example.BE_PBL6_FastOrderSystem.repository.RoleRepository;
 import com.example.BE_PBL6_FastOrderSystem.repository.UserRepository;
-import com.example.BE_PBL6_FastOrderSystem.request.FormRequest;
-import com.example.BE_PBL6_FastOrderSystem.request.RefreshRequest;
-import com.example.BE_PBL6_FastOrderSystem.request.ShipperRequest;
+import com.example.BE_PBL6_FastOrderSystem.request.*;
 import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
 import com.example.BE_PBL6_FastOrderSystem.entity.User;
-import com.example.BE_PBL6_FastOrderSystem.request.LoginRequest;
 import com.example.BE_PBL6_FastOrderSystem.response.JwtResponse;
 import com.example.BE_PBL6_FastOrderSystem.security.jwt.JwtUtils;
 import com.example.BE_PBL6_FastOrderSystem.security.user.FoodUserDetails;
@@ -257,5 +254,11 @@ public class AuthController {
             emailService.sendEmail(adminEmail, subject, message);
         }
         return response;
+    }
+    @PostMapping("/shipper-registration2")
+    public ResponseEntity<APIRespone> addFormV2(
+            @RequestBody FormRequestV2 request) {
+
+        return formService.addFormV2(request);
     }
 }
