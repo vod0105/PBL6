@@ -31,8 +31,17 @@ const Checkout = () => {
     const isBuyNowCombo = useSelector((state) => state.user.isBuyNowCombo);
     const productDetailBuyNow = useSelector((state) => state.user.productDetailBuyNow);
     const comboDetailBuyNow = useSelector((state) => state.user.comboDetailBuyNow);
+
     const listProductsSelectInCart = useSelector((state) => state.user.listProductsSelectInCart);
     const listCombosSelectInCart = useSelector((state) => state.user.listCombosSelectInCart);
+    const selectedStore = useSelector((state) => state.user.selectedStore);
+
+    // useEffect(() => { 
+    //     if (listVouchers && listVouchers.length > 0) {
+    //         setSelectedVoucherId(listVouchers[0].voucherId);
+    //     }
+    // }, [listVouchers]);
+
     const accountInfo = useSelector((state) => {
         return state.auth.account;
     });
@@ -215,10 +224,8 @@ const Checkout = () => {
     // Click chuột -> Tọa độ thay đổi -> Input thay đổi
     useEffect(() => {
         if (addressCoords) {
-
             // fetchAddressFromCoordinates(addressCoords[0], addressCoords[1]);  // Gọi hàm với tọa độ mới
-
-            let distance = getDistance(addressCoords[0], addressCoords[1], 16.0471, 108.2068); // note: thay tọa độ sau bằng tọa độ cửa hàng
+            let distance = getDistance(addressCoords[0], addressCoords[1], selectedStore ? +selectedStore.latitude : 16.0471, selectedStore ? +selectedStore.longitude : 108.206); // note: thay tọa độ sau bằng tọa độ cửa hàng
             setDistance(distance);
             if (distance > 1.5) {
                 setShippingFee(distance * 10000);
@@ -227,7 +234,7 @@ const Checkout = () => {
                 setShippingFee(0);
             }
         }
-    }, [addressCoords]);
+    }, [addressCoords, selectedStore]);
     return (
         <div className="checkout-page">
             <div className="container">
@@ -287,7 +294,7 @@ const Checkout = () => {
                                 {addressCoords && (
                                     <Marker position={addressCoords}>
                                         <Popup>
-                                            Tọa độ của địa chỉ. {addressCoords}
+                                            Vị trí bạn chọn
                                         </Popup>
                                     </Marker>
                                 )}

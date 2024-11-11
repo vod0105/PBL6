@@ -5,6 +5,7 @@ const initialState = {
 
     listProductsSelectInCart: {}, // list products chọn để mua ở trang Cart -> checkout
     listCombosSelectInCart: {}, // list combos chọn để mua ở trang Cart -> checkout
+    selectedStore: {}, //store chọn để mua ở trang Cart -> checkout
     isBuyNow: false,
     isBuyNowCombo: false,
     productDetailBuyNow: {},
@@ -51,6 +52,7 @@ const userReducer = (state = initialState, action) => {
                 ...state,
                 listProductsSelectInCart: action.dataProducts,
                 listCombosSelectInCart: action.dataCombos,
+                selectedStore: action.dataSelectedStore,
                 isBuyNow: false,
                 isBuyNowCombo: false,
             }
@@ -67,7 +69,8 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 listProductsSelectInCart: {},
-                listCombosSelectInCart: {}
+                listCombosSelectInCart: {},
+                selectedStore: {}
             }
         case 'PLACE_ORDER_ADD_TO_CART_ERROR':
             return {

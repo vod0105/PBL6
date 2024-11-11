@@ -32,6 +32,22 @@ const Cart = () => {
     dispatch(fetchProductsInCart());
   }, [dispatch]);
 
+  // Chọn cửa hàng đầu tiên khi danh sách sản phẩm hoặc combo thay đổi
+  useEffect(() => {
+    if (Array.isArray(listProductsInCart) && Array.isArray(listCombosInCart)) {
+      const allItems = [...listProductsInCart, ...listCombosInCart];
+      console.log('allItems: ', allItems);
+
+      if (allItems.length > 0) {
+        const firstStore = allItems.find((item) => item.product || item.combo);
+        setSelectedStore(+firstStore?.product?.storeId || +firstStore?.combo?.storeId || 0);
+      } else {
+        setSelectedStore(0);
+      }
+    }
+  }, [listProductsInCart, listCombosInCart]);
+
+
   // Handle checkbox toggle for each cart item
   const handleCheckboxChange = (cartId) => {
     setCheckedItems((prevCheckedItems) =>
@@ -75,49 +91,64 @@ const Cart = () => {
     let total = 0;
     for (let i = 0; i < listProductsInCart?.length; i++) {
       const item = listProductsInCart[i];
-      // Only add to total if item is checked
-      if (checkedItems.includes(item.cartId)) { // Added filter based on checkbox selection
-        total += (item.product.unitPrice * item.product.quantity);
+      if (
+        checkedItems.includes(item.cartId) && // Row checked
+        +item.product?.dataStore?.storeId === selectedStore  // Cửa hàng đang chọn
+      ) {
+        total += item.product.unitPrice * item.product.quantity;
       }
     }
     for (let i = 0; i < listCombosInCart?.length; i++) {
       const item = listCombosInCart[i];
-      // Only add to total if item is checked
-      if (checkedItems.includes(item.cartId)) { // Added filter based on checkbox selection
-        total += (item.combo.unitPrice * item.combo.quantity);
+      if (
+        checkedItems.includes(item.cartId) &&
+        +item.combo?.dataStore?.storeId === selectedStore
+      ) {
+        total += item.combo.unitPrice * item.combo.quantity;
       }
     }
     return total;
   };
 
+
   const handlePlaceOrder = () => {
-    if (!listProductsInCart && !Array.isArray(listProductsInCart) && listProductsInCart.length === 0 && !listCombosInCart && !Array.isArray(listCombosInCart) && listCombosInCart.length === 0) { // -> Xử lý thêm trường hợp listProducts ko phải là Array
+    if (
+      !Array.isArray(listProductsInCart) ||
+      listProductsInCart.length === 0 ||
+      !Array.isArray(listCombosInCart) ||
+      listCombosInCart.length === 0
+    ) {
       toast.error('Không có sản phẩm trong giỏ hàng!');
-    }
-    else {
+    } else {
       if (checkedItems.length === 0) {
         toast.error('Chọn ít nhất một sản phẩm để thanh toán!');
       } else {
-        // Filter the items in the cart by those that are checked
-        const selectedProducts = listProductsInCart.filter((item) =>
-          checkedItems.includes(item.cartId)
+        const selectedProducts = listProductsInCart.filter(
+          (item) =>
+            checkedItems.includes(item.cartId) && // Row checked
+            +item.product?.dataStore?.storeId === selectedStore // Cửa hàng đang chọn
         );
-        const selectedCombos = listCombosInCart.filter((item) =>
-          checkedItems.includes(item.cartId)
+        const selectedCombos = listCombosInCart.filter(
+          (item) =>
+            checkedItems.includes(item.cartId) &&
+            +item.combo?.dataStore?.storeId === selectedStore
         );
+        // console.log('selectedProducts: ', selectedProducts);
+        console.log('id selectedStore: ', selectedStore);
 
-        // Send only selected items for order placement
-        dispatch(placeOrderUsingAddToCart(selectedProducts, selectedCombos)); // Modified to pass selected items
+        dispatch(placeOrderUsingAddToCart(selectedProducts, selectedCombos, selectedStore));
         navigate('/checkout');
       }
     }
   };
 
-  const [selectedStore, setSelectedStore] = useState("all");
+
+  // const [selectedStore, setSelectedStore] = useState("all");
+  const [selectedStore, setSelectedStore] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleStoreChange = (event) => {
-    setSelectedStore(event.target.value);
+    setSelectedStore(+event.target.value);
   };
 
   const handleSearchChange = (event) => {
@@ -131,7 +162,8 @@ const Cart = () => {
     ].filter((item) => {
       const storeId = item.product ? item.product.storeId : item.combo.storeId;
       const name = item.product ? item.product.productName : item.combo.comboName;
-      const isStoreMatch = selectedStore === "all" || +storeId === +selectedStore; // select cửa hàng
+      // const isStoreMatch = selectedStore === "all" || +storeId === +selectedStore; // select cửa hàng
+      const isStoreMatch = +storeId === +selectedStore;
       const isSearchMatch = name.toLowerCase().includes(searchTerm.toLowerCase()); // input search
       return isStoreMatch && isSearchMatch;
     }) : [];
@@ -159,28 +191,33 @@ const Cart = () => {
             </div>
           </div>
         </div>
-        <div className="filter-container">
-          <select
-            className="form-select"
-            value={selectedStore}
-            onChange={handleStoreChange}
-            aria-label="Default select example"
-          >
-            <option value="all">Tất cả cửa hàng</option>
-            {
-              Array.isArray(listProductsInCart) && Array.isArray(listCombosInCart) &&
-              listProductsInCart.concat(listCombosInCart)
-                .map((item) => (item.product ? item.product.dataStore : item.combo.dataStore))
-                .filter((value, index, self) => value && self.findIndex(v => v.storeId === value.storeId) === index)
-                .map((store) => (
-                  <option key={store.storeId} value={store.storeId}>
-                    {store.storeName}
-                  </option>
-                ))
-            }
-          </select>
-        </div>
+        {
+          selectedStore ? (
+            <div className="filter-container">
+              <select
+                className="form-select"
+                value={selectedStore}
+                onChange={handleStoreChange}
+                aria-label="Default select example"
+              >
+                {/* <option value="all">Tất cả cửa hàng</option> */}
+                {
+                  Array.isArray(listProductsInCart) && Array.isArray(listCombosInCart) &&
+                  listProductsInCart.concat(listCombosInCart)
+                    .map((item) => (item.product ? item.product.dataStore : item.combo.dataStore))
+                    .filter((value, index, self) => value && self.findIndex(v => v.storeId === value.storeId) === index)
+                    .map((store) => (
+                      <option key={store.storeId} value={store.storeId}>
+                        {store.storeName}
+                      </option>
+                    ))
+                }
+              </select>
+            </div>)
+            : (<></>)
+        }
       </div>
+
       <div className="cart-items">
         <div className="cart-items-title">
           <p>Chọn</p>

@@ -197,11 +197,31 @@ const placeOrderComboUsingBuyNow = (combo, unitPrice, quantity, store, size, dri
 };
 
 // Nhấn THANH TOÁN trong Cart -> Chuyển đến Check out
-const placeOrderUsingAddToCart = (dataProducts, dataCombos) => {
+const placeOrderUsingAddToCartSuccess = (dataProducts, dataCombos, dataSelectedStore) => {
     return {
         type: types.ADD_TO_CART_OPTION,
         dataProducts: dataProducts,
-        dataCombos: dataCombos
+        dataCombos: dataCombos,
+        dataSelectedStore: dataSelectedStore
+    };
+};
+const placeOrderUsingAddToCart = (selectedProducts, selectedCombos, idSelectedStore) => {
+    return async (dispatch) => {
+        try {
+            const res = await fetchStoreByIdService(idSelectedStore);
+            const isSuccess = res?.data?.success ? res.data.success : false;
+            if (isSuccess) {
+                let store = res?.data?.data ? res.data.data : {}
+                dispatch(placeOrderUsingAddToCartSuccess(selectedProducts, selectedCombos, store));
+                // toast.success(res.data.message);
+            } else {
+                toast.error(res.data.message || "Lấy thông tin cửa hàng không thành công!");
+            }
+        } catch (error) {
+            console.log(error);
+            const errorMessage = error.response && error.response.data ? error.response.data.message : "An error occurred.";
+            toast.error(errorMessage);
+        }
     };
 };
 
