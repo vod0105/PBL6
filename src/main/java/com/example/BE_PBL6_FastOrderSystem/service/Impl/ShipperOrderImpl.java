@@ -47,6 +47,9 @@ public class ShipperOrderImpl implements IShipperOrderService {
     @Override
     public ResponseEntity<APIRespone> getAllOrderDetailOfShipper(Long shipperId) {
         List<ShipperOrder> shipperOrders = shipperOrderRepository.findAllByShipperId(shipperId);
+        if (shipperOrders.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "No orders found for the specified shipper", ""));
+        }
         List<ShipperOrderResponse> orderDetailResponses = shipperOrders.stream()
                 .map(ShipperOrderResponse::new)
                 .collect(Collectors.toList());
