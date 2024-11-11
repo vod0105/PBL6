@@ -4,6 +4,7 @@ import com.example.BE_PBL6_FastOrderSystem.entity.Chat;
 import com.example.BE_PBL6_FastOrderSystem.entity.User;
 import com.example.BE_PBL6_FastOrderSystem.repository.ChatRepository;
 import com.example.BE_PBL6_FastOrderSystem.repository.UserRepository;
+import com.example.BE_PBL6_FastOrderSystem.request.ChatImageRequest;
 import com.example.BE_PBL6_FastOrderSystem.request.ChatRequest;
 import com.example.BE_PBL6_FastOrderSystem.response.APIResponseChat;
 import com.example.BE_PBL6_FastOrderSystem.response.ChatResponse;
@@ -173,6 +174,29 @@ public class ChatServiceImpl implements IChatService {
                 .map(UserResponse::new)
                 .collect(Collectors.toList());
     }
+    @Override
+    public Chat saveChatV2(ChatImageRequest request) {
+        // Tìm user gửi
+        User sender = userRepository.findById(request.getSender())
+                .orElseThrow(() -> new RuntimeException("Sender not found"));
+        System.out.println("Người gửi" + sender.getFullName());
+        // Tìm user nhận
+        User receiver = userRepository.findById(request.getReceiver())
+                .orElseThrow(() -> new RuntimeException("Receiver not found"));
+        System.out.println("Người nhận " + receiver.getFullName());
+        // Tạo đối tượng Chat với ảnh nếu có
+        Chat chat = Chat.builder()
+                .sender(sender)
+                .receiver(receiver)
+                .message(request.getMessage())
+                .isRead(request.isRead())
+                .image(request.getImageBase64()) // Gán ảnh nếu có
+                .build();
+
+        // Lưu tin nhắn vào cơ sở dữ liệu
+        return chatRepository.save(chat);
+    }
+
 
     @Override
     public APIResponseChat<String> updateReadUser(Long userId) {

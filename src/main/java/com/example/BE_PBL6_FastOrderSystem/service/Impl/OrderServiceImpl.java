@@ -741,10 +741,12 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public ResponseEntity<APIRespone> getAllOrderDetailsByUser(Long userId) {
         List<Order> orders = orderRepository.findAllByUserId(userId);
+        System.out.println("Lenght order "+  orders.size());
         if (orders.isEmpty()) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "No order found", ""));
         }
         List<OrderResponse> orderResponses = orders.stream().map(order -> new OrderResponse(order, paymentRepository)).collect(Collectors.toList());
+        System.out.println("Lenght order response "+  orderResponses.size());
         return ResponseEntity.ok(new APIRespone(true, "Success", orderResponses));
     }
 

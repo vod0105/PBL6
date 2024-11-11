@@ -1,6 +1,7 @@
 package com.example.BE_PBL6_FastOrderSystem.controller.Chat;
 import com.example.BE_PBL6_FastOrderSystem.entity.Chat;
 import com.example.BE_PBL6_FastOrderSystem.entity.User;
+import com.example.BE_PBL6_FastOrderSystem.request.ChatImageRequest;
 import com.example.BE_PBL6_FastOrderSystem.request.ChatRequest;
 import com.example.BE_PBL6_FastOrderSystem.response.APIResponseChat;
 import com.example.BE_PBL6_FastOrderSystem.response.ChatResponse;
@@ -115,6 +116,15 @@ public class ChatController {
 
         // Lưu thông tin chat bao gồm ảnh (nếu có)
         chatService.saveChat(chatRequest);
+        APIResponseChat<String> response = new APIResponseChat<>("", 0, "Success");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @PostMapping("/saveImages")
+    public ResponseEntity<APIResponseChat<String>> saveChatV2(
+            @RequestBody ChatImageRequest request) {
+        // Lưu thông tin chat bao gồm ảnh (nếu có)
+
+        chatService.saveChatV2(request);
         APIResponseChat<String> response = new APIResponseChat<>("", 0, "Success");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

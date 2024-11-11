@@ -3,6 +3,7 @@ package com.example.BE_PBL6_FastOrderSystem.service.Impl;
 import com.example.BE_PBL6_FastOrderSystem.entity.ShipperRegistrationForm;
 import com.example.BE_PBL6_FastOrderSystem.repository.ShipperRegistrationFormReponsitory;
 import com.example.BE_PBL6_FastOrderSystem.request.FormRequest;
+import com.example.BE_PBL6_FastOrderSystem.request.FormRequestV2;
 import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
 import com.example.BE_PBL6_FastOrderSystem.response.FormResponse;
 import com.example.BE_PBL6_FastOrderSystem.service.IFormService;
@@ -60,4 +61,27 @@ public class FormServiceImpl implements IFormService {
         return new ResponseEntity<>(new APIRespone(true, "Success", ""), HttpStatus.OK);
 
     }
+
+
+    @Override
+    public   ResponseEntity<APIRespone> addFormV2(FormRequestV2 formRequest){
+        ShipperRegistrationForm shipperRegistrationForm = new ShipperRegistrationForm();
+        shipperRegistrationForm.setName(formRequest.getName());
+        shipperRegistrationForm.setCitizenID(formRequest.getCitizenID());
+        shipperRegistrationForm.setImageCitizenFront(formRequest.getImageCitizenFront());
+        shipperRegistrationForm.setImageCitizenBack(formRequest.getImageCitizenBack());
+        shipperRegistrationForm.setEmail(formRequest.getEmail());
+        shipperRegistrationForm.setPhone(formRequest.getPhone());
+        shipperRegistrationForm.setAddress(formRequest.getAddress());
+        shipperRegistrationForm.setAge(formRequest.getAge());
+        shipperRegistrationForm.setVehicle(formRequest.getVehicle());
+        shipperRegistrationForm.setLicensePlate(formRequest.getLicensePlate());
+        shipperRegistrationForm.setDriverLicense(formRequest.getDriverLicense());
+        shipperRegistrationFormReponsitory.save(shipperRegistrationForm);
+        return new ResponseEntity<>(new APIRespone(true, "Success", ""), HttpStatus.OK);
+    }
+
+
+
+
 }
