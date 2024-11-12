@@ -527,19 +527,24 @@ public class ProductServiceImpl implements IProductService {
             Integer quantityToAdd = quantity.get(i);
             Product product = products.get(i);
             if (product != null) {
-                Optional<ProductStore> existingProductStore = productStoreRepository.findByProductIdAndStoreId(product.getProductId(), store.getStoreId());
-                if (existingProductStore.isPresent()) {
-                    // Nếu tồn tại, cập nhật số lượng
-                    ProductStore ps = existingProductStore.get();
-                    ps.setStockQuantity(ps.getStockQuantity() + quantityToAdd);
-                    productStoreRepository.save(ps);
-                } else {
-                    ProductStore productStore = new ProductStore();
-                    productStore.setProduct(product);
-                    productStore.setStore(store);
-                    productStore.setStockQuantity(quantityToAdd);
-                    productStores.add(productStore);
+                if(product.getStockQuantity()>=quantityToAdd) {
+                    Optional<ProductStore> existingProductStore = productStoreRepository.findByProductIdAndStoreId(product.getProductId(), store.getStoreId());
+                    if (existingProductStore.isPresent()) {
+                        // Nếu tồn tại, cập nhật số lượng
+                        ProductStore ps = existingProductStore.get();
+                        ps.setStockQuantity(ps.getStockQuantity() + quantityToAdd);
+                        productStoreRepository.save(ps);
+                    } else {
+                        ProductStore productStore = new ProductStore();
+                        productStore.setProduct(product);
+                        productStore.setStore(store);
+                        productStore.setStockQuantity(quantityToAdd);
+                        productStores.add(productStore);
+                    }
+                    product.setStockQuantity(product.getStockQuantity()-quantityToAdd);
+                    productRepository.save(product);
                 }
+
             }
         }
         productStoreRepository.saveAll(productStores);

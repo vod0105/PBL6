@@ -37,4 +37,8 @@ public interface IChatService {
 
     APIResponseChat<String> updateReadUser(Long userId);
     Chat saveChatV2(ChatImageRequest request);
+
+    APIResponseChat<List<Long>> allIdOwnerOfStores();
+
+    APIResponseChat<Long> findStoreByOwner(Long idOwner);
 }
