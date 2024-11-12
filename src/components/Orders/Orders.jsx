@@ -107,7 +107,7 @@ const Orders = () => {
       <div className="container">
         <div className="icon-filter-container">
           <div className="icon-container">
-            <i class="icon-i fa-solid fa-box-open"></i>
+            <i className="icon-i fa-solid fa-box-open"></i>
             <span className='icon-span'>các đơn hàng của bạn</span>
           </div>
           <div className="filter-container">

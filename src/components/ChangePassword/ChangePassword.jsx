@@ -51,7 +51,7 @@ const ChangePassword = () => {
     <div className="change-password">
       <div className="container">
         <div className="change-password-icon">
-          <i class="icon-i fa-solid fa-lock"></i>
+          <i className="icon-i fa-solid fa-lock"></i>
           <span className='icon-span'>Đổi mật khẩu</span>
         </div>
         <div className="input-password">

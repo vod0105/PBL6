@@ -213,7 +213,7 @@ const ComboItemDetail = () => {
 
         <div className="product-detail-comment">
           <h2>Bài viết đánh giá</h2>
-          <div class="filter-wrapper">
+          <div className="filter-wrapper">
             <div className="filter-container">
               <select
                 className="form-select"

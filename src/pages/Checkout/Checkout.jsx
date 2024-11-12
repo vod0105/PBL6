@@ -54,7 +54,7 @@ const Checkout = () => {
             const vouchers = listVouchersUser ? (listVouchersUser.filter(
                 (voucher) => voucher.storeId.includes(+selectedStore.storeId) && !voucher.used
             )) : [];
-            // console.log('vouchers: ', vouchers);
+            console.log('vouchers: ', vouchers);
             setFilteredVouchers(vouchers)
         }
     }, [listVouchersUser]);

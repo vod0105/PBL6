@@ -197,15 +197,15 @@ const StoreDetail = () => {
               <div className="infor-left-name">{storeDetail.storeName}</div>
               <div className="infor-left-contact-container">
                 <span className="contact-location">
-                  <i class="fa-solid fa-compass"></i>
+                  <i className="fa-solid fa-compass"></i>
                   {storeDetail.location}
                 </span>
                 <span className="contact-phone">
-                  <i class="fa-solid fa-phone"></i>
+                  <i className="fa-solid fa-phone"></i>
                   {storeDetail.numberPhone}
                 </span>
                 <span className="contact-time">
-                  <i class="fa-solid fa-clock"></i>
+                  <i className="fa-solid fa-clock"></i>
                   {formatDate(storeDetail.openingTime)} - {formatDate(storeDetail.closingTime)} hàng ngày
                 </span>
                 {
