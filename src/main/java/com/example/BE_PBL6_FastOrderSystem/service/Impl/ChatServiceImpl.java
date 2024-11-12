@@ -191,4 +191,19 @@ public class ChatServiceImpl implements IChatService {
             return new APIResponseChat<>(e.getMessage(), 1, "Update failed");
         }
     }
+
+    @Override
+    public APIResponseChat<List<Long>> allIdOwnerOfStores() {
+        List<Long> sts = chatRepository.findAllStores();
+        return new APIResponseChat<>(sts,0,"Success");
+    }
+
+    @Override
+    public APIResponseChat<Long> findStoreByOwner(Long idOwner){
+        List<Long> idSt = chatRepository.findAllStoresById(idOwner);
+        if(idSt.isEmpty()){
+            return new APIResponseChat<>(null,1,"Fail");
+        }
+        return new APIResponseChat<>(idSt.get(0),0,"Success");
+    }
 }

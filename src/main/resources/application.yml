@@ -1,6 +1,6 @@
 server:
   port: 8080
-  address: 192.168.1.52
+#  address: 192.168.1.52
 #  connection-timeout: 20000
 spring:
   application:

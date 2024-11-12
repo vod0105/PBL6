@@ -35,4 +35,8 @@ public interface IChatService {
     List<UserResponse> getAllUsersByChatInteraction();
 
     APIResponseChat<String> updateReadUser(Long userId);
+
+    APIResponseChat<List<Long>> allIdOwnerOfStores();
+
+    APIResponseChat<Long> findStoreByOwner(Long idOwner);
 }
