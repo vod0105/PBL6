@@ -24,6 +24,8 @@ public interface IOrderService {
 
     Long calculateOrderAmount(List<Long> cartIds, Double latitude, Double longitude, String discountCode);
 
+    Long TinhTongTienKhiMuaTaiQuay(List<Long> cartIds, String discountCode);
+
     ResponseEntity<APIRespone> updateQuantityProduct(Long productId, Long comboId, Long storeId, int quantity);
     ResponseEntity<APIRespone> updateOrderStatus(String orderCode, String status);
 

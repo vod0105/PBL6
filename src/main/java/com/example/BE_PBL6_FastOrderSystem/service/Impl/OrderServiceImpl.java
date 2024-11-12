@@ -89,7 +89,6 @@ public class OrderServiceImpl implements IOrderService {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new APIRespone(true, "Success", userResponses));
     }
-
     @Transactional
     @Override
     public ResponseEntity<APIRespone> processOrder(Long userId, String paymentMethod, List<Long> cartIds, String deliveryAddress, Double longitude, Double latitude, String orderCode, String discountCode) {
@@ -103,7 +102,7 @@ public class OrderServiceImpl implements IOrderService {
         }
 
         if (cartItems.stream().anyMatch(cartItem -> !cartItem.getUser().getId().equals(userId))) {
-            return ResponseEntity.badRequest().body(new APIRespone(false, "Carts does not belong to the specified user!", ""));
+            return ResponseEntity.badRequest().body(new APIRespone(false, "Carts do not belong to the specified user!", ""));
         }
 
         List<Store> stores = cartItems.stream()
@@ -116,19 +115,17 @@ public class OrderServiceImpl implements IOrderService {
         if (stores.isEmpty()) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "No stores found in the cart", ""));
         }
+
         PaymentMethod paymentMethodEntity = paymentMethodRepository.findByName(paymentMethod);
         if (paymentMethodEntity == null) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "Payment method not found", ""));
         }
+
         Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isEmpty()) {
             return ResponseEntity.badRequest().body(new APIRespone(false, "User not found", ""));
         }
-        // Calculate total amount
-        Long totalAmount = calculateOrderAmount(cartIds, latitude, longitude, discountCode);
-        if (totalAmount == null) {
-            return ResponseEntity.badRequest().body(new APIRespone(false, "Failed to calculate total amount", ""));
-        }
+
         User user = userOptional.get();
         Order order = new Order();
         order.setOrderDate(LocalDateTime.now());
@@ -139,15 +136,6 @@ public class OrderServiceImpl implements IOrderService {
         order.setUpdatedAt(LocalDateTime.now());
         order.setUser(user);
         order.setFeedback(false);
-        //order.setCarts(cartItems);
-        order.setDeliveryAddress(deliveryAddress);
-        if (deliveryAddress.equalsIgnoreCase("Mua tại cửa hàng")) {
-            order.setDeliveryAddress("Mua tại cửa hàng");
-        } else {
-            order.setDeliveryAddress(deliveryAddress);
-            order.setLongitude(longitude);
-            order.setLatitude(latitude);
-        }
 
         List<OrderDetail> orderDetails = cartItems.stream().map(cartItem -> {
             OrderDetail orderDetail = new OrderDetail();
@@ -159,54 +147,78 @@ public class OrderServiceImpl implements IOrderService {
             }
             orderDetail.setQuantity(Integer.valueOf(cartItem.getQuantity()));
             orderDetail.setUnitPrice(cartItem.getUnitPrice());
-            orderDetail.setTotalPrice(Double.valueOf(totalAmount));
+            orderDetail.setTotalPrice(cartItem.getTotalPrice());
             orderDetail.setSize(cartItem.getSize());
             Store store = storeRepository.findById(cartItem.getStoreId()).orElseThrow(() -> new EntityNotFoundException("Store not found"));
             orderDetail.setStore(store);
             orderDetail.setStatus(statusOrder);
-            // lay ra danh sach cac san pham uong kem tu cart
+
             if (cartItem.getDrinkProducts() != null) {
                 List<Product> drinkProducts = new ArrayList<>(cartItem.getDrinkProducts());
                 orderDetail.setDrinkProducts(drinkProducts);
             }
             return orderDetail;
         }).collect(Collectors.toList());
-        order.setTotalAmount(Double.valueOf(totalAmount));
-        // Nhóm các order detail theo cửa hàng
-        if (!deliveryAddress.equalsIgnoreCase("Mua tại cửa hàng")) {
-            // Group OrderDetail objects by their store
+        // Separate handling for in-store vs. online purchase
+        if (deliveryAddress.equalsIgnoreCase("Mua tại cửa hàng")) {
+            // In-store purchase logic
+            order.setDeliveryAddress("Mua tại cửa hàng");
+            Long totalAmountInStore = TinhTongTienKhiMuaTaiQuay(cartIds, discountCode);
+            if (totalAmountInStore == null) {
+                return ResponseEntity.badRequest().body(new APIRespone(false, "Failed to calculate total amount for in-store purchase", ""));
+            }
+            order.setTotalAmount(Double.valueOf(totalAmountInStore));
+            System.out.println("Total amount for in-store purchase: " + totalAmountInStore);
+        } else {
+            // Online purchase logic
+            order.setDeliveryAddress(deliveryAddress);
+            order.setLongitude(longitude);
+            order.setLatitude(latitude);
+
             Map<Store, List<OrderDetail>> groupedOrderDetails = orderDetails.stream()
                     .collect(Collectors.groupingBy(OrderDetail::getStore));
             for (Map.Entry<Store, List<OrderDetail>> entry : groupedOrderDetails.entrySet()) {
                 Store store = entry.getKey();
                 List<OrderDetail> storeOrderDetails = entry.getValue();
-                // Calculate the shipping fee for the store
+
                 Double shippingFee = calculateShippingFee(order, store);
-                // Assign the shipping fee to each OrderDetail in the group
                 ShippingFee fee = new ShippingFee();
                 fee.setFee(shippingFee);
                 shippingFeeRepository.save(fee);
+
                 for (OrderDetail orderDetail : storeOrderDetails) {
                     orderDetail.setShippingFee(fee);
                 }
             }
+
+            Long totalAmountOnline = calculateOrderAmount(cartIds, latitude, longitude, discountCode);
+            if (totalAmountOnline == null) {
+                return ResponseEntity.badRequest().body(new APIRespone(false, "Failed to calculate total amount for online purchase", ""));
+            }
+            order.setTotalAmount(Double.valueOf(totalAmountOnline));
+            System.out.println("Total amount for online purchase: " + totalAmountOnline);
         }
+
         order.setOrderDetails(orderDetails);
         orderRepository.save(order);
+
         if (discountCode != null) {
-            UserVoucher userVoucher = userVoucherRepository.findByCode(discountCode,userId);
+            UserVoucher userVoucher = userVoucherRepository.findByCode(discountCode, userId);
             if (userVoucher != null) {
                 userVoucher.setIsUsed(true);
                 userVoucherRepository.save(userVoucher);
             }
         }
-        AnnounceUser announceUser  = new AnnounceUser(userId,"Thông báo đơn hàng ","Bạn đặt hàng "+orderCode +" thành công . Tổng giá trị " + totalAmount);
+
+        AnnounceUser announceUser = new AnnounceUser(userId, "Order Notification", "Your order " + orderCode + " has been successfully placed. Total value " + order.getTotalAmount());
         announceRepository.save(announceUser);
-        for (Store  store : stores){
-            User owner = storeRepository.findById(store.getStoreId()).get().getManager();
-            AnnounceUser announceUser1  = new AnnounceUser(owner.getId(),"Thông báo xác nhận đơn hàng đơn hàng ","Có đơn hàng mới có mã "+orderCode);
-            announceRepository.save(announceUser1);
+
+        for (Store store : stores) {
+            User owner = store.getManager();
+            AnnounceUser storeAnnounceUser = new AnnounceUser(owner.getId(), "Order Confirmation Notification", "A new order with code " + orderCode + " has been placed.");
+            announceRepository.save(storeAnnounceUser);
         }
+
         return ResponseEntity.ok(new APIRespone(true, "Order placed successfully", ""));
     }
 
@@ -381,8 +393,9 @@ public class OrderServiceImpl implements IOrderService {
             return 0.0;
         }
         double shippingFee = distance * shippingFeePerKm;
-        System.out.println("Shipping feee: " + shippingFee);
-        return Math.floor(shippingFee / 1000) * 1000;
+        double shippingFeeRounded = Math.floor(shippingFee / 1000) * 1000;
+        System.out.println("Shipping fee: " + shippingFeeRounded);
+        return shippingFeeRounded;
 
     }
 
@@ -415,13 +428,6 @@ public class OrderServiceImpl implements IOrderService {
 
         // Kiểm tra mã giảm giá
         if (discountCode != null) {
-            LocalDateTime now = LocalDateTime.now();
-            List<Voucher> voucherOptional = discountCodeRepository.findByStartDateBeforeAndEndDateAfter(now);
-            if (voucherOptional.isEmpty()) {
-                return null;
-            }
-            Voucher voucher1 = voucherOptional.get(0);
-            totalAmount -= Math.round(totalAmount * voucher1.getDiscountPercent() / 100);
             Voucher voucher = discountCodeRepository.findByCode(discountCode).orElseThrow();
             totalAmount -= Math.round(totalAmount * voucher.getDiscountPercent() / 100);
         }
@@ -451,27 +457,19 @@ public class OrderServiceImpl implements IOrderService {
         for (Cart item : cartItems) {
             totalAmount += Math.round(item.getTotalPrice());
         }
+        System.out.println("Total amount trước khi tính toán ở cart: " + totalAmount);
 
         // Kiểm tra mã giảm giá
         if (discountCode != null) {
-
-            LocalDateTime now = LocalDateTime.now();
-            List<Voucher> voucherOptional = discountCodeRepository.findByStartDateBeforeAndEndDateAfter(now);
-
-            if (!voucherOptional.isEmpty()) {
-                Voucher voucher1 = voucherOptional.get(0);
-                totalAmount -= Math.round(totalAmount * voucher1.getDiscountPercent() / 100);
-            } else {
-                System.out.println("Discount code not found or expired");
-            }
-
             Voucher voucher = discountCodeRepository.findByCode(discountCode).orElseThrow();
             totalAmount -= Math.round(totalAmount * voucher.getDiscountPercent() / 100);
+            System.out.println("Total amount sau khi giảm giá: " + totalAmount);
         }
 
         // Group cart items by store
         Map<Long, List<Cart>> itemsByStore = cartItems.stream()
                 .collect(Collectors.groupingBy(Cart::getStoreId));
+
 
         // Calculate shipping fee for each store
         double totalShippingFee = 0;
@@ -495,6 +493,27 @@ public class OrderServiceImpl implements IOrderService {
 
         System.out.println("Total amount sau khi tính toán: " + totalAmount);
         System.out.println("Discount code: " + discountCode);
+        return totalAmount;
+    }
+
+    @Override
+    public Long TinhTongTienKhiMuaTaiQuay(List<Long> cartIds, String discountCode) {
+        List<Cart> cartItems = cartIds.stream()
+                .flatMap(cartId -> getCartItemsByCartId(cartId).stream())
+                .toList();
+
+        long totalAmount = 0;
+        for (Cart item : cartItems) {
+            totalAmount += Math.round(item.getTotalPrice());
+        }
+        System.out.println("Total amount trước khi tính toán ở cart: " + totalAmount);
+
+        // Kiểm tra mã giảm giá
+        if (discountCode != null) {
+            Voucher voucher = discountCodeRepository.findByCode(discountCode).orElseThrow();
+            totalAmount -= Math.round(totalAmount * voucher.getDiscountPercent() / 100);
+            System.out.println("Total amount sau khi giảm giá: " + totalAmount);
+        }
         return totalAmount;
     }
 

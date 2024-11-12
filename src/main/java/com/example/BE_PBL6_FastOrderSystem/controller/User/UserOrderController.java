@@ -193,7 +193,7 @@ public class UserOrderController {
         orderRequest.setOrderId(orderCode);
         orderRequest.setUserId(userId);
         String discountCode = orderRequest.getDiscountCode();
-        long totalAmount = orderService.calculateOrderAmount(cartIds, latitude, longitude,discountCode);
+        long totalAmount = orderService.calculateOrderAmount(cartIds, latitude, longitude, discountCode);
         System.out.println("Total amounsst: " + totalAmount);
         orderRequest.setAmount(totalAmount);
         if ("ZALOPAY".equalsIgnoreCase(paymentMethod)) {
