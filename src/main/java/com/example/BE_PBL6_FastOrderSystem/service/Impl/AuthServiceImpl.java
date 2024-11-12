@@ -99,8 +99,8 @@ public class AuthServiceImpl implements IAuthService {
         if (user.getEmail() == null || !user.getEmail().matches("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@([a-zA-Z0-9-]+\\.)+(com|net|org|edu|gov|mil|int)$")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIRespone(false, "Email is required", ""));
         }
-        if (user.getAddress() == null || !user.getAddress().matches("^[\\p{L}0-9\\s,.-]+$")) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIRespone(false, "Address is required and must contain only letters, numbers, spaces, commas, periods, and hyphens", ""));
+        if (user.getAddress() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIRespone(false, "Address is required", ""));
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setAccountLocked(false);
@@ -145,8 +145,8 @@ public class AuthServiceImpl implements IAuthService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIRespone(false, "Email is required", ""));
         }
         String address = shipperRequest.getAddress();
-        if (address == null || !address.matches("^[\\p{L}0-9\\s,.-]+$")) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIRespone(false, "Address is required and must contain only letters, numbers, spaces, commas, periods, and hyphens", ""));
+        if (address == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIRespone(false, "Address is required", ""));
         }
         User user = new User();
         user.setFullName(fullName);

@@ -1,5 +1,6 @@
 package com.example.BE_PBL6_FastOrderSystem.controller.Shipper;
 
+import com.example.BE_PBL6_FastOrderSystem.request.UserRequestV2;
 import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
 import com.example.BE_PBL6_FastOrderSystem.security.user.FoodUserDetails;
 import com.example.BE_PBL6_FastOrderSystem.service.IShipperOrderService;
@@ -75,5 +76,10 @@ public class ShipperController {
     public ResponseEntity<APIRespone> getShipperReport(){
         Long shipperId= getCurrentUserId();
         return shipperReportService.getAllShipperReport(shipperId);
+    }
+    @PutMapping("/update")
+    public ResponseEntity<APIRespone> updateUsers(@RequestBody UserRequestV2 userRequest) {
+        Long userId = FoodUserDetails.getCurrentUserId();
+        return userService.updateUserV3(userId, userRequest);
     }
 }

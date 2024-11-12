@@ -23,6 +23,8 @@ public interface IUserService {
     ResponseEntity<APIRespone> updateUser (Long id, UserRequest userRequest);
     ResponseEntity<APIRespone> updateUserV2 (Long id, UserRequestV2 userRequest);
 
+    ResponseEntity<APIRespone> updateUserV3(Long id, UserRequestV2 userRequest);
+
     ResponseEntity<APIRespone> unlockUserAccount(Long userId) throws UserNotFoundException;
 
     UserDetails loadUserByNumberPhone(String numberPhone);

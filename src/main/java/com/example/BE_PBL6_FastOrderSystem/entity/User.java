@@ -28,6 +28,7 @@ public class User {
     private String fullName;
     @Column(name = "avatar", columnDefinition = "LONGTEXT")
     private String avatar;
+    @Column(name = "email")
     private String email;
     private String address;
     @Column(name = "longitude")
