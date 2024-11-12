@@ -16,7 +16,8 @@ import {
     fetchOrderInTransitByOrderCodeService,
     fetchShipperDetailByIdService,
     fetchVouchersService,
-    fetchFavouriteProducsService
+    fetchFavouriteProducsService,
+    saveVoucherService
 } from "../../services/userService";
 import { fetchStoreByIdService } from "../../services/storeService";
 import { fetchProductByIdService } from "../../services/productService";
@@ -184,7 +185,8 @@ const fetchProductsInCart = () => {
 const placeOrderUsingBuyNow = (product, finalPrice, quantity, store, size) => {
     return {
         type: types.BUY_NOW_OPTION,
-        productDetail: { product, finalPrice, quantity, store, size }
+        productDetail: { product, finalPrice, quantity, store, size },
+        dataSelectedStore: store
     };
 };
 
@@ -192,16 +194,37 @@ const placeOrderUsingBuyNow = (product, finalPrice, quantity, store, size) => {
 const placeOrderComboUsingBuyNow = (combo, unitPrice, quantity, store, size, drink) => {
     return {
         type: types.BUY_NOW_COMBO_OPTION,
-        comboDetail: { combo, unitPrice, quantity, store, size, drink }
+        comboDetail: { combo, unitPrice, quantity, store, size, drink },
+        dataSelectedStore: store
     };
 };
 
 // Nhấn THANH TOÁN trong Cart -> Chuyển đến Check out
-const placeOrderUsingAddToCart = (dataProducts, dataCombos) => {
+const placeOrderUsingAddToCartSuccess = (dataProducts, dataCombos, dataSelectedStore) => {
     return {
         type: types.ADD_TO_CART_OPTION,
         dataProducts: dataProducts,
-        dataCombos: dataCombos
+        dataCombos: dataCombos,
+        dataSelectedStore: dataSelectedStore
+    };
+};
+const placeOrderUsingAddToCart = (selectedProducts, selectedCombos, idSelectedStore) => {
+    return async (dispatch) => {
+        try {
+            const res = await fetchStoreByIdService(idSelectedStore);
+            const isSuccess = res?.data?.success ? res.data.success : false;
+            if (isSuccess) {
+                let store = res?.data?.data ? res.data.data : {}
+                dispatch(placeOrderUsingAddToCartSuccess(selectedProducts, selectedCombos, store));
+                // toast.success(res.data.message);
+            } else {
+                toast.error(res.data.message || "Lấy thông tin cửa hàng không thành công!");
+            }
+        } catch (error) {
+            console.log(error);
+            const errorMessage = error.response && error.response.data ? error.response.data.message : "An error occurred.";
+            toast.error(errorMessage);
+        }
     };
 };
 
@@ -219,6 +242,7 @@ const placeOrderBuyNowError = () => {
 
 const placeOrderBuyNow = (paymentMethod, productDetailBuyNow, address, longitude, latitude, navigate, voucher) => {
     return async (dispatch) => {
+        console.log('>>> voucher: ', voucher);
         try {
             // dispatch(placeOrderBuyNowSuccess());
 
@@ -236,13 +260,22 @@ const placeOrderBuyNow = (paymentMethod, productDetailBuyNow, address, longitude
                     toast.error(res.data.message || "Đặt hàng không thành công!");
                 }
             }
-            else { // ZALOPAY
+            else if (paymentMethod === 'ZALOPAY') { // ZALOPAY
                 // navigate('/order-complete');
                 const zalopayUrl = res && res.data && res.data.data ? res.data.data.orderurl : '';
                 if (zalopayUrl) {
                     window.location.href = zalopayUrl; // Chuyển hướng sang URL thanh toán của ZaloPay
                 } else {
                     toast.error("Không thể thanh toán đơn hàng với ZaloPay!");
+                }
+            }
+            else if (paymentMethod === 'MOMO') { // MOMO
+                // navigate('/order-complete');
+                const momoUrl = res?.data?.data?.payUrl ? res.data.data.payUrl : '';
+                if (momoUrl) {
+                    window.location.href = momoUrl; // Chuyển hướng sang URL thanh toán của momo
+                } else {
+                    toast.error("Không thể thanh toán đơn hàng với Momo!");
                 }
             }
         } catch (error) {
@@ -254,11 +287,11 @@ const placeOrderBuyNow = (paymentMethod, productDetailBuyNow, address, longitude
 }
 const placeOrderComboBuyNow = (paymentMethod, comboDetailBuyNow, address, longitude, latitude, navigate, voucher) => {
     return async (dispatch) => {
+        console.log('>>> voucher: ', voucher);
         try {
             // dispatch(placeOrderBuyNowSuccess());
 
             const res = await placeOrderComboBuyNowService(paymentMethod, comboDetailBuyNow, address, longitude, latitude, voucher);
-            // console.log('>>> res: ', res);
             if (paymentMethod === 'CASH') {
                 const isSuccess = res && res.data ? res.data.success : false;
                 if (isSuccess) {
@@ -271,13 +304,20 @@ const placeOrderComboBuyNow = (paymentMethod, comboDetailBuyNow, address, longit
                     toast.error(res.data.message || "Đặt hàng không thành công!");
                 }
             }
-            else { // ZALOPAY
-                // navigate('/order-complete');
+            else if (paymentMethod === 'ZALOPAY') { // ZALOPAY
                 const zalopayUrl = res && res.data && res.data.data ? res.data.data.orderurl : '';
                 if (zalopayUrl) {
                     window.location.href = zalopayUrl; // Chuyển hướng sang URL thanh toán của ZaloPay
                 } else {
                     toast.error("Không thể thanh toán đơn hàng với ZaloPay!");
+                }
+            }
+            else if (paymentMethod === 'MOMO') { // MOMO
+                const momoUrl = res?.data?.data?.payUrl ? res.data.data.payUrl : '';
+                if (momoUrl) {
+                    window.location.href = momoUrl; // Chuyển hướng sang URL thanh toán của MOMO
+                } else {
+                    toast.error("Không thể thanh toán đơn hàng với Momo!");
                 }
             }
         } catch (error) {
@@ -316,12 +356,20 @@ const placeOrderAddToCart = (paymentMethod, cartIds, address, longitude, latitud
                     toast.error(res.data.message || "Đặt hàng không thành công!");
                 }
             }
-            else {// ZALOPAY
+            else if (paymentMethod === 'ZALOPAY') { // ZALOPAY
                 const zalopayUrl = res && res.data ? res.data.data.orderurl : '';
                 if (zalopayUrl) {
                     window.location.href = zalopayUrl; // Chuyển hướng sang URL thanh toán của ZaloPay
                 } else {
                     toast.error("Không thể thanh toán đơn hàng với ZaloPay!");
+                }
+            }
+            else if (paymentMethod === 'MOMO') { // MOMO
+                const momoUrl = res?.data?.data?.payUrl ? res.data.data.payUrl : '';
+                if (momoUrl) {
+                    window.location.href = momoUrl; // Chuyển hướng sang URL thanh toán của MOMO
+                } else {
+                    toast.error("Không thể thanh toán đơn hàng với Momo!");
                 }
             }
         } catch (error) {
@@ -560,6 +608,33 @@ const fetchFavouriteProducs = (idUser) => {
         }
     }
 };
+
+// save voucher
+const saveVoucherSuccess = () => {
+    return {
+        type: types.SAVE_VOUCHER_SUCCESS,
+    };
+};
+const saveVoucher = (voucherId) => {
+    return async (dispatch, getState) => {
+        try {
+            const res = await saveVoucherService(voucherId);
+            const isSuccess = res?.data?.success ? res.data.success : false;
+            if (isSuccess) {
+                dispatch(fetchVouchers());
+                dispatch(saveVoucherSuccess());
+                toast.success(res.data.message);
+            }
+            else {
+                toast.error(res.data.message);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+};
+
+
 export {
     updateProfile,
     addToCartProduct,
@@ -580,5 +655,6 @@ export {
     reviewOrder,
     fetchOrderInTransitByOrderCode,
     fetchVouchers,
-    fetchFavouriteProducs
+    fetchFavouriteProducs,
+    saveVoucher
 };

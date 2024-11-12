@@ -135,14 +135,26 @@ const DeliveryMap = () => {
     const { lat, lng } = event.latlng;
     setAddressCoords([lat, lng]); // Lưu tọa độ đã click
   };
+
   // Component để phóng to bản đồ
-  const ZoomToAddress = () => {
+  // const ZoomToAddress = () => {
+  //   const map = useMap();
+  //   if (addressCoords) {
+  //     map.setView(addressCoords, 16); // Phóng to đến tọa độ với level 18
+  //   }
+  //   return null;
+  // };
+  const ZoomToAddress = ({ addressCoords }) => {
     const map = useMap();
-    if (addressCoords) {
-      map.setView(addressCoords, 16); // Phóng to đến tọa độ với level 18
-    }
+    useEffect(() => {
+      if (addressCoords) {
+        map.setView(addressCoords, 13); // Phóng to đến tọa độ với level 16
+      }
+    }, [addressCoords, map]);
     return null;
   };
+
+
   // Tọa độ -> Địa chỉ
   // const fetchAddressFromCoordinates = async (latitude, longitude) => {
   //   try {
@@ -302,7 +314,7 @@ const DeliveryMap = () => {
             <div className="infor-right-ggmap-container">
               <MapContainer
                 center={[orderCoords[1], orderCoords[0]]} // [lat, lon]
-                zoom={6}
+                zoom={15}
                 style={{ height: '80vh', width: '100%' }}
                 onClick={handleMapClick} //
               >
@@ -340,7 +352,7 @@ const DeliveryMap = () => {
                   </Marker>
                 )} */}
                 <LocationMarker setPosition={setAddressCoords} /> {/* Cập nhật vị trí đã click */}
-                <ZoomToAddress /> {/* Thêm component phóng to */}
+                <ZoomToAddress addressCoords={addressCoords} />
               </MapContainer>
             </div>
           </div>

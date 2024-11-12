@@ -1,5 +1,6 @@
 import React from 'react';
 import './OrderComplete.scss'
+import { NavLink } from 'react-router-dom';
 
 const OrderComplete = () => {
     return (
@@ -12,7 +13,12 @@ const OrderComplete = () => {
                 </div> */}
                 <div className="paragraph-complete">
                     <p>Cảm ơn bạn đã đặt hàng tại cửa hàng của chúng tôi. Đơn hàng sẽ sớm được giao</p>
-                    <button>Quản lý đơn hàng</button>
+                    <NavLink
+                        to="/"
+                        end
+                    >
+                        <button>Về trang chủ</button>
+                    </NavLink>
                 </div>
 
             </div>

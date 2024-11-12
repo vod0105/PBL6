@@ -135,12 +135,13 @@ const Navbar = () => {
         >
           Khuyến mãi
         </NavLink>
-        <NavLink
+
+        {/* <NavLink
           to="/contact"
           className={({ isActive }) => (isActive ? 'active' : '')}
         >
           Liên hệ
-        </NavLink>
+        </NavLink> */}
 
         <NavLink
           to="/store"

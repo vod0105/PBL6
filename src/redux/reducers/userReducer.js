@@ -5,13 +5,14 @@ const initialState = {
 
     listProductsSelectInCart: {}, // list products chọn để mua ở trang Cart -> checkout
     listCombosSelectInCart: {}, // list combos chọn để mua ở trang Cart -> checkout
+    selectedStore: {}, //store chọn để mua ở trang Cart -> checkout
     isBuyNow: false,
     isBuyNowCombo: false,
     productDetailBuyNow: {},
     comboDetailBuyNow: {},
     allOrders: {},
     orderInTransit: {},
-    listVouchers: {},
+    listVouchersUser: {},
     listFavouriteProducts: [], // list sản phẩm yêu thích của user => Nếu login mới có
 
 };
@@ -36,6 +37,7 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 productDetailBuyNow: action.productDetail,
+                selectedStore: action.dataSelectedStore,
                 isBuyNow: true,
                 isBuyNowCombo: false,
             }
@@ -43,6 +45,7 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 comboDetailBuyNow: action.comboDetail,
+                selectedStore: action.dataSelectedStore,
                 isBuyNow: false,
                 isBuyNowCombo: true,
             }
@@ -51,6 +54,7 @@ const userReducer = (state = initialState, action) => {
                 ...state,
                 listProductsSelectInCart: action.dataProducts,
                 listCombosSelectInCart: action.dataCombos,
+                selectedStore: action.dataSelectedStore,
                 isBuyNow: false,
                 isBuyNowCombo: false,
             }
@@ -67,7 +71,8 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 listProductsSelectInCart: {},
-                listCombosSelectInCart: {}
+                listCombosSelectInCart: {},
+                selectedStore: {}
             }
         case 'PLACE_ORDER_ADD_TO_CART_ERROR':
             return {
@@ -106,12 +111,16 @@ const userReducer = (state = initialState, action) => {
         case 'FETCH_VOUCHER_SUCCESS':
             return {
                 ...state,
-                listVouchers: action.dataVouchers
+                listVouchersUser: action.dataVouchers
             };
         case 'FETCH_FAVOURITE_PRODUCT_SUCCESS':
             return {
                 ...state,
                 listFavouriteProducts: action.dataProducts
+            };
+        case 'SAVE_VOUCHER_SUCCESS':
+            return {
+                ...state,
             };
         default:
             return state;

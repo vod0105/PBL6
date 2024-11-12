@@ -9,8 +9,8 @@
                 flex: 1;
                 .img-container {
                     img {
-                      height: 100%;
-                      width: 100%; 
+                      max-height: 500px !important;
+                      width: 95% !important; 
                       object-fit: contain; /* Đảm bảo tỉ lệ hình ảnh không bị biến dạng */
                     }
                   }

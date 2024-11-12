@@ -12,6 +12,7 @@
     }
     .product-item-price-container{
         display: flex;
+        margin-left: 18px;
         .product-item-price-discount{
             color: #fc4958;
             font-size: 22px;
@@ -49,7 +50,7 @@
         cursor: pointer;
       }
       .product-item-image {
-        height: auto; 
+        height: 270px !important; 
         width: 100%; 
         object-fit: contain; 
       }

@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { Form } from 'react-bootstrap';
 import L from 'leaflet';
 import iconStore from '../../assets/logo/map_store.png'
+import iconOrder from '../../assets/logo/map_order.png'
 //MAP
 import axios from 'axios';
 import { MapContainer, TileLayer, Polyline, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
@@ -31,25 +32,66 @@ const Checkout = () => {
     const isBuyNowCombo = useSelector((state) => state.user.isBuyNowCombo);
     const productDetailBuyNow = useSelector((state) => state.user.productDetailBuyNow);
     const comboDetailBuyNow = useSelector((state) => state.user.comboDetailBuyNow);
+
     const listProductsSelectInCart = useSelector((state) => state.user.listProductsSelectInCart);
     const listCombosSelectInCart = useSelector((state) => state.user.listCombosSelectInCart);
+    const selectedStore = useSelector((state) => state.user.selectedStore);
+
     const accountInfo = useSelector((state) => {
         return state.auth.account;
     });
     // Voucher
-    const listVouchers = useSelector((state) => state.user.listVouchers);
-    const [selectedVoucherId, setSelectedVoucherId] = useState("");
+    const listVouchersUser = useSelector((state) => state.user.listVouchersUser);
+    const [selectedVoucherId, setSelectedVoucherId] = useState("0");
     const [selectedVoucher, setSelectedVoucher] = useState(null);
+    const [promotion, setPromotion] = useState(0);
+
+    // Lọc các voucher hợp lệ theo điều kiện selectedStore và used = false
+    const [filteredVouchers, setFilteredVouchers] = useState([]);
     useEffect(() => {
-        if (listVouchers && listVouchers.length > 0) {
-            setSelectedVoucherId(listVouchers[0].voucherId);
+        // console.log('listVouchersUser: ', listVouchersUser);
+        if (listVouchersUser && listVouchersUser.length > 0) {
+            const vouchers = listVouchersUser ? (listVouchersUser.filter(
+                (voucher) => voucher.storeId.includes(+selectedStore.storeId) && !voucher.used
+            )) : [];
+            console.log('vouchers: ', vouchers);
+            setFilteredVouchers(vouchers)
         }
-    }, [listVouchers]);
+    }, [listVouchersUser]);
+    // const filteredVouchers = listVouchersUser ? (listVouchersUser.filter(
+    //     (voucher) => voucher.storeId.includes(selectedStore.storeId) && !voucher.used
+    // )) : [];
+
+    // useEffect(() => {
+    //     // Nếu có voucher hợp lệ, chọn mã đầu tiên từ `filteredVouchers`
+    //     if (filteredVouchers && filteredVouchers.length > 0) {
+    //         setSelectedVoucherId(filteredVouchers[0].voucherId);
+    //         setSelectedVoucher(filteredVouchers[0]);
+    //         setPromotion(+filteredVouchers[0].discountPercent);
+    //     } else {
+    //         // Nếu không có voucher hợp lệ, đặt các giá trị về mặc định
+    //         setSelectedVoucherId("0");
+    //         setSelectedVoucher(null);
+    //         setPromotion(0);
+    //     }
+    // }, [filteredVouchers]);
+
     useEffect(() => {
-        const voucher = listVouchers && listVouchers.length > 0 ? listVouchers.find(voucher => voucher.voucherId === selectedVoucherId) : {};
-        setSelectedVoucher(voucher ? voucher : {});
-        // console.log('>>> selectedDrink: ', selectedDrink);
-    }, [selectedVoucherId, listVouchers]);
+        // Cập nhật `selectedVoucher` và `promotion` khi `selectedVoucherId` thay đổi
+        const voucher = filteredVouchers.find(voucher => voucher.voucherId === +selectedVoucherId);
+        if (voucher) {
+            setSelectedVoucher(voucher);
+            setPromotion(+voucher.discountPercent);
+        } else { //Ko chọn voucher
+            setSelectedVoucher(null);
+            setPromotion(0);
+        }
+    }, [selectedVoucherId, filteredVouchers]);
+    // useEffect(() => { // Mới vô chọn mã đầu tiên
+    //     if (listVouchersUser && listVouchersUser.length > 0) {
+    //         setSelectedVoucherId(listVouchersUser[0].voucherId);
+    //     }
+    // }, [listVouchersUser]);
 
     const [fullname, setFullname] = useState(accountInfo.fullName);
     const [phonenumber, setPhonenumber] = useState(accountInfo.phoneNumber);
@@ -105,7 +147,8 @@ const Checkout = () => {
     };
 
     // MAP: OpenRouteService
-    const [addressCoords, setAddressCoords] = useState([16.075966, 108.149805]); // Tọa độ hiện tại của mình -> Trên Map
+    const [addressCoords, setAddressCoords] = useState([16.075966, 108.149805]); // Tọa độ click -> Chọn giao hàng ở đó -> Trên Map
+    const [currentCoords, setCurrentCoords] = useState([16.075966, 108.149805]); // Tọa độ hiện tại của mình
     // const [error, setError] = useState(null);
     // const [clickedCoords, setClickedCoords] = useState(null); // Tọa độ click
     const apiKey = '5b3ce3597851110001cf6248d480712f52d0466d8d71a3927b194e84Y';
@@ -121,6 +164,7 @@ const Checkout = () => {
                     // console.log("Current Longitude:", longitude);
                     const latLon = [latitude, longitude];
                     setAddressCoords(latLon);
+                    setCurrentCoords(latLon);
                 },
                 (error) => {
                     console.error("Error getting location:", error);
@@ -199,23 +243,27 @@ const Checkout = () => {
         iconAnchor: [20, 40],     // Điểm gắn icon
         popupAnchor: [0, -40],    // Điểm gắn Popup
     });
-
+    // Customize icon markup
+    const customIconOrder = new L.Icon({
+        iconUrl: iconOrder,
+        iconSize: [60, 60],       // Kích thước icon
+        iconAnchor: [20, 40],     // Điểm gắn icon
+        popupAnchor: [0, -40],    // Điểm gắn Popup
+    });
     // Mới vô -> Hiển thị trên input + map => Vị trí hiện tại
     useEffect(() => {
         dispatch(fetchVouchers());
         getCurrentCoors();
 
-        fetchAddressFromCoordinates(addressCoords[0], addressCoords[1]);  // (lat, lon)
+        // fetchAddressFromCoordinates(addressCoords[0], addressCoords[1]);  // (lat, lon)
 
     }, []);
 
     // Click chuột -> Tọa độ thay đổi -> Input thay đổi
     useEffect(() => {
         if (addressCoords) {
-
-            fetchAddressFromCoordinates(addressCoords[0], addressCoords[1]);  // Gọi hàm với tọa độ mới
-
-            let distance = getDistance(addressCoords[0], addressCoords[1], 16.0471, 108.2068); // note: thay tọa độ sau bằng tọa độ cửa hàng
+            // fetchAddressFromCoordinates(addressCoords[0], addressCoords[1]);  // Gọi hàm với tọa độ mới
+            let distance = getDistance(addressCoords[0], addressCoords[1], selectedStore ? +selectedStore.latitude : 16.0471, selectedStore ? +selectedStore.longitude : 108.206); // note: thay tọa độ sau bằng tọa độ cửa hàng
             setDistance(distance);
             if (distance > 1.5) {
                 setShippingFee(distance * 10000);
@@ -224,7 +272,7 @@ const Checkout = () => {
                 setShippingFee(0);
             }
         }
-    }, [addressCoords]);
+    }, [addressCoords, selectedStore]);
     return (
         <div className="checkout-page">
             <div className="container">
@@ -282,9 +330,17 @@ const Checkout = () => {
                                     <Polyline positions={route} color="blue" />
                                 )} */}
                                 {addressCoords && (
-                                    <Marker position={addressCoords}>
+                                    <Marker position={addressCoords} icon={customIconOrder}>
                                         <Popup>
-                                            Tọa độ của địa chỉ. {addressCoords}
+                                            Vị trí giao hàng
+                                        </Popup>
+                                    </Marker>
+                                )}
+
+                                {currentCoords && (
+                                    <Marker position={currentCoords}>
+                                        <Popup>
+                                            Vị trí hiện tại của bạn
                                         </Popup>
                                     </Marker>
                                 )}
@@ -474,21 +530,27 @@ const Checkout = () => {
                             </div>
                         </div>
                         <div className="voucher-container">
-                            <h3>Chọn mã khuyến mãi</h3>
+                            <h3>Chọn voucher</h3>
                             <Form.Select
                                 className="voucher-select"
                                 value={selectedVoucherId}
                                 onChange={(e) => {
                                     setSelectedVoucherId(e.target.value);
-                                    const voucher = listVouchers && listVouchers.length > 0 ? listVouchers.find(voucher => voucher.voucherId === e.target.value) : '';
-                                    setSelectedVoucher(voucher);
+                                    const voucher = filteredVouchers.find(voucher => +voucher.voucherId === +e.target.value);
+                                    if (voucher) {
+                                        setSelectedVoucher(voucher);
+                                        setPromotion(+voucher.discountPercent);
+                                    } else { // Không chọn mã
+                                        setSelectedVoucher(null);
+                                        setPromotion(0);
+                                    }
                                 }}
                             >
-                                {/* <option value="">Không có mã khuyến mãi</option> */}
+                                <option value="0">Không chọn</option>
                                 {
-                                    listVouchers && listVouchers.length > 0 && listVouchers.map((voucher, index) => (
+                                    filteredVouchers && filteredVouchers.length > 0 && filteredVouchers.map((voucher, index) => (
                                         <option key={index} value={voucher.voucherId}>
-                                            {voucher.code}
+                                            {voucher.code} ({Number(voucher.discountPercent)}%)
                                         </option>
                                     ))
                                 }
@@ -501,8 +563,12 @@ const Checkout = () => {
                                 <span>{distance} (km)</span>
                             </div>
                             <div className="fee-container">
-                                <span>Chi phí: </span>
+                                <span>Chi phí giao hàng: </span>
                                 <span>{Number(shippingFee).toLocaleString('vi-VN')} đ</span>
+                            </div>
+                            <div className="promotion-container">
+                                <span>Giảm giá: </span>
+                                <span>{Number(promotion)}%</span>
                             </div>
                         </div>
                         <hr />
@@ -512,10 +578,10 @@ const Checkout = () => {
                             <span>
                                 {
                                     isBuyNow === true && isBuyNowCombo === false
-                                        ? Number((productDetailBuyNow?.finalPrice * productDetailBuyNow?.quantity) + shippingFee).toLocaleString('vi-VN')
+                                        ? Number(((productDetailBuyNow?.finalPrice * productDetailBuyNow?.quantity) + shippingFee) * ((100 - promotion) / 100)).toLocaleString('vi-VN')
                                         : isBuyNow === false && isBuyNowCombo === true
-                                            ? Number((comboDetailBuyNow?.unitPrice * comboDetailBuyNow?.quantity) + shippingFee).toLocaleString('vi-VN')
-                                            : Number((getTotalPriceInCart()) + shippingFee).toLocaleString('vi-VN')
+                                            ? Number(((comboDetailBuyNow?.unitPrice * comboDetailBuyNow?.quantity) + shippingFee) * ((100 - promotion) / 100)).toLocaleString('vi-VN')
+                                            : Number(((getTotalPriceInCart()) + shippingFee) * ((100 - promotion) / 100)).toLocaleString('vi-VN')
                                 } đ
                             </span>
                         </div>

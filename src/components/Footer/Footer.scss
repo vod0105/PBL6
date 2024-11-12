@@ -10,9 +10,9 @@
     margin-top: 100px;
   
     .footer-content {
-      width: 100%;
+      width: 90%;
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
       gap: 80px;
   
       .footer-content-left,
@@ -21,7 +21,7 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start; /* Sửa 'start' thành 'flex-start' */
-        gap: 20px;
+        // gap: 20px;
   
         h2 {
           color: white; /* Đặt màu cho tiêu đề trong các phần */
@@ -45,7 +45,18 @@
         }
       }
     }
-  
+    .footer-contact-container{
+      display: flex;
+      flex-direction: column;
+      .title{
+        font-size: 24px;
+      }
+      .item{
+        font-size: 16px;
+      }
+
+
+    }
     .footer-social-icons {
       img {
         width: 40px;

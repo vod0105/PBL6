@@ -1,20 +1,27 @@
-import axios from "../setup/axios";
+import instance from "../setup/axios";
 
 const fetchAllPromotionsService = () => {
-    return axios({
+    return instance({
         method: 'get',
         url: `/api/v1/public/promotions/all`,
     });
 }
 const fetchPromotionByIdService = (id) => {
-    return axios({
+    return instance({
         method: 'get',
         url: `/api/v1/public/promotions/${id}`,
+    });
+}
+const fetchVouchersByIdStoreService = (id) => {
+    return instance({
+        method: 'get',
+        url: `/api/v1/public/voucher/${id}`,
     });
 }
 
 export {
     fetchAllPromotionsService,
     fetchPromotionByIdService,
+    fetchVouchersByIdStoreService,
 
 }

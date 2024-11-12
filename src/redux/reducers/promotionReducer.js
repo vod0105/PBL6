@@ -2,6 +2,8 @@ import types from "../types";
 
 const INITIAL_STATE = {
     listPromotions: [],
+    listVouchersStore: [],
+
 };
 
 const promotionReducer = (state = INITIAL_STATE, action) => {
@@ -17,6 +19,11 @@ const promotionReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 promotionDetail: action.promotionDetail,
+            };
+        case types.FETCH_VOUCHER_BY_ID_STORE_SUCCESS:
+            return {
+                ...state,
+                listVouchersStore: action.dataVouchers,
             };
     }
 

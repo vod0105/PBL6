@@ -64,12 +64,21 @@ const LoginModal = () => {
     }
   }
 
-  // GG + FB
+  // GG
   const handleSuccessGoogle = async (credentialResponse) => {
     // dispatch(loginGoogle(credentialResponse.credential));
-    window.location.href = 'https://pbl6-fastordersystem.onrender.com/oauth2/authorization/google';
+    window.location.href = 'http://localhost:8080/oauth2/authorization/google';
   }
   const handleErrorGoogle = () => {
+    alert('Lỗi tùm lum');
+  }
+
+  // FB
+  const handleSuccessFacebook = async () => {
+    // dispatch(loginGoogle(credentialResponse.credential));
+    window.location.href = 'http://localhost:8080/oauth2/authorization/facebook';
+  }
+  const handleErrorFacebook = () => {
     alert('Lỗi tùm lum');
   }
 
@@ -141,6 +150,7 @@ const LoginModal = () => {
                     fields='name,email,picture'
                     textButton={<i className="fa-brands fa-facebook" />}
                     cssClass='custom-facebook-button'
+                    onClick={handleSuccessFacebook}
                   />
                 </div>
               </div>

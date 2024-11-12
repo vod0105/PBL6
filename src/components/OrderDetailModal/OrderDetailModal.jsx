@@ -48,10 +48,18 @@ const OrderDetailModal = ({ showModal, handleClose, orderDetails, statusOrderInt
                 <p className="infor-content">{orderDetails.deliveryAddress}</p>
               </div>
               <div className="order-detail-infor-item">
-                {/* note: DB ko có trường ni */}
+                <p className="infor-title">Phương thức thanh toán</p>
+                <p className="infor-content">{orderDetails.paymentMethod}</p>
+              </div>
+              <div className="order-detail-infor-item">
+                <p className="infor-title">Trạng thái thanh toán</p>
+                <p className="infor-content">{orderDetails.statusPayment}</p>
+              </div>
+
+              {/* <div className="order-detail-infor-item">
                 <p className="infor-title">Ghi chú</p>
                 <p className="infor-content">Đem nhanh nhanh nha anh Shipper</p>
-              </div>
+              </div> */}
             </div>
 
             <div className="order-detail-status">
