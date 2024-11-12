@@ -244,7 +244,7 @@ const ChatHistory = (props) => {
 
                     const result = await response.json();
                     // const formattedMessage = result.replace(/\n/g, "\n");
-                    const formattedMessage = result;
+                    const formattedMessage = result.replace(/\n/g, "\n");
 
                     if (result != null) {
                         const currentTime = new Date().toISOString(); // Get current time in ISO string
@@ -473,6 +473,7 @@ const ChatHistory = (props) => {
                                     item.message ? (
                                         <div
                                             className={`message ${item.sender == idU ? 'other-message float-right' : 'my-message'}`}
+                                            style={{ whiteSpace: 'pre-line' }}
                                         >
                                             {/* {console.log("class: ",item.sender)} */}
                                             {item.message}
