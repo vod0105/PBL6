@@ -7,6 +7,7 @@ import com.example.BE_PBL6_FastOrderSystem.response.APIResponseChat;
 import com.example.BE_PBL6_FastOrderSystem.response.ChatResponse;
 import com.example.BE_PBL6_FastOrderSystem.response.UserResponse;
 import com.example.BE_PBL6_FastOrderSystem.service.IChatService;
+import com.example.BE_PBL6_FastOrderSystem.service.IStoreService;
 import com.example.BE_PBL6_FastOrderSystem.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,8 @@ public class ChatController {
     private IChatService chatService;
     @Autowired
     private IUserService userService;
+    @Autowired
+    private IStoreService storeService;
 
     @GetMapping
     public ResponseEntity<APIResponseChat<List<Chat>>> getAllChats() {
@@ -140,5 +143,21 @@ public class ChatController {
     public APIResponseChat<List<UserResponse>> getSearchByPhoneNumber(@PathVariable String phoneNumber) {
         List<UserResponse> users = userService.getSearchByPhoneNumber(phoneNumber);
         return new APIResponseChat<>(users, 0, "Data retrieved successfully");
+    }
+
+    @GetMapping("/searchOwner/{idStore}")
+    public APIResponseChat<UserResponse> getOwnerForStore(@PathVariable  Long idStore){
+        return storeService.getOwnerForStore(idStore);
+    }
+
+    @GetMapping("/all/owner/store")
+    public APIResponseChat<List<Long>> getAllOwnerStore(){
+        return  chatService.allIdOwnerOfStores();
+    }
+
+    @GetMapping("/findStore/{id}")
+    public  APIResponseChat<Long> findStoreByOwner(@PathVariable Long id){
+        System.out.println("findStoreByOwner");
+        return chatService.findStoreByOwner(id);
     }
 }
