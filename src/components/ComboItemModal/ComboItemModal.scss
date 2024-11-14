@@ -1,6 +1,6 @@
 .custom-modal-productitem{
-    min-width: 60% !important;
-    overflow-x: auto;
+    max-width: 60% !important;
+    // overflow-x: auto;
     .modal-product-item{
         display: flex;
         flex-direction: column;
@@ -10,8 +10,8 @@
                 flex: 1;
                 .img-container {
                     img {
-                      height: 100%;
-                      width: 100%; 
+                      height: 500px;
+                      width: auto; 
                       object-fit: contain; /* Đảm bảo tỉ lệ hình ảnh không bị biến dạng */
                     }
                   }
@@ -40,8 +40,10 @@
                     display: flex;
                     flex-direction: row;
                     border: 1px solid #E7E7E7;
-                    overflow-y: auto; // Chỉ cuộn dọc nội dung sản phẩm khi quá nhiều sản phẩm
-                    .product-item{
+                    max-width: 500px; 
+                    overflow-x: auto; /* Cuộn ngang */
+                    overflow-y: hidden; 
+                      .product-item{
                         flex: 1;
                         display: flex;
                         flex-direction: row;

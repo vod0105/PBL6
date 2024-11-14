@@ -7,11 +7,14 @@
             display: flex;
             .infor-left{
                 flex: 1;
+                display: flex;
+                align-items: center;
                 .img-container {
                     img {
                       max-height: 500px !important;
                       width: 95% !important; 
                       object-fit: contain; /* Đảm bảo tỉ lệ hình ảnh không bị biến dạng */
+                      // margin: auto 0;
                     }
                   }
             }

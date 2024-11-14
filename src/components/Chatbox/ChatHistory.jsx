@@ -214,7 +214,7 @@ const ChatHistory = (props) => {
             if (owner.includes(selectedUser.id)) {
                 console.log("dava")
                 setTimeout(() => {
-                    sendData(idU,selectedUser.id, inputMessage);
+                    sendData(idU, selectedUser.id, inputMessage);
                 }, 2000); // Chờ 2000ms (2 giây)
             }
             // if (loadStores) handleLoadStores();
@@ -267,7 +267,7 @@ const ChatHistory = (props) => {
                 }
             }
         } catch (error) {
-            console.error("Looix ",error);
+            console.error("Looix ", error);
         }
 
 

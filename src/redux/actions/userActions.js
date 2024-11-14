@@ -566,8 +566,9 @@ const fetchVouchers = () => {
         try {
             const res = await fetchVouchersService();
             const data = res && res.data && res.data.data ? res.data.data : [];
-            let listVoucherUnUsed = data.filter(voucher => voucher.used === false);
-            dispatch(fetchVouchersSuccess(listVoucherUnUsed));
+            dispatch(fetchVouchersSuccess(data));
+            // let listVoucherUnUsed = data.filter(voucher => voucher.used === false);
+            // dispatch(fetchVouchersSuccess(listVoucherUnUsed));
         } catch (error) {
             console.log(error);
             // toast.error('Có lỗi ở Server!');  // BE return status=400 -> Lỗi do BE nên chạy vô catch error ni
@@ -633,7 +634,6 @@ const saveVoucher = (voucherId) => {
         }
     }
 };
-
 
 export {
     updateProfile,

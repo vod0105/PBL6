@@ -262,7 +262,7 @@ const fetchVouchersService = () => {
 const fetchFavouriteProducsService = (idUser) => {
     return axios({
         method: 'get',
-        url: `http://127.0.0.1:5000/cross-sell/${idUser}`,
+        url: `http://localhost:5000/cross-sell/${idUser}`,
     });
 }
 const saveVoucherService = (voucherId) => {

@@ -64,7 +64,7 @@ const Home = () => {
 
   return (
     <div className='page-homepage'>
-      {/* <input type="file" accept="image/*" onChange={handleFileChange} /> */}
+      <input type="file" accept="image/*" onChange={handleFileChange} />
       <Header />
       <ExploreMenu />
       <BannerWelcome />

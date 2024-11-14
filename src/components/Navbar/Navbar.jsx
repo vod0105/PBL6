@@ -158,17 +158,10 @@ const Navbar = () => {
         </NavLink> */}
 
         {/* <NavLink
-          to="/test-checkout"
+          to="/download"
           className={({ isActive }) => (isActive ? 'active' : '')}
         >
-          Test thanh toán
-        </NavLink> */}
-
-        {/* <NavLink
-          to="/test-delivery"
-          className={({ isActive }) => (isActive ? 'active' : '')}
-        >
-          Test Map giao hàng
+          Tải ngay
         </NavLink> */}
 
       </ul >

@@ -32,7 +32,7 @@ const Orders = () => {
       case 'Đơn hàng đã bị hủy':
         setStatusOrderInteger(2);
         break;
-      case 'Đơn hàng đã được xác nhận':
+      case 'Đơn hàng đã được xác nhận': case 'Đơn hàng đã chọn được người giao': case 'Đơn hàng đã được người giao nhận':
         setStatusOrderInteger(3);
         break;
       case 'Đơn hàng đang giao':

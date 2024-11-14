@@ -76,7 +76,7 @@ const LoginModal = () => {
   // FB
   const handleSuccessFacebook = async () => {
     // dispatch(loginGoogle(credentialResponse.credential));
-    window.location.href = 'http://localhost:8080/oauth2/authorization/facebook';
+    window.location.href = 'http://10.10.27.27:8080/oauth2/authorization/facebook';
   }
   const handleErrorFacebook = () => {
     alert('Lỗi tùm lum');

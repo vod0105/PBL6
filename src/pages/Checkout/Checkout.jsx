@@ -255,14 +255,14 @@ const Checkout = () => {
         dispatch(fetchVouchers());
         getCurrentCoors();
 
-        // fetchAddressFromCoordinates(addressCoords[0], addressCoords[1]);  // (lat, lon)
+        fetchAddressFromCoordinates(addressCoords[0], addressCoords[1]);  // (lat, lon)
 
     }, []);
 
     // Click chuột -> Tọa độ thay đổi -> Input thay đổi
     useEffect(() => {
         if (addressCoords) {
-            // fetchAddressFromCoordinates(addressCoords[0], addressCoords[1]);  // Gọi hàm với tọa độ mới
+            fetchAddressFromCoordinates(addressCoords[0], addressCoords[1]);  // Gọi hàm với tọa độ mới
             let distance = getDistance(addressCoords[0], addressCoords[1], selectedStore ? +selectedStore.latitude : 16.0471, selectedStore ? +selectedStore.longitude : 108.206); // note: thay tọa độ sau bằng tọa độ cửa hàng
             setDistance(distance);
             if (distance > 1.5) {

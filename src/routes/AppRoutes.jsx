@@ -21,6 +21,7 @@ import RouteMap from '../components/RouteMap/RouteMap';
 import DeliveryMap from '../components/DeliveryMap/DeliveryMap';
 import Combo from '../pages/Combo/Combo';
 import ComboItemDetail from '../components/ComboItemDetail/ComboItemDetail';
+import Download from '../pages/Download/Download';
 
 const AppRoutes = (props) => {
     return (
@@ -59,6 +60,7 @@ const AppRoutes = (props) => {
                 <Route path="/test-ggmap" element={<RouteMap />} />
                 <Route path="/order-in-transit/:orderCode" element={<DeliveryMap />} />
 
+                <Route path="/download" element={<Download />} />
 
                 <Route path="*" element={<div>404 Not Found!!!</div>} />
 

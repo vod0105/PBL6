@@ -51,7 +51,8 @@
                 display: flex;
                 flex-direction: row;
                 border: 1px solid #E7E7E7;
-                overflow-y: auto; // Chỉ cuộn dọc nội dung sản phẩm khi quá nhiều sản phẩm
+                max-width: 600px;
+                overflow-x: auto; // Chỉ cuộn dọc nội dung sản phẩm khi quá nhiều sản phẩm
                 .product-item{
                     flex: 1;
                     display: flex;

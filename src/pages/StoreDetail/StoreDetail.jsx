@@ -157,6 +157,8 @@ const StoreDetail = () => {
     });
     // console.log('updatedListVouchersStore: ', updatedListVouchersStore);
     setVouchers(updatedListVouchersStore);
+    console.log('voucher cửa hàng: ', listVouchersStore);
+    console.log('voucher user: ', listVouchersUser);
   }, [listVouchersUser, listVouchersStore]);
 
   // useEffect(() => {
