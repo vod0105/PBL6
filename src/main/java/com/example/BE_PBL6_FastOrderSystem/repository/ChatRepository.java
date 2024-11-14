@@ -1,6 +1,7 @@
 package com.example.BE_PBL6_FastOrderSystem.repository;
 
 import com.example.BE_PBL6_FastOrderSystem.entity.Chat;
+import com.example.BE_PBL6_FastOrderSystem.entity.Store;
 import com.example.BE_PBL6_FastOrderSystem.entity.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -39,4 +40,10 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
     @Transactional
     @Query("UPDATE Chat m SET m.isRead = true WHERE m.isRead = false AND m.receiver.id = :sender AND m.sender.id= :user")
     int updateMessagesToOnline(@Param("sender") Long sender,@Param("user") Long user);
+
+    @Query("SELECT st.manager.id FROM Store st")
+    List<Long> findAllStores();
+
+    @Query("SELECT st.storeId FROM Store st WHERE st.manager.id = ?1")
+    List<Long> findAllStoresById(Long id);
 }
