@@ -1,7 +1,8 @@
 package com.example.BE_PBL6_FastOrderSystem.service.Impl;
-
 import com.example.BE_PBL6_FastOrderSystem.entity.Schedule;
 import com.example.BE_PBL6_FastOrderSystem.entity.Staff;
+
+import com.example.BE_PBL6_FastOrderSystem.entity.Store;
 import com.example.BE_PBL6_FastOrderSystem.repository.ScheduleRepository;
 import com.example.BE_PBL6_FastOrderSystem.repository.StaffRepository;
 import com.example.BE_PBL6_FastOrderSystem.repository.StoreRepository;
@@ -47,18 +48,20 @@ public class ScheduleServiceImpl implements IScheduleService {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new APIRespone(false, "No schedule found", null));
         }
         List<ScheduleResponse> scheduleResponses = scheduleRepository.findAll().stream()
-                .map(schedule -> new ScheduleResponse(schedule.getId(), schedule.getShift(), schedule.getStartShift(), schedule.getEndShift(), schedule.getDate(), schedule.getStaff().getId()))
+                .map(schedule -> new ScheduleResponse(schedule.getId(), schedule.getShift(), schedule.getStartShift(), schedule.getEndShift(), schedule.getDate(),schedule.getStaff()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new APIRespone(true, "Get all schedule successfully", scheduleResponses));
     }
     @Override
-    public ResponseEntity<APIRespone> getScheduleByStoreId(Long storeId) {
+    public ResponseEntity<APIRespone> getScheduleByStoreId(Long ownerId) {
+        List<Store> stores = storeRepository.findAllByManagerId(ownerId);
+        Long storeId = stores.get(0).getStoreId();
         if (staffRepository.findAll().isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new APIRespone(false, "No schedule found", null));
         }
         List<ScheduleResponse> scheduleResponses = scheduleRepository.findAll().stream()
                 .filter(schedule -> schedule.getStaff().getStore().getStoreId().equals(storeId))
-                .map(schedule -> new ScheduleResponse(schedule.getId(), schedule.getShift(), schedule.getStartShift(), schedule.getEndShift(), schedule.getDate(), schedule.getStaff().getId()))
+                .map(schedule -> new ScheduleResponse(schedule.getId(), schedule.getShift(), schedule.getStartShift(), schedule.getEndShift(), schedule.getDate(), schedule.getStaff()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new APIRespone(true, "Get schedule by store id successfully", scheduleResponses));
     }
@@ -69,7 +72,7 @@ public class ScheduleServiceImpl implements IScheduleService {
         }
         List<ScheduleResponse> scheduleResponses = scheduleRepository.findAll().stream()
                 .filter(schedule -> schedule.getId().equals(id))
-                .map(schedule -> new ScheduleResponse(schedule.getId(), schedule.getShift(), schedule.getStartShift(), schedule.getEndShift(), schedule.getDate(), schedule.getStaff().getId()))
+                .map(schedule -> new ScheduleResponse(schedule.getId(), schedule.getShift(), schedule.getStartShift(), schedule.getEndShift(), schedule.getDate(), schedule.getStaff()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new APIRespone(true, "Get schedule by id successfully", scheduleResponses));
     }
@@ -80,7 +83,7 @@ public class ScheduleServiceImpl implements IScheduleService {
         }
         List<ScheduleResponse> scheduleResponses = scheduleRepository.findAll().stream()
                 .filter(schedule -> schedule.getStaff().getEmployeeName().equals(employeeName))
-                .map(schedule -> new ScheduleResponse(schedule.getId(), schedule.getShift(), schedule.getStartShift(), schedule.getEndShift(), schedule.getDate(), schedule.getStaff().getId()))
+                .map(schedule -> new ScheduleResponse(schedule.getId(), schedule.getShift(), schedule.getStartShift(), schedule.getEndShift(), schedule.getDate(), schedule.getStaff()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new APIRespone(true, "Get schedule by employee name successfully", scheduleResponses));
 
@@ -92,7 +95,7 @@ public class ScheduleServiceImpl implements IScheduleService {
         }
         List<ScheduleResponse> scheduleResponses = scheduleRepository.findAll().stream()
                 .filter(schedule -> schedule.getStaff().getId().equals(staffId))
-                .map(schedule -> new ScheduleResponse(schedule.getId(), schedule.getShift(), schedule.getStartShift(), schedule.getEndShift(), schedule.getDate(), schedule.getStaff().getId()))
+                .map(schedule -> new ScheduleResponse(schedule.getId(), schedule.getShift(), schedule.getStartShift(), schedule.getEndShift(), schedule.getDate(), schedule.getStaff()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new APIRespone(true, "Get schedule by staff id successfully", scheduleResponses));
     }

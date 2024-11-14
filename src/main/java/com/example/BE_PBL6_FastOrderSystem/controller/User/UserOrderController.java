@@ -2,14 +2,11 @@ package com.example.BE_PBL6_FastOrderSystem.controller.User;
 import com.example.BE_PBL6_FastOrderSystem.controller.Payment.MOMO.PaymentMomoCheckStatusController;
 import com.example.BE_PBL6_FastOrderSystem.controller.Payment.ZALOPAY.PaymentZaloPayCheckStatusController;
 import com.example.BE_PBL6_FastOrderSystem.entity.Cart;
-import com.example.BE_PBL6_FastOrderSystem.repository.ProductRepository;
 import com.example.BE_PBL6_FastOrderSystem.request.PaymentRequest;
 import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
 import com.example.BE_PBL6_FastOrderSystem.response.OrderResponse;
 import com.example.BE_PBL6_FastOrderSystem.security.user.FoodUserDetails;
-import com.example.BE_PBL6_FastOrderSystem.service.IComboService;
 import com.example.BE_PBL6_FastOrderSystem.service.IPaymentService;
-import com.example.BE_PBL6_FastOrderSystem.service.IProductService;
 import com.example.BE_PBL6_FastOrderSystem.service.IOrderService;
 import lombok.RequiredArgsConstructor;
 
@@ -35,11 +32,9 @@ import java.util.stream.Collectors;
 public class UserOrderController {
     private final IOrderService orderService;
     private final IPaymentService paymentService;
-    private final IComboService comboService;
-    private final IProductService productService;
     private final PaymentMomoCheckStatusController paymentMomoCheckStatusController;
     private final PaymentZaloPayCheckStatusController paymentZaloPayCheckStatusController;
-    private final ProductRepository productRepository;
+
 
     public ResponseEntity<APIRespone> checkPaymentMomoStatus(PaymentRequest orderRequest) {
         try {
@@ -56,7 +51,6 @@ public class UserOrderController {
     }
     public ResponseEntity<APIRespone> checkPaymentZaloPayStatus(String apptransid) {
         try {
-            // Perform the HTTP request to check payment status
             ResponseEntity<APIRespone> response = paymentZaloPayCheckStatusController.getStatus(apptransid);
             Map<String, Object> responseData = (Map<String, Object>) response.getBody().getData();
             if (response.getStatusCode() == HttpStatus.OK && "Success".equals(responseData.get("status"))) {
@@ -83,18 +77,17 @@ public class UserOrderController {
         Double latitude = orderRequest.getLatitude();
         String orderCode = orderService.generateUniqueOrderCode();
         Long userId = FoodUserDetails.getCurrentUserId();
+        String discountCode = orderRequest.getDiscountCode();
         orderRequest.setOrderId(orderCode);
         orderRequest.setUserId(userId);
-        orderRequest.setAmount(orderService.calculateOrderNowAmount(productId, comboId, quantity, storeId, latitude, longitude));
+        orderRequest.setAmount(orderService.calculateOrderNowAmount(productId, comboId, quantity, storeId, latitude, longitude, discountCode, size));
         if ("ZALOPAY".equalsIgnoreCase(paymentMethod)) {
             orderRequest.setOrderId(orderCode);
             orderRequest.setUserId(userId);
-            orderRequest.setOrderInfo("Payment ZaloPay for order " + orderCode);
+            orderRequest.setOrderInfo("Payment for order " + orderCode);
             orderRequest.setLang("en");
             orderRequest.setExtraData("additional data");
             Map<String, Object> zalopayResponse = paymentService.createOrderZaloPay(orderRequest);
-            System.out.println("ZaloPay response: " + zalopayResponse);
-            System.out.println();
             if (Integer.parseInt(zalopayResponse.get("returncode").toString()) == 1) {
                 ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
                 final int[] count = {0};
@@ -105,22 +98,17 @@ public class UserOrderController {
                         return;
                     }
                     ResponseEntity<APIRespone> statusResponse = checkPaymentZaloPayStatus(zalopayResponse.get("apptransid").toString());
-                    System.out.println("Payment status response: " + statusResponse);
                     if (statusResponse.getStatusCode() == HttpStatus.OK) {
-                        ResponseEntity<APIRespone> response = orderService.processOrderNow(userId, paymentMethod, productId, comboId, drinkId ,storeId, quantity, size, deliveryAddress, longitude,latitude ,orderCode);
-                        System.out.println("Response khi processOrderNow = ZALOPAY: " + response);
+                        ResponseEntity<APIRespone> response = orderService.processOrderNow(userId, paymentMethod, productId, comboId, drinkId ,storeId, quantity, size, deliveryAddress, longitude,latitude ,orderCode, discountCode);
                         if (response.getStatusCode() == HttpStatus.OK) {
                             orderService.updateQuantityProduct(productId, comboId, storeId, quantity);
                             ResponseEntity<APIRespone> orderResponse = orderService.findOrderByOrderCode(orderCode);
                             OrderResponse data = (OrderResponse) orderResponse.getBody().getData();
-
-                            System.out.println("data: " + data);
                             paymentService.savePayment(orderRequest, data.getOrderId(), userId);
-                         //  orderService.updateOrderStatus(orderCode, "Đơn hàng đã được xác nhận");
                         }
                         scheduler.shutdown();
                     } else {
-                        System.out.println("Payment status is not OK. Retrying...");
+                        System.out.println("Waiting for payment status...");
                     }
                 }, 0, 10, TimeUnit.SECONDS);
                 APIRespone apiResponse = new APIRespone(true, "ZaloPay payment initiated", zalopayResponse);
@@ -132,11 +120,10 @@ public class UserOrderController {
         if ("MOMO".equalsIgnoreCase(paymentMethod)) {
             orderRequest.setOrderId(orderCode);
             orderRequest.setUserId(userId);
-            orderRequest.setOrderInfo("Payment MOMO for order " + orderCode);
+            orderRequest.setOrderInfo("Payment for order " + orderCode);
             orderRequest.setLang("en");
             orderRequest.setExtraData("additional data");
             Map<String, Object> momoResponse = paymentService.createOrderMomo(orderRequest);
-            System.out.println("MoMo response khi product: " + momoResponse);
             if ("Success".equals(momoResponse.get("message"))) {
                 ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
                 final int[] count = {0};
@@ -148,17 +135,16 @@ public class UserOrderController {
                     }
                     ResponseEntity<APIRespone> statusResponse = checkPaymentMomoStatus(orderRequest);
                     if (statusResponse.getStatusCode() == HttpStatus.OK) {
-                        ResponseEntity<APIRespone> response = orderService.processOrderNow(userId, paymentMethod, productId, comboId, drinkId ,storeId, quantity, size, deliveryAddress, longitude,latitude, orderCode);
+                        ResponseEntity<APIRespone> response = orderService.processOrderNow(userId, paymentMethod, productId, comboId, drinkId ,storeId, quantity, size, deliveryAddress, longitude,latitude, orderCode, discountCode);
                         if (response.getStatusCode() == HttpStatus.OK) {
                             orderService.updateQuantityProduct(productId, comboId, storeId, quantity);
                             ResponseEntity<APIRespone> orderResponse = orderService.findOrderByOrderCode(orderCode);
                             OrderResponse data = (OrderResponse) orderResponse.getBody().getData();
-                           orderService.updateOrderStatus(orderCode, "Đơn hàng đã được xác nhận");
                             paymentService.savePayment(orderRequest, data.getOrderId(), userId);
                         }
                         scheduler.shutdown();
                     } else {
-                        System.out.println("Payment status is not OK. Retrying...");
+                        System.out.println("Waiting for payment status...");
                     }
                 }, 0, 10, TimeUnit.SECONDS);
                 APIRespone apiResponse = new APIRespone(true, "MoMo payment initiated", momoResponse);
@@ -173,14 +159,13 @@ public class UserOrderController {
             orderRequest.setOrderInfo("Payment CASH for order " + orderCode);
             orderRequest.setLang("en");
             orderRequest.setExtraData("additional data");
-            ResponseEntity<APIRespone> response = orderService.processOrderNow(userId, paymentMethod, productId, comboId, drinkId ,storeId, quantity, size, deliveryAddress,  longitude,latitude, orderCode);
-            System.out.println("Response order khi processOrderNow = CASH: " + response);
+            System.out.println("Check 1 " + orderRequest);
+            ResponseEntity<APIRespone> response = orderService.processOrderNow(userId, paymentMethod, productId, comboId, drinkId ,storeId, quantity, size, deliveryAddress,  longitude,latitude, orderCode, discountCode);
             if (response.getStatusCode() == HttpStatus.OK) {
                 orderService.updateQuantityProduct(productId, comboId, storeId, quantity);
                 ResponseEntity<APIRespone> orderResponse = orderService.findOrderByOrderCode(orderCode);
                 OrderResponse data = (OrderResponse) orderResponse.getBody().getData();
                 paymentService.savePayment(orderRequest, data.getOrderId(), userId);
-              orderService.updateOrderStatus(orderCode, "Đơn hàng đã được xác nhận");
             }
             return response;
         } else {
@@ -207,7 +192,9 @@ public class UserOrderController {
         String orderCode = orderService.generateUniqueOrderCode();
         orderRequest.setOrderId(orderCode);
         orderRequest.setUserId(userId);
-        Long totalAmount = calculateOrderAmount(cartIds);
+        String discountCode = orderRequest.getDiscountCode();
+        long totalAmount = orderService.calculateOrderAmount(cartIds, latitude, longitude, discountCode);
+        System.out.println("Total amounsst: " + totalAmount);
         orderRequest.setAmount(totalAmount);
         if ("ZALOPAY".equalsIgnoreCase(paymentMethod)) {
             orderRequest.setOrderId(orderCode);
@@ -234,7 +221,7 @@ public class UserOrderController {
                     ResponseEntity<APIRespone> statusResponse = checkPaymentZaloPayStatus(zalopayResponse.get("apptransid").toString());
                     System.out.println("Payment status response: " + statusResponse);
                     if (statusResponse.getStatusCode() == HttpStatus.OK) {
-                        ResponseEntity<APIRespone> response = orderService.processOrder(userId, paymentMethod, cartIds, deliveryAddress,longitude,latitude, orderCode);
+                        ResponseEntity<APIRespone> response = orderService.processOrder(userId, paymentMethod, cartIds, deliveryAddress,longitude,latitude, orderCode,discountCode);
                         System.out.println("Check zalo " + response);
                         if (response.getStatusCode() == HttpStatus.OK) {
                             // duyệt qua tất cả các giỏ hàng
@@ -291,7 +278,7 @@ public class UserOrderController {
                     }
                     ResponseEntity<APIRespone> statusResponse = checkPaymentMomoStatus(orderRequest);
                     if (statusResponse.getStatusCode() == HttpStatus.OK) {
-                        ResponseEntity<APIRespone> response = orderService.processOrder(userId, paymentMethod, cartIds, deliveryAddress,  longitude,latitude, orderCode);
+                        ResponseEntity<APIRespone> response = orderService.processOrder(userId, paymentMethod, cartIds, deliveryAddress,  longitude,latitude, orderCode, discountCode);
                         if (response.getStatusCode() == HttpStatus.OK) {
                             for (Cart cart : cartItems) {
                                 Long storeId = cart.getStoreId();
@@ -310,10 +297,9 @@ public class UserOrderController {
                         ResponseEntity<APIRespone> orderResponse = orderService.findOrderByOrderCode(orderCode);
                         OrderResponse data = (OrderResponse) orderResponse.getBody().getData();
                         paymentService.savePayment(orderRequest, data.getOrderId(), userId);
-                       //orderService.updateOrderStatus(orderCode, "Đơn hàng đã được xác nhận");
                         scheduler.shutdown();
                     } else {
-                        System.out.println("Payment status is not OK. Retrying...");
+                        System.out.println("Waiting for payment status...");
                     }
                 }, 0, 10, TimeUnit.SECONDS);
                 APIRespone apiResponse = new APIRespone(true, "MoMo payment initiated", momoResponse);
@@ -329,7 +315,7 @@ public class UserOrderController {
             orderRequest.setOrderInfo("Payment CASH for order " + orderCode);
             orderRequest.setLang("en");
             orderRequest.setExtraData("additional data");
-            ResponseEntity<APIRespone> response = orderService.processOrder(userId, paymentMethod, cartIds, deliveryAddress,  longitude,latitude, orderCode);
+            ResponseEntity<APIRespone> response = orderService.processOrder(userId, paymentMethod, cartIds, deliveryAddress,  longitude,latitude, orderCode, discountCode);
             System.out.println("Check 1 " + response);
             if (response.getStatusCode() == HttpStatus.OK) {
                 if (response.getStatusCode() == HttpStatus.OK) {
@@ -354,17 +340,6 @@ public class UserOrderController {
         } else {
             return ResponseEntity.badRequest().body(new APIRespone(false, "Unsupported payment method", ""));
         }
-    }
-
-    private Long calculateOrderAmount(List<Long> cartIds) {
-        List<Cart> cartItems = cartIds.stream()
-                .flatMap(cartId -> orderService.getCartItemsByCartId(cartId).stream())
-                .collect(Collectors.toList());
-        long totalAmount = 0L;
-        for (Cart item : cartItems) {
-            totalAmount += (long) item.getTotalPrice();
-        }
-        return totalAmount;
     }
 
     @PostMapping("/cancel/{orderCode}")

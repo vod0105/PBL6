@@ -84,6 +84,7 @@ public class ResponseConverter {
                 averageRate,
                 combo.getImage(),
                 combo.getDescription(),
+                combo.getNumberDrinks(),
                 productResponses
         );
     }

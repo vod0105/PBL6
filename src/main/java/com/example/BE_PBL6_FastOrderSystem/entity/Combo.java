@@ -17,6 +17,7 @@ public class Combo {
     private String image;
     private Double comboPrice;
     private String description;
+    private Integer numberDrinks;
     @ManyToMany
     @JoinTable(
             name = "combo_product",

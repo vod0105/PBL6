@@ -1,8 +1,10 @@
 package com.example.BE_PBL6_FastOrderSystem.controller.Shipper;
 
+import com.example.BE_PBL6_FastOrderSystem.request.UserRequestV2;
 import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
 import com.example.BE_PBL6_FastOrderSystem.security.user.FoodUserDetails;
 import com.example.BE_PBL6_FastOrderSystem.service.IShipperOrderService;
+import com.example.BE_PBL6_FastOrderSystem.service.IShipperReportService;
 import com.example.BE_PBL6_FastOrderSystem.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/shipper")
 public class ShipperController {
     private final IShipperOrderService shipperOrderService;
+    private final IShipperReportService shipperReportService;
     private final IUserService userService;
     private Long getCurrentUserId() {
         return FoodUserDetails.getCurrentUserId();
@@ -23,16 +26,16 @@ public class ShipperController {
         return shipperOrderService.getAll();
     } // lay ra tat ca don hang
     @GetMapping("/order/status")
-    public ResponseEntity<APIRespone> getOrderByStatus(@RequestParam String status) {
-        Long shipperId = getCurrentUserId();
-        return shipperOrderService.getAllShipperOrderByStatus(shipperId, status);
+    public ResponseEntity<APIRespone> getAllOrderOfStatus(@RequestParam String status){
+        Long shipperId= getCurrentUserId();
+        return shipperOrderService.getAllShipperOrderByStatus(shipperId,status);
     }
     // lay ra tat ca don hang theo trang thai
 
-    @GetMapping("/order/all-one-shipper")
+    @GetMapping("/order/all-of-shipper")
     public ResponseEntity<APIRespone> getAllShipperOrder(){
         Long shipperId= getCurrentUserId();
-        return shipperOrderService.getAllShipperOrder(shipperId);
+        return shipperOrderService.getAllOrderDetailOfShipper(shipperId);
     } // lay ra tat ca don hang cua 1 shipper
     @GetMapping("/order/sorted-by-distance")
     public ResponseEntity<APIRespone> getOrdersSortedByDistance(@RequestParam int page, @RequestParam int size){
@@ -68,5 +71,15 @@ public class ShipperController {
     public ResponseEntity<APIRespone> setShipperBusy(){
         Long shipperId= getCurrentUserId();
         return shipperOrderService.updateBusyStatus(shipperId);
+    }
+    @GetMapping("/order/report")
+    public ResponseEntity<APIRespone> getShipperReport(){
+        Long shipperId= getCurrentUserId();
+        return shipperReportService.getAllShipperReport(shipperId);
+    }
+    @PutMapping("/update")
+    public ResponseEntity<APIRespone> updateUsers(@RequestBody UserRequestV2 userRequest) {
+        Long userId = FoodUserDetails.getCurrentUserId();
+        return userService.updateUserV3(userId, userRequest);
     }
 }

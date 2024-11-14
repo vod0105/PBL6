@@ -3,6 +3,7 @@ package com.example.BE_PBL6_FastOrderSystem.controller.Onwer;
 import com.example.BE_PBL6_FastOrderSystem.request.ScheduleRequest;
 import com.example.BE_PBL6_FastOrderSystem.request.StaffRequest;
 import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
+import com.example.BE_PBL6_FastOrderSystem.security.user.FoodUserDetails;
 import com.example.BE_PBL6_FastOrderSystem.service.IScheduleService;
 import com.example.BE_PBL6_FastOrderSystem.service.IStaffService;
 import jakarta.persistence.PostPersist;
@@ -17,15 +18,17 @@ public class OwnerStaffController {
     private final IScheduleService scheduleService;
     @PostMapping("/staff/create")
     public ResponseEntity<APIRespone> createStaff(@RequestBody StaffRequest request) {
-        return staffService.createStaff(request);
+        Long OwerId = FoodUserDetails.getCurrentUserId();
+        return staffService.createStaff(OwerId,request);
     }
     @GetMapping("/staff/all")
     public ResponseEntity<APIRespone> getAllStaff() {
         return staffService.getAllStaff();
     }
-    @GetMapping("/staff/store/{storeId}")
-    public ResponseEntity<APIRespone> getStaffByStoreId(@PathVariable Long storeId) {
-        return staffService.getStaffByStoreId(storeId);
+    @GetMapping("/staff/store")
+    public ResponseEntity<APIRespone> getStaffByStoreId() {
+        Long OwerId = FoodUserDetails.getCurrentUserId();
+        return staffService.getStaffByStoreId(OwerId);
     }
     @GetMapping("/staff/{id}")
     public ResponseEntity<APIRespone> getStaffById(@PathVariable Long id) {
@@ -37,7 +40,8 @@ public class OwnerStaffController {
     }
     @PutMapping("/staff/update/{id}")
     public ResponseEntity<APIRespone> updateStaff(@PathVariable Long id, @RequestBody StaffRequest request) {
-        return staffService.updateStaff(id, request);
+        Long OwerId = FoodUserDetails.getCurrentUserId();
+        return staffService.updateStaff(OwerId,id, request);
     }
     @DeleteMapping("/staff/delete/{id}")
     public ResponseEntity<APIRespone> deleteStaff(@PathVariable Long id) {
@@ -51,9 +55,10 @@ public class OwnerStaffController {
     public ResponseEntity<APIRespone> getAllSchedule() {
         return scheduleService.getAllSchedule();
     }
-    @GetMapping("/schedule/store/{storeId}")
-    public ResponseEntity<APIRespone> getScheduleByStoreId(@PathVariable Long storeId) {
-        return scheduleService.getScheduleByStoreId(storeId);
+    @GetMapping("/schedule/store")
+    public ResponseEntity<APIRespone> getScheduleByStoreId() {
+        Long OwerId = FoodUserDetails.getCurrentUserId();
+        return scheduleService.getScheduleByStoreId(OwerId);
     }
     @GetMapping("/schedule/staff/{staffId}")
     public ResponseEntity<APIRespone> getScheduleByStaffId(@PathVariable Long staffId) {

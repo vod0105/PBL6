@@ -11,6 +11,7 @@ public class HelperHmacSHA256 {
         try {
 
             Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
+            System.out.println(secretKey);
             SecretKeySpec secret_key = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
             sha256_HMAC.init(secret_key);
 

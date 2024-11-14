@@ -8,6 +8,7 @@ import java.util.List;
 
 @Data
 @Entity
+@Table(name = "shipper_order")
 public class ShipperOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,9 +23,18 @@ public class ShipperOrder {
     private List<OrderDetail> orderDetails;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private String status;
+    @ManyToOne
+    @JoinColumn(name = "status_id")
+    private StatusDelivery status;
     private LocalDateTime receivedAt;
     private LocalDateTime deliveredAt;
     private String note;
-}
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
+    @PreUpdate protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 
+}

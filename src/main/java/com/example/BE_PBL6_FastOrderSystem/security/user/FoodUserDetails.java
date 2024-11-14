@@ -24,13 +24,14 @@ public class FoodUserDetails implements UserDetails {
     private String password;
     private String fullName;
     private String email;
+    private String sub;
+    private String facebookId;
     private String address;
     private Double longitude;
     private Double latitude;
     private String avatar;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
     private boolean accountLocked;
     private Boolean isActive;
     private Collection<GrantedAuthority> authorities;
@@ -43,6 +44,8 @@ public class FoodUserDetails implements UserDetails {
                 user.getPassword(),
                 user.getFullName(),
                 user.getEmail(),
+                user.getSub(),
+                user.getFacebookId(),
                 user.getAddress(),
                 user.getLongitude(),
                 user.getLatitude(),

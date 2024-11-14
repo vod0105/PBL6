@@ -20,18 +20,21 @@ public class Order {
     private List<OrderDetail> orderDetails;
     private LocalDateTime orderDate;
     private Double totalAmount;
-    private Double shippingFee;
     @ManyToOne
     @JoinColumn(name = "status_id")
     private StatusOrder status;
     private String deliveryAddress;
-    @Column(name = "longitude", columnDefinition = "DOUBLE")
+    @Column(name = "longitude")
     private Double longitude;
-    @Column(name = "latitude", columnDefinition = "DOUBLE")
+    @Column(name = "latitude")
     private Double latitude;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private boolean isFeedBack;
+    @Column(name = "feed_back",nullable = false)
+    private Boolean feedback = false;
+    @ManyToOne
+    @JoinColumn(name = "discount_code_id")
+    private Voucher voucher;
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -52,14 +55,14 @@ public class Order {
                 ", orderDetails=" + orderDetails +
                 ", orderDate=" + orderDate +
                 ", totalAmount=" + totalAmount +
-                ", shippingFee=" + shippingFee +
                 ", status=" + status +
                 ", deliveryAddress='" + deliveryAddress + '\'' +
                 ", longitude=" + longitude +
                 ", latitude=" + latitude +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
-                ", isFeedBack=" + isFeedBack +
+                ", feedBack=" + feedback +
+                ", voucher=" + voucher +
                 '}';
     }
 }

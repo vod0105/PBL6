@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -16,11 +16,9 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cartId;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
@@ -28,8 +26,8 @@ public class Cart {
     @JoinColumn(name = "combo_id")
     private Combo combo;
     private int quantity;
-    private double unitPrice;
-    private double totalPrice;
+    private Double unitPrice;
+    private Double totalPrice;
     @ManyToOne
     @JoinColumn(name = "size_id")
     private Size size;
@@ -39,7 +37,7 @@ public class Cart {
             joinColumns = @JoinColumn(name = "cart_id"),
             inverseJoinColumns = @JoinColumn(name = "drink_product_id")
     )
-    private List<Product> drinkProducts;
+    private List<Product> drinkProducts = new ArrayList<>();
     private Long storeId;
     private String status;
     private LocalDateTime createdAt;
@@ -53,7 +51,6 @@ public class Cart {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
-
 
     @Override
     public String toString() {

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mã OTP đặt lại mật khẩu</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .email-container {
+      background-color: #ffffff;
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .email-header {
+      text-align: center;
+      font-size: 24px;
+      color: #333333;
+      margin-bottom: 20px;
+    }
+    .otp-code {
+      font-size: 20px;
+      color: #ffffff;
+      background-color: #007bff;
+      padding: 10px;
+      border-radius: 4px;
+      display: inline-block;
+      margin: 20px 0;
+    }
+    .footer {
+      text-align: center;
+      color: #999999;
+      font-size: 12px;
+      margin-top: 20px;
+    }
+    .company-logo {
+      display: block;
+      margin: 0 auto 20px auto;
+      width: 100%; /* Hoặc thay thế với kích thước cụ thể nếu cần */
+    }
+  </style>
+</head>
+<body>
+<div class="email-container">
+  <div class="email-header">Yêu cầu đặt lại mật khẩu</div>
+  <p>Xin chào, <strong>${email}</strong></p>
+  <p>Để đặt lại mật khẩu của bạn, vui lòng sử dụng mã OTP sau:</p>
+  <div class="otp-code">${otp}</div>
+  <p>Mã OTP này có hiệu lực trong 2 phút. Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này.</p>
+  <p>Trân trọng,<br>Đội ngũ DEV DUT</p>
+  <div class="footer">&copy; 2024 ${company_name}. Mọi quyền được bảo lưu.</div>
+</div>
+</body>
+</html>

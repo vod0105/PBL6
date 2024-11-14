@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,6 +22,8 @@ public class PublicController {
     private final ISizeService sizeService;
     private final IStatusOrderService statusOrderService;
     private final IRateService rateService;
+    private final IUserService userService;
+    private final IVoucherService voucherService;
 
     private final IOrderService orderService;
     @GetMapping("/categories/all")
@@ -76,6 +79,12 @@ public class PublicController {
       public ResponseEntity<APIRespone> getCombosByStoreId(@PathVariable("storeId") Long storeId) {
          return comboService.getCombosByStoreId(storeId);
       }
+    @GetMapping("/products/drinks")
+    public ResponseEntity<APIRespone> getDrinksByListStoreId(
+            @RequestParam("storeIds") List<Long> storeIds) {
+        return productService.getDrinksByListStoreId(storeIds);
+    }
+
     @GetMapping("/stores/all")
     public ResponseEntity<APIRespone> getStores() {
          return storeService.getAllStores();
@@ -122,4 +131,23 @@ public class PublicController {
     public ResponseEntity<APIRespone> searchShipper(@RequestParam Double longitude, @RequestParam Double latitude, @RequestParam int limit) {
         return orderService.findNearestShipper(longitude, latitude, limit);
     }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<APIRespone> getUserById(@PathVariable("id") Long id) {
+        return userService.getByid(id);
+    }
+    @GetMapping("/user/search/{keyname}")
+    public ResponseEntity<APIRespone> searchUser(@PathVariable String keyname) {
+        return userService.searchByName(keyname);
+    }
+    @GetMapping("/voucher/all")
+    public ResponseEntity<APIRespone> getAllVoucher() {
+        return voucherService.getAllDiscountCode();
+
+    }
+    @GetMapping("/voucher/{storeId}")
+    public ResponseEntity<APIRespone> getVoucherByStoreId(@PathVariable("storeId") Long storeId) {
+        return voucherService.getVouchersByStoreId(storeId);
+    }
+
 }

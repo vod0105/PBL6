@@ -1,19 +1,21 @@
-// AuthController.java
+
 package com.example.BE_PBL6_FastOrderSystem.controller.Public;
 
 import com.example.BE_PBL6_FastOrderSystem.repository.RoleRepository;
 import com.example.BE_PBL6_FastOrderSystem.repository.UserRepository;
-import com.example.BE_PBL6_FastOrderSystem.request.FormRequest;
-import com.example.BE_PBL6_FastOrderSystem.request.RefreshRequest;
+import com.example.BE_PBL6_FastOrderSystem.request.*;
 import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
 import com.example.BE_PBL6_FastOrderSystem.entity.User;
-import com.example.BE_PBL6_FastOrderSystem.request.LoginRequest;
 import com.example.BE_PBL6_FastOrderSystem.response.JwtResponse;
 import com.example.BE_PBL6_FastOrderSystem.security.jwt.JwtUtils;
 import com.example.BE_PBL6_FastOrderSystem.security.user.FoodUserDetails;
 import com.example.BE_PBL6_FastOrderSystem.service.IAuthService;
+import com.example.BE_PBL6_FastOrderSystem.service.IEmailService;
 import com.example.BE_PBL6_FastOrderSystem.service.IFormService;
 import com.example.BE_PBL6_FastOrderSystem.utils.ImageGeneral;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.http.*;
 
@@ -41,10 +43,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AuthController {
     private final IAuthService authService;
-    private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final IEmailService emailService;
     private final RoleRepository roleRepository;
     private final IFormService formService;
 
@@ -53,9 +54,11 @@ public class AuthController {
     public ResponseEntity<APIRespone> registerUser(@RequestBody User user) {
         return authService.registerUser(user);
     }
+
     @PostMapping("/register-shipper")
-    public ResponseEntity<APIRespone> registerShipper(@RequestBody User user) {
-        return authService.registerShipper(user);
+    public ResponseEntity<APIRespone> registerShipper(@RequestBody ShipperRequest shipperRequest) {
+        return authService.registerShipper(shipperRequest);
+
     }
 
 
@@ -63,16 +66,17 @@ public class AuthController {
     public ResponseEntity<APIRespone> authenticateUser(@Valid @RequestBody LoginRequest request) {
         return authService.authenticateUser(request.getNumberPhone(), request.getPassword());
     }
+
     @PostMapping("/logout")
-    public ResponseEntity<APIRespone> logoutUser(@RequestHeader("Authorization") String token)
-    {
+    public ResponseEntity<APIRespone> logoutUser(@RequestHeader("Authorization") String token) {
         if (token != null && token.startsWith("Bearer ")) {
             token = token.substring(7);
             authService.logout(token);
             return new ResponseEntity<>(new APIRespone(true, "Logout success", ""), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new APIRespone(true, "Logout success", ""), HttpStatus.OK);
     }
-    return new ResponseEntity<>(new APIRespone(true, "Logout success", ""), HttpStatus.OK);
-    }
+
     @PostMapping("/refresh")
     public ResponseEntity<APIRespone> refreshToken(@RequestBody RefreshRequest request) {
         String refreshToken = request.getRefreshToken();
@@ -84,145 +88,129 @@ public class AuthController {
             return ResponseEntity.badRequest().body(new APIRespone(false, "Invalid token", null));
         }
     }
+
     @PostMapping("/send-otp")
     public ResponseEntity<APIRespone> resetPassword(@RequestParam String email) {
         return authService.SendOTP(email);
     }
+
     @PostMapping("/confirm-otp")
     public ResponseEntity<APIRespone> verifyOTP(@RequestParam String email, @RequestParam String otp, @RequestParam String newPassword) {
         return authService.confirmOTP(email, otp, newPassword);
     }
 
-    @GetMapping("/user-info-google")
-    public ResponseEntity<APIRespone> getUserInfo(@AuthenticationPrincipal OAuth2User principal) throws Exception {
+    @GetMapping("/oauth2/callback")
+    public void handleCallback(HttpServletResponse response, @AuthenticationPrincipal OAuth2User principal, @RequestParam(value = "client", required = false) String client) throws Exception {
         if (principal == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new APIRespone(false, "User not authenticated", null));
+            response.sendRedirect("http://localhost:3000/login?error");
+            return;
         }
+
         String email = principal.getAttribute("email");
         String sub = principal.getAttribute("sub");
         String name = principal.getAttribute("name");
         String picture = principal.getAttribute("picture");
-        String base64Image = ImageGeneral.urlToBase64(picture);
-        Optional<User> optionalUser = userRepository.findByEmail(email);
+        String base64Image = picture != null ? ImageGeneral.urlToBase64(picture) : null;
         User user;
-        if (optionalUser.isPresent()) {
-            user = optionalUser.get();
-            user.setAvatar(base64Image);
-            user.setSub(sub);
-            userRepository.save(user);
+        System.out.println("email: " + email);
+
+        if (sub != null) {
+            // Google login
+            Optional<User> optionalUser = userRepository.findBySub(sub);
+            if (optionalUser.isPresent()) {
+                user = optionalUser.get();
+                user.setAvatar(base64Image);
+                user.setSub(sub);
+            } else {
+                user = new User();
+                user.setEmail(email);
+                user.setSub(sub);
+                user.setFullName(name);
+                user.setAvatar(base64Image);
+                user.setAccountLocked(false);
+                user.setRole(roleRepository.findByName("ROLE_USER").orElseThrow(() -> new RuntimeException("ROLE_USER not found")));
+            }
         } else {
-            user = new User();
-            user.setEmail(email);
-            user.setSub(sub);
-            user.setFullName(name);
-            user.setAvatar(base64Image);
-            user.setAccountLocked(false);
-            user.setRole(roleRepository.findByName("ROLE_USER").orElseThrow(() -> new RuntimeException("ROLE_USER not found")));
-            userRepository.save(user);
+            // Facebook login
+            String facebookId = principal.getAttribute("id");
+            System.out.println("Facebook ID: " + facebookId);
+            Optional<User> optionalUser = userRepository.findByFacebookId(facebookId);
+            if (optionalUser.isPresent()) {
+                user = optionalUser.get();
+                user.setAvatar(base64Image);
+                user.setFacebookId(facebookId);
+            } else {
+                user = new User();
+                user.setFullName(name);
+                user.setFacebookId(facebookId);
+                user.setAvatar(base64Image);
+                user.setAccountLocked(false);
+                user.setRole(roleRepository.findByName("ROLE_USER").orElseThrow(() -> new RuntimeException("ROLE_USER not found")));
+            }
         }
-        // Chuyển đổi User thành FoodUserDetails
+
+        userRepository.save(user);
+
+        // Convert User to FoodUserDetails
         FoodUserDetails userDetails = FoodUserDetails.buildUserDetails(user);
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         String jwt = jwtUtils.generateToken(authentication);
 
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .toList();
-        return ResponseEntity.ok(new APIRespone(true, "Success", new JwtResponse(
-                user.getId(),
-                user.getEmail(),
-                user.getFullName(),
-                user.getPhoneNumber(),
-                user.getAddress(),
-                user.getLongitude(),
-                user.getLatitude(),
-                user.getAvatar(),
-                user.getCreatedAt(),
-                user.getUpdatedAt(),
-                user.getAccountLocked(),
-                user.getIsActive(),
-                jwt,
-                roles
-        )));
-    }
-
-@GetMapping("/user-info-facebook")
-public ResponseEntity<APIRespone> getUserInfoFacebook(@AuthenticationPrincipal OAuth2User principal) throws Exception {
-    if (principal == null) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new APIRespone(false, "User not authenticated", null));
-    }
-    System.out.println("User Attributes: " + principal.getAttributes());
-    String email = principal.getAttribute("email") != null ? principal.getAttribute("email") : "";
-    String facebookId = principal.getAttribute("id");
-    String name = principal.getAttribute("name");
-
-    Map<String, Object> pictureData = (Map<String, Object>) principal.getAttribute("picture");
-    String pictureUrl = null;
-    if (pictureData != null && pictureData.get("data") != null) {
-        Map<String, Object> data = (Map<String, Object>) pictureData.get("data");
-        pictureUrl = (String) data.get("url");
-    }
-
-    if (facebookId == null || name == null) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIRespone(false, "Invalid Facebook profile information: Missing ID or name", null));
-    }
-
-    String base64Image = null;
-    try {
-        if (pictureUrl != null) {
-            base64Image = ImageGeneral.urlToBase64(pictureUrl);
+        String redirectUrl;
+        if ("flutter".equalsIgnoreCase(client)) {
+            redirectUrl = "myapp://oauth2/redirect?token=" + jwt + "&userId=" + user.getId();
+        } else {
+            redirectUrl = "http://localhost:3000/oauth2/redirect?token=" + jwt + "&userId=" + user.getId();
         }
-    } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new APIRespone(false, "Failed to convert image: " + e.getMessage(), null));
+
+        response.sendRedirect(redirectUrl);
     }
 
-    Optional<User> optionalUser = userRepository.findByFacebookId(facebookId);
-    User user;
+    @GetMapping("/user-info")
+    public ResponseEntity<APIRespone> getUserInfo(@RequestHeader("Authorization") String token) {
+        String jwt = token.substring(7);
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(jwtUtils.key())
+                .build()
+                .parseClaimsJws(jwt)
+                .getBody();
 
-    if (optionalUser.isPresent()) {
-        user = optionalUser.get();
-        user.setAvatar(base64Image);
-        user.setFacebookId(facebookId);
-        user.setAccountLocked(false);
-        userRepository.save(user);
-    } else {
-        user = new User();
-        user.setEmail(email);
-        user.setFacebookId(facebookId);
-        user.setFullName(name);
-        user.setAvatar(base64Image);
-        user.setAccountLocked(false);
-        user.setRole(roleRepository.findByName("ROLE_USER").orElseThrow(() -> new RuntimeException("ROLE_USER not found")));
-        userRepository.save(user);
+        String sub = claims.get("sub", String.class);
+        String facebookId = claims.get("facebookId", String.class);
+
+        Optional<User> optionalUser;
+        if (sub != null) {
+            System.out.println("Sub: " + sub);
+            optionalUser = userRepository.findBySub(sub);
+        } else if (facebookId != null) {
+            System.out.println("Facebook id: " + facebookId);
+            optionalUser = userRepository.findByFacebookId(facebookId);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIRespone(false, "Invalid token", null));
+        }
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            return ResponseEntity.ok(new APIRespone(true, "User info retrieved successfully", new JwtResponse(
+                    user.getId(),
+                    user.getEmail(),
+                    user.getFullName(),
+                    user.getPhoneNumber(),
+                    user.getAddress(),
+                    user.getLongitude(),
+                    user.getLatitude(),
+                    user.getAvatar(),
+                    user.getCreatedAt(),
+                    user.getUpdatedAt(),
+                    user.getAccountLocked(),
+                    user.getIsActive(),
+                    jwt,
+                    List.of("ROLE_USER")
+            )));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIRespone(false, "User not found", null));
+        }
     }
-
-    // Convert User to FoodUserDetails
-    FoodUserDetails userDetails = FoodUserDetails.buildUserDetails(user);
-    Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-    String jwt = jwtUtils.generateToken(authentication);
-
-    List<String> roles = userDetails.getAuthorities().stream()
-            .map(GrantedAuthority::getAuthority)
-            .collect(Collectors.toList());
-
-    // Return API response with user details
-    return ResponseEntity.ok(new APIRespone(true, "Success", new JwtResponse(
-            user.getId(),
-            user.getEmail(),
-            user.getFullName(),
-            user.getPhoneNumber(),
-            user.getAddress(),
-            user.getLongitude(),
-            user.getLatitude(),
-            user.getAvatar(),
-            user.getCreatedAt(),
-            user.getUpdatedAt(),
-            user.getAccountLocked(),
-            user.getIsActive(),
-            jwt,
-            roles
-    )));
-}
 
 
     @PostMapping("/shipper-registration")
@@ -238,7 +226,39 @@ public ResponseEntity<APIRespone> getUserInfoFacebook(@AuthenticationPrincipal O
             @RequestParam("vehicle") String vehicle,
             @RequestParam("licensePlate") String licensePlate,
             @RequestParam("driverLicense") String driverLicense) {
-            FormRequest formRequest = new FormRequest(name, citizenID, imageCitizenFront, imageCitizenBack, email, phone, address, age, vehicle, licensePlate, driverLicense);
-            return formService.addForm(formRequest);
+        FormRequest formRequest = new FormRequest(name, citizenID, imageCitizenFront, imageCitizenBack, email, phone, address, age, vehicle, licensePlate, driverLicense);
+        ResponseEntity<APIRespone> response = formService.addForm(formRequest);
+        if (response.getBody().getMessage().equals("Success")) {
+            String adminEmail = "vunguyen.170803@gmail.com";
+            String subject = "New shipper registration";
+            String message = "<html><head>" +
+                    "<style>" +
+                    "body { font-family: Arial, sans-serif; }" +
+                    "h1 { color: #333; }" +
+                    "p { font-size: 14px; }" +
+                    "ul { list-style-type: none; padding: 0; }" +
+                    "li { margin-bottom: 10px; }" +
+                    "strong { color: #555; }" +
+                    "</style>" +
+                    "</head><body>" +
+                    "<h1>New Shipper Registration</h1>" +
+                    "<p>A new shipper has registered with the following details:</p>" +
+                    "<ul>" +
+                    "<li><strong>Name:</strong> " + name + "</li>" +
+                    "<li><strong>Email:</strong> " + email + "</li>" +
+                    "<li><strong>Phone:</strong> " + phone + "</li>" +
+                    "<li><strong>Address:</strong> " + address + "</li>" +
+                    "</ul>" +
+                    "<p>Please review and approve the registration.</p>" +
+                    "</body></html>";
+            emailService.sendEmail(adminEmail, subject, message);
+        }
+        return response;
+    }
+    @PostMapping("/shipper-registration2")
+    public ResponseEntity<APIRespone> addFormV2(
+            @RequestBody FormRequestV2 request) {
+
+        return formService.addFormV2(request);
     }
 }

@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -46,6 +48,7 @@ public class UserServiceImpl implements IUserService {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new APIRespone(true, "Success", userResponses));
     }
+
     @Override
     public ResponseEntity<APIRespone> getLocations(Long userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
@@ -82,6 +85,7 @@ public class UserServiceImpl implements IUserService {
         UserResponse userResponse = new UserResponse(user);
         return ResponseEntity.ok(new APIRespone(true, "Success", userResponse));
     }
+
     @Override
     public ResponseEntity<APIRespone> updateUser(Long id, UserRequest userRequest) {
         ResponseEntity<APIRespone> validationResponse = validateUserRequest(userRequest);
@@ -95,7 +99,7 @@ public class UserServiceImpl implements IUserService {
         }
         User existingUser = optionalUser.get();
         existingUser.setFullName(userRequest.getFullName());
-        if(userRequest.getAvatar() != null) {
+        if (userRequest.getAvatar() != null) {
             try {
                 InputStream imageInputStream = userRequest.getAvatar().getInputStream();
                 String base64Image = ImageGeneral.fileToBase64(imageInputStream);
@@ -109,8 +113,58 @@ public class UserServiceImpl implements IUserService {
         userRepository.save(existingUser);
         return ResponseEntity.ok(new APIRespone(true, "User updated susccessfully", ""));
     }
+
     @Override
     public ResponseEntity<APIRespone> updateUserV2(Long id, UserRequestV2 userRequest) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new APIRespone(false, "User not found", ""));
+        }
+
+        User existingUser = optionalUser.get();
+
+        // Kiểm tra nếu người dùng yêu cầu thay đổi email
+        if (userRequest.getEmail() != null && !userRequest.getEmail().equals(existingUser.getEmail())) {
+            // Nếu email mới đã tồn tại trong cơ sở dữ liệu thì trả về lỗi
+            if (userRepository.existsByEmail(userRequest.getEmail())) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body(new APIRespone(false, "Email already exists", ""));
+            }
+
+            // Kiểm tra định dạng email
+            if (!userRequest.getEmail().matches("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@([a-zA-Z0-9-]+\\.)+(com|net|org|edu|gov|mil|int)$")) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new APIRespone(false, "Invalid email format", ""));
+            }
+            existingUser.setEmail(userRequest.getEmail()); // Cập nhật email
+        }
+
+        // Kiểm tra tính hợp lệ của địa chỉ nếu có
+        if (userRequest.getAddress() != null) {
+            if (!userRequest.getAddress().matches("^[\\p{L}0-9\\s,.-]+$")) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new APIRespone(false, "Address must contain only letters, numbers, spaces, commas, periods, and hyphens", ""));
+            }
+            existingUser.setAddress(userRequest.getAddress()); // Cập nhật địa chỉ
+        }
+
+        // Cập nhật các trường khác nếu có
+        if (userRequest.getFullName() != null) {
+            existingUser.setFullName(userRequest.getFullName());
+        }
+        if (userRequest.getAvatar() != null) {
+            existingUser.setAvatar(userRequest.getAvatar());
+        }
+
+        userRepository.save(existingUser);
+        return ResponseEntity.ok(new APIRespone(true, "User updated successfully", ""));
+    }
+
+
+
+    @Override
+    public ResponseEntity<APIRespone> updateUserV3(Long id, UserRequestV2 userRequest) {
 
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isEmpty()) {
@@ -119,11 +173,14 @@ public class UserServiceImpl implements IUserService {
         }
         User existingUser = optionalUser.get();
         existingUser.setFullName(userRequest.getFullName());
-        if(userRequest.getAvatar() != null) {
+        if (userRequest.getAvatar() != null) {
             existingUser.setAvatar(userRequest.getAvatar());
         }
+
         existingUser.setEmail(userRequest.getEmail());
         existingUser.setAddress(userRequest.getAddress());
+        existingUser.setLatitude(userRequest.getLatitude());
+        existingUser.setLongitude(userRequest.getLongitude());
         userRepository.save(existingUser);
         return ResponseEntity.ok(new APIRespone(true, "User updated susccessfully", ""));
     }
@@ -188,5 +245,57 @@ public class UserServiceImpl implements IUserService {
         user.setPhoneNumber(phone);
         userRepository.save(user);
         return ResponseEntity.ok(new APIRespone(true, "Success", ""));
+    }
+
+    @Override
+    public ResponseEntity<APIRespone> getByid(Long id){
+        User user = userRepository.findByid(id);
+        UserResponse userResponse = new UserResponse(user);
+        return ResponseEntity.ok(new APIRespone(true, "Success", userResponse));
+    }
+    @Override
+    public   ResponseEntity<APIRespone> searchByName(String name){
+        List<User> list = new ArrayList<>();
+        for(User user : userRepository.findAll()){
+            if(user.getFullName().toLowerCase().contains(name.toLowerCase())){
+                list.add(user);
+            }
+        }
+        List<UserResponse> userResponses = list.stream()
+                .map(UserResponse::new)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(new APIRespone(true, "Success", userResponses));
+
+    }
+    @Override
+    public ResponseEntity<APIRespone> countOrderByMonth(){
+        LocalDateTime now = LocalDateTime.now();
+        Long result = userRepository.getAllPeopleRegisterByMonth(now.getMonthValue(),now.getYear());
+        return  ResponseEntity.ok(new APIRespone(true, "Success", result));
+    }
+
+    @Override
+    public List<UserResponse> getSearchByPhoneNumber(String phoneNumber){
+        List<User> users = userRepository.SearchUsersByPhoneNumber(phoneNumber);
+
+        List<UserResponse> userResponses = users.stream()
+                .map(UserResponse::new)
+                .collect(Collectors.toList());
+        return userResponses;
+    }
+
+    @Override
+    public ResponseEntity<APIRespone> resetPassword(Long userId, String oldPassword, String newPassword) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "User not found", ""));
+        }
+        User user = optionalUser.get();
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            return ResponseEntity.badRequest().body(new APIRespone(false, "Old password is incorrect", ""));
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        return ResponseEntity.ok(new APIRespone(true, "Password reset successfully", ""));
     }
 }

@@ -1,6 +1,7 @@
 package com.example.BE_PBL6_FastOrderSystem.service;
 
 import com.example.BE_PBL6_FastOrderSystem.entity.User;
+import com.example.BE_PBL6_FastOrderSystem.request.ShipperRequest;
 import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -10,7 +11,7 @@ public interface IAuthService {
     ResponseEntity<APIRespone> authenticateUser(String numberPhone, String password);
     ResponseEntity<APIRespone> registerUser(User user);
 
-    ResponseEntity<APIRespone> registerShipper(User user);
+    ResponseEntity<APIRespone> registerShipper(ShipperRequest shipperRequest);
 
     ResponseEntity<APIRespone> registerAdmin(User user);
 

@@ -16,21 +16,4 @@ public class UserRequest {
         this.address = address;
     }
 
-    public String getFullName() {
-        return fullName;
-    }
-    public MultipartFile getAvatar() {
-        return avatar;
-    }
-    public void setAvatar(MultipartFile avatar) {
-        this.avatar = avatar;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getAddress() {
-        return address;
-    }
 }

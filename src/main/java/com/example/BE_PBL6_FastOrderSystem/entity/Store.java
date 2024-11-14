@@ -32,6 +32,8 @@ public class Store {
     private List<Promotion> promotions = new ArrayList<>();
     @OneToMany(mappedBy = "store")
     private List<ProductStore> productStores = new ArrayList<>();
+    @ManyToMany(mappedBy = "stores")
+    private List<Voucher> vouchers = new ArrayList<>();
     @Override
     public String toString() {
         return "Store{" +

@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,11 +22,8 @@ public class PaymentMomoCallbackController {
             result.put("orderInfo", callbackRequestDTO.get("orderInfo"));
             result.put("message", callbackRequestDTO.get("message"));
         } else {
-
             result.put("message", callbackRequestDTO.get("message"));
         }
-
         return new ResponseEntity<>(result, HttpStatus.OK);
-
     }
 }

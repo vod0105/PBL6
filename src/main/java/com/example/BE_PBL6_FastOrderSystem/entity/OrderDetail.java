@@ -3,10 +3,12 @@ package com.example.BE_PBL6_FastOrderSystem.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @Entity
+@Table(name = "order_detail")
 public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,11 +29,14 @@ public class OrderDetail {
             joinColumns = @JoinColumn(name = "order_detail_id"),
             inverseJoinColumns = @JoinColumn(name = "drink_product_id")
     )
-    private List<Product> drinkProducts;
+    private List<Product> drinkProducts = new ArrayList<>();
 
     private Integer quantity;
     private Double unitPrice;
     private Double totalPrice;
+    @ManyToOne
+    @JoinColumn(name = "fee_id")
+    private ShippingFee shippingFee;
     @ManyToOne
     @JoinColumn(name = "size_id")
     private Size size;
@@ -42,7 +47,7 @@ public class OrderDetail {
     @JoinColumn(name = "store_id")
     private Store store;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shipper_order_id")
+    @JoinColumn(name = "shipper_order_id", nullable = true)
     private ShipperOrder shipperOrder;
 
 }

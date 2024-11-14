@@ -23,7 +23,7 @@ public class StaffServiceImpl implements IStaffService {
 private final StaffRepository staffRepository;
 private final StoreRepository storeRepository;
     @Override
-    public ResponseEntity<APIRespone> createStaff(StaffRequest request) {
+    public ResponseEntity<APIRespone> createStaff(Long OwerId,StaffRequest request) {
         Staff staff = new Staff();
         staff.setEmployeeName(request.getEmployeeName());
         if (staffRepository.findByStaff_code(request.getStaff_code()).isPresent()) {
@@ -31,8 +31,13 @@ private final StoreRepository storeRepository;
         }
         staff.setStaff_code(request.getStaff_code());
         staff.setDepartment(request.getDepartment());
-        if (request.getStoreId() != null) {
-            Optional<Store> optionalStore = storeRepository.findById(request.getStoreId());
+        List<Store> stores = storeRepository.findAllByManagerId(OwerId);
+        if (stores.isEmpty()) {
+            return new ResponseEntity<>(new APIRespone(false, "Store not found", ""), HttpStatus.NOT_FOUND);
+        }
+        Store store = stores.get(0);
+        if (store.getStoreId() != null) {
+            Optional<Store> optionalStore = storeRepository.findById(store.getStoreId());
             if (optionalStore.isPresent()) {
                 staff.setStore(optionalStore.get());
             } else {
@@ -64,12 +69,17 @@ private final StoreRepository storeRepository;
          return ResponseEntity.ok(new APIRespone(true, "Get staff by id successfully", staffRespons));
     }
     @Override
-    public ResponseEntity<APIRespone> getStaffByStoreId(Long storeId) {
+    public ResponseEntity<APIRespone> getStaffByStoreId(Long OwnerId) {
         if (staffRepository.findAll().isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new APIRespone(false, "No staff found", null));
         }
+        List<Store> stores = storeRepository.findAllByManagerId(OwnerId);
+        if (stores.isEmpty()) {
+            return new ResponseEntity<>(new APIRespone(false, "Store not found", ""), HttpStatus.NOT_FOUND);
+        }
+        Store store = stores.get(0);
         List<StaffResponse> staffRespons = staffRepository.findAll().stream()
-                .filter(staff -> staff.getStore().getStoreId().equals(storeId))
+                .filter(staff -> staff.getStore().getStoreId().equals(store.getStoreId()))
                 .map(staff -> new StaffResponse(staff.getId(), staff.getEmployeeName(), staff.getStaff_code(), staff.getDepartment(), staff.getStore().getStoreId()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(new APIRespone(true, "Get staff by store id successfully", staffRespons));
@@ -87,19 +97,21 @@ private final StoreRepository storeRepository;
         return ResponseEntity.ok(new APIRespone(true, "Get staff by staff code successfully", staffRespons));
     }
     @Override
-    public ResponseEntity<APIRespone> updateStaff(Long id, StaffRequest request) {
+    public ResponseEntity<APIRespone> updateStaff(Long OnerId,Long id, StaffRequest request) {
         Staff staff = staffRepository.findById(id).orElse(null);
         if (staff == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIRespone(false, "Staff not found", null));
         }
         staff.setEmployeeName(request.getEmployeeName());
-        if (staffRepository.findByStaff_code(request.getStaff_code()).isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIRespone(false, "Staff code already exists", null));
-        }
         staff.setStaff_code(request.getStaff_code());
         staff.setDepartment(request.getDepartment());
-        if (request.getStoreId() != null) {
-            Optional<Store> optionalStore = storeRepository.findById(request.getStoreId());
+        List<Store> stores = storeRepository.findAllByManagerId(OnerId);
+        if (stores.isEmpty()) {
+            return new ResponseEntity<>(new APIRespone(false, "Store not found", ""), HttpStatus.NOT_FOUND);
+        }
+        Store store = stores.get(0);
+        if (store.getStoreId() != null) {
+            Optional<Store> optionalStore = storeRepository.findById(store.getStoreId());
             if (optionalStore.isPresent()) {
                 staff.setStore(optionalStore.get());
             } else {
