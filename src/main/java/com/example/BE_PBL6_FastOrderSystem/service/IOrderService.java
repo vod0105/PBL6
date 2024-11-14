@@ -22,6 +22,8 @@ public interface IOrderService {
     Long calculateOrderNowAmount(Long productId, Long comboId, int quantity, Long storeId, Double Latitude, Double Longitude, String DiscountCode, String size);
 
 
+    Long TinhTongTienKhiMuaNgayTaiQuay(Long productId, Long comboId, int quantity, String size);
+
     Long calculateOrderAmount(List<Long> cartIds, Double latitude, Double longitude, String discountCode);
 
     Long TinhTongTienKhiMuaTaiQuay(List<Long> cartIds, String discountCode);

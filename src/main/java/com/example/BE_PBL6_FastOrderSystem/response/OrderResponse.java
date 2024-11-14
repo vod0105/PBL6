@@ -20,6 +20,7 @@ public class OrderResponse {
     private String paymentMethod;
     private String statusPayment;
     private Double totalAmount;
+    private Double shippingFee;
     private String status;
     private String deliveryAddress;
     private LocalDateTime createdAt;
@@ -39,6 +40,7 @@ public class OrderResponse {
         this.userId = order.getUser().getId();
         this.orderDate = order.getOrderDate();
         this.totalAmount = order.getTotalAmount();
+        this.shippingFee = (!order.getOrderDetails().isEmpty() && order.getOrderDetails().get(0).getShippingFee() != null) ? order.getOrderDetails().get(0).getShippingFee().getFee() : 0.0;
         this.paymentMethod = paymentMethod;
         this.statusPayment = statusPayment;
         this.status = (order.getStatus() != null) ? order.getStatus().getStatusName() : "Unknown Status";
