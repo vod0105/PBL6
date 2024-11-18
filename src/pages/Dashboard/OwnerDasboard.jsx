@@ -100,6 +100,7 @@ const OwnerDasboard = () => {
           `${url}/api/v1/owner/display/order/month`,
           { headers }
         );
+        console.log("rsorder", rsordermonth);
 
         setordermonth(rsordermonth.data.data); // Cập nhật state với dữ liệu phản hồi từ API
       } catch (error) {

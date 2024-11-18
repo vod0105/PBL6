@@ -44,7 +44,7 @@ const UpdateCombo = ({ url }) => {
           comboName: response.data.data[0].comboName,
           price: response.data.data[0].price,
           description: response.data.data[0].description,
-
+          numberDrinks: response.data.data[0].numberDrinks,
           apiimg: response.data.data[0].image,
         });
       } catch (err) {
@@ -84,6 +84,7 @@ const UpdateCombo = ({ url }) => {
     formData.append("price", data.price);
     formData.append("description", data.description);
     formData.append("image", image);
+    formData.append("numberDrinks", data.numberDrinks);
 
     try {
       const response = await axios.put(
@@ -166,6 +167,19 @@ const UpdateCombo = ({ url }) => {
                   />
                 </td>
               </tr>
+              <tr>
+                <td>Number of drinks</td>
+                <td>
+                  <input
+                    name="numberDrinks"
+                    type="text"
+                    placeholder="Write content here"
+                    onChange={onChangeHandler}
+                    value={data.numberDrinks}
+                  />
+                </td>
+              </tr>
+              <tr></tr>
               <tr>
                 <td>Price</td>
                 <td>

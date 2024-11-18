@@ -25,7 +25,7 @@ const CalendarModalNew = ({ show, handleClose, handleSave }) => {
           "Content-Type": "application/json",
         };
         const response = await axios.get(
-          `http://localhost:8888/api/v1/owner/staff/store`,
+          `${url}/api/v1/owner/staff/store`,
           { headers }
         );
         console.log("Staff List Response:", response.data.data);
@@ -34,7 +34,7 @@ const CalendarModalNew = ({ show, handleClose, handleSave }) => {
         );
       } catch (err) {
         console.error("Lỗi khi lấy danh sách nhân viên:", err);
-        setStaffList([]); // Xử lý lỗi bằng cách đặt staffList là mảng rỗng
+        setStaffList([]);
       }
     };
 
@@ -86,8 +86,7 @@ const CalendarModalNew = ({ show, handleClose, handleSave }) => {
         setStaffName("");
         handleClose();
         toast.success("Add Employee To Shift Successfull!");
-        // window.location.reload();
-        // window.location.href = "http://localhost:3000/owner/calender";
+  
       } catch (error) {
         console.error("Lỗi khi thêm ca làm việc:", error);
         alert("Đã xảy ra lỗi khi thêm ca làm việc.");

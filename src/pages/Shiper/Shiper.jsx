@@ -16,7 +16,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Load from "../../components/Load/Load.jsx";
 
-const Combo = ({ url }) => {
+const Shiper = ({ url }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -27,8 +27,16 @@ const Combo = ({ url }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem("access_token");
-        const response = await axios.get(`${url}/api/v1/public/combo/all`);
+        const tk = localStorage.getItem("access_token");
+        const headers = {
+          Authorization: `Bearer ${tk}`,
+          "Content-Type": "application/json",
+        };
+        const response = await axios.get(
+          `${url}/api/v1/shipper/order/all-of-shipper`,
+          { headers }
+        );
+        console.log("Data", response);
         setData(response.data.data);
       } catch (err) {
         setError(err);
@@ -147,7 +155,7 @@ const Combo = ({ url }) => {
 
               <th scope="col">Price</th>
               <th scope="col">Description</th>
-              {/* <th scope="col">Food</th> */}
+              <th scope="col">Food</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -176,7 +184,7 @@ const Combo = ({ url }) => {
                   <td>{data.price}</td>
 
                   <td>{data.description}</td>
-                  {/* <td>A</td> */}
+                  <td>A</td>
                   <td>
                     <button
                       style={{
@@ -248,4 +256,4 @@ const Combo = ({ url }) => {
   );
 };
 
-export default Combo;
+export default Shiper;

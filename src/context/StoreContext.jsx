@@ -6,7 +6,8 @@ const StoreContextProvider = ({ children }) => {
   const [user, setUser] = useState({ name: "Son" });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userData, setUserData] = useState("");
-  const [url, setUrl] = useState("http://localhost:8080");
+  const [url, setUrl] = useState("http://10.10.27.227:8080");
+  const [url2, setUrl2] = useState("http://10.10.27.227:8080");
   const [token, setToken] = useState("");
   const [stores, setStores] = useState([]);
   const [idU, setIdU] = useState(1);
@@ -30,6 +31,8 @@ const StoreContextProvider = ({ children }) => {
     setLongtitude,
     latitude,
     setLatitude,
+    url2,
+    setUrl2,
   };
 
   return (

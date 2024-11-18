@@ -10,6 +10,7 @@ import {
   BiSolidDashboard,
   BiFoodMenu,
   BiCoin,
+  BiUser,
 } from "react-icons/bi";
 import "../styles/Sidebar.css";
 import { StoreContext } from "../context/StoreContext";
@@ -218,6 +219,32 @@ const Sidebar = () => {
                         <Link to="/admin/addProductToCombo">
                           Add Product To Combo
                         </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </p>
+                <p className="dropdownn">
+                  <FontAwesomeIcon icon={faChevronDown} />
+                </p>
+              </div>
+              <div className="item" onClick={() => toggleSubMenu("Shiper")}>
+                {/* <BiLogoProductHunt className="icon icon-item" /> */}
+                <Link to="/admin/promotion" className="linkitem">
+                  <BiUser className="icon icon-item" />
+                </Link>
+                <p>
+                  Shiper
+                  <div
+                    className={
+                      openSubMenus["Shiper"]
+                        ? "sub-menu active-sub"
+                        : "sub-menu hidden"
+                    }
+                  >
+                    <ul className="sub-item">
+                      <li onClick={(e) => e.stopPropagation()}>
+                        {" "}
+                        <Link to="/admin/shiper">List Shiper</Link>
                       </li>
                     </ul>
                   </div>

@@ -6,8 +6,10 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import SoundNotification from "../../components/Notify/Notify.jsx";
+import { useNavigate } from "react-router-dom";
 const UpdateStaff = ({ url }) => {
   const [image, setImage] = useState(false);
+  const navigate = useNavigate();
   const [data, setData] = useState({
     id: "",
     employeeName: "",
@@ -84,37 +86,33 @@ const UpdateStaff = ({ url }) => {
         formData,
         { headers }
       );
-      if (response.data.message) {
+      
+      if (response.data.success) {
         setData({
           employeeName: "",
           staff_code: "",
           department: "",
           storeId: "",
         });
-        setImage(null);
+        navigate("/owner/product");
         toast.success("Updated Staff Success");
       } else {
         toast.error(response.data.message);
+        console.log("2");
       }
     } catch (error) {
       if (error.response) {
         console.error("Error Response Data:", error.response.data);
+        console.log("3");
 
         toast.error(error.response.data.message || "Something went wrong.");
       } else {
         console.error("Error:", error.message);
+        console.log("4");
         toast.error("Something went wrong.");
       }
     }
   };
-  useEffect(() => {
-    console.log("data", data);
-
-    // console.log("selectedUserId", selectedUserId);
-    // console.log("data.price", data.price);
-    // console.log("data.comboName", data.comboName);
-    // console.log("data.description", data.description);
-  });
 
   return (
     <div className="add add-product">
@@ -123,27 +121,6 @@ const UpdateStaff = ({ url }) => {
         <form className="flex-col" onSubmit={onSubmitHandler}>
           <table className="form-table">
             <tbody>
-              {/* <tr>
-                <td className="td-text">Upload Image</td>
-                <td>
-                  <label htmlFor="image">
-                    <img
-                      className="img-uploa  d"
-                      src={
-                        image ? URL.createObjectURL(image) : assets.upload_area
-                      }
-                      alt=""
-                    />
-                  </label>
-                  <input
-                    onChange={(e) => setImage(e.target.files[0])}
-                    type="file"
-                    id="image"
-                    hidden
-                    required
-                  />
-                </td>
-              </tr> */}
               <tr>
                 <td>Employee Name</td>
                 <td>

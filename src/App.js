@@ -42,6 +42,7 @@ import StaffList from "./PagesOwner/Staff/Staff";
 import OwnerAddProductToStorev2 from "./PagesOwner/Product/OwnerAddproductToStore";
 import OrderDetail from "./PagesOwner/Order/OrderDetails";
 import SoundNotification from "./components/Notify/Notify";
+import Shiper from "./pages/Shiper/Shiper";
 
 const notificationSound = new Audio("/sound/tingting.mp3");
 const App = () => {
@@ -106,7 +107,7 @@ const App = () => {
                     <div className="dashboard">
                       {/* <div className="side-bar collapse"><Sidebar /></div> */}
                       <Sidebar />
-                     
+
                       <div className="dashboard-content">
                         <Dashboard />
                       </div>
@@ -446,6 +447,23 @@ const App = () => {
                 )
               }
             />
+            <Route
+              path="/admin/shiper"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      <Sidebar />
+                      <div className="dashboard-content">
+                        <Shiper url={url} />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
           </>
         )}
         <Route
@@ -470,7 +488,7 @@ const App = () => {
                   <>
                     <div className="dashboard">
                       <Sidebar />
-                      
+
                       <div className="dashboard-content">
                         <OwnerDasboard />
                       </div>

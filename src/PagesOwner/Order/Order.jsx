@@ -7,6 +7,10 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBackward, faForward } from "@fortawesome/free-solid-svg-icons";
 import SoundNotification from "../../components/Notify/Notify.jsx";
+import { assets } from "../../assets/assets.js";
+import IconButton from "@mui/material/IconButton";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import { PiEyesBold } from "react-icons/pi";
 const notificationSound = new Audio("/sound/tingting.mp3");
 const Order = ({ url }) => {
   const [data, setData] = useState([]);
@@ -48,20 +52,20 @@ const Order = ({ url }) => {
   };
 
   //
-  useEffect(() => {
-    // Thiết lập hẹn giờ để phát âm thanh sau 3 giây
-    const timer = setTimeout(() => {
-      const speech = new SpeechSynthesisUtterance("Có đơn hàng mới");
-      speech.lang = "vi-VN";
-      window.speechSynthesis.speak(speech);
-      notificationSound.play().catch((error) => {
-        console.error("Lỗi phát âm thanh:", error);
-      });
-    }, 3000);
+  // useEffect(() => {
+  //   // Thiết lập hẹn giờ để phát âm thanh sau 3 giây
+  //   const timer = setTimeout(() => {
+  //     const speech = new SpeechSynthesisUtterance("Có đơn hàng mới");
+  //     speech.lang = "vi-VN";
+  //     window.speechSynthesis.speak(speech);
+  //     notificationSound.play().catch((error) => {
+  //       console.error("Lỗi phát âm thanh:", error);
+  //     });
+  //   }, 3000);
 
-    return () => clearTimeout(timer);
-  }, []);
-  //
+  //   return () => clearTimeout(timer);
+  // }, []);
+  // //
 
   //thong bao don hang
 
@@ -187,7 +191,11 @@ const Order = ({ url }) => {
                   <td>{order.orderCode}</td>
                   <td>
                     <img
-                      src={`data:image/jpeg;base64,${order.imageUser}`}
+                      src={
+                        order.imageUser
+                          ? `data:image/jpeg;base64,${order.imageUser}`
+                          : assets.manOrder
+                      }
                       className="img-cate"
                       alt="Image cate"
                       style={{
@@ -203,10 +211,12 @@ const Order = ({ url }) => {
                     <td>
                       <button
                         type="button"
-                        className="btn btn-primary"
+                        style={{ border: "none", outline: "none" }}
                         onClick={() => handleAcceptClick(order.orderCode)}
                       >
-                        Accept
+                        <IconButton aria-label="delete" size="medium">
+                          <CheckBoxIcon />
+                        </IconButton>
                       </button>
                     </td>
                   )}
@@ -214,10 +224,13 @@ const Order = ({ url }) => {
                   <td>
                     <button
                       type="button"
-                      className="btn btn-danger"
+                      style={{
+                        border: "none",
+                        outline: "none",
+                      }}
                       onClick={() => handleRedirect(order.orderCode)}
                     >
-                      Detail
+                      <PiEyesBold style={{ width: "35px", height: "35px" }} />
                     </button>
                   </td>
                 </tr>

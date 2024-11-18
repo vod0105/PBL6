@@ -13,9 +13,9 @@ const Content = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem('access_token');
+        const token = localStorage.getItem("access_token");
         const response = await axios.get(
-          "http://192.168.1.18:8080/api/v1/public/stores/all",
+          "http://192.168.1.34:8080/api/v1/public/stores/all"
           // {
           //   headers: {
           //     Authorization: `Bearer ${token}`,

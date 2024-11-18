@@ -107,7 +107,7 @@ const UpdateCategory = ({ url }) => {
     <div className="add">
       <div className="cover-left">
         {" "}
-        <h2 className="">Add Category</h2>
+        <h2 className="">Update Category</h2>
         <form className="flex-col" onSubmit={onSubmitHandler}>
           <div className="add-img-upload flex-col">
             <p>Upload Image</p>

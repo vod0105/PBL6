@@ -56,7 +56,9 @@
     bottom: 0;
     right: 15px;
     z-index: 1000;
+    border-radius: 15px;
     /* border: #333 5px; */
+    box-shadow: 1px 1px 15px black;
   }
 
   .card {

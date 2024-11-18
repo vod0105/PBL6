@@ -261,7 +261,7 @@ const CalendarPage = () => {
         }
         dateClick={handleDateClick}
         eventClick={handleEventClick}
-        height={580}
+        height={550}
       />
 
       <CalendarModalNew

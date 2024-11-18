@@ -56,6 +56,7 @@ const AddCombo = ({ url }) => {
     formData.append("price", data.price);
     formData.append("description", data.description);
     formData.append("image", image);
+    formData.append("numberDrinks", data.numberDrinks);
 
     try {
       const response = await axios.post(
@@ -68,6 +69,7 @@ const AddCombo = ({ url }) => {
           comboName: "",
           price: "",
           description: "",
+          numberDrinks: "",
         });
         setImage(null);
         toast.success("Added Combo Success");
@@ -143,6 +145,18 @@ const AddCombo = ({ url }) => {
                     placeholder="Write content here"
                     onChange={onChangeHandler}
                     value={data.price}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>Number of drinks</td>
+                <td>
+                  <input
+                    name="numberDrinks"
+                    type="text"
+                    placeholder="Write content here"
+                    onChange={onChangeHandler}
+                    value={data.numberDrinks}
                   />
                 </td>
               </tr>

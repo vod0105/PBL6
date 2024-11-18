@@ -58,7 +58,7 @@ const OwnerProduct = ({ url }) => {
       await axios.delete(
         `${url}/api/v1/owner/products/remove-from-store?productId=${productId}`,
         {
-          // http://localhost:8082/api/v1/owner/products/remove-list-products-from-store?storeId=33&productIds=19
+        
           headers,
         }
       );
