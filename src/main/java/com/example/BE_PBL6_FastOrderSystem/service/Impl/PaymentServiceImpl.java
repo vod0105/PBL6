@@ -111,20 +111,16 @@ public class PaymentServiceImpl implements IPaymentService {
     }
     @Override
     public Map<String, Object> getStatusMomo(PaymentRequest requestDTO) throws IOException {
-
         JSONObject json = new JSONObject();
         json.put("partnerCode", MoMoConstant.PARTNER_CODE);
         json.put("accessKey", MoMoConstant.ACCESS_KEY);
         json.put("requestId", String.valueOf(System.currentTimeMillis()));
         json.put("orderId", requestDTO.getOrderId());
-        //json.put("cardId", requestDTO.getCartIds());
         json.put("requestType", MoMoConstant.CHECK_STATUS_TYPE);
-
         String data = "partnerCode=" + MoMoConstant.PARTNER_CODE
                 + "&accessKey=" + json.get("accessKey")
                 + "&requestId=" + json.get("requestId")
                 + "&orderId=" + json.get("orderId")
-                //  + "&cardId=" + json.get("cardId")
                 + "&requestType=" + json.get("requestType");
         String signatureKey = HelperHmacSHA256.computeHmacSha256(data, MoMoConstant.SECRET_KEY);
         json.put("signature", signatureKey);
@@ -138,7 +134,6 @@ public class PaymentServiceImpl implements IPaymentService {
         StringBuilder resultJsonStr = new StringBuilder();
         String line;
         while ((line = rd.readLine()) != null) {
-
             resultJsonStr.append(line);
         }
 
@@ -175,7 +170,6 @@ public class PaymentServiceImpl implements IPaymentService {
         paymentRepository.save(payment);
 
         List<OrderDetail> orderDetails = orderDetailRepository.findByOrderId(order.getOrderId());
-
         // nhom cac OrderDetail theo Store
         Map<Store, List<OrderDetail>> groupedOrderDetails = orderDetails.stream()
                 .collect(Collectors.groupingBy(OrderDetail::getStore));

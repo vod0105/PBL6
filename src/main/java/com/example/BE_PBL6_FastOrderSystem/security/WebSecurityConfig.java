@@ -69,6 +69,12 @@ public class WebSecurityConfig {
     private static final String[] ZALO = {
             "/api/v1/zalopay/**"
     };
+    private static final String[] EMAIL = {
+            "/api/v1/email/**"
+    };
+    private static final String[] WS = {
+            "/ws/chat/**"
+    };
 
     @Autowired
     public WebSecurityConfig(@Lazy JwtUtils jwtUtils, JwtAuthEntryPoint jwtAuthEntryPoint, FoodUserDetailsService userDetailsService, TokenRepository tokenRepository) {
@@ -127,7 +133,8 @@ public class WebSecurityConfig {
                         .requestMatchers(SHIPPER).hasAnyRole("SHIPPER", "ADMIN", "OWNER")
                         .requestMatchers(OWNER).hasAnyRole("OWNER", "ADMIN")
                         .requestMatchers(ADMIN).hasAnyRole("ADMIN")
-                        .requestMatchers("/ws/chat/**").permitAll()
+                        .requestMatchers(WS).permitAll()
+                        .requestMatchers(EMAIL).permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(exception ->
                         exception.authenticationEntryPoint(jwtAuthEntryPoint)
