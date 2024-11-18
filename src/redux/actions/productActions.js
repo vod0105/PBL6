@@ -8,7 +8,8 @@ import {
     fetchProductsByIdStoreService,
     fetchRatingProductByIdService,
     fetchAllDrinksService,
-    fetchRatingComboByIdService
+    fetchRatingComboByIdService,
+    fetchAllProductsService,
 
 } from "../../services/productService";
 import { fetchUserDetailByIdService } from "../../services/userService";
@@ -79,12 +80,12 @@ const fetchAllDrinksSuccess = (data) => {
         dataDrinks: data
     };
 };
-const fetchAllDrinks = (id) => {
+const fetchAllDrinks = (drinkId) => {
     return async (dispatch, getState) => {
         try {
-            const res = await fetchAllDrinksService();
+            const res = await fetchAllDrinksService(drinkId);
             const data = res && res.data ? res.data.data : [];
-            dispatch(fetchAllDrinksSuccess(data)); // // Chạy ở đây (2)
+            dispatch(fetchAllDrinksSuccess(data));
             // console.log(data);
         } catch (error) {
             console.log(error);
@@ -263,10 +264,32 @@ const fetchRatingComboById = (id) => {
         }
     }
 };
+
+// fetch all products
+const fetchAllProductsSuccess = (data) => {
+    return {
+        type: types.FETCH_ALL_PRODUCT_SUCCESS,
+        dataProducts: data
+    };
+};
+const fetchAllProducts = () => {
+    return async (dispatch, getState) => {
+        try {
+            const res = await fetchAllProductsService();
+            const data = res && res.data ? res.data.data : [];
+            dispatch(fetchAllProductsSuccess(data)); // // Chạy ở đây (2)
+            // console.log(data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+};
+
 export {
     fetchProductsBestSale,
     fetchProductsByIdCategory,
     fetchAllCombos,
+    fetchAllProducts,
     fetchAllDrinks,
     fetchProductById,
     fetchProductsByIdStore,

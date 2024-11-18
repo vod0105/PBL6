@@ -23,6 +23,7 @@ const Orders = () => {
   // Filter status -> Select
   const [selectedStatus, setSelectedStatus] = useState("0"); // Mặc định là "Tất cả đơn hàng"
 
+  // Nhấn vô 'Xem chi tiết đơn hàng' -> Quy trạng thái từ Chữ => Số
   const handleShowDetails = (order) => {
     // let orderChangeStatus = _.cloneDeep(order);
     switch (order.status) {

@@ -1,6 +1,6 @@
 import types from "../types";
 import { fetchAllCategoriesService } from "../../services/categoryService";
-
+import { fetchAllDrinks } from "./productActions";
 // Thunk: fetching data
 export const fetchCategoriesRequest = () => {
     return {
@@ -9,10 +9,11 @@ export const fetchCategoriesRequest = () => {
 
 };
 
-export const fetchCategoriesSuccess = (data) => {
+export const fetchCategoriesSuccess = (data, drinkCategoryId) => {
     return {
         type: types.FETCH_CATEGORY_SUCCESS,
-        dataCategories: data
+        dataCategories: data,
+        drinkCategoryId: drinkCategoryId
     };
 };
 
@@ -23,12 +24,15 @@ export const fetchCategoriesError = () => {
 };
 const fetchAllCategories = () => {
     return async (dispatch, getState) => {
-        dispatch(fetchCategoriesRequest()); // Chạy ở đây (1)
+        dispatch(fetchCategoriesRequest());
         try {
             const res = await fetchAllCategoriesService();
             const data = res && res.data ? res.data.data : [];
-            // console.log(data);
-            dispatch(fetchCategoriesSuccess(data)); // // Chạy ở đây (2)
+            // Sau khi lấy all categories -> Tìm cateId có categoryName ==='Drinks'
+            const drinkCategoryId = data.find(item => item.categoryName.toLowerCase().includes("drinks")).categoryId;
+            dispatch(fetchAllDrinks(drinkCategoryId));
+            dispatch(fetchCategoriesSuccess(data, drinkCategoryId));
+
         } catch (error) {
             console.log(error);
             dispatch(fetchCategoriesError());

@@ -1,27 +1,28 @@
 import React, { useState, useEffect } from "react";
-import './Combo.scss';
-import { useParams } from 'react-router-dom';
+import './AllProducts.scss';
+import ProductItem from "../../components/ProductItem/ProductItem";
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllCombos } from "../../redux/actions/productActions";
+import { fetchAllProducts } from "../../redux/actions/productActions";
 import Pagination from 'react-bootstrap/Pagination';
-import ComboItem from "../../components/ComboItem/ComboItem";
 import axios from 'axios';
+import { toast } from "react-toastify";
 
-export default function Combo() {
+export default function AllProducts() {
   const dispatch = useDispatch();
-  const allCombos = useSelector((state) => state.product.allCombos);
+  const allProducts = useSelector((state) => state.product.allProducts);
 
   // State -> trang hiện tại
   const [activePage, setActivePage] = useState(1);
   const itemsPerPage = 8; // Số sản phẩm mỗi trang
-  const totalPages = Math.ceil(allCombos.length / itemsPerPage); // Tổng số trang
+  const totalPages = Math.ceil(allProducts.length / itemsPerPage); // Tổng số trang
   // State cho AI + search + select
   const [searchTerm, setSearchTerm] = useState('');
   const [searchTermAI, setSearchTermAI] = useState('');
   const [selectedSort, setSelectedSort] = useState("default");
+
   useEffect(() => {
     window.scrollTo(0, 0);
-    dispatch(fetchAllCombos());
+    dispatch(fetchAllProducts());
   }, [dispatch]);
 
   // Hàm xử lý thay đổi từ khóa tìm kiếm
@@ -36,20 +37,20 @@ export default function Combo() {
     setActivePage(1); // Reset về trang 1 khi thay đổi sắp xếp
   };
 
-  // Lọc và sắp xếp sản phẩm theo search (input) + AI(file) và giá (select)
-  const filteredProducts = allCombos
-    .filter((combo) =>
-      combo.comboName.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      combo.comboName.toLowerCase().includes(searchTermAI.toLowerCase())
+  // Lọc và sắp xếp sản phẩm theo từ khóa và giá
+  const filteredProducts = allProducts
+    .filter((product) =>
+      product.productName.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      product.productName.toLowerCase().includes(searchTermAI.toLowerCase())
     )
     .sort((a, b) => {
-      if (selectedSort === "asc") return a.price - b.price;
-      if (selectedSort === "desc") return b.price - a.price;
-      return 0;
+      if (selectedSort === "asc") return a.discountedPrice - b.discountedPrice;
+      if (selectedSort === "desc") return b.discountedPrice - a.discountedPrice;
+      return 0; // Mặc định
     });
 
   // Lấy sản phẩm cho trang hiện tại
-  const currentCombos = filteredProducts.slice(
+  const currentProducts = filteredProducts.slice(
     (activePage - 1) * itemsPerPage,
     activePage * itemsPerPage
   );
@@ -72,6 +73,7 @@ export default function Combo() {
       setActivePage(activePage + 1);
     }
   };
+
   // AI file upload
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -105,6 +107,7 @@ export default function Combo() {
           setSearchTerm(nameProduct);
         }
       } catch (err) {
+        toast.error('Có lỗi ở Server!');
         console.error("Error details: ", err);
       }
     } catch (error) {
@@ -113,7 +116,7 @@ export default function Combo() {
   };
 
   return (
-    <div className="page-combo">
+    <div className="page-all-products">
       <div className="search-filter-container">
         {/* AI */}
         <div className="file-upload-AI-container">
@@ -138,7 +141,7 @@ export default function Combo() {
                   type="search"
                   value={searchTerm}
                   onChange={handleSearchChange}
-                  placeholder="Tìm kiếm sản phẩm"
+                  placeholder="Tìm kiếm tên sản phẩm"
                 />
 
                 <span className="input-group-append">
@@ -164,16 +167,16 @@ export default function Combo() {
         </div>
       </div>
       <div
-        className={`${allCombos && allCombos.length > 0 ? 'has-products' : ''}`}
+        className={`${allProducts && allProducts.length > 0 ? 'has-products' : ''}`}
       >
-        <div className="combo-list-products">
+        <div className="category-list-products">
           {
-            currentCombos && currentCombos.length > 0 ? (
-              currentCombos.map((combo, index) => (
+            currentProducts && currentProducts.length > 0 ? (
+              currentProducts.map((product, index) => (
                 <React.Fragment key={index}>
-                  <ComboItem combo={combo} />
+                  <ProductItem product={product} />
                   {
-                    (index + 1) % 4 === 0 && (index + 1) !== currentCombos.length && <hr className="hr-separate" />
+                    (index + 1) % 4 === 0 && (index + 1) !== currentProducts.length && <hr className="hr-separate" />
                   }
                 </React.Fragment>
               ))

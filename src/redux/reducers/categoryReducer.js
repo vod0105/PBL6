@@ -2,6 +2,7 @@ import types from "../types";
 
 const INITIAL_STATE = {
     listCategories: [],
+    drinkCategoryId: 0,
     isLoading: false,
     isError: false,
     isCreating: false,
@@ -19,6 +20,7 @@ const categoryReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 listCategories: action.dataCategories,
+                drinkCategoryId: action.drinkCategoryId,
                 isLoading: false,
                 isError: false
             };

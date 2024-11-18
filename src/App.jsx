@@ -11,12 +11,14 @@ import LoginModal from "./components/LoginModal/LoginModal";
 import RegisterModal from "./components/RegisterModal/RegisterModal";
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserAccount } from "./redux/actions/authActions";
+import { fetchAllProducts } from "./redux/actions/productActions";
 import ChatContext, { ChatProvider } from "./context/showChat";
 
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getUserAccount());
+    dispatch(fetchAllProducts());
   }, [dispatch]);
   return (
     <>

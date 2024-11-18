@@ -24,7 +24,14 @@ const AccountInfo = () => {
 
   const handleCancelClick = () => {
     setIsEditing(false); // update
-    setAvatarPreview(`data:image/png;base64,${accountInfo.avatar}`); // Revert avatar if cancel
+    if (accountInfo) {
+      setFullname(accountInfo.fullName || '');
+      setPhonenumber(accountInfo.phoneNumber || '');
+      setAddress(accountInfo.address || '');
+      setEmail(accountInfo.email || '');
+      setAvatarPreview(`data:image/png;base64,${accountInfo.avatar}`);
+    }
+    // setAvatarPreview(`data:image/png;base64,${accountInfo.avatar}`); // Revert avatar if cancel
   };
 
   const handleEditClick = () => {

@@ -18,10 +18,11 @@ const fetchAllCombosService = () => {
         url: `/api/v1/public/combo/all`,
     });
 }
-const fetchAllDrinksService = () => {
+const fetchAllDrinksService = (drinkId) => {
+    console.log('>>> drink id: ', drinkId);
     return axios({
         method: 'get',
-        url: `/api/v1/public/products/category/8`,
+        url: `/api/v1/public/products/category/${drinkId}`,
     });
 }
 
@@ -56,6 +57,14 @@ const fetchRatingComboByIdService = (id) => {
     });
 }
 
+// Tất cả sp -> Page: All Products
+const fetchAllProductsService = () => {
+    return axios({
+        method: 'get',
+        url: `/api/v1/public/products/all`,
+    });
+}
+
 export {
     fetchProductsBestSaleService,
     fetchProductsByIdCategoryService,
@@ -66,5 +75,5 @@ export {
     fetchProductsByIdStoreService,
     fetchRatingProductByIdService,
     fetchRatingComboByIdService,
-
+    fetchAllProductsService,
 }

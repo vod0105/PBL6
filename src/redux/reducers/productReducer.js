@@ -4,6 +4,7 @@ const INITIAL_STATE = {
     listProductsBestSale: [],
     listProductsByIdCategory: [],
     allCombos: [],
+    allProductss: [],
     productDetail: {},  // product đang nhấn để coi chi tiết hiện tại
     comboDetail: {},
     listProductsByIdStore: [],
@@ -70,6 +71,11 @@ const productReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 listSimilarCombos: action.dataCombos,
+            };
+        case types.FETCH_ALL_PRODUCT_SUCCESS:
+            return {
+                ...state,
+                allProducts: action.dataProducts,
             };
         default: return state;
 

@@ -22,6 +22,7 @@ import DeliveryMap from '../components/DeliveryMap/DeliveryMap';
 import Combo from '../pages/Combo/Combo';
 import ComboItemDetail from '../components/ComboItemDetail/ComboItemDetail';
 import Download from '../pages/Download/Download';
+import AllProducts from '../pages/AllProducts/AllProducts';
 
 const AppRoutes = (props) => {
     return (
@@ -38,6 +39,7 @@ const AppRoutes = (props) => {
                 <Route path="/introduce" element={<Introduce />} />
                 <Route path="/category/:id" element={<Category />} />
                 <Route path="/combo" element={<Combo />} />
+                <Route path="/all-products" element={<AllProducts />} />
 
                 <Route path="/promotion" element={<Promotion />} />
                 {/* <Route path="/store" element={<Store_Old />} /> */}

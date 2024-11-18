@@ -13,7 +13,7 @@ export default function Category() {
   const dispatch = useDispatch();
   const listProducts = useSelector((state) => state.product.listProductsByIdCategory);
 
-  // State -> rang hiện tại
+  // State -> trang hiện tại
   const [activePage, setActivePage] = useState(1);
   const itemsPerPage = 8; // Số sản phẩm mỗi trang
   const totalPages = Math.ceil(listProducts.length / itemsPerPage); // Tổng số trang
@@ -105,7 +105,8 @@ export default function Category() {
         console.log("response AI:", responseAI);
         if (responseAI?.data) {
           const nameProduct = responseAI.data;
-          setSearchTermAI(nameProduct);
+          // setSearchTermAI(nameProduct);
+          setSearchTerm(nameProduct);
         }
       } catch (err) {
         toast.error('Có lỗi ở Server!');

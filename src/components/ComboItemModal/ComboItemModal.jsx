@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import { addToCartCombo, placeOrderComboUsingBuyNow } from "../../redux/actions/userActions";
 import { fetchAllStores } from "../../redux/actions/storeActions";
 import { showLoginModal } from "../../redux/actions/modalActions";
-import { fetchAllDrinks } from "../../redux/actions/productActions";
+// import { fetchAllDrinks } from "../../redux/actions/productActions";
 
 import { Form } from 'react-bootstrap';
 
@@ -57,7 +57,7 @@ const ComboItemModal = ({ showModalCombo, handleCloseModalCombo, combo, stores, 
     // console.log('list stores: ', stores);
     dispatch(fetchAllSizes());
     dispatch(fetchAllStores());
-    dispatch(fetchAllDrinks());
+    // dispatch(fetchAllDrinks());
   }, [dispatch]);
   // list sizes thay đổi -> Chọn size đầu tiên
   useEffect(() => {
