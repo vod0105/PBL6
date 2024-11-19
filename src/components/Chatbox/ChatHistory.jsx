@@ -100,7 +100,7 @@ const ChatHistory = (props) => {
 
     useEffect(() => {
         // Set up WebSocket connection once
-        const socket = new WebSocket('ws://localhost:8080/ws/chat');
+        const socket = new WebSocket('ws://10.10.27.107:8080/ws/chat');
 
         socket.onopen = () => {
             // console.log('Connected to the WebSocket server');
@@ -230,7 +230,7 @@ const ChatHistory = (props) => {
                     question: question
                 };
                 try {
-                    const response = await fetch("http://localhost:5000/intent-detection", {
+                    const response = await fetch("http://10.10.27.107:5000/intent-detection", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"

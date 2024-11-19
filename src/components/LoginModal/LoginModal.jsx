@@ -67,7 +67,7 @@ const LoginModal = () => {
   // GG
   const handleSuccessGoogle = async (credentialResponse) => {
     // dispatch(loginGoogle(credentialResponse.credential));
-    window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+    window.location.href = 'http://10.10.27.107:8080/oauth2/authorization/google';
   }
   const handleErrorGoogle = () => {
     alert('Lỗi tùm lum');
@@ -76,7 +76,7 @@ const LoginModal = () => {
   // FB
   const handleSuccessFacebook = async () => {
     // dispatch(loginGoogle(credentialResponse.credential));
-    window.location.href = 'http://localhost:8080/oauth2/authorization/facebook';
+    window.location.href = 'http://10.10.27.107:8080/oauth2/authorization/facebook';
   }
   const handleErrorFacebook = () => {
     alert('Lỗi tùm lum');

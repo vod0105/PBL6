@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-    baseURL: 'http://localhost:8080',
+    baseURL: 'http://10.10.27.107:8080',
     // withCredentials: true, // Đảm bảo gửi cookie khi request
 });
 
@@ -59,7 +59,7 @@ instance.interceptors.response.use(function (response) {
         // localStorage.removeItem('token');
 
         try {
-            const response = await axios.post('http://localhost:8080/auth/refresh', { refreshToken });
+            const response = await axios.post('http://10.10.27.107:8080/auth/refresh', { refreshToken });
             const newToken = response?.data?.data ? response.data.data : refreshToken; // Lấy token mới từ response -> note: Lỗi thì giữ nguyên token cũ ko refresh
             localStorage.setItem("token", newToken); // Lưu token mới vào localStorage
             processQueue(null, newToken); // Xử lý lại các request trong queue

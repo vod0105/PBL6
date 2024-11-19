@@ -95,7 +95,7 @@ export default function Combo() {
       // console.log("Chuỗi base64:", base64FileImage);
       // AI: Tìm product bằng AI -> upload file
       try {
-        const responseAI = await axios.post(`http://localhost:5000/predict`, {
+        const responseAI = await axios.post(`http://10.10.27.107:5000/predict`, {
           image: base64FileImage
         });
         console.log("response AI:", responseAI);

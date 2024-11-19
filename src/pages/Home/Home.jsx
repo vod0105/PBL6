@@ -74,7 +74,7 @@ const Home = () => {
       {
         isAuthenticated && (
           <>
-            <h2>SẢN PHẨM BẠN YÊU THÍCH</h2>
+            <h2>CÓ THỂ BẠN QUAN TÂM</h2>
             {
               listFavouriteProducts && (
                 <FoodDisplay listProducts={listFavouriteProducts} />

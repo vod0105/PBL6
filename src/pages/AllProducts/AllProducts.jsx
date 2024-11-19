@@ -14,7 +14,7 @@ export default function AllProducts() {
   // State -> trang hiện tại
   const [activePage, setActivePage] = useState(1);
   const itemsPerPage = 8; // Số sản phẩm mỗi trang
-  const totalPages = Math.ceil(allProducts.length / itemsPerPage); // Tổng số trang
+  const totalPages = allProducts && allProducts.length > 0 ? Math.ceil(allProducts.length / itemsPerPage) : 0; // Tổng số trang
   // State cho AI + search + select
   const [searchTerm, setSearchTerm] = useState('');
   const [searchTermAI, setSearchTermAI] = useState('');
@@ -38,7 +38,7 @@ export default function AllProducts() {
   };
 
   // Lọc và sắp xếp sản phẩm theo từ khóa và giá
-  const filteredProducts = allProducts
+  const filteredProducts = allProducts && allProducts.length > 0 ? (allProducts
     .filter((product) =>
       product.productName.toLowerCase().includes(searchTerm.toLowerCase()) &&
       product.productName.toLowerCase().includes(searchTermAI.toLowerCase())
@@ -47,7 +47,7 @@ export default function AllProducts() {
       if (selectedSort === "asc") return a.discountedPrice - b.discountedPrice;
       if (selectedSort === "desc") return b.discountedPrice - a.discountedPrice;
       return 0; // Mặc định
-    });
+    })) : [];
 
   // Lấy sản phẩm cho trang hiện tại
   const currentProducts = filteredProducts.slice(
@@ -97,7 +97,7 @@ export default function AllProducts() {
       // console.log("Chuỗi base64:", base64FileImage);
       // AI: Tìm product bằng AI -> upload file
       try {
-        const responseAI = await axios.post(`http://localhost:5000/predict`, {
+        const responseAI = await axios.post(`http://10.10.27.107:5000/predict`, {
           image: base64FileImage
         });
         console.log("response AI:", responseAI);

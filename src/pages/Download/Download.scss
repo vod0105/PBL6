@@ -1,25 +1,8 @@
 .page-download{
     padding: 20px;
-    // .breadcrumb {
-    //     margin-bottom: 20px;
-    //     font-size: 14px;
-    //     text-align: center;
-    //     display: flex;
-    //     justify-content: center;
-    //     gap: 10px;
-  
-    //     p {
-    //         font-size: 25px;
-    //         font-weight: bold;
-  
-    //         &:nth-child(3) {
-    //             color: #0088cc;
-    //         }
-    //     }
-    // }
-    .paragraph-complete{
+    .paragraph{
         margin-top: 20px;
-        margin-bottom: 100px;
+        margin-bottom: 20px;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -27,7 +10,7 @@
         p{
             text-align: center;
             font-size: 30px;
-            color: red;
+            color: black;
             font-weight: bold;
         }
         button{
@@ -44,6 +27,42 @@
                 background-color: #333;
             }
         }
+    }
+    .btn-container{
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        .btn-download{
+            border: 1px solid red;
+            border-radius: 8px;
+            padding: 10px 20px;
+            // background-color: rgb(240, 68, 68);
+            cursor: pointer;
+            min-width: 200px;
+            text-align: center;
+            img{
+                width: 50px;
+                height: 50px;
+            }
+            span{
+                color: red;
+                font-size: 20px;
+                font-weight: bold;
+                margin-left: 10px;
+            }
+            &:hover{
+                background-color: rgb(235, 51, 51);
+                span{
+                    color: white;
+                }
+            }
+        }
+        // .btn-shipper{
+        //     img{
+        //         width: 50px;
+        //         height: 50px;
+        //     }
+        // }
     }
 }
        
