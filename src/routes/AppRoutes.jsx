@@ -23,6 +23,7 @@ import Combo from '../pages/Combo/Combo';
 import ComboItemDetail from '../components/ComboItemDetail/ComboItemDetail';
 import Download from '../pages/Download/Download';
 import AllProducts from '../pages/AllProducts/AllProducts';
+import Loading from '../pages/Loading/Loading';
 
 const AppRoutes = (props) => {
     return (
@@ -59,7 +60,7 @@ const AppRoutes = (props) => {
                 <Route path="/order-complete" element={<OrderComplete />} />
 
                 <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
-                <Route path="/test-ggmap" element={<RouteMap />} />
+                <Route path="/test-loading" element={<Loading />} />
                 <Route path="/order-in-transit/:orderCode" element={<DeliveryMap />} />
 
                 <Route path="/download" element={<Download />} />

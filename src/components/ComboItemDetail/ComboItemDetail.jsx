@@ -65,6 +65,7 @@ const ComboItemDetail = () => {
   const listSimilarCombos = useSelector((state) => {
     return state.product.listSimilarCombos;
   })
+  const isLoading = useSelector((state) => state.product.isLoadingListSimilarCombos);
   // Tìm store chứa tất cả product trong combo
   const filterStoresWithAllComboProducts = (combo) => {
     if (!combo || !combo.products || combo.products.length === 0) return [];
@@ -208,7 +209,7 @@ const ComboItemDetail = () => {
 
         <div className="similar-combos-container">
           <h2>DANH SÁCH COMBO KHÁC</h2>
-          <FoodDisplay listProducts={listSimilarCombos} />
+          <FoodDisplay listProducts={listSimilarCombos} isLoading={isLoading} />
         </div>
 
         <div className="product-detail-comment">

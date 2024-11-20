@@ -35,9 +35,13 @@ const StoreDetail = () => {
   const storeDetail = useSelector((state) => {
     return state.store.storeDetail;
   })
+
   const listProductsByIdStore = useSelector((state) => {
     return state.product.listProductsByIdStore;
   })
+  const isLoading = useSelector((state) => state.product.isLoadingListProductsByIdStore);
+
+
   const listVouchersStore = useSelector((state) => {
     return state.promotion.listVouchersStore;
   })
@@ -237,7 +241,7 @@ const StoreDetail = () => {
           </div>
         </div>
         <div className="list-products">
-          <FoodDisplay listProducts={listProductsByIdStore} />
+          <FoodDisplay listProducts={listProductsByIdStore} isLoading={isLoading} />
         </div>
       </div>
     </div>

@@ -158,6 +158,13 @@ const Navbar = () => {
         </NavLink> */}
 
         <NavLink
+          to="/test-loading"
+          className={({ isActive }) => (isActive ? 'active' : '')}
+        >
+          Test LOADING
+        </NavLink>
+
+        <NavLink
           to="/download"
           className={({ isActive }) => (isActive ? 'active' : '')}
         >

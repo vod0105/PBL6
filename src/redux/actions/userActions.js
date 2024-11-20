@@ -576,6 +576,12 @@ const fetchVouchers = () => {
     }
 };
 // list sản phẩm yêu thích -> Nếu đã login
+const fetchFavouriteProducsRequest = (data) => {
+    return {
+        type: types.FETCH_FAVOURITE_PRODUCT_REQUEST,
+
+    };
+};
 const fetchFavouriteProducsSuccess = (data) => {
     return {
         type: types.FETCH_FAVOURITE_PRODUCT_SUCCESS,
@@ -585,6 +591,7 @@ const fetchFavouriteProducsSuccess = (data) => {
 const fetchFavouriteProducs = (idUser) => {
     return async (dispatch, getState) => {
         try {
+            dispatch(fetchFavouriteProducsRequest());
             const res = await fetchFavouriteProducsService(idUser);
             const data = res && res.data ? res.data : []; // list productIds
             if (data) {
@@ -606,6 +613,7 @@ const fetchFavouriteProducs = (idUser) => {
             }
         } catch (error) {
             console.log(error);
+            dispatch(fetchFavouriteProducsSuccess({}));
         }
     }
 };

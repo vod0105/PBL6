@@ -64,6 +64,8 @@ const ProductItemDetail = () => {
   const listSimilarProducts = useSelector((state) => {
     return state.product.listSimilarProducts;
   })
+  const isLoading = useSelector((state) => state.product.isLoadingListSimilarProducts);
+
   const ratingProduct = useSelector((state) => { // All số bài đánh giá sản phẩm (Ko phải số sao)
     return state.product.ratingProduct;
   })
@@ -156,7 +158,7 @@ const ProductItemDetail = () => {
 
         <div className="similar-products-container">
           <h2>SẢN PHẨM CÙNG DANH MỤC</h2>
-          <FoodDisplay listProducts={listSimilarProducts} />
+          <FoodDisplay listProducts={listSimilarProducts} isLoading={isLoading} />
         </div>
         <div className="product-detail-comment">
           <h2>Bài viết đánh giá</h2>

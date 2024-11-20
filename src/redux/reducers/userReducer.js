@@ -1,5 +1,8 @@
 // reducers/authReducer.js
 const initialState = {
+    isLoadingListFavouriteProducts: false,
+
+
     listProductsInCart: {}, // list products ở giỏ hàng khách hàng => fetch từ BE
     listCombosInCart: {},
 
@@ -113,10 +116,16 @@ const userReducer = (state = initialState, action) => {
                 ...state,
                 listVouchersUser: action.dataVouchers
             };
+        case 'FETCH_FAVOURITE_PRODUCT_REQUEST':
+            return {
+                ...state,
+                isLoadingListFavouriteProducts: true
+            };
         case 'FETCH_FAVOURITE_PRODUCT_SUCCESS':
             return {
                 ...state,
-                listFavouriteProducts: action.dataProducts
+                listFavouriteProducts: action.dataProducts,
+                isLoadingListFavouriteProducts: false,
             };
         case 'SAVE_VOUCHER_SUCCESS':
             return {

@@ -6,10 +6,12 @@ import { fetchAllProducts } from "../../redux/actions/productActions";
 import Pagination from 'react-bootstrap/Pagination';
 import axios from 'axios';
 import { toast } from "react-toastify";
+import MoonLoader from 'react-spinners/MoonLoader';
 
 export default function AllProducts() {
   const dispatch = useDispatch();
   const allProducts = useSelector((state) => state.product.allProducts);
+  const isLoading = useSelector((state) => state.product.isLoadingAllProducts);
 
   // State -> trang hiện tại
   const [activePage, setActivePage] = useState(1);
@@ -97,7 +99,7 @@ export default function AllProducts() {
       // console.log("Chuỗi base64:", base64FileImage);
       // AI: Tìm product bằng AI -> upload file
       try {
-        const responseAI = await axios.post(`http://10.10.27.107:5000/predict`, {
+        const responseAI = await axios.post(`http://localhost:5000/predict`, {
           image: base64FileImage
         });
         console.log("response AI:", responseAI);
@@ -166,43 +168,52 @@ export default function AllProducts() {
           </select>
         </div>
       </div>
-      <div
-        className={`${allProducts && allProducts.length > 0 ? 'has-products' : ''}`}
-      >
-        <div className="category-list-products">
-          {
-            currentProducts && currentProducts.length > 0 ? (
-              currentProducts.map((product, index) => (
-                <React.Fragment key={index}>
-                  <ProductItem product={product} />
-                  {
-                    (index + 1) % 4 === 0 && (index + 1) !== currentProducts.length && <hr className="hr-separate" />
-                  }
-                </React.Fragment>
-              ))
-            ) : (
-              <div className="no-product">Không có sản phẩm</div>
-            )
-          }
-        </div>
+      {
+        isLoading === false ? (
+          currentProducts && currentProducts.length > 0 ? (
+            <div className="has-products">
+              <div className="list-products">
+                {
+                  currentProducts.map((product, index) => (
+                    <React.Fragment key={index}>
+                      <ProductItem product={product} />
+                      {
+                        (index + 1) % 4 === 0 && (index + 1) !== currentProducts.length && <hr className="hr-separate" />
+                      }
+                    </React.Fragment>
+                  ))
+                }
+              </div>
+              {/* Phần phân trang */}
+              <div className="pagination-container">
+                <Pagination>
+                  <Pagination.Prev onClick={handlePrevious} disabled={activePage === 1} />
+                  {[...Array(totalPages)].map((_, number) => (
+                    <Pagination.Item
+                      key={number + 1}
+                      active={number + 1 === activePage}
+                      onClick={() => handlePageChange(number + 1)}
+                    >
+                      {number + 1}
+                    </Pagination.Item>
+                  ))}
+                  <Pagination.Next onClick={handleNext} disabled={activePage === totalPages} />
+                </Pagination>
+              </div>
+            </div>
+          ) : (
+            <div className="no-product">Không có sản phẩm nào</div>
+          )
+        ) : (
+          <div className="loading-container">
+            <MoonLoader size={50} color={"#ff0000"} loading={isLoading} />
+            <span>
+              Đang lấy dữ liệu
+            </span>
+          </div>
+        )
+      }
 
-        {/* Phần phân trang */}
-        <div className="pagination-container">
-          <Pagination>
-            <Pagination.Prev onClick={handlePrevious} disabled={activePage === 1} />
-            {[...Array(totalPages)].map((_, number) => (
-              <Pagination.Item
-                key={number + 1}
-                active={number + 1 === activePage}
-                onClick={() => handlePageChange(number + 1)}
-              >
-                {number + 1}
-              </Pagination.Item>
-            ))}
-            <Pagination.Next onClick={handleNext} disabled={activePage === totalPages} />
-          </Pagination>
-        </div>
-      </div>
     </div>
   );
 }

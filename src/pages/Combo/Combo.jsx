@@ -6,10 +6,12 @@ import { fetchAllCombos } from "../../redux/actions/productActions";
 import Pagination from 'react-bootstrap/Pagination';
 import ComboItem from "../../components/ComboItem/ComboItem";
 import axios from 'axios';
+import MoonLoader from 'react-spinners/MoonLoader';
 
 export default function Combo() {
   const dispatch = useDispatch();
   const allCombos = useSelector((state) => state.product.allCombos);
+  const isLoading = useSelector((state) => state.product.isLoadingAllCombos);
 
   // State -> trang hiện tại
   const [activePage, setActivePage] = useState(1);
@@ -95,7 +97,7 @@ export default function Combo() {
       // console.log("Chuỗi base64:", base64FileImage);
       // AI: Tìm product bằng AI -> upload file
       try {
-        const responseAI = await axios.post(`http://10.10.27.107:5000/predict`, {
+        const responseAI = await axios.post(`http://localhost:5000/predict`, {
           image: base64FileImage
         });
         console.log("response AI:", responseAI);
@@ -163,43 +165,51 @@ export default function Combo() {
           </select>
         </div>
       </div>
-      <div
-        className={`${allCombos && allCombos.length > 0 ? 'has-products' : ''}`}
-      >
-        <div className="combo-list-products">
-          {
-            currentCombos && currentCombos.length > 0 ? (
-              currentCombos.map((combo, index) => (
-                <React.Fragment key={index}>
-                  <ComboItem combo={combo} />
-                  {
-                    (index + 1) % 4 === 0 && (index + 1) !== currentCombos.length && <hr className="hr-separate" />
-                  }
-                </React.Fragment>
-              ))
-            ) : (
-              <div className="no-product">Không có sản phẩm</div>
-            )
-          }
-        </div>
-
-        {/* Phần phân trang */}
-        <div className="pagination-container">
-          <Pagination>
-            <Pagination.Prev onClick={handlePrevious} disabled={activePage === 1} />
-            {[...Array(totalPages)].map((_, number) => (
-              <Pagination.Item
-                key={number + 1}
-                active={number + 1 === activePage}
-                onClick={() => handlePageChange(number + 1)}
-              >
-                {number + 1}
-              </Pagination.Item>
-            ))}
-            <Pagination.Next onClick={handleNext} disabled={activePage === totalPages} />
-          </Pagination>
-        </div>
-      </div>
+      {
+        isLoading === false ? (
+          currentCombos && currentCombos.length > 0 ? (
+            <div className="has-products">
+              <div className="combo-list-products">
+                {
+                  currentCombos.map((combo, index) => (
+                    <React.Fragment key={index}>
+                      <ComboItem combo={combo} />
+                      {
+                        (index + 1) % 4 === 0 && (index + 1) !== currentCombos.length && <hr className="hr-separate" />
+                      }
+                    </React.Fragment>
+                  ))
+                }
+              </div>
+              {/* Phần phân trang */}
+              <div className="pagination-container">
+                <Pagination>
+                  <Pagination.Prev onClick={handlePrevious} disabled={activePage === 1} />
+                  {[...Array(totalPages)].map((_, number) => (
+                    <Pagination.Item
+                      key={number + 1}
+                      active={number + 1 === activePage}
+                      onClick={() => handlePageChange(number + 1)}
+                    >
+                      {number + 1}
+                    </Pagination.Item>
+                  ))}
+                  <Pagination.Next onClick={handleNext} disabled={activePage === totalPages} />
+                </Pagination>
+              </div>
+            </div>
+          ) : (
+            <div className="no-product">Không có sản phẩm</div>
+          )
+        ) : (
+          <div className="loading-container">
+            <MoonLoader size={50} color={"#ff0000"} loading={isLoading} />
+            <span>
+              Đang lấy dữ liệu
+            </span>
+          </div>
+        )
+      }
     </div>
   );
 }
