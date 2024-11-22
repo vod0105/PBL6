@@ -6,7 +6,7 @@ services:
     container_name: mysql
     environment:
       MYSQL_DATABASE: db
-      MYSQL_ROOT_PASSWORD: 123456789 # Chỉnh sửa lại đúng tên biến
+      MYSQL_ROOT_PASSWORD: 123456789 n
     ports:
       - '3307:3306'
     volumes:

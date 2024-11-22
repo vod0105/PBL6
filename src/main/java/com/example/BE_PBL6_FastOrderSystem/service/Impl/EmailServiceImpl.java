@@ -1,15 +1,20 @@
 package com.example.BE_PBL6_FastOrderSystem.service.Impl;
 
+import com.example.BE_PBL6_FastOrderSystem.response.APIRespone;
+import com.example.BE_PBL6_FastOrderSystem.response.EmailReponse;
 import com.example.BE_PBL6_FastOrderSystem.service.IEmailService;
 import jakarta.mail.*;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.util.Properties;
+import java.util.*;
 
 @Service
 public class EmailServiceImpl implements IEmailService {
@@ -38,11 +43,11 @@ public class EmailServiceImpl implements IEmailService {
             throw new RuntimeException("Failed to send email: " + e.getMessage());
         }
     }
-
-    public void receiveEmail(String host, String storeType, String user, String password, String senderEmail) {
+    @Override
+    public ResponseEntity<APIRespone> receiveEmail(String user, String password, String senderEmail) {
         Properties properties = new Properties();
-        properties.put("mail.store.protocol", "imaps");
-        properties.put("mail.imaps.host", host);
+        properties.put("mail.store.protocol", "imap");
+        properties.put("mail.imaps.host", "imap.gmail.com");
         properties.put("mail.imaps.port", "993");
         properties.put("mail.imaps.ssl.enable", "true"); // Bật SSL
         Session emailSession = Session.getInstance(properties);
@@ -50,28 +55,43 @@ public class EmailServiceImpl implements IEmailService {
         Folder emailFolder = null;
 
         try {
-            // Kết nối tới máy chủ email
             store = emailSession.getStore("imaps");
             store.connect(user, password);
 
-            // Mở thư mục INBOX
             emailFolder = store.getFolder("INBOX");
             emailFolder.open(Folder.READ_ONLY);
 
-            // Lấy danh sách email
             Message[] messages = emailFolder.getMessages();
             System.out.println("Total messages: " + messages.length);
 
+            // Lấy thời gian hiện tại
+            long currentTimeMillis = System.currentTimeMillis();
+            List<EmailReponse> emailReponses = new ArrayList<>();
+
             for (Message message : messages) {
-                String fromEmail = message.getFrom()[0].toString(); // Lấy người gửi
-                // Kiểm tra xem người gửi có trùng với senderEmail không
-                if (fromEmail.contains(senderEmail)) {
+                String fromEmail = message.getFrom()[0].toString();
+                Date receivedDate = message.getReceivedDate();
+
+                // Kiểm tra email từ người gửi và trong vòng 1 giờ
+                if (receivedDate != null
+                        && (currentTimeMillis - receivedDate.getTime()) <= 3600000
+                        && fromEmail.contains(senderEmail)) {
+
+                    emailReponses.add(new EmailReponse(
+                            message.getMessageNumber(),
+                            message.getSubject(),
+                            message.getFrom()[0].toString(),
+                            message.getContent().toString()
+                    ));
+
                     System.out.println("Email Number: " + message.getMessageNumber());
                     System.out.println("Subject: " + message.getSubject());
                     System.out.println("From: " + message.getFrom()[0]);
                     System.out.println("Text: " + message.getContent().toString());
                 }
             }
+
+            return ResponseEntity.ok(new APIRespone(true, "Emails from the past hour received successfully", emailReponses));
         } catch (MessagingException | IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to receive email: " + e.getMessage());
@@ -89,9 +109,58 @@ public class EmailServiceImpl implements IEmailService {
         }
     }
 
+    @Override
+    public ResponseEntity<APIRespone> receiveAllEmail(String user, String password) {
+        Properties properties = new Properties();
+        properties.put("mail.store.protocol", "imap");
+        properties.put("mail.imaps.host", "imap.gmail.com");
+        properties.put("mail.imaps.port", "993");
+        properties.put("mail.imaps.ssl.enable", "true");
+        Session emailSession = Session.getInstance(properties);
+        Store store = null;
+        Folder emailFolder = null;
+
+        try {
+
+            store = emailSession.getStore("imaps");
+            store.connect(user, password);
 
 
+            emailFolder = store.getFolder("INBOX");
+            emailFolder.open(Folder.READ_ONLY);
 
 
+            Message[] messages = emailFolder.getMessages();
+            System.out.println("Total messages: " + messages.length);
 
+            List<EmailReponse> emailReponses = new ArrayList<>();
+            for (Message message : messages) {
+                emailReponses.add(new EmailReponse(
+                        message.getMessageNumber(),
+                        message.getSubject(),
+                        message.getFrom()[0].toString(),
+                        message.getContent().toString()
+                ));
+                System.out.println("Email Number: " + message.getMessageNumber());
+                System.out.println("Subject: " + message.getSubject());
+                System.out.println("From: " + message.getFrom()[0]);
+                System.out.println("Text: " + message.getContent().toString());
+            }
+            return ResponseEntity.ok(new APIRespone(true, "Email received successfully", emailReponses));
+        } catch (MessagingException | IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to receive email: " + e.getMessage());
+        } finally {
+            try {
+                if (emailFolder != null && emailFolder.isOpen()) {
+                    emailFolder.close(false);
+                }
+                if (store != null) {
+                    store.close();
+                }
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
