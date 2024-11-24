@@ -144,14 +144,14 @@ const LoginModal = () => {
                     type='icon'
                     shape='circle'
                   />
-                  <FacebookLogin
+                  {/* <FacebookLogin
                     appId=''
                     autoLoad={true}
                     fields='name,email,picture'
                     textButton={<i className="fa-brands fa-facebook" />}
                     cssClass='custom-facebook-button'
                     onClick={handleSuccessFacebook}
-                  />
+                  /> */}
                 </div>
               </div>
               <div className="click-register">

@@ -266,7 +266,11 @@ const Checkout = () => {
             let distance = getDistance(addressCoords[0], addressCoords[1], selectedStore ? +selectedStore.latitude : 16.0471, selectedStore ? +selectedStore.longitude : 108.206); // note: thay tọa độ sau bằng tọa độ cửa hàng
             setDistance(distance);
             if (distance > 1.5) {
-                setShippingFee(distance * 10000);
+                // setShippingFee(Math.floor(distance * 10000));
+                const calculatedFee = distance * 10000;
+                // Quy về hàng nghìn
+                const roundedFee = Math.floor(calculatedFee / 1000) * 1000;
+                setShippingFee(roundedFee);
             }
             else {
                 setShippingFee(0);
@@ -517,7 +521,7 @@ const Checkout = () => {
                                 />
                                 <label htmlFor="Zalopay">Zalopay</label>
                             </div>
-                            <div>
+                            {/* <div>
                                 <input
                                     type="radio"
                                     id="momo"
@@ -527,7 +531,7 @@ const Checkout = () => {
                                     onChange={(e) => setPaymentMethod(e.target.value)}
                                 />
                                 <label htmlFor="momo">Momo</label>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="voucher-container">
                             <h3>Chọn voucher</h3>
@@ -578,10 +582,10 @@ const Checkout = () => {
                             <span>
                                 {
                                     isBuyNow === true && isBuyNowCombo === false
-                                        ? Number(((productDetailBuyNow?.finalPrice * productDetailBuyNow?.quantity) + shippingFee) * ((100 - promotion) / 100)).toLocaleString('vi-VN')
+                                        ? Number(((productDetailBuyNow?.finalPrice * productDetailBuyNow?.quantity) * ((100 - promotion) / 100)) + shippingFee).toLocaleString('vi-VN')
                                         : isBuyNow === false && isBuyNowCombo === true
-                                            ? Number(((comboDetailBuyNow?.unitPrice * comboDetailBuyNow?.quantity) + shippingFee) * ((100 - promotion) / 100)).toLocaleString('vi-VN')
-                                            : Number(((getTotalPriceInCart()) + shippingFee) * ((100 - promotion) / 100)).toLocaleString('vi-VN')
+                                            ? Number(((comboDetailBuyNow?.unitPrice * comboDetailBuyNow?.quantity) * ((100 - promotion) / 100)) + shippingFee).toLocaleString('vi-VN')
+                                            : Number(((getTotalPriceInCart()) * ((100 - promotion) / 100)) + shippingFee).toLocaleString('vi-VN')
                                 } đ
                             </span>
                         </div>

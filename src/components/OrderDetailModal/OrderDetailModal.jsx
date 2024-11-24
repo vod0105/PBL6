@@ -43,7 +43,7 @@ const OrderDetailModal = ({ showModal, handleClose, orderDetails, statusOrderInt
                 <p className="infor-title">Mã đơn hàng</p>
                 <p className="infor-content">{orderDetails.orderCode}</p>
               </div>
-              <div className="order-detail-infor-item">
+              <div className="order-detail-infor-item address-item">
                 <p className="infor-title">Địa chỉ nhận hàng</p>
                 <p className="infor-content">{orderDetails.deliveryAddress}</p>
               </div>
@@ -52,9 +52,14 @@ const OrderDetailModal = ({ showModal, handleClose, orderDetails, statusOrderInt
                 <p className="infor-content">{orderDetails.paymentMethod}</p>
               </div>
               <div className="order-detail-infor-item">
-                <p className="infor-title">Trạng thái thanh toán</p>
+                <p className="infor-title">Trạng thái</p>
                 <p className="infor-content">{orderDetails.statusPayment}</p>
               </div>
+              <div className="order-detail-infor-item">
+                <p className="infor-title">Phí giao hàng</p>
+                <p className="infor-content">{Number(orderDetails.shippingFee).toLocaleString('vi-VN')} đ</p>
+              </div>
+
 
               {/* <div className="order-detail-infor-item">
                 <p className="infor-title">Ghi chú</p>

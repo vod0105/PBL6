@@ -157,12 +157,12 @@ const Navbar = () => {
           Test GGMAP
         </NavLink> */}
 
-        <NavLink
+        {/* <NavLink
           to="/test-loading"
           className={({ isActive }) => (isActive ? 'active' : '')}
         >
           Test LOADING
-        </NavLink>
+        </NavLink> */}
 
         <NavLink
           to="/download"

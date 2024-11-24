@@ -155,11 +155,11 @@ const ComboItemModal = ({ showModalCombo, handleCloseModalCombo, combo, stores, 
     }, 500);
   };
 
-  const drinks = [
-    { drinkId: 1, drinkName: "Coca Cola", price: 10000 },
-    { drinkId: 2, drinkName: "Pepsi", price: 10000 },
-    { drinkId: 3, drinkName: "7Up", price: 10000 }
-  ]
+  // const drinks = [
+  //   { drinkId: 1, drinkName: "Coca Cola", price: 10000 },
+  //   { drinkId: 2, drinkName: "Pepsi", price: 10000 },
+  //   { drinkId: 3, drinkName: "7Up", price: 10000 }
+  // ]
   return (
     <Modal
       show={showModalCombo}

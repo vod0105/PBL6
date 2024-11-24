@@ -24,11 +24,15 @@
               border-radius: 6px;
               box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); // Đổ bóng nhẹ            
             }
+            .address-item {
+              flex: 2; // Address item chiếm gấp đôi các mục khác
+            }
             .infor-title{
               font-weight: 600;
               color: #495057;
               margin-bottom: 5px; 
               font-size: 16px;
+              min-height: 50px;
             }
             .infor-content{
               font-size: 15px;
