@@ -54,9 +54,9 @@ public class PublicController {
     public ResponseEntity<APIRespone> getProductsByCategoryId(@PathVariable("categoryId") Long categoryId) {
        return productService.getProductsByCategoryId(categoryId);
     }
-    @GetMapping("/products/search")
-    public ResponseEntity<APIRespone> getProductByNames(@RequestParam("name") String productName) {
-     return productService.getProductByNames(productName);
+    @GetMapping("/products/search/{name}")
+    public ResponseEntity<APIRespone> searchProduct(@PathVariable String name) {
+        return productService.getProductByNames(name);
     }
     @GetMapping("/products/best-sale")
     public ResponseEntity<APIRespone> getBestSaleProducts() {
