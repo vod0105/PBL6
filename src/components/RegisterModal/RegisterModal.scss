@@ -17,6 +17,25 @@
                     border: 1px solid red; 
                 }
             }
+            .password-input-container {
+                position: relative;
+
+                input {
+                    padding-right: 40px; // Dành không gian cho icon eye
+                }
+
+                .password-toggle {
+                    position: absolute;
+                    top: 50%;
+                    right: 10px;
+                    transform: translateY(-50%);
+                    cursor: pointer;
+                    color: #aaa;
+                    &:hover {
+                        color: #333;
+                    }
+                }
+            }
             
         }
 

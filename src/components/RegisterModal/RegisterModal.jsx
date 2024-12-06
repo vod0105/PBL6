@@ -19,6 +19,11 @@ const RegisterModal = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  // Show eye icon
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+
   const defaultValidInput = {
     isValidFullname: true,
     isValidPhonenumber: true,
@@ -132,7 +137,7 @@ const RegisterModal = () => {
                 onChange={(event) => setEmail(event.target.value)}
                 className={objCheckInput.isValidEmail ? 'form-control' : 'form-control is-invalid'}
               />
-              <input
+              {/* <input
                 type="password"
                 placeholder='Password'
                 value={password}
@@ -145,7 +150,45 @@ const RegisterModal = () => {
                 value={confirmPassword}
                 className={objCheckInput.isValidConfirmPassword ? 'form-control' : 'form-control is-invalid'}
                 onChange={(event) => setConfirmPassword(event.target.value)}
-              />
+              /> */}
+              <div className="password-input-container">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder='Password'
+                  value={password}
+                  className={objCheckInput.isValidPassword ? 'form-control' : 'form-control is-invalid'}
+                  onChange={(event) => setPassword(event.target.value)}
+                />
+                <span
+                  className="password-toggle"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                      <i className="fa fa-eye-slash" aria-hidden="true"></i>
+                    ) : (
+                      <i className="fa fa-eye" aria-hidden="true"></i>
+                    )}
+                </span>
+              </div>
+              <div className="password-input-container">
+                <input
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  placeholder='Nhập lại mật khẩu'
+                  value={confirmPassword}
+                  className={objCheckInput.isValidConfirmPassword ? 'form-control' : 'form-control is-invalid'}
+                  onChange={(event) => setConfirmPassword(event.target.value)}
+                />
+                <span
+                  className="password-toggle"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? (
+                      <i className="fa fa-eye-slash" aria-hidden="true"></i>
+                    ) : (
+                      <i className="fa fa-eye" aria-hidden="true"></i>
+                    )}
+                </span>
+              </div>
             </div>
             <button className='btn btn-danger' onClick={handleRegister}>Đăng ký</button>
             <div className="click-register">

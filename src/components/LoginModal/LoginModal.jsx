@@ -22,7 +22,8 @@ const LoginModal = () => {
   const [phonenumber, setPhonenumber] = useState("");
   const [password, setPassword] = useState("");
 
-  const [showForgetPassword, setShowForgetPassword] = useState(false); // Quản lý hiển thị Modal quên mật khẩu
+  const [showForgetPassword, setShowForgetPassword] = useState(false); // Hiển thị Modal quên mật khẩu
+  const [showPassword, setShowPassword] = useState(false); // Hiển thị eye password
 
   const defaultValidInput = {
     isValidPhonenumber: true,
@@ -115,13 +116,32 @@ const LoginModal = () => {
                   onChange={(event) => setPhonenumber(event.target.value)}
                   className={objCheckInput.isValidPhonenumber ? 'form-control' : 'form-control is-invalid'}
                 />
-                <input
+                {/* <input
                   type="password"
                   placeholder='Mật khẩu'
                   value={password}
                   className={objCheckInput.isValidPassword ? 'form-control' : 'form-control is-invalid'}
                   onChange={(event) => setPassword(event.target.value)}
-                />
+                /> */}
+                <div className="password-container">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Mật khẩu"
+                    value={password}
+                    className={objCheckInput.isValidPassword ? 'form-control' : 'form-control is-invalid'}
+                    onChange={(event) => setPassword(event.target.value)}
+                  />
+                  <span
+                    className="toggle-password"
+                    onClick={() => setShowPassword(!showPassword)} // Chuyển đổi trạng thái
+                  >
+                    {showPassword ? (
+                      <i className="fa fa-eye-slash" aria-hidden="true"></i>
+                    ) : (
+                      <i className="fa fa-eye" aria-hidden="true"></i>
+                    )}
+                  </span>
+                </div>
                 <button
                   className='btn-forgot-password'
                   onClick={() => {
