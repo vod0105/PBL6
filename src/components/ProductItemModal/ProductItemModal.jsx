@@ -92,6 +92,9 @@ const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, 
           toast.error('Vui lòng chọn cửa hàng');
         }
         else {
+          // const store = product.stores.find(store => +store.storeId === +selectedStore.storeId);
+          // if (quantity > +store.stockQuantity) {
+
           if (quantity > product.stockQuantity) {
             toast.error("Số lượng sản phẩm vượt quy định!")
           }
@@ -144,6 +147,7 @@ const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, 
     setQuantity(1);
     setSelectedStore(null); // Reset cửa hàng về null -> Ko chọn cửa hàng nào
     setSelectedSize(listSizes.length > 0 ? listSizes[0].name : ""); // Reset kích thước về kích thước đầu tiên
+    setFinalPrice(product.discountedPrice);
     handleCloseModalProduct();
     // setTimeout(() => {
     //   setFinalPrice(product?.discountedPrice);

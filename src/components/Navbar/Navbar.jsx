@@ -4,18 +4,11 @@ import { assets } from "../../assets/assets";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { showLoginModal, showRegisterModal } from "../../redux/actions/modalActions";
-import { fetchAllCategories } from "../../redux/actions/categoryActions";
+// import { fetchAllCategories } from "../../redux/actions/categoryActions";
 import logoCart from '../../assets/logo/cart.png'
 import logoUser from '../../assets/logo/user.png'
 
 import cate_1 from "../../assets/navbar/cate_1.png";
-import cate_2 from "../../assets/navbar/cate_2.png";
-import cate_3 from "../../assets/navbar/cate_3.png";
-import cate_4 from "../../assets/navbar/cate_4.png";
-import cate_5 from "../../assets/navbar/cate_5.png";
-import cate_6 from "../../assets/navbar/cate_6.png";
-import cate_7 from "../../assets/navbar/cate_7.png";
-import cate_8 from "../../assets/navbar/cate_8.png";
 import ChatButton from "../Chatbox/ChatButton";
 
 
@@ -42,9 +35,9 @@ const Navbar = () => {
   const listCategories = useSelector((state) => {
     return state.category.listCategories;
   })
-  useEffect(() => {
-    dispatch(fetchAllCategories());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(fetchAllCategories());
+  // }, []);
 
   // Mỗi li ở ul thực đơn được nhấn -> active cho THỰC ĐƠN -> Dùng path trên URL 
   const location = useLocation(); // useLocation -> Tự động re-render cho component nào sử dụng Hook này
@@ -93,7 +86,8 @@ const Navbar = () => {
           Giới thiệu
         </NavLink>
         <NavLink
-          to={listCategories.length > 0 ? `combo` : "/category"}
+          // to={listCategories.length > 0 ? `combo` : "/category"}
+          to={`combo`}
           className={({ isActive }) => (isActive || isMenuActive ? "active navbar-category" : "navbar-category")}
         >
           Thực đơn

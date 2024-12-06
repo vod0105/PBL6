@@ -27,9 +27,9 @@ const Store = () => {
   const listStores = useSelector((state) => {
     return state.store.listStores;
   })
-  useEffect(() => {
-    dispatch(fetchAllStores());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(fetchAllStores());
+  // }, []);
 
   // Reset contentRef khi component unmounts
   useEffect(() => {

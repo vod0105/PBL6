@@ -34,9 +34,9 @@ const Home = () => {
     return state.user.listFavouriteProducts;
   })
 
-  useEffect(() => {
-    dispatch(fetchProductsBestSale());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(fetchProductsBestSale());
+  // }, []);
   useEffect(() => {
     if (account) {
       dispatch(fetchFavouriteProducs(account.id));

@@ -12,6 +12,10 @@ import RegisterModal from "./components/RegisterModal/RegisterModal";
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserAccount } from "./redux/actions/authActions";
 import { fetchAllProducts } from "./redux/actions/productActions";
+import { fetchAllCategories } from "./redux/actions/categoryActions";
+import { fetchProductsBestSale } from "./redux/actions/productActions";
+import { fetchAllPromotions } from "./redux/actions/promotionActions";
+import { fetchAllStores } from "./redux/actions/storeActions";
 import ChatContext, { ChatProvider } from "./context/showChat";
 
 const App = () => {
@@ -19,6 +23,10 @@ const App = () => {
   useEffect(() => {
     dispatch(getUserAccount());
     dispatch(fetchAllProducts());
+    dispatch(fetchAllCategories());
+    dispatch(fetchProductsBestSale());
+    dispatch(fetchAllPromotions());
+    dispatch(fetchAllStores());
   }, [dispatch]);
   return (
     <>

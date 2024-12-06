@@ -29,44 +29,40 @@ const AppRoutes = (props) => {
     return (
         <>
             <Routes>
-                {/* <PrivateRoutes path='/users' element={Users} />
-                <PrivateRoutes path='/roles' element={Role} />
-                <PrivateRoutes path='/group-role' element={GroupRole} /> */}
 
                 {/* PrivateRoutes */}
-                {/* <Route path='/introduce' element={<PrivateRoutes element={<Introduce />} />} /> */}
+                <Route path='/cart' element={<PrivateRoutes element={<Cart />} />} />
+                <Route path='/order' element={<PrivateRoutes element={<PlaceOrder />} />} />
+                <Route path='/account/*' element={<PrivateRoutes element={<Account />} />} />
+                <Route path='/checkout' element={<PrivateRoutes element={<Checkout />} />} />
+                <Route path='/order-complete' element={<PrivateRoutes element={<OrderComplete />} />} />
+                <Route path='/order-in-transit/:orderCode' element={<PrivateRoutes element={<DeliveryMap />} />} />
 
+                {/* Public Routes */}
                 <Route path="/" element={<Home />} />
                 <Route path="/introduce" element={<Introduce />} />
                 <Route path="/category/:id" element={<Category />} />
                 <Route path="/combo" element={<Combo />} />
                 <Route path="/all-products" element={<AllProducts />} />
-
                 <Route path="/promotion" element={<Promotion />} />
-                {/* <Route path="/store" element={<Store_Old />} /> */}
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/order" element={<PlaceOrder />} />
                 <Route path="/contact" element={<Contact />} />
-                <Route path="/account/*" element={<Account />} />
-
                 <Route path="/product-detail/:id" element={<ProductItemDetail />} />
                 <Route path="/combo-detail/:id" element={<ComboItemDetail />} />
-
                 <Route path="/store" element={<Store />} />
                 <Route path="/store-detail/:id" element={<StoreDetail />} />
-
-                <Route path="/checkout" element={<Checkout />} />
                 <Route path="/promotion-detail/:id" element={<PromotionDetail />} />
-                <Route path="/order-complete" element={<OrderComplete />} />
-
                 <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
-                <Route path="/test-loading" element={<Loading />} />
-                <Route path="/order-in-transit/:orderCode" element={<DeliveryMap />} />
-
                 <Route path="/download" element={<Download />} />
+                {/* <Route path="/store" element={<Store_Old />} /> */}
+                {/* <Route path="/cart" element={<Cart />} /> */}
+                {/* <Route path="/order" element={<PlaceOrder />} /> */}
+                {/* <Route path="/account/*" element={<Account />} /> */}
+                {/* <Route path="/checkout" element={<Checkout />} /> */}
+                {/* <Route path="/order-complete" element={<OrderComplete />} /> */}
+                {/* <Route path="/test-loading" element={<Loading />} /> */}
+                {/* <Route path="/order-in-transit/:orderCode" element={<DeliveryMap />} /> */}
 
                 <Route path="*" element={<div>404 Not Found!!!</div>} />
-
             </Routes>
         </>
     );

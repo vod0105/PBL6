@@ -14,9 +14,9 @@ const Promotion = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(6); // Số lượng chương trình khuyến mãi hiển thị mỗi trang
 
-  useEffect(() => {
-    dispatch(fetchAllPromotions());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchAllPromotions());
+  // }, [dispatch]);
 
   // Lướt trang
   const contentRef = useRef(null);

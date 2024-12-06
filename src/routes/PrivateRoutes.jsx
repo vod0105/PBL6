@@ -5,9 +5,9 @@ import { showLoginModal } from '../redux/actions/modalActions';
 
 const PrivateRoutes = ({ element }) => {
     const dispatch = useDispatch();
-    const user = useSelector((state) => state.auth.user);
+    const isLogin = useSelector((state) => state.auth.isAuthenticated);
 
-    if (user && user.isAuthenticated === true) {
+    if (isLogin === true) {
         // Nếu người dùng đã xác thực, trả về element của route
         return element;
     } else {
