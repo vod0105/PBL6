@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 class InputTextCustom extends StatelessWidget{
   final TextEditingController controller;
   final IconData icon;
-  final String hinttext;
-  InputTextCustom({
-       Key? key,
+  final String hintText;
+  const InputTextCustom({
+       super.key,
        required this.controller,
-       required this.hinttext,
+       required this.hintText,
        required this.icon,
-   }): super(key:key);
+   });
    @override
    Widget build(BuildContext context) {
        return Container(
@@ -22,7 +22,7 @@ class InputTextCustom extends StatelessWidget{
                   BoxShadow(
                     blurRadius: AppDimention.size10,
                     spreadRadius: 7,
-                    offset: Offset(1, 10),
+                    offset: const Offset(1, 10),
                     color: Colors.grey.withOpacity(0.2)
                   )
                 ]
@@ -30,21 +30,21 @@ class InputTextCustom extends StatelessWidget{
               child: TextField(
                   controller: controller,
                   decoration: InputDecoration(
-                    hintText: hinttext,
-                    hintStyle: TextStyle(
+                    hintText: hintText,
+                    hintStyle: const TextStyle(
                               color: Colors.black26
                             ),
                     prefixIcon: Icon(icon,color: AppColor.yellowColor,),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(AppDimention.size30),
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         width: 1.0,
                         color: Colors.white
                       )
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(AppDimention.size30),
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         width: 1.0,
                         color: Colors.white
                       )

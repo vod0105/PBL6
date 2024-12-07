@@ -1,14 +1,14 @@
-class Userdto {
+class UserDto {
   String username;
   String password;
-  Userdto({
+  UserDto({
     required this.username,
     required this.password,
   });
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data["numberPhone"] = this.username;
-    data["password"] = this.password;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["numberPhone"] = username;
+    data["password"] = password;
     return data;
   }
 }

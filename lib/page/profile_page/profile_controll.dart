@@ -1,22 +1,19 @@
-import 'package:android_project/custom/icon_text_custom.dart';
-import 'package:android_project/data/controller/Order_controller.dart';
+import 'package:android_project/page/chat_page/home_chart/home_chat.dart';
 import 'package:android_project/route/app_route.dart';
-
-import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ProfileControll extends StatefulWidget {
   const ProfileControll({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
-  _ProfileControllState createState() => _ProfileControllState();
+  ProfileControllState createState() => ProfileControllState();
 }
 
-class _ProfileControllState extends State<ProfileControll> {
+class ProfileControllState extends State<ProfileControll> {
   PageController pageController = PageController(viewportFraction: 0.96);
   double currentPageValue = 0.0;
 
@@ -58,7 +55,7 @@ class _ProfileControllState extends State<ProfileControll> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(AppDimention.size10),
                 ),
-                child: Column(
+                child: const Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Icon(
@@ -93,7 +90,7 @@ class _ProfileControllState extends State<ProfileControll> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.airplane_ticket,
                     size: 27,
                     color: Colors.black54,
@@ -101,7 +98,7 @@ class _ProfileControllState extends State<ProfileControll> {
                   SizedBox(
                     height: AppDimention.size5,
                   ),
-                  Text(
+                  const Text(
                     "Giảm giá",
                     style: TextStyle(
                       fontSize: 12,
@@ -115,7 +112,8 @@ class _ProfileControllState extends State<ProfileControll> {
             ),
             GestureDetector(
               onTap: () {
-                Get.toNamed(AppRoute.CHART_PAGE);
+                // Get.toNamed(AppRoute.CHART_PAGE);
+                Get.to(const HomeChat());
               },
               child: Container(
                 width: AppDimention.size80,
@@ -128,7 +126,7 @@ class _ProfileControllState extends State<ProfileControll> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.chat_bubble_outline_outlined,
                       size: 27,
                       color: Colors.black54,
@@ -136,7 +134,7 @@ class _ProfileControllState extends State<ProfileControll> {
                     SizedBox(
                       height: AppDimention.size5,
                     ),
-                    Text(
+                    const Text(
                       "Tin nhắn",
                       style: TextStyle(
                         fontSize: 12,

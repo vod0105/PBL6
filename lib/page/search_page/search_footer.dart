@@ -1,17 +1,17 @@
-import 'package:android_project/data/controller/Order_controller.dart';
+
 import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SearchFooter extends StatefulWidget {
-  const SearchFooter({Key? key}) : super(key: key);
+  const SearchFooter({super.key});
 
   @override
-  _SearchFooterState createState() => _SearchFooterState();
+  SearchFooterState createState() => SearchFooterState();
 }
 
-class _SearchFooterState extends State<SearchFooter> {
+class SearchFooterState extends State<SearchFooter> {
   int _selectedIndex = 1;
 
   void _onItemTapped(int index) {

@@ -1,26 +1,25 @@
-class Cartmodel {
+class CartModel {
   bool? status;
   String? message;
   List<CartData>? data = [];
-  List<CartData>? get getdata => data;
 
-  Cartmodel({this.status, this.message, this.data});
+  CartModel({this.status, this.message, this.data});
 
-  Cartmodel.fromJson(Map<String, dynamic> json) {
+  CartModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
     if (json['data'] != null) {
       data = <CartData>[];
       json['data'].forEach((v) {
-        data!.add(new CartData.fromJson(v));
+        data!.add(CartData.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['message'] = this.message;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -40,20 +39,20 @@ class CartData {
     cartId = json['cartId'];
     type = json['type'];
     product = json['product'] != null
-        ? new ProductInCart.fromJson(json['product'])
+        ? ProductInCart.fromJson(json['product'])
         : null;
     combo =
-        json['combo'] != null ? new ComboInCart.fromJson(json['combo']) : null;
+        json['combo'] != null ? ComboInCart.fromJson(json['combo']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['cartId'] = this.cartId;
-    data['type'] = this.type;
-    if (this.product != null) {
-      data['product'] = this.product!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['cartId'] = cartId;
+    data['type'] = type;
+    if (product != null) {
+      data['product'] = product!.toJson();
     }
-    data['combo'] = this.combo;
+    data['combo'] = combo;
     return data;
   }
 }
@@ -63,6 +62,7 @@ class ProductInCart {
   int? productId;
   String? productName;
   String? image;
+  
   int? quantity;
   double? unitPrice;
   double? totalPrice;
@@ -78,6 +78,7 @@ class ProductInCart {
       this.image,
       this.quantity,
       this.unitPrice,
+      
       this.totalPrice,
       this.storeId,
       this.status,
@@ -93,6 +94,7 @@ class ProductInCart {
     quantity = json['quantity'];
     unitPrice = json['unitPrice'];
     totalPrice = json['totalPrice'];
+   
     storeId = json['storeId'];
     status = json['status'];
     createdAt = json['createdAt'];
@@ -101,19 +103,20 @@ class ProductInCart {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['userId'] = this.userId;
-    data['productId'] = this.productId;
-    data['productName'] = this.productName;
-    data['image'] = this.image;
-    data['quantity'] = this.quantity;
-    data['unitPrice'] = this.unitPrice;
-    data['totalPrice'] = this.totalPrice;
-    data['storeId'] = this.storeId;
-    data['status'] = this.status;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['size'] = this.size;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['userId'] = userId;
+    data['productId'] = productId;
+    data['productName'] = productName;
+    
+    data['image'] = image;
+    data['quantity'] = quantity;
+    data['unitPrice'] = unitPrice;
+    data['totalPrice'] = totalPrice;
+    data['storeId'] = storeId;
+    data['status'] = status;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['size'] = size;
     return data;
   }
 }
@@ -123,6 +126,7 @@ class ComboInCart {
   int? comboId;
   String? comboName;
   String? image;
+  List<int>? drinkId;
   int? quantity;
   double? unitPrice;
   double? totalPrice;
@@ -137,6 +141,7 @@ class ComboInCart {
       this.comboName,
       this.image,
       this.quantity,
+      this.drinkId,
       this.unitPrice,
       this.totalPrice,
       this.storeId,
@@ -154,6 +159,12 @@ class ComboInCart {
     unitPrice = json['unitPrice'];
     totalPrice = json['totalPrice'];
     storeId = json['storeId'];
+     if (json['drinkId'] != null) {
+      drinkId = <int>[];
+      json['drinkId'].forEach((v) {
+        drinkId!.add(v);
+      });
+    }
     status = json['status'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
@@ -161,19 +172,22 @@ class ComboInCart {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['userId'] = this.userId;
-    data['comboId'] = this.comboId;
-    data['comboName'] = this.comboName;
-    data['image'] = this.image;
-    data['quantity'] = this.quantity;
-    data['unitPrice'] = this.unitPrice;
-    data['totalPrice'] = this.totalPrice;
-    data['storeId'] = this.storeId;
-    data['status'] = this.status;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['size'] = this.size;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['userId'] = userId;
+    data['comboId'] = comboId;
+    data['comboName'] = comboName;
+    data['image'] = image;
+    data['quantity'] = quantity;
+    data['unitPrice'] = unitPrice;
+    if (drinkId != null) {
+      data['drinkId'] = drinkId!.map((v) => v.toString()).toList();
+    }
+    data['totalPrice'] = totalPrice;
+    data['storeId'] = storeId;
+    data['status'] = status;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['size'] = size;
     return data;
   }
 }

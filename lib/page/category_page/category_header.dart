@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CategoryHeader extends StatefulWidget {
-  const CategoryHeader({Key? key}) : super(key: key);
+  const CategoryHeader({super.key});
 
   @override
-  _CategoryHeaderState createState() => _CategoryHeaderState();
+  CategoryHeaderState createState() => CategoryHeaderState();
 }
 
-class _CategoryHeaderState extends State<CategoryHeader> {
+class CategoryHeaderState extends State<CategoryHeader> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -19,7 +19,7 @@ class _CategoryHeaderState extends State<CategoryHeader> {
         Container(
           width: AppDimention.screenWidth,
           height: AppDimention.size100,
-          decoration: BoxDecoration(color: AppColor.mainColor),
+          decoration: const BoxDecoration(color: AppColor.mainColor),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -33,7 +33,7 @@ class _CategoryHeaderState extends State<CategoryHeader> {
                   size: AppDimention.size40,
                 ),
               ),
-              Container(
+              SizedBox(
                 width: AppDimention.size100 * 2,
                 child: Center(
                   child: Text(

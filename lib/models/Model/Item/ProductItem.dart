@@ -9,8 +9,8 @@ class Productitem {
   double? price;
   double? discountedPrice;
   double? averageRate;
-  Categoryitem? category;
-  List<Storesitem>? stores;
+  CategoryItem? category;
+  List<StoresItem>? stores;
   int? stockQuantity;
   String? createdAt;
   String? updatedAt;
@@ -40,12 +40,12 @@ class Productitem {
     discountedPrice = json['discountedPrice'];
     averageRate = json['averageRate'];
     category = json['category'] != null
-        ? new Categoryitem.fromJson(json['category'])
+        ? CategoryItem.fromJson(json['category'])
         : null;
     if (json['stores'] != null) {
-      stores = <Storesitem>[];
+      stores = <StoresItem>[];
       json['stores'].forEach((v) {
-        stores!.add(new Storesitem.fromJson(v));
+        stores!.add(StoresItem.fromJson(v));
       });
     }
     stockQuantity = json['stockQuantity'];
@@ -55,23 +55,23 @@ class Productitem {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['productId'] = this.productId;
-    data['productName'] = this.productName;
-    data['image'] = this.image;
-    data['description'] = this.description;
-    data['price'] = this.price;
-    data['discountedPrice'] = this.discountedPrice;
-    if (this.category != null) {
-      data['category'] = this.category!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['productId'] = productId;
+    data['productName'] = productName;
+    data['image'] = image;
+    data['description'] = description;
+    data['price'] = price;
+    data['discountedPrice'] = discountedPrice;
+    if (category != null) {
+      data['category'] = category!.toJson();
     }
-    if (this.stores != null) {
-      data['stores'] = this.stores!.map((v) => v.toJson()).toList();
+    if (stores != null) {
+      data['stores'] = stores!.map((v) => v.toJson()).toList();
     }
-    data['stockQuantity'] = this.stockQuantity;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['bestSale'] = this.bestSale;
+    data['stockQuantity'] = stockQuantity;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['bestSale'] = bestSale;
     return data;
   }
 }

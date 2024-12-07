@@ -1,4 +1,5 @@
 import 'package:android_project/page/profile_page/profile_footer.dart';
+import 'package:android_project/page/profile_page/profile_setup_page/manifest_social/manifest_social.dart';
 import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
@@ -7,31 +8,31 @@ import 'package:get/get.dart';
 
 class ProfileSetupPage extends StatefulWidget {
   const ProfileSetupPage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   @override
-  _ProfileSetupPageState createState() => _ProfileSetupPageState();
+  ProfileSetupPageState createState() => ProfileSetupPageState();
 }
 
-class _ProfileSetupPageState extends State<ProfileSetupPage> {
+class ProfileSetupPageState extends State<ProfileSetupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Color.fromRGBO(243, 243, 243, 1),
+      backgroundColor: const Color.fromRGBO(243, 243, 243, 1),
       body: Column(
         children: [
           Container(
             width: AppDimention.screenWidth,
             height: AppDimention.size70,
-            decoration: BoxDecoration(color: AppColor.mainColor),
+            decoration: const BoxDecoration(color: AppColor.mainColor),
             child: Row(
               children: [
                 GestureDetector(
                   onTap: () {
                     Get.back();
                   },
-                  child: Container(
+                  child: SizedBox(
                     width: AppDimention.size70,
                     height: AppDimention.size70,
                     child: Center(
@@ -67,7 +68,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                 ),
                 Container(
                   width: AppDimention.screenWidth,
-                  decoration: BoxDecoration(color: Colors.white),
+                  decoration: const BoxDecoration(color: Colors.white),
                   child: Column(
                     children: [
                       Container(
@@ -76,13 +77,13 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                         padding: EdgeInsets.only(
                             left: AppDimention.size20,
                             right: AppDimention.size10),
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             border: Border(
                                 bottom: BorderSide(
                                     width: 1,
-                                    color: const Color.fromARGB(
+                                    color: Color.fromARGB(
                                         255, 194, 193, 193)))),
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("Trung tâm hỗ trợ"),
@@ -93,19 +94,23 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                           ],
                         ),
                       ),
-                      Container(
+                      GestureDetector(
+                        onTap: (){
+                          Get.to(const ManifestSocial());
+                        },
+                        child: Container(
                         width: AppDimention.screenWidth,
                         height: AppDimention.size50,
                         padding: EdgeInsets.only(
                             left: AppDimention.size20,
                             right: AppDimention.size10),
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             border: Border(
                                 bottom: BorderSide(
                                     width: 1,
-                                    color: const Color.fromARGB(
+                                    color: Color.fromARGB(
                                         255, 194, 193, 193)))),
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("Tiêu chuẩn cộng đồng"),
@@ -116,19 +121,20 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                           ],
                         ),
                       ),
+                      ),
                       Container(
                         width: AppDimention.screenWidth,
                         height: AppDimention.size50,
                         padding: EdgeInsets.only(
                             left: AppDimention.size20,
                             right: AppDimention.size10),
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             border: Border(
                                 bottom: BorderSide(
                                     width: 1,
-                                    color: const Color.fromARGB(
+                                    color: Color.fromARGB(
                                         255, 194, 193, 193)))),
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("Điều khoản ứng dụng"),
@@ -149,13 +155,13 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                           padding: EdgeInsets.only(
                               left: AppDimention.size20,
                               right: AppDimention.size10),
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                               border: Border(
                                   bottom: BorderSide(
                                       width: 1,
-                                      color: const Color.fromARGB(
+                                      color: Color.fromARGB(
                                           255, 194, 193, 193)))),
-                          child: Row(
+                          child: const Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text("Đăng kí giao hàng"),
@@ -173,7 +179,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                         padding: EdgeInsets.only(
                             left: AppDimention.size20,
                             right: AppDimention.size10),
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("Giới thiệu"),
@@ -190,7 +196,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
               ],
             ),
           )),
-          ProfileFooter(),
+          const ProfileFooter(),
         ],
       ),
     );

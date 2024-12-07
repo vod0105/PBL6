@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:path_drawing/path_drawing.dart';
 
-class ClippathCustomer extends CustomClipper<Path>{
-  String svgPath;
+class ClipPathCustomer extends CustomClipper<Path>{
+  final String svgPath;
 
-  ClippathCustomer({required this.svgPath});
+  ClipPathCustomer({required this.svgPath});
 
   @override
   Path getClip(Size size) {

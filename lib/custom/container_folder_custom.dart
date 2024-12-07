@@ -5,12 +5,12 @@ class ContainerFolderCustom extends StatelessWidget{
   final String text;
   final IconData iconData;
   final Color iconcolor;
-  ContainerFolderCustom({
+  const ContainerFolderCustom({
     required this.iconData,
     required this.text,
     required this.iconcolor,
-       Key? key,
-   }): super(key:key);
+       super.key,
+   });
    @override
    Widget build(BuildContext context) {
        return Container(
@@ -24,7 +24,7 @@ class ContainerFolderCustom extends StatelessWidget{
                   BoxShadow(
                     blurRadius: AppDimention.size10,
                     spreadRadius: 7,
-                    offset: Offset(1, 10),
+                    offset: const Offset(1, 10),
                     color: Colors.grey.withOpacity(0.2)
                   )
                 ]
@@ -34,7 +34,7 @@ class ContainerFolderCustom extends StatelessWidget{
                 children: [
                   SizedBox(height: AppDimention.size10,),
                   Icon(iconData,size: AppDimention.size40,color:iconcolor),
-                  Text(text,style: TextStyle(
+                  Text(text,style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                     fontSize:18

@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:android_project/data/controller/User_controller.dart';
 import 'package:android_project/page/profile_page/profile_footer.dart';
-import 'package:android_project/route/app_route.dart';
+
 import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
@@ -10,13 +10,13 @@ import 'package:get/get.dart';
 
 class Notification extends StatefulWidget {
   const Notification({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   @override
-  _NotificationState createState() => _NotificationState();
+  NotificationState createState() => NotificationState();
 }
 
-class _NotificationState extends State<Notification> {
+class NotificationState extends State<Notification> {
   final List<Color> colors = [
     const Color.fromARGB(255, 255, 92, 146), // Màu 1
     const Color.fromARGB(255, 92, 255, 146), // Màu 2
@@ -28,20 +28,20 @@ class _NotificationState extends State<Notification> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Color.fromRGBO(243, 243, 243, 1),
+      backgroundColor: const Color.fromRGBO(243, 243, 243, 1),
       body: Column(
         children: [
           Container(
             width: AppDimention.screenWidth,
             height: AppDimention.size70,
-            decoration: BoxDecoration(color: AppColor.mainColor),
+            decoration: const BoxDecoration(color: AppColor.mainColor),
             child: Row(
               children: [
                 GestureDetector(
                   onTap: () {
                     Get.back();
                   },
-                  child: Container(
+                  child: SizedBox(
                     width: AppDimention.size70,
                     height: AppDimention.size70,
                     child: Center(
@@ -53,7 +53,7 @@ class _NotificationState extends State<Notification> {
                     ),
                   ),
                 ),
-                Container(
+                SizedBox(
                   width: AppDimention.size100 * 2.5,
                   height: AppDimention.size70,
                   child: Center(
@@ -78,16 +78,16 @@ class _NotificationState extends State<Notification> {
                     width: AppDimention.screenWidth,
                     padding: EdgeInsets.all(AppDimention.size5),
                     child:
-                        GetBuilder<UserController>(builder: (usercontroller) {
-                      return usercontroller.loadingannouce
-                          ? CircularProgressIndicator()
+                        GetBuilder<UserController>(builder: (userController) {
+                      return userController.loadingAnnoUce
+                          ? const CircularProgressIndicator()
                           : Column(
                               children: [
                                 Column(
-                                  children: usercontroller
-                                      .getlistannouce.reversed
+                                  children: userController
+                                      .listAnnoUce.reversed
                                       .take(isShowAll
-                                          ? usercontroller.getlistannouce.length
+                                          ? userController.listAnnoUce.length
                                           : 6)
                                       .map((item) {
                                     Color randomColor =
@@ -119,12 +119,12 @@ class _NotificationState extends State<Notification> {
                                                         BorderRadius.circular(
                                                             AppDimention
                                                                 .size30)),
-                                                child: Icon(
+                                                child: const Icon(
                                                   Icons.generating_tokens,
                                                   color: Colors.white,
                                                 ),
                                               ),
-                                              Container(
+                                              SizedBox(
                                                 width:
                                                     AppDimention.size100 * 2.7,
                                                 child: Column(
@@ -133,14 +133,14 @@ class _NotificationState extends State<Notification> {
                                                   children: [
                                                     Text(
                                                       "${item.title}",
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                           fontSize: 16,
                                                           fontWeight:
                                                               FontWeight.w500),
                                                     ),
                                                     Text(
                                                       "${item.content}",
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                           color:
                                                               Colors.black38),
                                                       overflow:
@@ -163,14 +163,14 @@ class _NotificationState extends State<Notification> {
                                         isShowAll = false;
                                       });
                                     },
-                                    child: Icon(Icons.keyboard_arrow_up_rounded),
+                                    child: const Icon(Icons.keyboard_arrow_up_rounded),
                                   ) : GestureDetector(
                                     onTap: (){
                                          setState(() {
                                         isShowAll = true;
                                       });
                                     },
-                                    child: Icon(Icons.keyboard_arrow_down_rounded),
+                                    child: const Icon(Icons.keyboard_arrow_down_rounded),
                                   )
                                 )
                               ],
@@ -179,7 +179,7 @@ class _NotificationState extends State<Notification> {
               ],
             ),
           )),
-          ProfileFooter(),
+          const ProfileFooter(),
         ],
       ),
     );

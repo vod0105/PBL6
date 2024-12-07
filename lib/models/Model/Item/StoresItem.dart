@@ -1,4 +1,4 @@
-class Storesitem {
+class StoresItem {
   int? storeId;
   String? storeName;
   String? image;
@@ -8,11 +8,11 @@ class Storesitem {
   String? numberPhone;
   String? openingTime;
   String? closingTime;
-  String? managerName;
+  int? managerId;
   String? createdAt;
   String? updatedAt;
 
-  Storesitem(
+  StoresItem(
       {this.storeId,
       this.storeName,
       this.image,
@@ -22,11 +22,11 @@ class Storesitem {
       this.numberPhone,
       this.openingTime,
       this.closingTime,
-      this.managerName,
+      this.managerId,
       this.createdAt,
       this.updatedAt});
 
-  Storesitem.fromJson(Map<String, dynamic> json) {
+  StoresItem.fromJson(Map<String, dynamic> json) {
     storeId = json['storeId'];
     storeName = json['storeName'];
     image = json['image'];
@@ -36,25 +36,25 @@ class Storesitem {
     numberPhone = json['numberPhone'];
     openingTime = json['openingTime'];
     closingTime = json['closingTime'];
-    managerName = json['managerName'];
+    managerId = json['managerId'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['storeId'] = this.storeId;
-    data['storeName'] = this.storeName;
-    data['image'] = this.image;
-    data['location'] = this.location;
-    data['longitude'] = this.longitude;
-    data['latitude'] = this.latitude;
-    data['numberPhone'] = this.numberPhone;
-    data['openingTime'] = this.openingTime;
-    data['closingTime'] = this.closingTime;
-    data['managerName'] = this.managerName;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['storeId'] = storeId;
+    data['storeName'] = storeName;
+    data['image'] = image;
+    data['location'] = location;
+    data['longitude'] = longitude;
+    data['latitude'] = latitude;
+    data['numberPhone'] = numberPhone;
+    data['openingTime'] = openingTime;
+    data['closingTime'] = closingTime;
+    data['managerId'] = managerId;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
     return data;
   }
 }

@@ -1,19 +1,10 @@
-import 'dart:io';
-
-import 'package:android_project/data/api/ApiClient.dart';
-import 'package:android_project/data/controller/Auth_controller.dart';
-import 'package:android_project/data/repository/Auth_repo.dart';
 import 'package:android_project/data/repository/User_repo.dart';
-import 'package:android_project/models/Dto/AnnouceDto.dart';
+import 'package:android_project/models/Dto/AnnoUceDto.dart';
 import 'package:android_project/models/Dto/RegisterShipperDto.dart';
-import 'package:android_project/models/Dto/UserDto.dart';
-import 'package:android_project/models/Dto/UserRegisterDto.dart';
 import 'package:android_project/models/Dto/UserUpdateDto.dart';
 import 'package:android_project/models/Model/AnnounceModel.dart';
 import 'package:android_project/models/Model/UserModel.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_connect/http/src/multipart/multipart_file.dart' as get_multipart;
-
 import 'package:get/get.dart';
 
 class UserController extends GetxController implements GetxService {
@@ -21,36 +12,50 @@ class UserController extends GetxController implements GetxService {
   UserController({
     required this.userRepo,
   });
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
+  bool isLoading = false;
 
-  User? _userprofile;
-  User? get userprofile => _userprofile;
+  User? userProfile;
 
-  Future<void> getuserprofile() async {
-    _isLoading = true;
+  Future<void> getUserProfile() async {
+    isLoading = true;
     update();
-    Response response = await userRepo.getuserprofile();
+    Response response = await userRepo.getUserProfile();
     if (response.statusCode == 200) {
       var data = response.body;
-      _userprofile = Usermodel.fromJson(data).getuser;
+      userProfile = UserModel.fromJson(data).user;
     } else {}
-    _isLoading = false;
+    isLoading = false;
     update();
   }
-
-  String? base64Image = null;
-  void updateAvatar(String newimage) {
-  base64Image = newimage;
+  bool? loadReceiver ;
+  Future<User?> getById(int id)async{
+    loadReceiver = true;
+    Response response = await userRepo.getById(id);
+    if (response.statusCode == 200) {
+      var data = response.body;
+      loadReceiver = false;
+      update();
+      return UserModel.fromJson(data).user!;
+    }
+    else{
+    }
+    loadReceiver = false;
+    update();
+    return null;
+  }
+  
+  String? base64Image;
+  void updateAvatar(String newImage) {
+  base64Image = newImage;
   update();
 }
 
 
-  Future<void> updateprofile(Userupdatedto updatedto) async {
-    _isLoading = true;
+  Future<void> updateProfile(UserUpdateDto updateDto) async {
+    isLoading = true;
     update();
 
-    Response response = await userRepo.updateprofile(updatedto);
+    Response response = await userRepo.updateProfile(updateDto);
     if (response.statusCode == 200) {
       Get.snackbar(
             "Thông báo",
@@ -58,14 +63,14 @@ class UserController extends GetxController implements GetxService {
             snackPosition: SnackPosition.TOP,
             backgroundColor: Colors.white,
             colorText: Colors.black,
-            icon: Icon(Icons.card_giftcard_sharp, color: Colors.green),
+            icon: const Icon(Icons.card_giftcard_sharp, color: Colors.green),
             borderRadius: 10,
-            margin: EdgeInsets.all(10),
-            duration: Duration(seconds: 1),
+            margin: const EdgeInsets.all(10),
+            duration: const Duration(seconds: 1),
             isDismissible: true,
             
           );
-      getuserprofile();
+      getUserProfile();
     } else {
       Get.snackbar(
             "Thông báo",
@@ -73,22 +78,22 @@ class UserController extends GetxController implements GetxService {
             snackPosition: SnackPosition.TOP,
             backgroundColor: Colors.white,
             colorText: Colors.black,
-            icon: Icon(Icons.card_giftcard_sharp, color: Colors.green),
+            icon: const Icon(Icons.card_giftcard_sharp, color: Colors.green),
             borderRadius: 10,
-            margin: EdgeInsets.all(10),
-            duration: Duration(seconds: 1),
+            margin: const EdgeInsets.all(10),
+            duration: const Duration(seconds: 1),
             isDismissible: true,
             
           );
     }
-    _isLoading = false;
+    isLoading = false;
     update();
   }
 
-   Future<bool> registershipper(Registershipperdto dto) async {
+   Future<bool> registerShipper(RegisterShipperDto dto) async {
     update();
 
-    Response response = await userRepo.registershipper(dto);
+    Response response = await userRepo.registerShipper(dto);
     if (response.statusCode == 200) {
         return true;
     } else {
@@ -96,32 +101,35 @@ class UserController extends GetxController implements GetxService {
     }
     
   }
-  List<AnnounceData> listannouce = [];
-  List<AnnounceData> get getlistannouce => listannouce;
-  bool loadingannouce = false;
-  bool get getloadingannouce =>loadingannouce;
-  Future<void> getannounce()async{
-      loadingannouce = true;
-      Response response = await userRepo.getannounce();
+  List<AnnounceData> listAnnoUce = [];
+  bool loadingAnnoUce = false;
+  Future<void> getAnnounce()async{
+      loadingAnnoUce = true;
+      Response response = await userRepo.getAnnounce();
       if(response.statusCode == 200){
         var data = response.body;
         
-        listannouce = [];
-        listannouce.addAll(Announcemodel.fromJson(data).getannounce ?? []);
+        listAnnoUce = [];
+        listAnnoUce.addAll(AnnounceModel.fromJson(data).announce ?? []);
        
       }
       else{
-        print("Lỗi lấy thông báo ${response.statusCode}");
+        listAnnoUce = [];
       }
-      loadingannouce = false;
+      loadingAnnoUce = false;
       update();
   }
-  Future<void> addannouce(String title,String content) async{
-    int userid = _userprofile!.id!;
-    Annoucedto annoucedto = Annoucedto(userid: userid, title: title, content: content);
-    Response response = await userRepo.addannouce(annoucedto);
+  Future<void> addAnnoUce(String title,String content) async{
+    int userid = userProfile!.id!;
+    AnnoUceDto annoUceDto = AnnoUceDto(userid: userid, title: title, content: content);
+    Response response = await userRepo.addAnnoUce(annoUceDto);
     if(response.statusCode !=200){
-      print("Lỗi không thêm được thông báo ${response.statusCode}");
+    }
+  }
+  Future<void> addAnnoUceV2( int userid,String title,String content) async{
+    AnnoUceDto annoUceDto = AnnoUceDto(userid: userid, title: title, content: content);
+    Response response = await userRepo.addAnnoUce(annoUceDto);
+    if(response.statusCode !=200){
     }
   }
 }

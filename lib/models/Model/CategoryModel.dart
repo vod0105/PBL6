@@ -1,30 +1,29 @@
 import 'package:android_project/models/Model/Item/CategoryItem.dart';
 
-class Categorymodel {
+class CategoryModel {
   bool? status;
   String? message;
-  List<Categoryitem>? listCategory;
-  List<Categoryitem>? get  get_listCategory => listCategory;
+  List<CategoryItem>? listCategory;
 
-  Categorymodel({this.status, this.message, this.listCategory});
+  CategoryModel({this.status, this.message, this.listCategory});
 
-  Categorymodel.fromJson(Map<String, dynamic> json) {
+  CategoryModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
     if (json['data'] != null) {
-      listCategory = <Categoryitem>[];
+      listCategory = <CategoryItem>[];
       json['data'].forEach((v) {
-        listCategory!.add(new Categoryitem.fromJson(v));
+        listCategory!.add(CategoryItem.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['message'] = this.message;
-    if (this.listCategory != null) {
-      data['data'] = this.listCategory!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['message'] = message;
+    if (listCategory != null) {
+      data['data'] = listCategory!.map((v) => v.toJson()).toList();
     }
     return data;
   }

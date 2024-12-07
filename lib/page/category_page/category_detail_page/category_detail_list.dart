@@ -8,46 +8,45 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CategoryDetailList extends StatefulWidget {
-  final categoryid;
-  const CategoryDetailList({Key? key, required this.categoryid})
-      : super(key: key);
+  final int categoryId;
+  const CategoryDetailList({super.key, required this.categoryId});
 
   @override
-  _CategoryDetailListState createState() => _CategoryDetailListState();
+  CategoryDetailListState createState() => CategoryDetailListState();
 }
 
-class _CategoryDetailListState extends State<CategoryDetailList> {
+class CategoryDetailListState extends State<CategoryDetailList> {
   late ProductController productController;
   @override
   void initState() {
     super.initState();
     productController = Get.find();
-    productController.getProductByCategoryId(widget.categoryid);
+    productController.getProductByCategoryId(widget.categoryId);
   }
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ProductController>(builder: (productController) {
       return ListView.builder(
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
-        itemCount: productController.productListBycategory.length,
+        itemCount: productController.productListByCategory.length,
         itemBuilder: (context, index) {
           return Align(
             alignment: Alignment.center,
             child: Container(
                 width: AppDimention.size170 + 2 * AppDimention.size100,
                 height: AppDimention.size150 + AppDimention.size10,
-                margin: EdgeInsets.only(bottom: 20),
+                margin: const EdgeInsets.only(bottom: 20),
                 decoration: BoxDecoration(
                     color: Colors.white,
                     border: Border.all(
-                        width: 1, color: Color.fromRGBO(0, 0, 0, 0.1)),
+                        width: 1, color: const Color.fromRGBO(0, 0, 0, 0.1)),
                     borderRadius: BorderRadius.circular(10)),
                 child: GestureDetector(
                   onTap: () {
                     Get.toNamed(AppRoute.get_product_detail(productController
-                        .productListBycategory[index].productId!));
+                        .productListByCategory[index].productId!));
                   },
                   child: Row(
                     children: [
@@ -59,9 +58,9 @@ class _CategoryDetailListState extends State<CategoryDetailList> {
                             image: DecorationImage(
                               fit: BoxFit.cover,
                               image: MemoryImage(base64Decode(productController
-                                  .productListBycategory[index].image!)),
+                                  .productListByCategory[index].image!)),
                             ),
-                            borderRadius: BorderRadius.only(
+                            borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(10),
                                 bottomLeft: Radius.circular(10))),
                       ),
@@ -74,17 +73,15 @@ class _CategoryDetailListState extends State<CategoryDetailList> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Container(
-                                  child: Text(
-                                    productController
-                                        .productListBycategory[index]
-                                        .productName!,
-                                    style: TextStyle(
-                                        fontSize: AppDimention.size25,
-                                        fontWeight: FontWeight.w500),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
+                                Text(
+                                  productController
+                                      .productListByCategory[index]
+                                      .productName!,
+                                  style: TextStyle(
+                                      fontSize: AppDimention.size25,
+                                      fontWeight: FontWeight.w500),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                                 SizedBox(
                                   height: AppDimention.size5,
@@ -92,7 +89,7 @@ class _CategoryDetailListState extends State<CategoryDetailList> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Row(
+                                    const Row(
                                       children: [
                                         Text("4.5"),
                                         Icon(
@@ -105,7 +102,7 @@ class _CategoryDetailListState extends State<CategoryDetailList> {
                                       width: AppDimention.size30,
                                     ),
                                     Text(
-                                      "Giá : ${productController.productListBycategory[index].price.toString()} vnđ",
+                                      "Giá : ${productController.productListByCategory[index].price.toString()} vnđ",
                                       style: TextStyle(
                                         fontSize: AppDimention.size10,
                                       ),
@@ -124,7 +121,7 @@ class _CategoryDetailListState extends State<CategoryDetailList> {
                                   decoration: BoxDecoration(
                                       color: AppColor.mainColor,
                                       borderRadius: BorderRadius.circular(10)),
-                                  child: Center(
+                                  child: const Center(
                                     child: Text(
                                       "Mua ngay",
                                       style: TextStyle(

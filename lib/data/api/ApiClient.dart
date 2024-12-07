@@ -1,15 +1,16 @@
+// ignore_for_file: file_names
+
 import 'package:android_project/data/api/AppConstant.dart';
 import 'package:get/get.dart';
 
 class ApiClient extends GetConnect implements GetxService {
   late String token;
-  String get gettoken => token;
   final String appBaseUrl;
   late Map<String, String> _mainHeaders;
 
   ApiClient({required this.appBaseUrl}) {
     baseUrl = appBaseUrl;
-    timeout = Duration(seconds: 30);
+    timeout = const Duration(seconds: 30);
     token = Appconstant.TOKEN;
     _mainHeaders = {
       'Content-type': 'application/json;charset=UTF-8',

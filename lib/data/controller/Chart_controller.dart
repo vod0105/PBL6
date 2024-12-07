@@ -1,93 +1,116 @@
 import 'package:android_project/data/repository/Chart_repo.dart';
 import 'package:android_project/models/Model/ChartModel.dart';
-import 'package:android_project/models/Model/Messagemodel.dart';
+import 'package:android_project/models/Model/MessageModel.dart';
+import 'package:android_project/models/Model/UserModel.dart';
+import 'package:android_project/models/Model/UserChatModel.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ChartController extends GetxController implements GetxService {
   final ChartRepo chartRepo;
-  var IsLogin = false.obs;
+  var isLogin = false.obs;
   ChartController({
     required this.chartRepo,
   });
 
-  // **************************************************************************** Khai báo biến
+  bool isLoading = false;
 
-  // * load dữ liệu danh sách người nhắn tin
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
+  bool isLoadingMessage = false;
 
-  //* load tin nhắn
-  bool _isLoadingMessage = false;
-  bool get getisLoadingMessage => _isLoadingMessage;
-
-  // * danh sách người nhắn tin
   List<UserChart> listUser = [];
-  List<UserChart> get getlistuser => listUser;
 
-  // * danh sách tin nhắn với người dùng
-  List<Usermessage> listUsermesage = [];
-  List<Usermessage> get getlistusermesage => listUsermesage;
+  List<User> listUserSearch = [];
 
-  // * tên của cuộc hội thoại
-  String chartname = "Chart time";
-  String get getchartname => chartname;
+  List<UserMessage> listUserMessage = [];
+  String chartName = "Chart time";
 
-  // * người nhận tin nhắn
-  int _idreceiver = 0;
-  int get getidreceiver => _idreceiver;
+  int idReceiver = 0;
 
-  // * hiện tin nhắn với người dùng
-  bool _isShow = true;
-  bool get isShow => _isShow;
+  bool isShow = true;
 
-   // * Hết khai báo biến ------------------------------------------------------------------------
-
-
-  // **************************************************************************** Khai báo hàm
-
-  Future<void> getall() async{
-      Response response = await chartRepo.getChart();
-      if(response.statusCode == 200){
-          var data = response.body;
-           listUser = [];
-          listUser.addAll(Chartmodel.fromJson(data).getlistuser ?? []);
-      }
-      update();
-  }
-
-  Future<void> getlistmessage(int idreceiver) async{
-      _isLoadingMessage = true;
-      Response response = await chartRepo.getlistChart(idreceiver);
-      if(response.statusCode == 200){
-          var data = response.body;
-          listUsermesage = [];
-          listUsermesage.addAll(Messagemodel.fromJson(data).getlistmessage ?? []);
-          _idreceiver = idreceiver;
-      }
-     _isLoadingMessage = false;
-      update();
-  }
-
-  Future<void> senImage(int idsender,int idreceiver,String image) async{
-    Response response = await chartRepo.sendImage(idsender, idreceiver, image);
-    if(response.statusCode == 200){
-      print("Save image successfully");
-    }
-    else{
-      print("Save image failed");
-    }
-  }
-
-  void ChangeShow() {
-    _isShow = !_isShow;
-    update();
-  }
-  
-  void updatechartname(String newvalue){
-    chartname = newvalue;
+  Future<void> getAll() async {
+    isLoading = true;
+    Response response = await chartRepo.getChart();
+    if (response.statusCode == 200) {
+      var data = response.body;
+      listUser = [];
+      listUser = ChartModel.fromJson(data).listUser ?? [];
+    } else {}
+    isLoading = false;
     update();
   }
 
-  
+  UserChart? getReceiver(int idReceiver) {
+    for (UserChart item in listUser) {
+      if (item.id == idReceiver) {
+        return item;
+      }
+    }
+    return null;
+  }
 
+  bool isLoadingSearch = true;
+  Future<void> searchUser(String username) async {
+    listUserSearch = [];
+    isLoadingSearch = true;
+    Response response = await chartRepo.searchUser(username);
+    if (response.statusCode == 200) {
+      var data = response.body;
+      listUserSearch.addAll(UserChatModel.fromJson(data).listUser ?? []);
+    } else {}
+    isLoadingSearch = false;
+    update();
+  }
+
+  Future<void> getListMessage(int idReceiver) async {
+    isLoadingMessage = true;
+    Response response = await chartRepo.getListChart(idReceiver);
+    if (response.statusCode == 200) {
+      var data = response.body;
+      listUserMessage = [];
+      listUserMessage.addAll(MessageModel.fromJson(data).listMessage ?? []);
+      idReceiver = idReceiver;
+    }
+    isLoadingMessage = false;
+    update();
+  }
+
+  Future<void> senImage(int idSender, int idReceiver, String image) async {
+    Response response = await chartRepo.sendImage(idSender, idReceiver, image);
+    if (response.statusCode == 200) {
+    } else {}
+  }
+
+  void changeShow() {
+    isShow = !isShow;
+    update();
+  }
+
+  void updateChartName(String newValue) {
+    chartName = newValue;
+    update();
+  }
+
+  Future<String?> autoResponse(String question, int storeId) async {
+    Response response = await chartRepo.autoResponse(question, storeId);
+    if (response.statusCode == 200) {
+      var data = response.body;
+
+      return data as String;
+    } else {
+      Get.snackbar(
+        "Bảo trì",
+        "Chức năng này đang bảo trì. Vui lòng thử lại sau",
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.white,
+        colorText: Colors.black,
+        icon: const Icon(Icons.warning, color: Colors.red),
+        borderRadius: 10,
+        margin: const EdgeInsets.all(10),
+        duration: const Duration(seconds: 1),
+        isDismissible: true,
+      );
+    }
+    return null;
+  }
 }

@@ -1,28 +1,28 @@
-class Userregisterdto {
+class UserRegisterDto {
   String fullname;
   String password;
-  String phonenumber;
+  String phoneNumber;
   String email;
   String address;
-  double longtitude;
+  double longTiTuDe;
   double latitude;
-  Userregisterdto(
+  UserRegisterDto(
       {required this.fullname,
       required this.password,
-      required this.phonenumber,
+      required this.phoneNumber,
       required this.email,
-      required this.longtitude,
+      required this.longTiTuDe,
       required this.latitude,
       required this.address});
   Map<String, dynamic> toJson() {
-    Map<String, dynamic> data = new Map<String, dynamic>();
-    data["fullName"] = this.fullname;
-    data["password"] = this.password;
-    data["longtitude"] = this.longtitude;
-    data["latitude"] = this.latitude;
-    data["phoneNumber"] = this.phonenumber;
-    data["email"] = this.email;
-    data["address"] = this.address;
+    Map<String, dynamic> data = <String, dynamic>{};
+    data["fullName"] = fullname;
+    data["password"] = password;
+    data["longtitude"] = longTiTuDe;
+    data["latitude"] = latitude;
+    data["phoneNumber"] = phoneNumber;
+    data["email"] = email;
+    data["address"] = address;
     return data;
   }
 }

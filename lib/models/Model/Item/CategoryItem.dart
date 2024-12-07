@@ -1,13 +1,13 @@
-class Categoryitem {
+class CategoryItem {
   int? categoryId;
   String? categoryName;
   String? description;
   String? image;
 
-  Categoryitem(
+  CategoryItem(
       {this.categoryId, this.categoryName, this.description, this.image});
 
-  Categoryitem.fromJson(Map<String, dynamic> json) {
+  CategoryItem.fromJson(Map<String, dynamic> json) {
     categoryId = json['categoryId'];
     categoryName = json['categoryName'];
     description = json['description'];
@@ -15,11 +15,11 @@ class Categoryitem {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['categoryId'] = this.categoryId;
-    data['categoryName'] = this.categoryName;
-    data['description'] = this.description;
-    data['image'] = this.image;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['categoryId'] = categoryId;
+    data['categoryName'] = categoryName;
+    data['description'] = description;
+    data['image'] = image;
     return data;
   }
 }

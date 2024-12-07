@@ -1,12 +1,12 @@
 import 'package:android_project/models/Model/CartModel.dart';
 import 'package:android_project/models/Model/Item/StoresItem.dart';
 
-class Newcartmodel {
-  Storesitem? storeitem;
-  List<CartData>? cartdata;
+class NewCartModel {
+  StoresItem? storeItem;
+  List<CartData>? cartData;
 
-  Newcartmodel({
-    this.storeitem,
-    this.cartdata
+  NewCartModel({
+    this.storeItem,
+    this.cartData
   });
 }

@@ -6,13 +6,13 @@ import 'package:get/get.dart';
 
 class OrderFooter extends StatefulWidget {
   const OrderFooter({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   @override
-  _OrderFooterState createState() => _OrderFooterState();
+  OrderFooterState createState() => OrderFooterState();
 }
 
-class _OrderFooterState extends State<OrderFooter> {
+class OrderFooterState extends State<OrderFooter> {
   int _selectedIndex = 2;
 
   void _onItemTapped(int index) {
@@ -23,7 +23,7 @@ class _OrderFooterState extends State<OrderFooter> {
       } else if (index == 1) {
         Get.toNamed(AppRoute.SEARCH_PAGE);
       } else if (index == 2) {
-        Get.find<OrderController>().getall();
+        Get.find<OrderController>().getAll();
         Get.toNamed(AppRoute.ORDER_PAGE);
       } else if (index == 3) {
          Get.toNamed(AppRoute.STORE_PAGE);

@@ -1,4 +1,5 @@
 import 'package:android_project/data/repository/Store_repo.dart';
+import 'package:android_project/models/Model/Item/ProductItem.dart';
 import 'package:android_project/models/Model/Item/StoresItem.dart';
 import 'package:android_project/models/Model/StoreModel.dart';
 import 'package:get/get.dart';
@@ -11,61 +12,90 @@ class Storecontroller extends GetxController {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  List<Storesitem> _storeList = [];
-  List<Storesitem> get storeList => _storeList;
+  List<StoresItem> _storeList = [];
+  List<StoresItem> get storeList => _storeList;
 
-  Future<void> getall() async {
+  Future<void> getAll() async {
     _isLoading = true;
-    Response response = await storeRepo.getall();
+    Response response = await storeRepo.getAll();
 
     if (response.statusCode == 200) {
-      print("Lấy dữ liệu danh sách cửa hàng thành công");
       var data = response.body;
       _storeList = [];
-      _storeList.addAll(Storesmodel.fromJson(data).get_liststores ?? []);
+      _storeList.addAll(StoresModel.fromJson(data).listStores ?? []);
     } else {
-      print("Lỗi không lấy được danh sách cửa hàng : " +
-          response.statusCode.toString());
     }
     _isLoading = false;
     update();
   }
 
-  String addressOfStore(int storeid){
-    for(Storesitem item in _storeList){
-      if(item.storeId == storeid){
+  String addressOfStore(int storeId) {
+    for (StoresItem item in _storeList) {
+      if (item.storeId == storeId) {
         return item.location!;
       }
     }
     return "";
   }
 
-  Storesitem? _storeItem ;
-  Storesitem? get storeItem => _storeItem;
+  StoresItem? getStoreById(int idStore) {
+    for (StoresItem item in _storeList) {
+      if (item.storeId == idStore) {
+        return item;
+      }
+    }
+    return null;
+  }
+
+  StoresItem? _storeItem;
+  StoresItem? get storeItem => _storeItem;
   bool _isLoadingItem = false;
   bool get isLoadingItem => _isLoadingItem;
 
-  Future<void> getbyid(int id) async {
+  Future<void> getById(int id) async {
     _isLoadingItem = true;
-    Response response = await storeRepo.getbyid(id);
+    Response response = await storeRepo.getById(id);
     if (response.statusCode == 200) {
       var data = response.body;
-      _storeItem = Storesitem.fromJson(data["data"]);
-      print("Lấy chi tiết cửa hàng thành công");
+      _storeItem = StoresItem.fromJson(data["data"]);
     } else {
-      print("Lỗi không lấy được cửa hàng"+ response.statusCode.toString());
     }
     _isLoadingItem = false;
     update();
   }
 
-  Future<String> getnamestoreByid(int id) async {
-    Response response = await storeRepo.getbyid(id);
+  Future<String> getNameStoreById(int id) async {
+    Response response = await storeRepo.getById(id);
     if (response.statusCode == 200) {
       var data = response.body["data"];
       return data["storeName"];
     } else {
       return "No name";
     }
+  }
+  bool loadingCommonStore = false;
+
+  List<StoresItem> getCommonStores(List<Productitem> listProduct) {
+    loadingCommonStore = true;
+    if (listProduct.isEmpty) {
+      return [];
+    }
+    List<StoresItem> initialStores = listProduct[0].stores!;
+    Set<String?> commonStoreNames =
+        initialStores.map((store) => store.storeName).toSet();
+    for (int i = 1; i < listProduct.length; i++) {
+      List<StoresItem> currentStores = listProduct[i].stores!;
+      Set<String?> currentStoreNames =
+          currentStores.map((store) => store.storeName).toSet();
+      commonStoreNames = commonStoreNames.intersection(currentStoreNames);
+    }
+    List<StoresItem> commonStores = [];
+    for (var storeName in commonStoreNames) {
+      var store =
+          initialStores.firstWhere((store) => store.storeName == storeName);
+      commonStores.add(store);
+    }
+    loadingCommonStore = false;
+    return commonStores;
   }
 }

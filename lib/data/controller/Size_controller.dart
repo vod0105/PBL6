@@ -1,49 +1,46 @@
 import 'package:android_project/data/repository/Size_repo.dart';
 import 'package:android_project/models/Model/SizeModel.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
 class SizeController extends GetxController {
   final SizeRepo sizeRepo;
   SizeController({
     required this.sizeRepo,
   });
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
+  bool isLoading = false;
 
-  List<Size> _sizelist = [];
-  List<Size> get sizelist => _sizelist;
+  List<Size> sizeList = [];
 
-  Future<void> getall() async {
-    _isLoading = true;
-    Response response = await sizeRepo.getall();
+  Future<void> getAll() async {
+    isLoading = true;
+    Response response = await sizeRepo.getAll();
     if (response.statusCode == 200) {
-      print("Lấy dữ liệu danh sách size thành công");
       var data = response.body;
-      _sizelist = [];
-      _sizelist.addAll(Sizemodel.fromJson(data).listsize ?? []);
-    } else {
-      print("Lỗi không lấy được dữ liệu size : " +
-          response.statusCode.toString());
-    }
-    _isLoading = false;
+      sizeList = [];
+      sizeList.addAll(SizeModel.fromJson(data).listSize ?? []);
+    } else {}
+    isLoading = false;
     update();
   }
 
-  String sizename = "";
-  String get getsizename => sizename;
-  Future<void> getbyidl(int id) async {
-    _isLoading = true;
-    Response response = await sizeRepo.getbyid(id);
-    if (response.statusCode == 200) {
-      print("Lấy dữ liệu size by id thành công");
-      var data = response.body["data"];
-      sizename = data["name"];
-    } else {
-      print("Lỗi không lấy được dữ liệu size : " +
-          response.statusCode.toString());
+  int? getByName(String name) {
+    for (Size item in sizeList) {
+      if (item.name == name) {
+        return item.id!;
+      }
     }
-    _isLoading = false;
+    return null;
+  }
+
+  String sizeName = "";
+  Future<void> getById(int id) async {
+    isLoading = true;
+    Response response = await sizeRepo.getById(id);
+    if (response.statusCode == 200) {
+      var data = response.body["data"];
+      sizeName = data["name"];
+    } else {}
+    isLoading = false;
     update();
   }
 }

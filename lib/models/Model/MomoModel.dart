@@ -1,61 +1,60 @@
-class MomoModels {
+class MoMoModels {
   String? requestType;
   String? orderId;
   String? signature;
   String? requestId;
   String? qrCodeUrl;
-  String? deeplink;
+  String? deepLink;
   int? errorCode;
   String? payUrl;
-  String? deeplinkWebInApp;
+  String? deepLinkWebInApp;
   String? message;
   String? localMessage;
-  MomoModels(
+  MoMoModels(
       {this.requestType,
       this.orderId,
       this.signature,
       this.requestId,
       this.qrCodeUrl,
-      this.deeplink,
+      this.deepLink,
       this.errorCode,
       this.payUrl,
-      this.deeplinkWebInApp,
+      this.deepLinkWebInApp,
       this.message,
       this.localMessage});
 
- late MomoModels _momo;
-  MomoModels get momo => _momo;
-  MomoModels.fromJson(Map<String, dynamic> json) {
+ late MoMoModels moMo;
+  MoMoModels.fromJson(Map<String, dynamic> json) {
     requestType = json['requestType'];
     orderId = json['orderId'];
     signature = json['signature'];
     requestId = json['requestId'];
     qrCodeUrl = json['qrCodeUrl'];
-    deeplink = json['deeplink'];
+    deepLink = json['deeplink'];
     errorCode = json['errorCode'];
     payUrl = json['payUrl'];
-    deeplinkWebInApp = json['deeplinkWebInApp'];
+    deepLinkWebInApp = json['deeplinkWebInApp'];
     message = json['message'];
     localMessage = json['localMessage'];
     if(json['data'] != null){
-      _momo = MomoModels();
-      _momo =  MomoModels.fromJson(json['data']);
+      moMo = MoMoModels();
+      moMo =  MoMoModels.fromJson(json['data']);
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['requestType'] = this.requestType;
-    data['orderId'] = this.orderId;
-    data['signature'] = this.signature;
-    data['requestId'] = this.requestId;
-    data['qrCodeUrl'] = this.qrCodeUrl;
-    data['deeplink'] = this.deeplink;
-    data['errorCode'] = this.errorCode;
-    data['payUrl'] = this.payUrl;
-    data['deeplinkWebInApp'] = this.deeplinkWebInApp;
-    data['message'] = this.message;
-    data['localMessage'] = this.localMessage;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['requestType'] = requestType;
+    data['orderId'] = orderId;
+    data['signature'] = signature;
+    data['requestId'] = requestId;
+    data['qrCodeUrl'] = qrCodeUrl;
+    data['deeplink'] = deepLink;
+    data['errorCode'] = errorCode;
+    data['payUrl'] = payUrl;
+    data['deeplinkWebInApp'] = deepLinkWebInApp;
+    data['message'] = message;
+    data['localMessage'] = localMessage;
     return data;
   }
 }

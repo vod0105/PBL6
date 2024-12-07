@@ -1,28 +1,28 @@
-class Sizemodel {
+class SizeModel {
   bool? status;
   String? message;
-  List<Size>? listsize;
-  List<Size>? get getlistsize => listsize;
+  List<Size>? listSize;
 
-  Sizemodel({this.status, this.message, this.listsize});
 
-  Sizemodel.fromJson(Map<String, dynamic> json) {
+  SizeModel({this.status, this.message, this.listSize});
+
+  SizeModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
     if (json['data'] != null) {
-      listsize = <Size>[];
+      listSize = <Size>[];
       json['data'].forEach((v) {
-        listsize!.add(new Size.fromJson(v));
+        listSize!.add(Size.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['message'] = this.message;
-    if (this.listsize != null) {
-      data['data'] = this.listsize!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['message'] = message;
+    if (listSize != null) {
+      data['data'] = listSize!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -40,9 +40,9 @@ class Size {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
     return data;
   }
 }

@@ -3,15 +3,15 @@ import 'package:android_project/page/profile_page/profile_setup_page/shipper_reg
 import 'package:flutter/material.dart';
 class ShipperRegisterPage extends StatefulWidget{
    const ShipperRegisterPage({
-       Key? key,
-   }): super(key:key);
+       super.key,
+   });
    @override
-   _ShipperRegisterPageState createState() => _ShipperRegisterPageState();
+   ShipperRegisterPageState createState() => ShipperRegisterPageState();
 }
-class _ShipperRegisterPageState extends State<ShipperRegisterPage>{
+class ShipperRegisterPageState extends State<ShipperRegisterPage>{
    @override
    Widget build(BuildContext context) {
-      return Scaffold(
+      return const Scaffold(
       body: Column(
         children: [
           ShipperRegisterHeader(),

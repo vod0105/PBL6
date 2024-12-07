@@ -7,25 +7,29 @@ import 'package:get/get.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   @override
-  _CartPageState createState() => _CartPageState();
+  CartPageState createState() => CartPageState();
 }
 
-class _CartPageState extends State<CartPage> {
+class CartPageState extends State<CartPage> {
+  CartController cartController =  Get.find<CartController>();
   @override
   void initState() {
     super.initState();
-    Get.find<CartController>().getall();
-    Get.find<CartController>().getListCartV2();
-    Get.find<CartController>().resetIDSelected();
-    Get.find<CartController>().getDistinctStoreId();
+    cartController.getAll();
+    cartController.getListCartV2();
+    cartController.resetIDSelected();
+    cartController.getDistinctStoreId();
+
+    cartController.updateTotal(cartController.totalPrice, false);
+
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Column(
         children: [
           CartHeader(),

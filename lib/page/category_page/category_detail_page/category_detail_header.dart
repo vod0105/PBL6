@@ -6,14 +6,13 @@ import 'package:get/get.dart';
 
 class CategoryDetailHeader extends StatefulWidget {
   final String categoryname;
-  const CategoryDetailHeader({Key? key, required this.categoryname})
-      : super(key: key);
+  const CategoryDetailHeader({super.key, required this.categoryname});
 
   @override
-  _CategoryDetailHeaderState createState() => _CategoryDetailHeaderState();
+  CategoryDetailHeaderState createState() => CategoryDetailHeaderState();
 }
 
-class _CategoryDetailHeaderState extends State<CategoryDetailHeader> {
+class CategoryDetailHeaderState extends State<CategoryDetailHeader> {
   late String title;
   @override
   void initState() {
@@ -28,7 +27,7 @@ class _CategoryDetailHeaderState extends State<CategoryDetailHeader> {
         Container(
           width: AppDimention.screenWidth,
           height: AppDimention.size100,
-          decoration: BoxDecoration(color: AppColor.mainColor),
+          decoration: const BoxDecoration(color: AppColor.mainColor),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -42,7 +41,7 @@ class _CategoryDetailHeaderState extends State<CategoryDetailHeader> {
                   size: AppDimention.size40,
                 ),
               ),
-              Container(
+              SizedBox(
                 width: AppDimention.size100 * 2,
                 child: Center(
                   child: Text(
@@ -72,11 +71,11 @@ class _CategoryDetailHeaderState extends State<CategoryDetailHeader> {
           width: AppDimention.screenWidth,
           height: AppDimention.size50,
           decoration:
-              BoxDecoration(border: Border(bottom: BorderSide(width: 1))),
+              const BoxDecoration(border: Border(bottom: BorderSide(width: 1))),
           child: Center(
             child: Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                   color: AppColor.mainColor,
                   fontSize: 20,
                   fontWeight: FontWeight.bold),

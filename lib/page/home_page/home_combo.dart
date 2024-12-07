@@ -1,19 +1,18 @@
 import 'dart:convert';
 import 'package:android_project/data/controller/Combo_controller.dart';
-import 'package:android_project/models/Model/Item/ComboItem.dart';
 import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomeCombo extends StatefulWidget {
-  const HomeCombo({Key? key}) : super(key: key);
+  const HomeCombo({super.key});
 
   @override
-  _HomeComboState createState() => _HomeComboState();
+  HomeComboState createState() => HomeComboState();
 }
 
-class _HomeComboState extends State<HomeCombo> {
+class HomeComboState extends State<HomeCombo> {
   PageController pageController = PageController(viewportFraction: 0.9);
   double currentPageValue = 0.0;
 
@@ -33,7 +32,7 @@ class _HomeComboState extends State<HomeCombo> {
   Widget build(BuildContext context) {
     return GetBuilder<ComboController>(builder: (comboController) {
       return !comboController.isLoading
-          ? Container(
+          ? SizedBox(
               width: AppDimention.screenWidth,
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -67,8 +66,7 @@ class _HomeComboState extends State<HomeCombo> {
                                         AppDimention.size10),
                                     image: DecorationImage(
                                       fit: BoxFit.cover,
-                                      image: MemoryImage(
-                                          base64Decode(item.image!)),
+                                      image:item.image != null ?  MemoryImage(base64Decode(item.image!)) : const AssetImage("assets/image/LoadingBg.png"),
                                     ),
                                   ),
                                 ),
@@ -84,9 +82,9 @@ class _HomeComboState extends State<HomeCombo> {
                                     children: [
                                       Text(
                                         item.comboName ?? '',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                             fontWeight: FontWeight.w600,
-                                            fontSize: 18),
+                                            fontSize: 18,color: Colors.black.withOpacity(0.7)),
                                       ),
                                       Row(
                                         children: [

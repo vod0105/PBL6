@@ -1,62 +1,63 @@
-import 'package:android_project/models/Model/ComboModel.dart';
-import 'package:android_project/models/Model/Item/ComboItem.dart';
-
-class Ordermodel {
+class OrderModel {
   bool? status;
   String? message;
-  List<OrderItem>? orderitem = [];
-  List<OrderItem>? get getorderitem => orderitem;
+  List<OrderItem>? orderItem = [];
 
-  Ordermodel({this.status, this.message, this.orderitem});
+  OrderModel({this.status, this.message, this.orderItem});
 
-  Ordermodel.fromJson(Map<String, dynamic> json) {
+  OrderModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
     if (json['data'] != null) {
-      orderitem = <OrderItem>[];
+      orderItem = <OrderItem>[];
       json['data'].forEach((v) {
-        orderitem!.add(new OrderItem.fromJson(v));
+        orderItem!.add(OrderItem.fromJson(v));
       });
     }
   }
-  Ordermodel.fromAJson(Map<String, dynamic> json) {
+  OrderModel.fromAJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
     if (json['data'] != null) {
-      orderitem = <OrderItem>[];
-      orderitem!.add(new OrderItem.fromJson(json['data']));
+      orderItem = <OrderItem>[];
+      orderItem!.add(OrderItem.fromJson(json['data']));
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['message'] = this.message;
-    if (this.orderitem != null) {
-      data['data'] = this.orderitem!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['message'] = message;
+    if (orderItem != null) {
+      data['data'] = orderItem!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-
 class OrderItem {
- int? orderId;
+  int? orderId;
   String? orderCode;
   int? userId;
   String? orderDate;
   double? totalAmount;
+  int? shipperId;
   String? status;
   String? deliveryAddress;
   String? createdAt;
   String? updatedAt;
   bool? feedback;
+  double? longitude;
+  double? latitude;
   List<OrderDetails>? orderDetails;
 
   OrderItem(
       {this.orderId,
       this.orderCode,
       this.userId,
+      this.longitude,
+      this.latitude,
+      this.shipperId,
       this.orderDate,
       this.totalAmount,
       this.status,
@@ -70,35 +71,41 @@ class OrderItem {
     orderId = json['orderId'];
     orderCode = json['orderCode'];
     userId = json['userId'];
+    shipperId = json['shipperId'];
     orderDate = json['orderDate'];
     totalAmount = json['totalAmount'];
     status = json['status'];
     deliveryAddress = json['deliveryAddress'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
-    feedback = json['feedback'];
+    longitude = json['longitude'];
+    latitude = json['latitude'];
+    feedback = json['feedBack'];
     if (json['orderDetails'] != null) {
       orderDetails = <OrderDetails>[];
       json['orderDetails'].forEach((v) {
-        orderDetails!.add(new OrderDetails.fromJson(v));
+        orderDetails!.add(OrderDetails.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['orderId'] = this.orderId;
-    data['orderCode'] = this.orderCode;
-    data['userId'] = this.userId;
-    data['orderDate'] = this.orderDate;
-    data['totalAmount'] = this.totalAmount;
-    data['status'] = this.status;
-    data['deliveryAddress'] = this.deliveryAddress;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['feedback'] = this.feedback;
-    if (this.orderDetails != null) {
-      data['orderDetails'] = this.orderDetails!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['orderId'] = orderId;
+    data['orderCode'] = orderCode;
+    data['shipperId'] = shipperId;
+    data['userId'] = userId;
+    data['orderDate'] = orderDate;
+    data['totalAmount'] = totalAmount;
+    data['status'] = status;
+    data['deliveryAddress'] = deliveryAddress;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['longitude'] = longitude;
+    data['latitude'] = latitude;
+    data['feedBack'] = feedback;
+    if (orderDetails != null) {
+      data['orderDetails'] = orderDetails!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -114,25 +121,26 @@ class OrderDetails {
   OrderDetails.fromJson(Map<String, dynamic> json) {
     type = json['type'];
     productDetail = json['productDetail'] != null
-        ? new ProductDetail.fromJson(json['productDetail'])
+        ? ProductDetail.fromJson(json['productDetail'])
         : null;
-     comboDetail = json['comboDetail'] != null
-        ? new ComboDetail.fromJson(json['comboDetail'])
+    comboDetail = json['comboDetail'] != null
+        ? ComboDetail.fromJson(json['comboDetail'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['type'] = this.type;
-    if (this.productDetail != null) {
-      data['productDetail'] = this.productDetail!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['type'] = type;
+    if (productDetail != null) {
+      data['productDetail'] = productDetail!.toJson();
     }
-     if (this.comboDetail != null) {
-      data['comboDetail'] = this.comboDetail!.toJson();
+    if (comboDetail != null) {
+      data['comboDetail'] = comboDetail!.toJson();
     }
     return data;
   }
 }
+
 class ProductDetail {
   int? orderDetailId;
   int? productId;
@@ -144,7 +152,7 @@ class ProductDetail {
   double? unitPrice;
   double? totalPrice;
   String? size;
-  String? drinkId;
+  List<String>? drinkId;
   int? storeId;
   String? status;
   bool? bestSeller;
@@ -176,52 +184,60 @@ class ProductDetail {
     unitPrice = json['unitPrice'];
     totalPrice = json['totalPrice'];
     size = json['size'];
-    drinkId = json['drinkId'];
+    if (json['drinkId'] != null) {
+      drinkId = <String>[];
+      json['drinkId'].forEach((v) {
+        drinkId!.add(v.toString());
+      });
+    }
     storeId = json['storeId'];
     status = json['status'];
     bestSeller = json['bestSeller'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['orderDetailId'] = this.orderDetailId;
-    data['productId'] = this.productId;
-    data['productName'] = this.productName;
-    data['description'] = this.description;
-    data['productImage'] = this.productImage;
-    data['category'] = this.category;
-    data['quantity'] = this.quantity;
-    data['unitPrice'] = this.unitPrice;
-    data['totalPrice'] = this.totalPrice;
-    data['size'] = this.size;
-    data['drinkId'] = this.drinkId;
-    data['storeId'] = this.storeId;
-    data['status'] = this.status;
-    data['bestSeller'] = this.bestSeller;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['orderDetailId'] = orderDetailId;
+    data['productId'] = productId;
+    data['productName'] = productName;
+    data['description'] = description;
+    data['productImage'] = productImage;
+    data['category'] = category;
+    data['quantity'] = quantity;
+    data['unitPrice'] = unitPrice;
+    data['totalPrice'] = totalPrice;
+    data['size'] = size;
+    if (drinkId != null) {
+      data['drinkId'] = drinkId!.map((v) => v.toString()).toList();
+    }
+    data['storeId'] = storeId;
+    data['status'] = status;
+    data['bestSeller'] = bestSeller;
     return data;
   }
 }
+
 class ComboDetail {
- int? orderDetailId;
+  int? orderDetailId;
   int? comboId;
   int? quantity;
   double? unitPrice;
   double? totalPrice;
   String? size;
-  String? drinkId;
+  List<String>? drinkId;
   int? storeId;
   String? status;
 
-  ComboDetail(
-      {this.orderDetailId,
-      this.quantity,
-      this.unitPrice,
-      this.totalPrice,
-      this.size,
-      this.drinkId,
-      this.storeId,
-      this.status,
-      });
+  ComboDetail({
+    this.orderDetailId,
+    this.quantity,
+    this.unitPrice,
+    this.totalPrice,
+    this.size,
+    this.drinkId,
+    this.storeId,
+    this.status,
+  });
 
   ComboDetail.fromJson(Map<String, dynamic> json) {
     orderDetailId = json['orderDetailId'];
@@ -230,23 +246,29 @@ class ComboDetail {
     unitPrice = json['unitPrice'];
     totalPrice = json['totalPrice'];
     size = json['size'];
-     drinkId = json['drinkId'];
+     if (json['drinkId'] != null) {
+      drinkId = <String>[];
+      json['drinkId'].forEach((v) {
+        drinkId!.add(v.toString());
+      });
+    }
     storeId = json['storeId'];
     status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['orderDetailId'] = this.orderDetailId;
-    data['comboId'] = this.comboId;
-    data['quantity'] = this.quantity;
-    data['unitPrice'] = this.unitPrice;
-    data['totalPrice'] = this.totalPrice;
-    data['size'] = this.size;
-    data['drinkId'] = this.drinkId;
-    data['storeId'] = this.storeId;
-    data['status'] = this.status;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['orderDetailId'] = orderDetailId;
+    data['comboId'] = comboId;
+    data['quantity'] = quantity;
+    data['unitPrice'] = unitPrice;
+    data['totalPrice'] = totalPrice;
+    data['size'] = size;
+    if (drinkId != null) {
+      data['drinkId'] = drinkId!.map((v) => v.toString()).toList();
+    }
+    data['storeId'] = storeId;
+    data['status'] = status;
     return data;
   }
-
 }

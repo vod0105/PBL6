@@ -8,78 +8,64 @@ class OrderController extends GetxController {
   OrderController({
     required this.orderRepo,
   });
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
+  bool isLoading = false;
 
 
 
-  List<OrderItem> _orderlist = [];
-  List<OrderItem> get orderlist => _orderlist;
+  List<OrderItem> orderList = [];
 
-  Future<void> getall() async {
-    _isLoading = true;
-    Response response = await orderRepo.getall();
+  Future<void> getAll() async {
+    isLoading = true;
+    Response response = await orderRepo.getAll();
     if (response.statusCode == 200) {
-      print("Lấy thành công danh sách đơn hàng");
       var data = response.body;
-      _orderlist = Ordermodel.fromJson(data).getorderitem ?? [];
+      orderList = OrderModel.fromJson(data).orderItem ?? [];
     } else {
-      print("Lỗi không lấy được danh sách đơn hàng: " +
-          response.statusCode.toString());
-      _orderlist = [];
+      orderList = [];
     }
-    _isLoading = false;
+    isLoading = false;
     update();
   }
 
-  OrderItem? _orderdetail;
-  OrderItem? get orderdetail => _orderdetail;
+  OrderItem? orderDetail;
 
-  Future<void> getorderbyOrdercode(String ordercode) async {
-    _isLoading = true;
-    Response response = await orderRepo.getorderbyordercode(ordercode);
+  Future<void> getOrderByOrderCode(String orderCode) async {
+    isLoading = true;
+    Response response = await orderRepo.getOrderByOrderCode(orderCode);
     if (response.statusCode == 200) {
-      print("Lấy thành công chi tiết đơn hàng");
       var data = response.body;
 
-      _orderdetail = OrderItem.fromJson(data["data"]);
+      orderDetail = OrderItem.fromJson(data["data"]);
     } else {
-      print("Lỗi không lấy được danh sách đơn hàng: " +
-          response.statusCode.toString());
     }
-    _isLoading = false;
+    isLoading = false;
     update();
   }
 
-  Future<void> getorderWithStatus(String status) async {
-    _isLoading = true;
-    Response response = await orderRepo.getorderbyorderstatus(status);
+  Future<void> getOrderWithStatus(String status) async {
+    isLoading = true;
+    Response response = await orderRepo.getOrderByOrderStatus(status);
     if (response.statusCode == 200) {
-      print("Lấy thành công danh sách đơn hàng");
       var data = response.body;
-      _orderlist = Ordermodel.fromJson(data).getorderitem ?? [];
+      orderList = OrderModel.fromJson(data).orderItem ?? [];
     } else {
-      print("Lỗi không lấy được danh sách đơn hàng: " +
-          response.statusCode.toString());
-      _orderlist = [];
+      orderList = [];
     }
-    _isLoading = false;
+    isLoading = false;
     update();
   }
-  Future<void> updatefeedback(int orderid)async{
-    Response response = await orderRepo.updatefeedback(orderid);
+  Future<void> updateFeedback(int orderid)async{
+    Response response = await orderRepo.updateFeedback(orderid);
     if(response.statusCode != 200){
-      print("Lỗi feedback");
     }
   }
-  Future<void> cancelorder(String ordercode)async{
-    Response response = await orderRepo.cancelorder(ordercode);
+  Future<void> cancelOrder(String orderCode,String status)async{
+    Response response = await orderRepo.cancelOrder(orderCode);
     if(response.statusCode != 200){
-      print("Lỗi hủy đơn");
     }
     else{
-      Get.find<UserController>().addannouce("Thông báo đơn hàng", "Bạn vừa đặt hủy thành công một đơn hàng !"); 
-     
+      Get.find<UserController>().addAnnoUce("Thông báo đơn hàng", "Bạn vừa đặt hủy thành công một đơn hàng !"); 
+     await getOrderWithStatus(status);
       
     }
   }

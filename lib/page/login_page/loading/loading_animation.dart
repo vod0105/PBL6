@@ -1,8 +1,8 @@
-
 import 'package:android_project/data/controller/Cart_controller.dart';
 import 'package:android_project/data/controller/Category_controller.dart';
 import 'package:android_project/data/controller/Combo_controller.dart';
 import 'package:android_project/data/controller/Product_controller.dart';
+import 'package:android_project/data/controller/Promotion_controller.dart';
 import 'package:android_project/data/controller/Size_controller.dart';
 import 'package:android_project/data/controller/Store_Controller.dart';
 import 'package:android_project/data/controller/User_controller.dart';
@@ -13,11 +13,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class BarLoadingScreen extends StatefulWidget {
+  const BarLoadingScreen({super.key});
+
   @override
-  _BarLoadingScreenState createState() =>  _BarLoadingScreenState();
+  BarLoadingScreenState createState() => BarLoadingScreenState();
 }
 
-class _BarLoadingScreenState extends State<BarLoadingScreen>
+class BarLoadingScreenState extends State<BarLoadingScreen>
     with TickerProviderStateMixin {
   late AnimationController _controller;
   CartController cartController = Get.find<CartController>();
@@ -27,11 +29,12 @@ class _BarLoadingScreenState extends State<BarLoadingScreen>
   ProductController productController = Get.find<ProductController>();
   Storecontroller storecontroller = Get.find<Storecontroller>();
   CategoryController categoryController = Get.find<CategoryController>();
+  PromotionController promotionController = Get.find<PromotionController>();
 
   @override
   void initState() {
     super.initState();
-    _controller =  AnimationController(
+    _controller = AnimationController(
       duration: const Duration(milliseconds: 3000),
       vsync: this,
     );
@@ -39,13 +42,16 @@ class _BarLoadingScreenState extends State<BarLoadingScreen>
     loading();
   }
 
+
   void loading() async {
     while (cartController.isLoading ||
         userController.isLoading ||
         sizeController.isLoading ||
         comboController.isLoading ||
         productController.isLoading ||
+        productController.loadingRecommendProduct ||
         storecontroller.isLoading ||
+        promotionController.loaDing! ||
         categoryController.isLoading!) {
       await Future.delayed(const Duration(milliseconds: 50));
     }
@@ -58,11 +64,11 @@ class _BarLoadingScreenState extends State<BarLoadingScreen>
     super.dispose();
   }
 
-  Tween<double> tween =  Tween<double>(begin: 0.0, end: 1.00);
+  Tween<double> tween = Tween<double>(begin: 0.0, end: 1.00);
   Animation<double> get stepOne => tween.animate(
-         CurvedAnimation(
+        CurvedAnimation(
           parent: _controller,
-          curve:  Interval(
+          curve: const Interval(
             0.0,
             0.125,
             curve: Curves.linear,
@@ -70,9 +76,9 @@ class _BarLoadingScreenState extends State<BarLoadingScreen>
         ),
       );
   Animation<double> get stepTwo => tween.animate(
-         CurvedAnimation(
-          parent: _controller!,
-          curve:  Interval(
+        CurvedAnimation(
+          parent: _controller,
+          curve: const Interval(
             0.125,
             0.26,
             curve: Curves.linear,
@@ -80,9 +86,9 @@ class _BarLoadingScreenState extends State<BarLoadingScreen>
         ),
       );
   Animation<double> get stepThree => tween.animate(
-         CurvedAnimation(
+        CurvedAnimation(
           parent: _controller,
-          curve:  Interval(
+          curve: const Interval(
             0.25,
             0.375,
             curve: Curves.linear,
@@ -90,9 +96,9 @@ class _BarLoadingScreenState extends State<BarLoadingScreen>
         ),
       );
   Animation<double> get stepFour => tween.animate(
-         CurvedAnimation(
+        CurvedAnimation(
           parent: _controller,
-          curve:  Interval(
+          curve: const Interval(
             0.375,
             0.5,
             curve: Curves.linear,
@@ -100,9 +106,9 @@ class _BarLoadingScreenState extends State<BarLoadingScreen>
         ),
       );
   Animation<double> get stepFive => tween.animate(
-         CurvedAnimation(
+        CurvedAnimation(
           parent: _controller,
-          curve:  Interval(
+          curve: const Interval(
             0.5,
             0.625,
             curve: Curves.linear,
@@ -110,9 +116,9 @@ class _BarLoadingScreenState extends State<BarLoadingScreen>
         ),
       );
   Animation<double> get stepSix => tween.animate(
-         CurvedAnimation(
+        CurvedAnimation(
           parent: _controller,
-          curve:  Interval(
+          curve: const Interval(
             0.625,
             0.75,
             curve: Curves.linear,
@@ -120,9 +126,9 @@ class _BarLoadingScreenState extends State<BarLoadingScreen>
         ),
       );
   Animation<double> get stepSeven => tween.animate(
-         CurvedAnimation(
+        CurvedAnimation(
           parent: _controller,
-          curve:  Interval(
+          curve: const Interval(
             0.75,
             0.875,
             curve: Curves.linear,
@@ -130,9 +136,9 @@ class _BarLoadingScreenState extends State<BarLoadingScreen>
         ),
       );
   Animation<double> get stepEight => tween.animate(
-         CurvedAnimation(
+        CurvedAnimation(
           parent: _controller,
-          curve:  Interval(
+          curve: const Interval(
             0.875,
             1.0,
             curve: Curves.linear,
@@ -142,11 +148,10 @@ class _BarLoadingScreenState extends State<BarLoadingScreen>
 
   Widget get forwardStaggeredAnimation {
     return Center(
-  
-      child:  Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-           PivotBar(
+          PivotBar(
             alignment: FractionalOffset.centerLeft,
             controller: _controller,
             animations: [
@@ -157,7 +162,7 @@ class _BarLoadingScreenState extends State<BarLoadingScreen>
             marginLeft: 0.0,
             isClockwise: true,
           ),
-           PivotBar(
+          PivotBar(
             controller: _controller,
             animations: [
               stepThree,
@@ -167,7 +172,7 @@ class _BarLoadingScreenState extends State<BarLoadingScreen>
             marginLeft: 0.0,
             isClockwise: false,
           ),
-           PivotBar(
+          PivotBar(
             controller: _controller,
             animations: [
               stepFour,
@@ -177,7 +182,7 @@ class _BarLoadingScreenState extends State<BarLoadingScreen>
             marginLeft: 32.0,
             isClockwise: true,
           ),
-           PivotBar(
+          PivotBar(
             controller: _controller,
             animations: [
               stepFive,
@@ -191,16 +196,21 @@ class _BarLoadingScreenState extends State<BarLoadingScreen>
       ),
     );
   }
+
   Widget getForwardStaggeredAnimation() {
     return forwardStaggeredAnimation;
   }
+
   @override
   Widget build(BuildContext context) {
-    return  Container(
-      decoration: BoxDecoration(
-        color: Colors.white
-      ),
-      child: forwardStaggeredAnimation);
+    return Container(
+        width: AppDimention.screenWidth,
+        height: AppDimention.screenHeight,
+        decoration: const BoxDecoration(
+            color: Colors.white,
+            image: DecorationImage(
+                fit: BoxFit.cover,
+                image: AssetImage("assets/image/LoadingBg.png"))),
+        child: forwardStaggeredAnimation,);
   }
 }
-

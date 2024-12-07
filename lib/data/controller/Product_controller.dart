@@ -1,48 +1,45 @@
-import 'package:android_project/data/api/AppConstant.dart';
+import 'dart:convert';
+import 'package:android_project/data/controller/Auth_controller.dart';
 import 'package:android_project/data/controller/User_controller.dart';
 import 'package:android_project/data/repository/Product_repo.dart';
 import 'package:android_project/models/Dto/AddCartDto.dart';
-import 'package:android_project/models/Dto/CartDto.dart';
 import 'package:android_project/models/Dto/CommentDto.dart';
 import 'package:android_project/models/Dto/OrderProductDto.dart';
 import 'package:android_project/models/Model/Item/ProductItem.dart';
 import 'package:android_project/models/Model/MomoModel.dart';
 import 'package:android_project/models/Model/ProductModel.dart';
 import 'package:android_project/models/Model/RateModel.dart';
+import 'package:android_project/models/Model/UserModel.dart';
+import 'package:android_project/models/Model/ZaloModels.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 
 class ProductController extends GetxController {
   final ProductRepo productRepo;
+  UserController userController = Get.find<UserController>();
+  AuthController authController = Get.find<AuthController>();
   ProductController({
     required this.productRepo,
   });
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
+  bool isLoading = false;
 
-  // Lấy tất cả sản phẩm
-  List<Productitem> _productList = [];
-  List<Productitem> get productList => _productList;
+  List<Productitem> productList = [];
 
-  Future<void> getall() async {
-    _isLoading = true;
-    Response response = await productRepo.getall();
+  Future<void> getAll() async {
+    isLoading = true;
+    Response response = await productRepo.getAll();
     if (response.statusCode == 200) {
       var data = response.body;
-      _productList = [];
-      _productList.addAll(Productmodel.fromJson(data).get_listproduct ?? []);
-    } else {
-      print("Lỗi không lấy được dữ liệu danh sách sản phẩm : " +
-          response.statusCode.toString());
-    }
-    _isLoading = false;
+      productList = [];
+      productList.addAll(ProductModel.fromJson(data).listProduct ?? []);
+    } else {}
+    isLoading = false;
     update();
   }
 
-  // Lấy sản phẩm theo id
-  Productitem? getproductbyid(int id) {
-    for (Productitem item in _productList) {
+  Productitem? getProductById(int id) {
+    for (Productitem item in productList) {
       if (item.productId == id) {
         return item;
       }
@@ -50,179 +47,167 @@ class ProductController extends GetxController {
     return null;
   }
 
-  // Thêm sản phẩm vào giỏ hàng
-  Future<void> addtocart(
-      int productid, int quantity, int idstore, String sizename) async {
-    _isLoading = true;
-    AddcartDto cart = AddcartDto(
-        productId: productid,
+  Future<void> addToCart(
+      int productId, int quantity, int idStore, String sizeName) async {
+    isLoading = true;
+    AddCartDto cart = AddCartDto(
+        productId: productId,
         quantity: quantity,
-        size: sizename,
-        storeId: idstore);
-    Response response = await productRepo.addtocart(cart);
+        size: sizeName,
+        storeId: idStore);
+    Response response = await productRepo.addToCart(cart);
     if (response.statusCode == 200) {
       Get.snackbar(
-            "Thông báo",
-            "Thêm vào giỏ hàng thành công",
-            snackPosition: SnackPosition.TOP,
-            backgroundColor: Colors.white,
-            colorText: Colors.black,
-            icon: Icon(Icons.card_giftcard_sharp, color: Colors.green),
-            borderRadius: 10,
-            margin: EdgeInsets.all(10),
-            duration: Duration(seconds: 1),
-            isDismissible: true,
-            
-          );
-      Get.find<UserController>().addannouce(
-          "Thông báo giỏ hàng", "Bạn vừa thêm một sản phẩm vào giỏ hàng !");
-    } else {
-      print("Lỗi thêm sản phẩm vào giỏ hàng" + response.statusCode.toString());
-    }
-    _isLoading = false;
+        "Thông báo",
+        "Thêm vào giỏ hàng thành công",
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.white,
+        colorText: Colors.black,
+        icon: const Icon(Icons.card_giftcard_sharp, color: Colors.green),
+        borderRadius: 10,
+        margin: const EdgeInsets.all(10),
+        duration: const Duration(seconds: 1),
+        isDismissible: true,
+      );
+    } else {}
+    isLoading = false;
     update();
   }
 
-  // Lấy sản phẩm theo danh mục
-  List<Productitem> _productListBycategory = [];
-  List<Productitem> get productListBycategory => _productListBycategory;
-  bool? _isLoadingProductIncategory;
-  bool? get isLoadingProductIncategory => _isLoadingProductIncategory;
+  List<Productitem> productListByCategory = [];
+
+  bool isLoadingProductInCategory = true;
   Future<void> getProductByCategoryId(int id) async {
-    _isLoadingProductIncategory = true;
-    Response response = await productRepo.getbycategoryid(id);
+    isLoadingProductInCategory = true;
+    Response response = await productRepo.getByCategoryId(id);
     if (response.statusCode == 200) {
       var data = response.body;
-      _productListBycategory = [];
-      _productListBycategory
-          .addAll(Productmodel.fromJson(data).get_listproduct ?? []);
-    } else {
-      print("Lỗi không lấy được danh sách sản phẩm theo danh mục" +
-          response.statusCode.toString());
-    }
-    _isLoadingProductIncategory = false;
+      productListByCategory = [];
+      productListByCategory
+          .addAll(ProductModel.fromJson(data).listProduct ?? []);
+    } else {}
+    isLoadingProductInCategory = false;
     update();
   }
 
-  // Lấy tất cả sản phẩm của cửa hàng theo danh mục
-  List<Productitem> _productListBycategorystore = [];
-  List<Productitem> get productListBycategorystore =>
-      _productListBycategorystore;
+  List<Productitem> productListByCategoryStore = [];
 
-  bool _isLoadingStoreCategory = false;
-  bool get isLoadingStoreCategory => _isLoadingStoreCategory;
-  Future<void> getProductByStoreCategoryId(int storeid, int categoryid) async {
-    _isLoadingStoreCategory = true;
-    print(_isLoadingStoreCategory);
+  bool isLoadingStoreCategory = false;
+  Future<void> getProductByStoreCategoryId(int storeId, int categoryId) async {
+    isLoadingStoreCategory = true;
     Response response =
-        await productRepo.getbystoreandcategoryid(storeid, categoryid);
+        await productRepo.getByStoreAndCategoryId(storeId, categoryId);
     if (response.statusCode == 200) {
       var data = response.body;
-      _productListBycategorystore = [];
-      _productListBycategorystore
-          .addAll(Productmodel.fromJson(data).get_listproduct ?? []);
-      print("Lấy danh sách sản phẩm theo danh mục và cửa hàng thành công");
-    } else {
-      print("Lỗi không lấy được danh sách sản phẩm theo danh mục" +
-          response.statusCode.toString());
-    }
-    _isLoadingStoreCategory = false;
-    print(_isLoadingStoreCategory);
+      productListByCategoryStore = [];
+      productListByCategoryStore
+          .addAll(ProductModel.fromJson(data).listProduct ?? []);
+    } else {}
+    isLoadingStoreCategory = false;
     update();
+  }
+
+  Future<List<Productitem>> getProductByStoreCategoryIdV2(
+      int storeId, int categoryId) async {
+    List<Productitem> list = [];
+    Response response =
+        await productRepo.getByStoreAndCategoryId(storeId, categoryId);
+    if (response.statusCode == 200) {
+      var data = response.body;
+
+      list.addAll(ProductModel.fromJson(data).listProduct ?? []);
+    } else {}
+    return list;
   }
 
   String textSearch = "";
   String get gettextSearch => textSearch;
 
   void updateTextSearch(String text) {
-    this.textSearch = text;
+    textSearch = text;
     update();
   }
 
-  // Tìm kiếm sản phẩm theo tên
-  List<Productitem> _productListSearch = [];
-  List<Productitem> get productListSearch => _productListSearch;
+  List<Productitem> productListSearch = [];
+
   void search() {
     try {
-      _productListSearch = [];
+      productListSearch = [];
 
       if (textSearch.isEmpty) {
-        _productListSearch = _productList;
+        productListSearch = productList;
       } else {
-        for (Productitem item in _productList) {
+        for (Productitem item in productList) {
           if (item.productName!
               .toLowerCase()
               .contains(textSearch.toLowerCase())) {
-            _productListSearch.add(item);
+            productListSearch.add(item);
           }
         }
       }
     } catch (e) {
-      print("Exception: $e");
-      _productListSearch = [];
+      productListSearch = [];
     } finally {
       SchedulerBinding.instance.addPostFrameCallback((_) {
         update();
       });
     }
   }
-void swap(List<Productitem> arr, int i, int j) {
-  Productitem temp = arr[i];
-  arr[i] = arr[j];
-  arr[j] = temp;
-}
 
-int partition(List<Productitem> arr, int low, int high,type) {
-  Productitem pivot = arr[high];
-  int i = low - 1;
+  void swap(List<Productitem> arr, int i, int j) {
+    Productitem temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+  }
 
-  for (int j = low; j <= high - 1; j++) {
-    if(type == 1){
-    if (arr[j].price! > pivot.price!) {
-      i++;
-      swap(arr, i, j);
+  int partition(List<Productitem> arr, int low, int high, type) {
+    Productitem pivot = arr[high];
+    int i = low - 1;
+
+    for (int j = low; j <= high - 1; j++) {
+      if (type == 1) {
+        if (arr[j].price! > pivot.price!) {
+          i++;
+          swap(arr, i, j);
+        }
+      } else {
+        if (arr[j].price! < pivot.price!) {
+          i++;
+          swap(arr, i, j);
+        }
+      }
     }
-    }
-    else{
-       if (arr[j].price! < pivot.price!) {
-      i++;
-      swap(arr, i, j);
-    }
+
+    swap(arr, i + 1, high);
+    return i + 1;
+  }
+
+  void quickSort(List<Productitem> arr, int low, int high, int type) {
+    if (low < high) {
+      int pi = partition(arr, low, high, type);
+      quickSort(arr, low, pi - 1, type);
+      quickSort(arr, pi + 1, high, type);
     }
   }
 
-  swap(arr, i + 1, high);
-  return i + 1;
-}
-
-void quickSort(List<Productitem> arr, int low, int high,int type) {
-  if (low < high) {
-    int pi = partition(arr, low, high,type);
-    quickSort(arr, low, pi - 1,type);
-    quickSort(arr, pi + 1, high,type);
+  void sortDes(int type) {
+    try {
+      quickSort(productListSearch, 0, productListSearch.length - 1, type);
+    } catch (e) {
+      productListSearch = [];
+    } finally {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        update();
+      });
+    }
   }
-}
 
-void sortDes(int type) {
-  try {
-    quickSort(_productListSearch, 0, _productListSearch.length - 1,type);
-  } catch (e) {
-    print("Exception: $e");
-    _productListSearch = [];
-  } finally {
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      update();
-    });
-  }
-}
-
-  void getallProductSearch(){
-     try {
-      _productListSearch = _productList;
+  void getAllProductSearch() {
+    try {
+      productListSearch = productList;
       textSearch = "";
     } catch (e) {
-      print("Exception: $e");
-      _productListSearch = [];
+      productListSearch = [];
     } finally {
       SchedulerBinding.instance.addPostFrameCallback((_) {
         update();
@@ -230,26 +215,25 @@ void sortDes(int type) {
     }
   }
 
-  void filterProduct(String categoryName, int lowprice, int highprice) {
+  void filterProduct(String categoryName, int lowPrice, int highPrice) {
     try {
-      _productListSearch = [];
+      productListSearch = [];
       for (Productitem item in productList) {
         if (categoryName == "Tất cả") {
-          if (item.price!.toInt() > lowprice &&
-              item.price!.toInt() < highprice) {
-            _productListSearch.add(item);
+          if (item.price!.toInt() > lowPrice &&
+              item.price!.toInt() < highPrice) {
+            productListSearch.add(item);
           }
         } else {
           if (item.category!.categoryName == categoryName &&
-              item.price!.toInt() > lowprice &&
-              item.price!.toInt() < highprice) {
-            _productListSearch.add(item);
+              item.price!.toInt() > lowPrice &&
+              item.price!.toInt() < highPrice) {
+            productListSearch.add(item);
           }
         }
       }
     } catch (e) {
-      print("Exception: $e");
-      _productListSearch = [];
+      productListSearch = [];
     } finally {
       SchedulerBinding.instance.addPostFrameCallback((_) {
         update();
@@ -258,122 +242,168 @@ void sortDes(int type) {
   }
 
   Future<void> searchByImage(String base64Image) async {
-    Response response = await productRepo.searchbyimage(base64Image);
+    Response response = await productRepo.searchByImage(base64Image);
     if (response.statusCode == 200) {
       var data = response.body;
-      _productListSearch = [];
-      _productListSearch
-          .addAll(Productmodel.fromJson(data).get_listproduct ?? []);
+      productListSearch = [];
+      for (Productitem item in productList) {
+        if (item.productName!.toLowerCase().contains(data.toLowerCase())) {
+          productListSearch.add(item);
+        }
+      }
       update();
-      print("Món ăn" + _productListSearch[0].productName!);
     } else {
-      print("Lỗi ${response.statusCode}");
-      _productListSearch = [];
+      productListSearch = [];
       update();
     }
   }
 
-  // Lấy danh sách nước uống
-  List<Productitem>? getlistdrink() {
-    List<Productitem> _productListDrink = [];
+  List<Productitem>? getListDrink() {
+    List<Productitem> productListDrink = [];
     for (Productitem item in productList) {
       if (item.category!.categoryName == "Nước uống") {
-        _productListDrink.add(item);
+        productListDrink.add(item);
       }
     }
-    return _productList;
+    return productList;
   }
 
-  Future<void> addcomment(Commentdto dto) async {
-    Response response = await productRepo.addcomment(dto);
-    if (response.statusCode == 200) {
-      Get.snackbar(
-            "Thông báo",
-            "Phản hồi thành công",
-            snackPosition: SnackPosition.TOP,
-            backgroundColor: Colors.white,
-            colorText: Colors.black,
-            icon: Icon(Icons.card_giftcard_sharp, color: Colors.green),
-            borderRadius: 10,
-            margin: EdgeInsets.all(10),
-            duration: Duration(seconds: 1),
-            isDismissible: true,
-            
-          );
-    } else {
-      print("Phản hồi thất bại");
-    }
+  Future<void> addComment(CommentDto dto) async {
+    var response = await productRepo.addComment(dto);
+
+    var responseString = await response.stream.bytesToString();
+
+    try {
+      jsonDecode(responseString);
+
+      if (response.statusCode == 200) {
+        Get.snackbar(
+          "Thông báo",
+          "Phản hồi thành công",
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.white,
+          colorText: Colors.black,
+          icon: const Icon(Icons.card_giftcard_sharp, color: Colors.green),
+          borderRadius: 10,
+          margin: const EdgeInsets.all(10),
+          duration: const Duration(seconds: 1),
+          isDismissible: true,
+        );
+      } else {}
+    // ignore: empty_catches
+    } catch (e) {}
   }
 
-  List<RateData> listcomment = [];
-  List<RateData> get getlistcomment => listcomment;
+  List<DisplayRate> listComment = [];
   bool? loadingComment = false;
-  bool? get getloadingComment => loadingComment;
-  Future<void> getcomment(int productid) async {
+  Future<void> getComment(int productId) async {
     loadingComment = true;
-    Response response = await productRepo.getcomment(productid);
+    Response response = await productRepo.getComment(productId);
     if (response.statusCode == 200) {
       var data = response.body;
-      listcomment = [];
-      listcomment.addAll(Ratemodel.fromJson(data).getlistrate ?? []);
-    } else {
-      print("Lỗi không nhận được phản hồi ${response.statusCode}");
-    }
+      listComment = [];
+      for (RateData item in RateModel.fromJson(data).listRate ?? []) {
+        User? user = await userController.getById(item.userId!);
+        while (userController.loadReceiver!) {
+          await Future.delayed(const Duration(microseconds: 100));
+        }
+        DisplayRate displayRate = DisplayRate(user: user, rateData: item);
+        listComment.add(displayRate);
+      }
+    } else {}
     loadingComment = false;
     update();
   }
 
-  MomoModels _qrcode = MomoModels();
-  MomoModels get qrcode => _qrcode;
+  MoMoModels _qrcode = MoMoModels();
+  MoMoModels get qrcode => _qrcode;
+  ZaloData _qrcodeZalo = ZaloData();
+  ZaloData get qrcodeZalo => _qrcodeZalo;
   bool loadingOrder = false;
-  bool get getloadingOrder => loadingOrder;
   Future<void> order(Orderproductdto dto) async {
     loadingOrder = true;
     Response response = await productRepo.order(dto);
     if (response.statusCode == 200) {
+      var data = response.body;
       if (dto.paymentMethod == "CASH") {
         Get.snackbar(
-            "Thông báo",
-            "Đặt đơn hàng thành công",
-            snackPosition: SnackPosition.TOP,
-            backgroundColor: Colors.white,
-            colorText: Colors.black,
-            icon: Icon(Icons.card_giftcard_sharp, color: Colors.green),
-            borderRadius: 10,
-            margin: EdgeInsets.all(10),
-            duration: Duration(seconds: 1),
-            isDismissible: true,
-            
-          );
-        Get.find<UserController>().addannouce(
-            "Thông báo đơn hàng", "Bạn vừa đặt thành công một đơn hàng !");
+          "Thông báo",
+          "Đặt đơn hàng thành công",
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.white,
+          colorText: Colors.black,
+          icon: const Icon(Icons.card_giftcard_sharp, color: Colors.green),
+          borderRadius: 10,
+          margin: const EdgeInsets.all(10),
+          duration: const Duration(seconds: 1),
+          isDismissible: true,
+        );
+      } else if (dto.paymentMethod == "MOMO") {
+        _qrcode = (MoMoModels.fromJson(data).moMo);
       } else {
-        var data = response.body;
-        _qrcode = (MomoModels.fromJson(data).momo);
-        print("PAYURRL ${_qrcode.payUrl}");
+        _qrcodeZalo = ZaloModels.fromJson(data).zaloData!;
       }
-    }
+    } else {}
     loadingOrder = false;
     update();
   }
-}
 
-/*
-List<Productitem> _productListDetail = [];
-  List<Productitem> get productListDetail => _productListDetail;
-  Future<void> getProductById(int id) async {
-    _isLoading = true;
-    Response response = await productRepo.getbyid(id);
+  Future<List<Productitem>> getByStoreId(int storeId) async {
+    List<Productitem> result = [];
+    Response response = await productRepo.getByStoreId(storeId);
     if (response.statusCode == 200) {
       var data = response.body;
-      _productListDetail = [];
-      _productListDetail
-          .addAll(Productmodel.fromJson(data).get_listproduct ?? []);
+      result.addAll(ProductModel.fromJson(data).listProduct ?? []);
+      return result;
     } else {
-      print("Lỗi không lấy được dữ liệu chi tiết sản phẩm : " +
-          response.statusCode.toString());
+      return result;
     }
-    _isLoading = false;
+  }
+
+  bool loadingRecommendProduct = false;
+  List<int> listProductId = [];
+  Future<void> getRecommendProduct() async {
+    loadingRecommendProduct = true;
+    Response response =
+        await productRepo.getRecommendProduct(authController.idUser);
+    if (response.statusCode == 200) {
+      listProductId = [];
+      if (response.body is List) {
+        listProductId = List<int>.from(response.body);
+      } else if (response.body is String) {
+        listProductId = List<int>.from(jsonDecode(response.body));
+      } else {
+        throw Exception("response.body không phải là kiểu hợp lệ");
+      }
+    } else {
+      listProductId = [];
+    }
+    loadingRecommendProduct = false;
     update();
   }
-*/
+
+  List<Productitem> listProductRecommend = [];
+  void getProductRecommend() async {
+    for (Productitem item in productList) {
+      if (listProductId.contains(item.productId)) {
+        listProductRecommend.add(item);
+      }
+    }
+  }
+
+  bool loadDrinkInCombo = false;
+  Future<List<Productitem>?> getListDrinkInCombo(List<int> storeId) async {
+    loadDrinkInCombo = true;
+    List<Productitem> res = [];
+    Response response = await productRepo.getListDrinkInCombo(storeId);
+    if (response.statusCode == 200) {
+      res = [];
+      var data = response.body;
+      res.addAll(ProductModel.fromJson(data).listProduct ?? []);
+      loadDrinkInCombo = false;
+      update();
+      return res;
+    } else {}
+    return null;
+  }
+}

@@ -1,41 +1,41 @@
-class Registershipperdto {
+class RegisterShipperDto {
   String? name;
+  String? citizenID;
   String? imageCitizenFront;
   String? imageCitizenBack;
   String? email;
   String? phone;
-  String? currentaddress;
   String? address;
   String? birthday;
   String? vehicle;
   String? licensePlate;
-  String? DriverLicense;
-  Registershipperdto({
+  String? driverLicense;
+  RegisterShipperDto({
     required this.name,
+    required this.citizenID,
     required this.imageCitizenFront,
     required this.imageCitizenBack,
     required this.email,
     required this.phone,
-    required this.currentaddress,
     required this.address,
     required this.birthday,
     required this.vehicle,
     required this.licensePlate,
-    required this.DriverLicense,
+    required this.driverLicense,
   });
   Map<String, dynamic> toJson() {
-    Map<String, dynamic> data = new Map<String, dynamic>();
-      data["name"] =  this.name;
-      data["imageCitizenFront"] =  this.imageCitizenFront;
-      data["imageCitizenBack"] =  this.imageCitizenBack;
-      data["email"] =  this.email;
-      data["phone"] =  this.phone;
-      data["currentaddress"] =  this.currentaddress;
-      data["address"] =  this.address;
-      data["birthday"] =  this.birthday;
-      data["vehicle"] =  this.vehicle;
-      data["licensePlate"] =  this.licensePlate;
-      data["DriverLicense"] =  this.DriverLicense;
+    Map<String, dynamic> data = <String, dynamic>{};
+      data["name"] =  name;
+      data["citizenID"] =  citizenID;
+      data["imageCitizenFront"] =  imageCitizenFront;
+      data["imageCitizenBack"] =  imageCitizenBack;
+      data["email"] =  email;
+      data["phone"] =  phone;
+      data["address"] =  address;
+      data["age"] =  int.parse(birthday!);
+      data["vehicle"] =  vehicle;
+      data["licensePlate"] =  licensePlate;
+      data["driverLicense"] =  driverLicense;
     return data;
   }
 }

@@ -1,198 +1,216 @@
-import 'package:android_project/data/controller/Store_Controller.dart';
-import 'package:android_project/data/controller/User_controller.dart';
 import 'package:android_project/data/repository/Cart_repo.dart';
 import 'package:android_project/models/Dto/CartDto.dart';
 import 'package:android_project/models/Model/CartModel.dart';
 import 'package:android_project/models/Model/Item/StoresItem.dart';
 import 'package:android_project/models/Model/MomoModel.dart';
 import 'package:android_project/models/Model/NewCartModel.dart';
+import 'package:android_project/models/Model/ZaloModels.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:android_project/data/controller/Store_Controller.dart';
 
 class CartController extends GetxController implements GetxService {
   final CartRepo cartRepo;
   CartController({
     required this.cartRepo,
   });
-  // **************************************************************************** Khai báo biến
 
-  // * load dữ liệu giỏ hàng
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
+  bool isLoading = false;
 
-  // * mã QR thanh toán
-  MomoModels _qrcode = MomoModels();
-  MomoModels get qrcode => _qrcode;
+  MoMoModels qrcode = MoMoModels();
 
-  // * danh sách sản phẩm trong giỏ hàng
-  List<CartData> _cartlist = [];
-  List<CartData> get cartlist => _cartlist;
+  ZaloData _qrcodeZalo = ZaloData();
+  ZaloData get qrcodeZalo => _qrcodeZalo;
 
-  // * tổng giá của giỏ hàng
-  int _totalprice = 0;
-  int get totalprice => _totalprice;
-  
+  List<CartData> cartList = [];
 
-  // * danh sách các sản phẩm được chọn để thanh toán
-  List<int> _IDSelectedItem = [];
-  List<int> get IDSelectedItem => _IDSelectedItem;
+  int totalPrice = 0;
 
-  // * danh sách các cửa hàng được chọn để thanh toán
-  List<int> _IDSelectedStore = [];
-  List<int> get IDSelectedStore => _IDSelectedStore;
+  final List<int> idSelectedItem = [];
 
-  // * danh sách các combo được chọn để thanh toán
-  List<int> _IDSelectedCombo = [];
-  List<int> get IDSelectedCombo => _IDSelectedCombo;
+  final List<int> idSelectedStore = [];
 
-  // *  danh sách các cửa hàng 
+  final List<int> idSelectedCombo = [];
+
   List<int> listIDStore = [];
-  List<int> get getlistIDStore => listIDStore;
 
-  // * danh sách các sản phẩm của cửa hàng
   List<ProductInCart> listCartWithStoreId = [];
-  List<ProductInCart> get getlistCartWithStoreId => listCartWithStoreId;
 
-  // * danh sách các sản phẩm 
-  List<Newcartmodel> listcart = [];
-  List<Newcartmodel> get getlistcart => listcart;
+  List<NewCartModel> listCart = [];
 
-  // * danh sách sản phẩm chọn để thanh toán
-  List<Newcartmodel> listcartinorder = [];
-  List<Newcartmodel> get getlistcartinorder => listcartinorder;
+  List<NewCartModel> listCartInOrder = [];
 
-  // * Controller 
   Storecontroller storecontroller = Get.find<Storecontroller>();
-  // Hết khai báo biến ------------------------------------------------------------------------
 
-
-  // **************************************************************************** Khai báo hàm
-
-  // * Hàm lấy danh sách sản phẩm trong giỏ hàng
-  Future<void> getall() async {
-
-    _isLoading = true;
-    Response response = await cartRepo.getall();
+  Future<void> getAll() async {
+    isLoading = true;
+    Response response = await cartRepo.getAll();
 
     if (response.statusCode == 200) {
       var data = response.body;
-      _cartlist = [];
-      var cartData = Cartmodel.fromJson(data).getdata;
+      cartList = [];
+      var cartData = CartModel.fromJson(data).data;
       if (cartData != null) {
-        _cartlist.addAll(cartData);
+        cartList.addAll(cartData);
       }
-      _totalprice = _cartlist
-          .where((item) => item.product != null)
-          .map((item) => item.product!.totalPrice ?? 0.0)
-          .fold(0, (previous, current) => previous.toInt() + current.toInt());
-      _totalprice = _totalprice.toInt();
     } else {
-      _cartlist = [];
-      _totalprice = 0;
+      cartList = [];
+      totalPrice = 0;
     }
 
-    _isLoading = false;
+    isLoading = false;
     update();
   }
-  bool? ordering = false;
-  bool? get getordering => ordering;
 
-  // * Hàm thanh toán đơn hàng
-  Future<void> orderall(String address, String paymentMethod) async {
+  bool? ordering = false;
+
+  Future<void> orderAll(String address, String paymentMethod, double latitude,
+      double longitude, String discountCode) async {
     ordering = true;
-    // * Thanh toán các đơn nằm được chọn 
-    if (!listcartinorder.isEmpty) {
+
+    if (listCartInOrder.isNotEmpty) {
       List<int> listIdCartItem = [];
-      for(Newcartmodel cartmodel in listcartinorder){
-        for(CartData cart in cartmodel.cartdata!){
+      for (NewCartModel cartModel in listCartInOrder) {
+        for (CartData cart in cartModel.cartData!) {
           listIdCartItem.add(cart.cartId!);
         }
       }
+      Response response;
+      if (discountCode != "") {
+        response = await cartRepo.orderProductInCart(CartDto(
+            cartList: listIdCartItem,
+            deliveryAddress: address,
+            paymentMethod: paymentMethod,
+            latitude: latitude,
+            longitude: longitude,
+            discountCode: discountCode));
+      } else {
+        response = await cartRepo.orderProductInCart(CartDto(
+            cartList: listIdCartItem,
+            deliveryAddress: address,
+            paymentMethod: paymentMethod,
+            latitude: latitude,
+            longitude: longitude));
+      }
 
-      Response response = await cartRepo.orderproductintcart(Cartdto(
-          cartlist: listIdCartItem,
-          deliveryAddress: address,
-          paymentMethod: paymentMethod));
       if (response.statusCode == 200) {
+        var data = response.body;
         if (paymentMethod == "CASH") {
-           Get.snackbar(
+          Get.snackbar(
             "Thông báo",
             "Đặt đơn hàng thành công",
             snackPosition: SnackPosition.TOP,
             backgroundColor: Colors.white,
             colorText: Colors.black,
-            icon: Icon(Icons.card_giftcard_sharp, color: Colors.green),
+            icon: const Icon(Icons.card_giftcard_sharp, color: Colors.green),
             borderRadius: 10,
-            margin: EdgeInsets.all(10),
-            duration: Duration(seconds: 1),
+            margin: const EdgeInsets.all(10),
+            duration: const Duration(seconds: 1),
             isDismissible: true,
-            
           );
-          Get.find<UserController>().addannouce("Thông báo đơn hàng", "Bạn vừa đặt thành công một đơn hàng !"); 
           await getListCartV2();
+        } else if (paymentMethod == "MOMO") {
+          qrcode = (MoMoModels.fromJson(data).moMo);
         } else {
-          var data = response.body;
-          _qrcode = (MomoModels.fromJson(data).momo);
-          print( "PAYURRL ${_qrcode.payUrl}");
+          _qrcodeZalo = ZaloModels.fromJson(data).zaloData!;
         }
-      } else {
-        print("Đặt đơn hàng sản phẩm thất bại : " +response.statusCode.toString());
-      }
-    }
-     else {
-       Get.snackbar(
+      } else {}
+    } else {
+      Get.snackbar(
         "Thông báo",
         "Vui lòng chọn sản phẩm đặt đơn",
         snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.white,
         colorText: Colors.black,
-        icon: Icon(Icons.warning, color: Colors.red),
+        icon: const Icon(Icons.warning, color: Colors.red),
         borderRadius: 10,
-        margin: EdgeInsets.all(10),
-        duration: Duration(seconds: 1),
+        margin: const EdgeInsets.all(10),
+        duration: const Duration(seconds: 1),
         isDismissible: true,
-        
       );
     }
     ordering = false;
     update();
   }
 
-  // * Hàm cập nhật tổng tiền giỏ hàng
-  void updateTotal(double newtotal) {
-    this._totalprice = newtotal.toInt();
+  void updateTotal(int newTotal, bool key) {
+    if (key) {
+      totalPrice = totalPrice + newTotal.toInt();
+    } else {
+      totalPrice = totalPrice - newTotal.toInt();
+    }
     update();
   }
 
-  // * Hàm reset chỉ số khi chuyển trang khác
   void resetIDSelected() {
-    _IDSelectedItem.clear();
-    _IDSelectedCombo.clear();
-    _IDSelectedStore.clear();
+    idSelectedItem.clear();
+    idSelectedCombo.clear();
+    idSelectedStore.clear();
     update();
   }
 
-  // * Hàm cập nhật các cửa hàng được chọn
   void updateIDSelectedStore(int id, bool value) {
     if (value) {
-      _IDSelectedStore.add(id);
+      idSelectedStore.add(id);
     } else {
-      _IDSelectedStore.remove(id);
+      idSelectedStore.remove(id);
     }
     update();
   }
 
-  // * Hàm cập nhật các sản phẩm được chọn
   void updateIDSelectedItem(int id, bool value) {
     if (value) {
-      _IDSelectedItem.add(id);
+      idSelectedItem.add(id);
     } else {
-      _IDSelectedItem.remove(id);
+      idSelectedItem.remove(id);
     }
     update();
   }
 
- 
+  void updateIDSelectedCombo(int id, bool value) {
+    if (value) {
+      idSelectedCombo.add(id);
+    } else {
+      idSelectedCombo.remove(id);
+    }
+    update();
+  }
+
+  Future<void> deleteCart(int cartId) async {
+    Response response = await cartRepo.deleteCart(cartId);
+    if (response.statusCode == 200) {
+      Get.snackbar(
+        "Thông báo",
+        "Xóa  giỏ hàng thành công",
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.white,
+        colorText: Colors.black,
+        icon: const Icon(Icons.card_giftcard_sharp, color: Colors.green),
+        borderRadius: 10,
+        margin: const EdgeInsets.all(10),
+        duration: const Duration(seconds: 1),
+        isDismissible: true,
+      );
+    } else {}
+  }
+
+  Future<void> updateCart(int cartId, int quantity) async {
+    Response response = await cartRepo.updateCart(cartId, quantity);
+    if (response.statusCode == 200) {
+      Get.snackbar(
+        "Thông báo",
+        "Cập nhật giỏ hàng thành công",
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.white,
+        colorText: Colors.black,
+        icon: const Icon(Icons.card_giftcard_sharp, color: Colors.green),
+        borderRadius: 10,
+        margin: const EdgeInsets.all(10),
+        duration: const Duration(seconds: 1),
+        isDismissible: true,
+      );
+    } else {}
+  }
 
   bool checkInList(int storeId, List<int> listId) {
     for (int item in listId) {
@@ -203,138 +221,153 @@ class CartController extends GetxController implements GetxService {
     return true;
   }
 
-  
-  // * Hàm lấy ra các cửa hàng của sản phẩm
   void getDistinctStoreId() async {
-    _cartlist.forEach((item) {
-      if(item.type == "product"){
+    for (var item in cartList) {
+      if (item.type == "product") {
         if (checkInList(item.product!.storeId!, listIDStore)) {
           listIDStore.add(item.product!.storeId!);
-        };
-      }
-      else{
+        }
+      } else {
         if (checkInList(item.combo!.storeId!, listIDStore)) {
           listIDStore.add(item.combo!.storeId!);
-        };
+        }
       }
-    });
+    }
   }
 
-  // * Hàm lấy ra các sản phẩm của cửa hàng 
   void getCartWithStoreId(int storeId) {
-    _cartlist.forEach((item) {
+    for (var item in cartList) {
       if (item.product!.storeId == storeId) {
         listCartWithStoreId.add(item.product!);
       }
-    });
+    }
   }
 
-  // * Hàm lấy các sản phẩm trong giở hàng
   Future<void> getListCartV2() async {
-    listcart = [];
-    List<int> liststoreid = [];
-    Response response = await cartRepo.getallstoreincart();
+    listCart = [];
+    List<int> listStoreId = [];
+    Response response = await cartRepo.getAllStoreInCart();
     if (response.statusCode == 200) {
       try {
         var data = response.body;
         if (data["data"] is List) {
-          liststoreid.addAll(List<int>.from(data["data"]));
+          listStoreId.addAll(List<int>.from(data["data"]));
         } else {
-          print("data['data'] is not a List: ${data["data"]}");
-          liststoreid = [];
-          listcart = [];
+          listStoreId = [];
+          listCart = [];
           update();
         }
       } catch (e) {
-        print("An error occurred: $e");
-        liststoreid = [];
-        listcart = [];
+        listStoreId = [];
+        listCart = [];
       }
 
-      for (int storeid in liststoreid) {
-        await storecontroller.getbyid(storeid);
-        Storesitem item = storecontroller.storeItem!;
+      for (int storeId in listStoreId) {
+        await storecontroller.getById(storeId);
+        StoresItem item = storecontroller.storeItem!;
 
-        List<CartData> cartmodellist = [];
-        Response responsev2 = await cartRepo.getlistcartbystore(storeid);
-        if (responsev2.statusCode == 200) {
-          var dataproduct = responsev2.body;
-          cartmodellist.addAll(Cartmodel.fromJson(dataproduct).getdata ?? []);
-          print("Lấy danh sách giở hàng mới thành công");
+        List<CartData> cartModelList = [];
+        Response responseV2 = await cartRepo.getListCartByStore(storeId);
+        if (responseV2.statusCode == 200) {
+          var dataProduct = responseV2.body;
+          cartModelList.addAll(CartModel.fromJson(dataProduct).data ?? []);
         } else {
-          listcart = [];
-          print("Không có sản phẩm");
+          listCart = [];
           return;
         }
-        Newcartmodel newcartmodel =
-            Newcartmodel(storeitem: item, cartdata: cartmodellist);
-        listcart.add(newcartmodel);
+        NewCartModel newCartModel =
+            NewCartModel(storeItem: item, cartData: cartModelList);
+        listCart.add(newCartModel);
 
         update();
       }
-    } else {
-      print("Không có cửa hàng");
-    }
+    } else {}
   }
 
-  // * Hàm lấy các sản phẩm trong được thanh toán
-  Future<void> getlistcartorder() async {
-    listcartinorder.clear();
-    if (_IDSelectedStore.isNotEmpty) {
-      for (int storeid in _IDSelectedStore) {
-        await storecontroller.getbyid(storeid);
-        Storesitem item = storecontroller.storeItem!;
+  Future<void> getListCartOrder() async {
+    listCartInOrder.clear();
+    if (idSelectedStore.isNotEmpty) {
+      for (int storeId in idSelectedStore) {
+        await storecontroller.getById(storeId);
+        StoresItem item = storecontroller.storeItem!;
 
-        Response responsev2 = await cartRepo.getlistcartbystore(storeid);
-        if (responsev2.statusCode == 200) {
-          var dataproduct = responsev2.body;
-          List<CartData> cartmodellist =
-              Cartmodel.fromJson(dataproduct).getdata ?? [];
+        Response responseV2 = await cartRepo.getListCartByStore(storeId);
+        if (responseV2.statusCode == 200) {
+          var dataProduct = responseV2.body;
+          List<CartData> cartModelList =
+              CartModel.fromJson(dataProduct).data ?? [];
 
-          Newcartmodel newcartmodel =
-              Newcartmodel(storeitem: item, cartdata: cartmodellist);
-          listcartinorder.add(newcartmodel);
+          NewCartModel newCartModel =
+              NewCartModel(storeItem: item, cartData: cartModelList);
+          listCartInOrder.add(newCartModel);
 
-          cartmodellist.forEach((idcart) {
-            _IDSelectedItem.remove(idcart.cartId);
-          });
-          print("Lấy danh sách giỏ hàng mới thành công");
+          for (var idCart in cartModelList) {
+            idSelectedItem.remove(idCart.cartId);
+          }
         } else {
-          print("Không có sản phẩm");
           return;
         }
         update();
       }
     }
 
-    if (_IDSelectedItem.isNotEmpty) {
-      print("Product ${_IDSelectedItem}");
-      for (int productId in _IDSelectedItem) {
-        Response response = await cartRepo.getbyid(productId);
+    if (idSelectedItem.isNotEmpty) {
+      for (int cartId in idSelectedItem) {
+        Response response = await cartRepo.getById(cartId);
         if (response.statusCode == 200) {
           var data = response.body;
-          print(data);
           CartData cartData = CartData.fromJson(data["data"][0]);
-          bool newitem = true;
-          for (Newcartmodel cart in listcartinorder) {
-            if (cart.storeitem!.storeId == cartData.product!.storeId) {
-              Set<int> cartIdSet = cart.cartdata!.map((e) => e.cartId!).toSet();
+          bool newItem = true;
+          for (NewCartModel cart in listCartInOrder) {
+            if (cart.storeItem!.storeId == cartData.product!.storeId) {
+              Set<int> cartIdSet = cart.cartData!.map((e) => e.cartId!).toSet();
               if (!cartIdSet.contains(cartData.cartId)) {
-                cart.cartdata!.add(cartData);
-                newitem = false;
+                cart.cartData!.add(cartData);
+                newItem = false;
                 update();
               } else {
-                newitem = false;
+                newItem = false;
               }
             }
           }
-          if (newitem) {
-            await storecontroller.getbyid(cartData.product!.storeId!);
-            Storesitem storeitem = storecontroller.storeItem!;
+          if (newItem) {
+            await storecontroller.getById(cartData.product!.storeId!);
+            StoresItem storeItem = storecontroller.storeItem!;
 
-            Newcartmodel newcartmodel =
-                Newcartmodel(storeitem: storeitem, cartdata: [cartData]);
-            listcartinorder.add(newcartmodel);
+            NewCartModel newCartModel =
+                NewCartModel(storeItem: storeItem, cartData: [cartData]);
+            listCartInOrder.add(newCartModel);
+            update();
+          }
+        }
+      }
+    }
+    if (idSelectedCombo.isNotEmpty) {
+      for (int cartId in idSelectedCombo) {
+        Response response = await cartRepo.getById(cartId);
+        if (response.statusCode == 200) {
+          var data = response.body;
+          CartData cartData = CartData.fromJson(data["data"][0]);
+          bool newItem = true;
+          for (NewCartModel cart in listCartInOrder) {
+            if (cart.storeItem!.storeId == cartData.combo!.storeId) {
+              Set<int> cartIdSet = cart.cartData!.map((e) => e.cartId!).toSet();
+              if (!cartIdSet.contains(cartData.cartId)) {
+                cart.cartData!.add(cartData);
+                newItem = false;
+                update();
+              } else {
+                newItem = false;
+              }
+            }
+          }
+          if (newItem) {
+            await storecontroller.getById(cartData.combo!.storeId!);
+            StoresItem storeItem = storecontroller.storeItem!;
+
+            NewCartModel newCartModel =
+                NewCartModel(storeItem: storeItem, cartData: [cartData]);
+            listCartInOrder.add(newCartModel);
             update();
           }
         }

@@ -2,10 +2,8 @@ import 'dart:convert';
 
 import 'package:android_project/data/controller/Auth_controller.dart';
 import 'package:android_project/data/controller/Chart_controller.dart';
-import 'package:android_project/models/Dto/Message.dart';
-import 'package:android_project/models/Model/Messagemodel.dart';
+import 'package:android_project/models/Model/MessageModel.dart';
 import 'package:android_project/page/chat_page/chart_header.dart';
-import 'package:android_project/page/profile_page/profile_footer.dart';
 import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
@@ -15,28 +13,27 @@ import 'package:image_picker/image_picker.dart';
 import 'package:web_socket_channel/io.dart';
 import 'dart:io';
 
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 class ChartPage extends StatefulWidget {
-  const ChartPage({Key? key}) : super(key: key);
+  const ChartPage({super.key});
 
   @override
-  _ChartPageState createState() => _ChartPageState();
+  ChartPageState createState() => ChartPageState();
 }
 
-class _ChartPageState extends State<ChartPage>
+class ChartPageState extends State<ChartPage>
     with SingleTickerProviderStateMixin {
-  // khai báo biến
+  
   TextEditingController searchController = TextEditingController();
   TextEditingController sendController = TextEditingController();
   FocusNode focusNode = FocusNode();
   late IOWebSocketChannel _channel;
-  List<Usermessage> listchart = [];
+  List<UserMessage> listChart = [];
   bool trans = false;
   File? _image;
-  String imagebase64 = "";
-  int idme = 0;
-  int idyou = 0;
+  String imageBase64 = "";
+  int idMe = 0;
+  int idYou = 0;
 
   ChartController chartController = Get.find<ChartController>();
   AuthController authController = Get.find<AuthController>();
@@ -44,8 +41,8 @@ class _ChartPageState extends State<ChartPage>
   void initState() {
     super.initState();
 
-    chartController.getall();
-    idme = authController.getiduser;
+    chartController.getAll();
+    idMe = authController.idUser;
     HttpClient client = HttpClient()
       ..badCertificateCallback =
           (X509Certificate cert, String host, int port) => true;
@@ -58,9 +55,8 @@ class _ChartPageState extends State<ChartPage>
     _channel.stream.listen((message) {
       setState(() {
         var decodedMessage = jsonDecode(message);
-        listchart.add(Usermessage.fromJson(decodedMessage));
+        listChart.add(UserMessage.fromJson(decodedMessage));
       });
-      print("Tin nhắn nhận được: $message");
     });
     focusNode.addListener(() {
       setState(() {
@@ -70,31 +66,25 @@ class _ChartPageState extends State<ChartPage>
   }
 
   bool isPicking = false;
-
   Future<void> _pickImage() async {
     if (isPicking) return;
-
     setState(() {
       isPicking = true;
     });
-
     try {
       final picker = ImagePicker();
       final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
       if (pickedFile != null) {
         File imageFile = File(pickedFile.path);
-
         List<int> imageBytes = await imageFile.readAsBytes();
         String base64Image = base64Encode(imageBytes);
-
         setState(() {
           _image = imageFile;
-          imagebase64 = base64Image;
+          imageBase64 = base64Image;
         });
       }
     } catch (e) {
-      print('Error picking image: $e');
+      return;
     } finally {
       setState(() {
         isPicking = false;
@@ -102,8 +92,8 @@ class _ChartPageState extends State<ChartPage>
     }
   }
 
-  void _reconnect() {
-    Future.delayed(Duration(seconds: 5), () {
+  void reconnect() {
+    Future.delayed(const Duration(seconds: 5), () {
       HttpClient client = HttpClient()
         ..badCertificateCallback =
             (X509Certificate cert, String host, int port) => true;
@@ -118,20 +108,17 @@ class _ChartPageState extends State<ChartPage>
             try {
               var decodedMessage = jsonDecode(message);
               setState(() {
-                listchart.add(Usermessage.fromJson(decodedMessage));
+                listChart.add(UserMessage.fromJson(decodedMessage));
               });
             } catch (e) {
-              print("Lỗi khi giải mã tin nhắn: $e");
+              return;
             }
           });
-          print("Tin nhắn nhận được: $message");
         },
         onError: (error) {
-          print("Lỗi WebSocket: $error");
         },
         onDone: () {
-          print("Kết nối WebSocket đã đóng");
-          _reconnect();
+          reconnect();
         },
       );
     });
@@ -140,7 +127,7 @@ class _ChartPageState extends State<ChartPage>
   void startSessionSocket() {
     final data = {
       "type": "identify",
-      "userId": idme,
+      "userId": idMe,
     };
     _channel.sink.add(jsonEncode(data));
   }
@@ -149,8 +136,8 @@ class _ChartPageState extends State<ChartPage>
     String message = sendController.text.trim();
     if (message.isNotEmpty) {
       final data = {
-        "sender": idme,
-        "receiver": idyou,
+        "sender": idMe,
+        "receiver": idYou,
         "message": message,
         "localTime": "",
         "image": "",
@@ -159,27 +146,27 @@ class _ChartPageState extends State<ChartPage>
       _channel.sink.add(jsonEncode(data));
       sendController.clear();
     }
-    if (!imagebase64.isEmpty) {
-      chartController.senImage(idme, idyou, imagebase64);
-      updateData(idyou);
+    if (imageBase64.isNotEmpty) {
+      chartController.senImage(idMe, idYou, imageBase64);
+      updateData(idYou);
     }
   }
 
-  Future<void> updateData(int idreceiver) async {
-    listchart.clear();
+  Future<void> updateData(int idReceiver) async {
+    listChart.clear();
 
-    await chartController.getlistmessage(idreceiver);
+    await chartController.getListMessage(idReceiver);
 
-    while (chartController.getisLoadingMessage == true) {
-      await Future.delayed(Duration(milliseconds: 500));
+    while (chartController.isLoadingMessage == true) {
+      await Future.delayed(const Duration(milliseconds: 500));
     }
 
     setState(() {
-      listchart = chartController.getlistusermesage;
+      listChart = chartController.listUserMessage;
     });
     setState(() {
       _image = null;
-      imagebase64 = "";
+      imageBase64 = "";
     });
   }
 
@@ -200,7 +187,7 @@ class _ChartPageState extends State<ChartPage>
         resizeToAvoidBottomInset: true,
         body: Column(
           children: [
-            ChartHeader(),
+            const ChartHeader(),
             Expanded(
               child: Stack(
                 children: [
@@ -212,14 +199,14 @@ class _ChartPageState extends State<ChartPage>
                       child: GestureDetector(
                         onTap: () {
                           if (status) {
-                            chartController.ChangeShow();
+                            chartController.changeShow();
                           }
                         },
                         child: Column(
                           children: [
                             Expanded(
                               child: SingleChildScrollView(
-                                child: listchart.isEmpty
+                                child: listChart.isEmpty
                                     ? Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -228,7 +215,7 @@ class _ChartPageState extends State<ChartPage>
                                           Align(
                                             alignment: Alignment.centerLeft,
                                             child: Container(
-                                              padding: EdgeInsets.all(15),
+                                              padding: const EdgeInsets.all(15),
                                               margin: EdgeInsets.only(
                                                   left: AppDimention.size10),
                                               decoration: BoxDecoration(
@@ -237,14 +224,14 @@ class _ChartPageState extends State<ChartPage>
                                                     BorderRadius.circular(
                                                         AppDimention.size10),
                                               ),
-                                              child: Text("Chào bạn "),
+                                              child: const Text("Chào bạn "),
                                             ),
                                           ),
                                           SizedBox(height: AppDimention.size20),
                                           Align(
                                             alignment: Alignment.centerRight,
                                             child: Container(
-                                              padding: EdgeInsets.all(15),
+                                              padding: const EdgeInsets.all(15),
                                               margin: EdgeInsets.only(
                                                   right: AppDimention.size10),
                                               decoration: BoxDecoration(
@@ -253,7 +240,7 @@ class _ChartPageState extends State<ChartPage>
                                                     BorderRadius.circular(
                                                         AppDimention.size10),
                                               ),
-                                              child: Text("Chào bạn "),
+                                              child: const Text("Chào bạn "),
                                             ),
                                           ),
                                           SizedBox(height: AppDimention.size10),
@@ -264,7 +251,7 @@ class _ChartPageState extends State<ChartPage>
                                             CrossAxisAlignment.start,
                                         children: [
                                           SizedBox(height: AppDimention.size10),
-                                          ...listchart.map((item) {
+                                          ...listChart.map((item) {
                                             // DecorationImage? imageDecoration;
                                             // if (item.image != null) {
                                             //   imageDecoration = DecorationImage(
@@ -276,20 +263,20 @@ class _ChartPageState extends State<ChartPage>
 
                                             return Align(
                                                     alignment: item.sender ==
-                                                            idyou
+                                                            idYou
                                                         ? Alignment.centerLeft
                                                         : Alignment.centerRight,
                                                     child: Container(
-                                                      padding: EdgeInsets.only(
+                                                      padding: const EdgeInsets.only(
                                                           left: 15,
                                                           right: 15,
                                                           bottom: 10,
                                                           top: 10),
-                                                      margin: EdgeInsets.only(
+                                                      margin: const EdgeInsets.only(
                                                           top: 10),
                                                       decoration: BoxDecoration(
                                                           color: item.sender ==
-                                                                  idyou
+                                                                  idYou
                                                               ? const Color
                                                                   .fromARGB(66,
                                                                   48, 40, 15)
@@ -302,14 +289,14 @@ class _ChartPageState extends State<ChartPage>
                                                          ),
                                                       child: Text(
                                                         item.message.toString(),
-                                                        style: TextStyle(
+                                                        style: const TextStyle(
                                                             color:
                                                                 Colors.white),
                                                       ),
                                                     ),
                                                   );
                                                 
-                                          }).toList(),
+                                          }),
                                           SizedBox(height: AppDimention.size20),
                                         ],
                                       ),
@@ -319,13 +306,13 @@ class _ChartPageState extends State<ChartPage>
                         ),
                       )),
                   AnimatedPositioned(
-                    duration: Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 300),
                     top: 0,
                     left: status ? 0 : -MediaQuery.of(context).size.width,
                     child: Container(
                       width: AppDimention.size100 * 3,
                       height: MediaQuery.of(context).size.height,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: AppColor.mainColor,
                       ),
                       child: SingleChildScrollView(
@@ -334,7 +321,7 @@ class _ChartPageState extends State<ChartPage>
                             Container(
                                 width: AppDimention.size100 * 3,
                                 height: AppDimention.size60,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   color: Colors.white,
                                   border: Border(
                                       right: BorderSide(
@@ -399,7 +386,7 @@ class _ChartPageState extends State<ChartPage>
                             Container(
                               width: AppDimention.size100 * 3,
                               height: AppDimention.size60,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 color: Colors.white,
                                 border: Border(
                                     right: BorderSide(
@@ -408,7 +395,7 @@ class _ChartPageState extends State<ChartPage>
                               child: TextField(
                                 controller: searchController,
                                 focusNode: focusNode,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   hintText: "Search ...",
                                   prefixIcon: Icon(
                                     Icons.search,
@@ -427,21 +414,21 @@ class _ChartPageState extends State<ChartPage>
                               ),
                             ),
                             GetBuilder<ChartController>(
-                              builder: (listusercontroller) {
+                              builder: (listUserController) {
                                 return Column(
                                   children:
-                                      listusercontroller.listUser.map((item) {
+                                      listUserController.listUser.map((item) {
                                     return GestureDetector(
                                       onTap: () async {
-                                        await listusercontroller
-                                            .getlistmessage(item.id!);
-                                        listchart = listusercontroller
-                                            .getlistusermesage;
-                                        listusercontroller
-                                            .updatechartname(item.fullName!);
+                                        await listUserController
+                                            .getListMessage(item.id!);
+                                        listChart = listUserController
+                                            .listUserMessage;
+                                        listUserController
+                                            .updateChartName(item.fullName!);
 
-                                        idyou = Get.find<ChartController>()
-                                            .getidreceiver;
+                                        idYou = Get.find<ChartController>()
+                                            .idReceiver;
                                       },
                                       child: Container(
                                         width: AppDimention.size100 * 2.9,
@@ -464,7 +451,7 @@ class _ChartPageState extends State<ChartPage>
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           AppDimention.size100),
-                                                  image: DecorationImage(
+                                                  image: const DecorationImage(
                                                       fit: BoxFit.cover,
                                                       image: AssetImage(
                                                           "assets/image/logo.png"))),
@@ -479,16 +466,16 @@ class _ChartPageState extends State<ChartPage>
                                                     height: AppDimention.size5),
                                                 Text(
                                                   item.fullName.toString(),
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
-                                                Container(
+                                                SizedBox(
                                                   width: AppDimention.size100 *
                                                       1.8,
                                                   child: Text(
-                                                    "Cảm ơn shop nhiều hi hi hiahsdlkash",
+                                                    "${item.email}",
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                   ),
@@ -550,11 +537,11 @@ class _ChartPageState extends State<ChartPage>
                       ],
                     ),
                   )
-                : SizedBox.shrink(),
+                : const SizedBox.shrink(),
             Container(
               width: AppDimention.screenWidth,
               height: AppDimention.size70,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: AppColor.mainColor,
               ),
               child: Row(
@@ -563,7 +550,7 @@ class _ChartPageState extends State<ChartPage>
                     onTap: () {
                       _pickImage();
                     },
-                    child: Container(
+                    child: SizedBox(
                       width: AppDimention.size70,
                       height: AppDimention.size70,
                       child: Center(
@@ -587,7 +574,7 @@ class _ChartPageState extends State<ChartPage>
                       ),
                       child: TextField(
                         controller: sendController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: "Chart ...",
                           hintStyle: TextStyle(color: Colors.black12),
                           focusedBorder: OutlineInputBorder(
@@ -607,7 +594,7 @@ class _ChartPageState extends State<ChartPage>
                     onTap: () {
                       _sendMessage();
                     },
-                    child: Container(
+                    child: SizedBox(
                       width: AppDimention.size70,
                       height: AppDimention.size70,
                       child: Center(

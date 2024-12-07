@@ -1,30 +1,29 @@
 import 'package:android_project/models/Model/Item/ProductItem.dart';
 
-class Productmodel {
+class ProductModel {
   bool? status;
   String? message;
-  List<Productitem>? listproduct;
-  List<Productitem>? get get_listproduct => listproduct;
+  List<Productitem>? listProduct = [];
 
-  Productmodel({this.status, this.message, this.listproduct});
+  ProductModel({this.status, this.message, this.listProduct});
 
-  Productmodel.fromJson(Map<String, dynamic> json) {
+  ProductModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
     if (json['data'] != null) {
-      listproduct = <Productitem>[];
+      listProduct = <Productitem>[];
       json['data'].forEach((v) {
-        listproduct!.add(new Productitem.fromJson(v));
+        listProduct!.add(Productitem.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['message'] = this.message;
-    if (this.listproduct != null) {
-      data['data'] = this.listproduct!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['message'] = message;
+    if (listProduct != null) {
+      data['data'] = listProduct!.map((v) => v.toJson()).toList();
     }
     return data;
   }

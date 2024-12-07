@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:android_project/data/controller/Auth_controller.dart';
 import 'package:android_project/page/profile_page/profile_controll.dart';
 import 'package:android_project/page/profile_page/profile_footer.dart';
@@ -10,8 +12,8 @@ import 'package:get/get.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -24,14 +26,14 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Color.fromRGBO(243, 243, 243, 1),
+      backgroundColor: const Color.fromRGBO(243, 243, 243, 1),
       body: Stack(
         children: [
          
           Container(
             width: double.infinity,
             height: double.infinity,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/image/Frame.png'),
                 fit: BoxFit.cover,
@@ -42,16 +44,15 @@ class _ProfilePageState extends State<ProfilePage> {
           Column(
             children: [
               Obx(() {
-                if (!authController.IsLogin.value) {
-                  return Container(
-                    width: AppDimention.screenWidth,
-                    height: AppDimention.screenHeight - AppDimention.size60,
+                if (!authController.isLogin.value) {
+                  return Expanded(
+                    
                     child: Center(
                       child: GestureDetector(
                         onTap: () {
                           Get.toNamed(AppRoute.LOGIN_PAGE);
                         },
-                        child: Center(
+                        child: const Center(
                           child: Text("Vui lòng đăng nhập"),
                         ),
                       ),
@@ -62,19 +63,19 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          ProfileHeader(),
+                          const ProfileHeader(),
                           SizedBox(
                             height: AppDimention.size10,
                           ),
-                          ProfileControll(),
-                          ProfileSetting(),
+                          const ProfileControll(),
+                          const ProfileSetting(),
                         ],
                       ),
                     ),
                   );
                 }
               }),
-              ProfileFooter(),
+              const ProfileFooter(),
             ],
           ),
         ],

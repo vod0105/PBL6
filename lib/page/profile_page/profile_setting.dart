@@ -8,19 +8,18 @@ import 'package:get/get.dart';
 
 class ProfileSetting extends StatefulWidget {
   const ProfileSetting({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
-  _ProfileSettingState createState() => _ProfileSettingState();
+  ProfileSettingState createState() => ProfileSettingState();
 }
 
-class _ProfileSettingState extends State<ProfileSetting> {
+class ProfileSettingState extends State<ProfileSetting> {
   Color _rowColor = Colors.transparent;
   Color _rowColor1 = Colors.transparent;
   Color _rowColor2 = Colors.transparent;
   Color _rowColor3 = Colors.transparent;
-  Color _rowColor4 = Colors.transparent;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +64,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SelectSettingCustom(
+                      const SelectSettingCustom(
                         icon: Icons.person_2_outlined,
                         title: "Hồ sơ",
                       ),
@@ -105,7 +104,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SelectSettingCustom(
+                      const SelectSettingCustom(
                         icon: Icons.settings_applications_outlined,
                         title: "Cài đặt",
                       ),
@@ -145,7 +144,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SelectSettingCustom(
+                      const SelectSettingCustom(
                         icon: Icons.circle_notifications_outlined,
                         title: "Thông báo",
                       ),
@@ -158,43 +157,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                   ),
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  Get.toNamed(AppRoute.TRANSFER_POINT_PAGE);
-                },
-                onTapDown: (_) {
-                  setState(() {
-                    _rowColor4 = Colors.grey.withOpacity(0.3);
-                  });
-                },
-                onTapUp: (_) {
-                  setState(() {
-                    _rowColor4 = Colors.transparent;
-                  });
-                },
-                child: Container(
-                  padding: EdgeInsets.only(top:AppDimention.size10,bottom: AppDimention.size10),
-                  
-                  decoration: BoxDecoration(
-                    color: _rowColor4,
-                    borderRadius: BorderRadius.circular(AppDimention.size10),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SelectSettingCustom(
-                        icon: Icons.polyline_outlined,
-                        title: "Đổi điểm",
-                      ),
-                      Icon(
-                        Icons.arrow_right_rounded,
-                        size: AppDimention.size40,
-                        color: AppColor.mainColor,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              
               SizedBox(
                 height: AppDimention.size10,
               ),
@@ -222,7 +185,7 @@ class _ProfileSettingState extends State<ProfileSetting> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SelectSettingCustom(
+                      const SelectSettingCustom(
                         icon: Icons.login,
                         title: "Đăng xuất",
                       ),

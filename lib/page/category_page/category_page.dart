@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 
 class CategoryPage extends StatefulWidget {
   const CategoryPage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   @override
-  _CategoryPageState createState() => _CategoryPageState();
+  CategoryPageState createState() => CategoryPageState();
 }
 
-class _CategoryPageState extends State<CategoryPage> {
+class CategoryPageState extends State<CategoryPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Column(
         children: [
           CategoryHeader(),

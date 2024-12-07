@@ -3,6 +3,7 @@ import 'package:android_project/data/controller/Cart_controller.dart';
 import 'package:android_project/data/controller/Category_controller.dart';
 import 'package:android_project/data/controller/Combo_controller.dart';
 import 'package:android_project/data/controller/Product_controller.dart';
+import 'package:android_project/data/controller/Promotion_controller.dart';
 import 'package:android_project/data/controller/Size_controller.dart';
 import 'package:android_project/data/controller/Store_Controller.dart';
 import 'package:android_project/data/controller/User_controller.dart';
@@ -18,45 +19,39 @@ import 'package:geolocator/geolocator.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dep.init();
-   await initNotifications();
-  
+  await initNotifications();
+
   bool isLocationEnabled = await checkLocationPermission();
   if (!isLocationEnabled) {
-    runApp(LocationErrorApp()); 
+    runApp(const LocationErrorApp());
   } else {
     runApp(const MyApp());
   }
 }
+
 Future<bool> checkLocationPermission() async {
   bool serviceEnabled;
   LocationPermission permission;
 
-  // Kiểm tra dịch vụ vị trí có bật không
   serviceEnabled = await Geolocator.isLocationServiceEnabled();
   if (!serviceEnabled) {
-    return false; 
+    return false;
   }
 
-  // Kiểm tra quyền truy cập vị trí
   permission = await Geolocator.checkPermission();
   if (permission == LocationPermission.denied) {
-    // Yêu cầu cấp quyền nếu bị từ chối
     permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.denied) {
-      // Nếu quyền vẫn bị từ chối sau khi yêu cầu
-      return false; 
+      return false;
     }
   }
 
-  // Nếu quyền bị từ chối vĩnh viễn
   if (permission == LocationPermission.deniedForever) {
-    return false; 
+    return false;
   }
 
-  // Quyền đã được cấp
-  return true; 
+  return true;
 }
-
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -71,7 +66,6 @@ Future<void> initNotifications() async {
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 }
 
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -79,16 +73,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final authController = Get.find<AuthController>();
     return Obx(() {
-      if (authController.IsLogin.value) {
-        Get.putAsync(() => Announcecheckservice().initService());
-        Get.find<CartController>().getall();
-        Get.find<UserController>().getuserprofile();
-        Get.find<UserController>().getannounce();
-        Get.find<SizeController>().getall();
-        Get.find<ComboController>().getall();
-        Get.find<ProductController>().getall();
-        Get.find<Storecontroller>().getall();
-        Get.find<CategoryController>().getall();
+      if (authController.isLogin.value) {
+        Get.putAsync(() => AnnounceCheckService().initService());
+        Get.find<CartController>().getAll();
+        Get.find<UserController>().getUserProfile();
+        Get.find<UserController>().getAnnounce();
+        Get.find<SizeController>().getAll();
+        Get.find<ComboController>().getAll();
+        Get.find<ProductController>().getAll();
+        Get.find<ProductController>().getRecommendProduct();
+        Get.find<Storecontroller>().getAll();
+        Get.find<CategoryController>().getAll();
+        Get.find<PromotionController>().getAll();
       }
 
       return GetMaterialApp(
@@ -102,9 +98,11 @@ class MyApp extends StatelessWidget {
 }
 
 class LocationErrorApp extends StatelessWidget {
+  const LocationErrorApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: Scaffold(
         body: Center(
           child: Text(

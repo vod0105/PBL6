@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:android_project/page/login_page/loading/loading_animation.dart';
 import 'package:android_project/route/app_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,19 +6,31 @@ import 'package:android_project/data/controller/Category_controller.dart';
 import 'package:android_project/data/controller/Product_controller.dart';
 import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomeFolder extends StatefulWidget {
-  const HomeFolder({Key? key}) : super(key: key);
+  const HomeFolder({super.key});
 
   @override
-  _HomeFolderState createState() => _HomeFolderState();
+  HomeFolderState createState() => HomeFolderState();
 }
 
-class _HomeFolderState extends State<HomeFolder> {
+class HomeFolderState extends State<HomeFolder> {
   int? categorySelected = 0;
   final ProductController productController = Get.find<ProductController>();
   final CategoryController categoryController = Get.find<CategoryController>();
   final ScrollController _scrollController = ScrollController();
+
+  List<IconData> listIconCategory = [
+    FontAwesomeIcons.burger,
+    FontAwesomeIcons.pizzaSlice,
+    FontAwesomeIcons.fire,
+    FontAwesomeIcons.lemon,
+    FontAwesomeIcons.cheese,
+    FontAwesomeIcons.drumstickBite,
+    FontAwesomeIcons.cookie,
+    FontAwesomeIcons.martiniGlassCitrus
+  ];
 
   bool? loaded = false;
 
@@ -38,7 +49,7 @@ class _HomeFolderState extends State<HomeFolder> {
 
   Future<void> loadData() async {
     while (categoryController.isLoading == true) {
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 1));
     }
     await productController
         .getProductByCategoryId(categoryController.categoryList[0].categoryId!);
@@ -55,8 +66,8 @@ class _HomeFolderState extends State<HomeFolder> {
     });
 
     _scrollController.animateTo(
-      index * (AppDimention.size150 + AppDimention.size10),
-      duration: Duration(milliseconds: 300),
+      index * (AppDimention.size150 - 5 * index ),
+      duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
   }
@@ -69,15 +80,14 @@ class _HomeFolderState extends State<HomeFolder> {
 
   @override
   Widget build(BuildContext context) {
-    final loadingScreen = context.findAncestorWidgetOfExactType<BarLoadingScreen>();
     return GetBuilder<CategoryController>(
       builder: (categoryController) {
         return categoryController.isLoading!
-            ? Container(
+            ? SizedBox(
                 width: AppDimention.screenWidth,
-                child: Center(child: CircularProgressIndicator()),
+                child: const Center(child: CircularProgressIndicator()),
               )
-            : Container(
+            : SizedBox(
                 width: AppDimention.screenWidth,
                 child: Column(
                   children: [
@@ -87,7 +97,8 @@ class _HomeFolderState extends State<HomeFolder> {
                         Text(
                           "Danh mục sản phẩm",
                           style: TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.w600),
+                            
+                              fontSize: 25, fontWeight: FontWeight.w600,color: Colors.black.withOpacity(0.7)),
                         ),
                       ],
                     ),
@@ -95,7 +106,7 @@ class _HomeFolderState extends State<HomeFolder> {
                       width: AppDimention.screenWidth,
                       padding: EdgeInsets.only(
                           top: AppDimention.size5, bottom: AppDimention.size15),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.white,
                         border: Border(
                             bottom:
@@ -115,15 +126,16 @@ class _HomeFolderState extends State<HomeFolder> {
                                       onTap: () => _onCategorySelected(
                                           item.categoryId!, index),
                                       child: Container(
-                                        width: AppDimention.size150,
+                                        padding: EdgeInsets.only(left: AppDimention.size20,right: AppDimention.size20),
                                         height: AppDimention.size50,
                                         margin: EdgeInsets.only(
-                                            left: AppDimention.size10,
+                                            left: AppDimention.size20,
                                             top: AppDimention.size10),
                                         decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(AppDimention.size10),
                                           gradient: item.categoryId ==
                                                   categorySelected
-                                              ? LinearGradient(
+                                              ? const LinearGradient(
                                                   begin: Alignment.bottomCenter,
                                                   end: Alignment.topCenter,
                                                   colors: [
@@ -142,32 +154,50 @@ class _HomeFolderState extends State<HomeFolder> {
                                             ),
                                           ),
                                         ),
-                                        child: Center(
-                                            child: Text(item.categoryName!)),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              listIconCategory[index],
+                                              color: item.categoryId ==
+                                                      categorySelected
+                                                  ? Colors.blue
+                                                  : Colors.amber,
+                                              size: 15,
+                                            ),
+                                            SizedBox(width: AppDimention.size10,),
+                                            Text(item.categoryName!,style: TextStyle(
+                                              color: item.categoryId ==
+                                                      categorySelected
+                                                  ? Colors.blue
+                                                  : Colors.amber
+                                            ),)
+                                          ],
+                                        ),
                                       ),
                                     );
                                   }),
                                 )
-                              : Container(
+                              : SizedBox(
                                   width: AppDimention.screenWidth,
-                                  child: Center(
+                                  child: const Center(
                                       child: CircularProgressIndicator()),
                                 )),
                     ),
                     SizedBox(height: AppDimention.size10),
                     if (loaded == true)
-                      Container(
+                      SizedBox(
                         width: AppDimention.screenWidth,
                         child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: GetBuilder<ProductController>(
                             builder: (productController) {
                               return productController
-                                      .isLoadingProductIncategory!
-                                  ? CircularProgressIndicator()
+                                      .isLoadingProductInCategory
+                                  ? const CircularProgressIndicator()
                                   : Row(
                                       children: productController
-                                          .productListBycategory
+                                          .productListByCategory
                                           .map((item) {
                                         return GestureDetector(
                                           onTap: () {
@@ -202,24 +232,26 @@ class _HomeFolderState extends State<HomeFolder> {
                                                   decoration: BoxDecoration(
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            AppDimention
+                                                            AppDimention 
                                                                 .size10),
                                                     image: DecorationImage(
                                                       fit: BoxFit.cover,
-                                                      image: MemoryImage(
-                                                          base64Decode(
-                                                              item.image!)),
+                                                      image:item.image != null ?  MemoryImage(base64Decode(item.image!)) : const AssetImage("assets/image/LoadingBg.png"),
                                                     ),
                                                   ),
                                                 ),
                                                 SizedBox(
                                                     height:
                                                         AppDimention.size20),
-                                                Text(item.productName!,
-                                                    style: TextStyle(
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.w600)),
+                                                Text(
+                                                  item.productName!,
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.w600,color: Colors.black.withOpacity(0.7)),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
                                                 SizedBox(
                                                     height:
                                                         AppDimention.size10),
@@ -237,7 +269,6 @@ class _HomeFolderState extends State<HomeFolder> {
                                                             if (index <
                                                                 item.averageRate!
                                                                     .floor()) {
-                                                           
                                                               return Icon(
                                                                   Icons.star,
                                                                   color: AppColor
@@ -250,7 +281,6 @@ class _HomeFolderState extends State<HomeFolder> {
                                                                 item.averageRate! %
                                                                         1 !=
                                                                     0) {
-                                                              
                                                               return Icon(
                                                                   Icons
                                                                       .star_half,
@@ -259,7 +289,6 @@ class _HomeFolderState extends State<HomeFolder> {
                                                                   size: AppDimention
                                                                       .size15);
                                                             } else {
-                                                             
                                                               return Icon(
                                                                   Icons
                                                                       .star_border,
@@ -271,12 +300,16 @@ class _HomeFolderState extends State<HomeFolder> {
                                                           }),
                                                         ),
                                                         Text(
-                                                            "(${item.averageRate})",style: TextStyle(color: Colors.red),),
+                                                          "(${item.averageRate})",
+                                                          style: const TextStyle(
+                                                              color:
+                                                                  Colors.red),
+                                                        ),
                                                       ],
                                                     ),
                                                     Text(
                                                       "đ${_formatNumber(item.price!.toInt())}",
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                           color: AppColor
                                                               .mainColor,
                                                           fontSize: 18),

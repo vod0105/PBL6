@@ -1,18 +1,17 @@
 import 'package:android_project/models/Model/UserModel.dart';
 
-class Chartmodel {
-  List<UserChart>? listuser;
-  List<UserChart>? get getlistuser => listuser;
+class ChartModel {
+  List<UserChart>? listUser;
   int? eC;
   String? eM;
 
-  Chartmodel({this.listuser, this.eC, this.eM});
+  ChartModel({this.listUser, this.eC, this.eM});
 
-  Chartmodel.fromJson(Map<String, dynamic> json) {
+  ChartModel.fromJson(Map<String, dynamic> json) {
     if (json['DT'] != null) {
-      listuser = <UserChart>[];
+      listUser = <UserChart>[];
       json['DT'].forEach((v) {
-        listuser!.add(new UserChart.fromJson(v));
+        listUser!.add(UserChart.fromJson(v));
       });
     }
     eC = json['EC'];
@@ -20,12 +19,12 @@ class Chartmodel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.listuser != null) {
-      data['DT'] = this.listuser!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (listUser != null) {
+      data['DT'] = listUser!.map((v) => v.toJson()).toList();
     }
-    data['EC'] = this.eC;
-    data['EM'] = this.eM;
+    data['EC'] = eC;
+    data['EM'] = eM;
     return data;
   }
 }
@@ -73,25 +72,25 @@ class UserChart {
     updatedAt = json['updatedAt'];
     accountLocked = json['accountLocked'];
     isActive = json['isActive'];
-    role = json['role'] != null ? new Role.fromJson(json['role']) : null;
+    role = json['role'] != null ? Role.fromJson(json['role']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['phoneNumber'] = this.phoneNumber;
-    data['fullName'] = this.fullName;
-    data['avatar'] = this.avatar;
-    data['email'] = this.email;
-    data['address'] = this.address;
-    data['longitude'] = this.longitude;
-    data['latitude'] = this.latitude;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['accountLocked'] = this.accountLocked;
-    data['isActive'] = this.isActive;
-    if (this.role != null) {
-      data['role'] = this.role!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['phoneNumber'] = phoneNumber;
+    data['fullName'] = fullName;
+    data['avatar'] = avatar;
+    data['email'] = email;
+    data['address'] = address;
+    data['longitude'] = longitude;
+    data['latitude'] = latitude;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['accountLocked'] = accountLocked;
+    data['isActive'] = isActive;
+    if (role != null) {
+      data['role'] = role!.toJson();
     }
     return data;
   }

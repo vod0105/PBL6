@@ -6,13 +6,13 @@ import 'package:get/get.dart';
 
 class ChartHeader extends StatefulWidget {
   const ChartHeader({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   @override
-  _ChartHeaderState createState() => _ChartHeaderState();
+  ChartHeaderState createState() => ChartHeaderState();
 }
 
-class _ChartHeaderState extends State<ChartHeader> {
+class ChartHeaderState extends State<ChartHeader> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ChartController>(builder: (chartController) {
@@ -21,12 +21,12 @@ class _ChartHeaderState extends State<ChartHeader> {
         height: AppDimention.size70,
         padding: EdgeInsets.only(
             left: AppDimention.size10, right: AppDimention.size10),
-        decoration: BoxDecoration(color: AppColor.mainColor),
+        decoration: const BoxDecoration(color: AppColor.mainColor),
         child: Row(
           children: [
             GestureDetector(
               onTap: () {
-                chartController.ChangeShow();
+                chartController.changeShow();
               },
               child: Icon(
                 Icons.view_list,
@@ -37,7 +37,7 @@ class _ChartHeaderState extends State<ChartHeader> {
             SizedBox(
               width: AppDimention.size20,
             ),
-            Text(Get.find<ChartController>().getchartname,
+            Text(Get.find<ChartController>().chartName,
                 style: TextStyle(
                     fontSize: AppDimention.size20, color: Colors.white))
           ],

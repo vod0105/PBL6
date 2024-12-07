@@ -7,14 +7,14 @@ import 'package:get/get.dart';
 
 class SearchHeader extends StatefulWidget {
   const SearchHeader({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
-  _SearchHeaderState createState() => _SearchHeaderState();
+  SearchHeaderState createState() => SearchHeaderState();
 }
 
-class _SearchHeaderState extends State<SearchHeader> {
+class SearchHeaderState extends State<SearchHeader> {
   final TextEditingController searchController = TextEditingController();
 
   @override
@@ -38,7 +38,7 @@ class _SearchHeaderState extends State<SearchHeader> {
               onTap: () {
                 Get.toNamed(AppRoute.CAMERA_PAGE);
               },
-              child: Icon(
+              child: const Icon(
                 Icons.camera_alt_outlined,
                 color: AppColor.mainColor,
               ),
@@ -46,7 +46,7 @@ class _SearchHeaderState extends State<SearchHeader> {
             SizedBox(width: AppDimention.size10),
             Expanded(
               child: TextField(
-                onChanged: (Text) {
+                onChanged: (text) {
                   productController.textSearch = searchController.text;
                   productController.search();
                 },
@@ -54,7 +54,7 @@ class _SearchHeaderState extends State<SearchHeader> {
                 decoration: InputDecoration(
                   hintText: "Search ... ",
                   prefixIcon: IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.search,
                       color: AppColor.yellowColor,
                     ),
@@ -64,11 +64,11 @@ class _SearchHeaderState extends State<SearchHeader> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppDimention.size30),
-                    borderSide: BorderSide(width: 1.0, color: Colors.white),
+                    borderSide: const BorderSide(width: 1.0, color: Colors.white),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppDimention.size30),
-                    borderSide: BorderSide(width: 1.0, color: Colors.white),
+                    borderSide: const BorderSide(width: 1.0, color: Colors.white),
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppDimention.size30),
@@ -83,7 +83,7 @@ class _SearchHeaderState extends State<SearchHeader> {
               onTap: () {
                 Get.toNamed(AppRoute.CART_PAGE);
               },
-              child: Icon(Icons.shopping_cart_outlined),
+              child: const Icon(Icons.shopping_cart_outlined),
             )
           ],
         ),

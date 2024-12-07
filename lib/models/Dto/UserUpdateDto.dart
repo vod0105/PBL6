@@ -1,19 +1,19 @@
-class Userupdatedto {
+class UserUpdateDto {
   String fullName;
   String  avatar;
   String email;
   String address;
-  Userupdatedto(
+  UserUpdateDto(
       {required this.fullName,
       required this.avatar,
       required this.email,
       required this.address});
   Map<String, dynamic> toJson() {
-    Map<String, dynamic> data = new Map<String, dynamic>();
-    data["fullName"] = this.fullName;
-    data["avatar"] = this.avatar;
-    data["email"] = this.email;
-    data["address"] = this.address;
+    Map<String, dynamic> data = <String, dynamic>{};
+    data["fullName"] = fullName;
+    data["avatar"] = avatar;
+    data["email"] = email;
+    data["address"] = address;
     return data;
   }
 }

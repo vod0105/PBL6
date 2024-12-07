@@ -6,18 +6,18 @@ class LoginTextfield extends StatefulWidget {
   final String? title;
   final int? type;
 
-  LoginTextfield({
+  const LoginTextfield({
     this.controller,
     this.title,
     this.type,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
-  _LoginTextfieldState createState() => _LoginTextfieldState();
+  LoginTextfieldState createState() => LoginTextfieldState();
 }
 
-class _LoginTextfieldState extends State<LoginTextfield> {
+class LoginTextfieldState extends State<LoginTextfield> {
   late TextEditingController? controller;
   late String? title;
   late int? type;
@@ -46,7 +46,7 @@ class _LoginTextfieldState extends State<LoginTextfield> {
         children: [
           Text(
             title!,
-            style: TextStyle(color: Colors.black54, fontSize: 18),
+            style: const TextStyle(color: Colors.white, fontSize: 18),
           ),
           SizedBox(height: AppDimention.size10),
           type == 1
@@ -57,14 +57,15 @@ class _LoginTextfieldState extends State<LoginTextfield> {
                     horizontal: AppDimention.size20,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.1),
+                    color: Colors.grey.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: TextField(
                     controller: controller,
+                    style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
-                      hintText: "......",
-                      hintStyle: TextStyle(color: Colors.black26, fontSize: 13),
+                      hintText: "............",
+                      hintStyle: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 13),
                       isDense: true,
                       contentPadding: EdgeInsets.symmetric(
                           vertical: AppDimention.size15),
@@ -88,22 +89,22 @@ class _LoginTextfieldState extends State<LoginTextfield> {
                   padding: EdgeInsets.symmetric(
                       horizontal: AppDimention.size10),
                   decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.1),
+                    color: Colors.grey.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
+                      SizedBox(
                         width: AppDimention.screenWidth * 0.76,
                         height: AppDimention.size60,
                         child: TextField(
                           obscureText: isShow, 
                           controller: controller,
+                          style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
-                            hintText: "......",
-                            hintStyle:
-                                TextStyle(color: Colors.black26, fontSize: 13),
+                            hintText: "............",
+                            hintStyle: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 13),
                             isDense: true,
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: AppDimention.size15),
@@ -138,6 +139,7 @@ class _LoginTextfieldState extends State<LoginTextfield> {
                           isShow
                               ? Icons.visibility 
                               : Icons.visibility_off, 
+                          color: Colors.white,
                         ),
                       ),
                     ],

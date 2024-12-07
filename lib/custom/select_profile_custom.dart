@@ -5,12 +5,12 @@ class SelectProfileCustom extends StatelessWidget{
   final IconData icon;
   final String title;
   final String smalltext;
-   SelectProfileCustom({
-       Key? key,
+   const SelectProfileCustom({
+       super.key,
        required this.icon,
        required this.title,
        required this.smalltext,
-   }): super(key:key);
+   });
    @override
    Widget build(BuildContext context) {
        return Container(

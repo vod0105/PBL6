@@ -1,29 +1,27 @@
-import 'package:android_project/custom/clippath_customer.dart';
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:android_project/custom/input_text_custom.dart';
 import 'package:android_project/data/controller/Auth_controller.dart';
-import 'package:android_project/models/Dto/UserDto.dart';
-import 'package:android_project/page/forget_password_page/forget_password_page.dart';
 import 'package:android_project/page/register_page/register_page.dart';
-import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-
 class ForgetPasswordPage extends StatefulWidget {
+  const ForgetPasswordPage({super.key});
+
   @override
   _ForgetPasswordPageState createState() => _ForgetPasswordPageState();
 }
 
 class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController otpcontroller = TextEditingController();
-  final TextEditingController passwordcontroller = TextEditingController();
-  final TextEditingController repasswordcontroller = TextEditingController();
-  bool _isHidden = true;
-  bool _isvalidEmail = false;
+  final TextEditingController otpController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController rePasswordController = TextEditingController();
+  bool isHidden = true;
+  bool isValidEmail = false;
   String announce = "";
   @override
   void dispose() {
@@ -33,17 +31,17 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
-    void _sendotp() {
-      var auth_controller = Get.find<AuthController>();
+    void sendotp() {
+      var authController = Get.find<AuthController>();
       String email = emailController.text.trim();
-      String password = passwordcontroller.text;
-      String repassword = repasswordcontroller.text;
+      String password = passwordController.text;
+      String rePassword = rePasswordController.text;
 
       String pattern = r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\W).{9,}$';
       RegExp regExp = RegExp(pattern);
       bool isValid = regExp.hasMatch(password);
 
-      if (email.isEmpty || password.isEmpty || repassword.isEmpty) {
+      if (email.isEmpty || password.isEmpty || rePassword.isEmpty) {
         setState(() {
           announce = "Vui lòng nhập đủ thông tin";
         });
@@ -53,46 +51,45 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
               "Mật khẩu phải trên 8 kí tự gồm in hoa , in thường và kí tự đặc biệt";
         });
       } else {
-        auth_controller.sendotp(email).then((status) {
+        authController.sendotp(email).then((status) {
           if (status) {
             setState(() {
               announce = "Mã xác nhận được gửi qua email của bạn gồm 6 số";
-              _isvalidEmail = true;
+              isValidEmail = true;
             });
           } else {
             setState(() {
-              announce = Get.find<AuthController>().getvalidatesendotp;
-              _isvalidEmail = false;
+              announce = Get.find<AuthController>().validateSendotp;
+              isValidEmail = false;
             });
           }
         });
       }
     }
 
-    void _verifyotp() {
-      var auth_controller = Get.find<AuthController>();
-      String otp = otpcontroller.text.trim();
+    void verifyotp() {
+      var authController = Get.find<AuthController>();
+      String otp = otpController.text.trim();
       String email = emailController.text.trim();
-      String password = passwordcontroller.text;
+      String password = passwordController.text;
       if (otp.isEmpty) {
         announce = "Vui lòng nhập mã otp";
-      }
-      else{
-         auth_controller.verifyotp(email,otp,password).then((status) {
+      } else {
+        authController.verifyotp(email, otp, password).then((status) {
           if (status) {
             setState(() {
               announce = "Thay đổi mật khẩu thành công";
-              otpcontroller.text = "";
+              otpController.text = "";
               emailController.text = "";
-              passwordcontroller.text = "";
-              repasswordcontroller.text = "";
-              _isvalidEmail = false;
+              passwordController.text = "";
+              rePasswordController.text = "";
+              isValidEmail = false;
             });
           } else {
             setState(() {
               announce = "Mã xác nhận không chính xác";
-              otpcontroller.text = "";
-              _isvalidEmail = true;
+              otpController.text = "";
+              isValidEmail = true;
             });
           }
         });
@@ -103,68 +100,33 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         resizeToAvoidBottomInset: false,
         body: Stack(
           children: [
-            // Background blue
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              height: AppDimention.size320,
-              child: ClipPath(
-                clipper: ClippathCustomer(
-                  svgPath:
-                      "M1.97342e-05 -24.75H391.904C391.904 -24.75 451.205 218.765 383.748 152.224C316.292 85.6825 6.41361e-05 470.483 1.97342e-05 152.224C-2.46677e-05 -166.036 1.97342e-05 -24.75 1.97342e-05 -24.75Z",
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColor.mainColor,
-                  ),
-                ),
-              ),
-            ),
-            // Background blue
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: -1,
-              height: AppDimention.size320,
-              child: ClipPath(
-                clipper: ClippathCustomer(
-                  svgPath:
-                      "M0 75.0047C197.38 292.88 367.66 -173.226 407 75.0047V320H0V75.0047Z",
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColor.mainColor,
-                  ),
-                ),
-              ),
-            ),
             // Form login
             Positioned(
-              left: AppDimention.size40,
-              top: AppDimention.size110,
-              width: AppDimention.size310,
-              height: AppDimention.size630,
+              left: 10,
+              right: 10,
+              bottom: 10,
+              top: 250,
               child: Container(
+                width: Get.width,
+                height: Get.height,
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(width: 1, color: AppColor.mainColor),
-                ),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(width: 1, color: AppColor.mainColor),
+                    image: const DecorationImage(
+                        image: AssetImage('assets/image/LoadingBg.png'),
+                        fit: BoxFit.cover)),
                 child: Column(
                   children: [
-                    SizedBox(
-                      height: AppDimention.size170,
+                    const SizedBox(
+                      height: 50,
                     ),
-                    SizedBox(
-                      height: AppDimention.size10,
-                    ),
-                    _isvalidEmail
+                    isValidEmail
                         ? Column(
                             children: [
                               InputTextCustom(
-                                controller: otpcontroller,
-                                hinttext: "Otp",
+                                controller: otpController,
+                                hintText: "Otp",
                                 icon: Icons.account_tree_rounded,
                               ),
                               SizedBox(
@@ -180,9 +142,9 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                                   children: [
                                     GestureDetector(
                                       onTap: () {
-                                        _sendotp();
+                                        sendotp();
                                       },
-                                      child: Text("Gửi lại"),
+                                      child: const Text("Gửi lại"),
                                     )
                                   ],
                                 ),
@@ -193,7 +155,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                             children: [
                               InputTextCustom(
                                 controller: emailController,
-                                hinttext: "Email",
+                                hintText: "Email",
                                 icon: Icons.email,
                               ),
                               SizedBox(
@@ -211,23 +173,23 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                                       BoxShadow(
                                           blurRadius: AppDimention.size10,
                                           spreadRadius: 7,
-                                          offset: Offset(1, 10),
+                                          offset: const Offset(1, 10),
                                           color: Colors.grey.withOpacity(0.2))
                                     ]),
                                 child: TextField(
-                                  controller: passwordcontroller,
-                                  obscureText: _isHidden,
+                                  controller: passwordController,
+                                  obscureText: isHidden,
                                   decoration: InputDecoration(
                                     hintText: "Mật khẩu",
-                                    hintStyle: TextStyle(color: Colors.black26),
+                                    hintStyle: const TextStyle(color: Colors.black26),
                                     prefixIcon: GestureDetector(
                                       onTap: () {
                                         setState(() {
-                                          _isHidden = !_isHidden;
+                                          isHidden = !isHidden;
                                         });
                                       },
                                       child: Icon(
-                                        _isHidden
+                                        isHidden
                                             ? Icons.visibility_off_outlined
                                             : Icons.visibility_outlined,
                                         color: AppColor.yellowColor,
@@ -236,12 +198,12 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                                     focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(
                                             AppDimention.size30),
-                                        borderSide: BorderSide(
+                                        borderSide: const BorderSide(
                                             width: 1.0, color: Colors.white)),
                                     enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(
                                             AppDimention.size30),
-                                        borderSide: BorderSide(
+                                        borderSide: const BorderSide(
                                             width: 1.0, color: Colors.white)),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(
@@ -265,23 +227,23 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                                       BoxShadow(
                                           blurRadius: AppDimention.size10,
                                           spreadRadius: 7,
-                                          offset: Offset(1, 10),
+                                          offset: const Offset(1, 10),
                                           color: Colors.grey.withOpacity(0.2))
                                     ]),
                                 child: TextField(
-                                  controller: repasswordcontroller,
-                                  obscureText: _isHidden,
+                                  controller: rePasswordController,
+                                  obscureText: isHidden,
                                   decoration: InputDecoration(
                                     hintText: "Xác nhận mật khẩu",
-                                    hintStyle: TextStyle(color: Colors.black26),
+                                    hintStyle: const TextStyle(color: Colors.black26),
                                     prefixIcon: GestureDetector(
                                       onTap: () {
                                         setState(() {
-                                          _isHidden = !_isHidden;
+                                          isHidden = !isHidden;
                                         });
                                       },
                                       child: Icon(
-                                        _isHidden
+                                        isHidden
                                             ? Icons.visibility_off_outlined
                                             : Icons.visibility_outlined,
                                         color: AppColor.yellowColor,
@@ -290,12 +252,12 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                                     focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(
                                             AppDimention.size30),
-                                        borderSide: BorderSide(
+                                        borderSide: const BorderSide(
                                             width: 1.0, color: Colors.white)),
                                     enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(
                                             AppDimention.size30),
-                                        borderSide: BorderSide(
+                                        borderSide: const BorderSide(
                                             width: 1.0, color: Colors.white)),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(
@@ -317,7 +279,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       child: Center(
                         child: Text(
                           announce,
-                          style: TextStyle(color: Colors.red),
+                          style: const TextStyle(color: Colors.red),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -325,16 +287,16 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                     SizedBox(
                       height: AppDimention.size10,
                     ),
-                    if (!_isvalidEmail)
+                    if (!isValidEmail)
                       Center(
                           child: GestureDetector(
                         onTap: () {
-                          _sendotp();
+                          sendotp();
                         },
                         child: Container(
                           width: AppDimention.screenWidth / 2,
                           height: AppDimention.screenHeight / 14,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(100)),
                               color: AppColor.mainColor),
@@ -352,45 +314,43 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       ))
                     else
                       Center(
-                        child: GestureDetector(
-                          onTap: (){
-                            _verifyotp();
-                          },
-                          child: Container(
-                            width: AppDimention.screenWidth / 2,
-                            height: AppDimention.screenHeight / 14,
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(100)),
-                                color: AppColor.mainColor),
-                            child:Center(
-                                child: Text(
-                                  "Xác nhận",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: AppDimention.size20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                          child: GestureDetector(
+                        onTap: () {
+                          verifyotp();
+                        },
+                        child: Container(
+                          width: AppDimention.screenWidth / 2,
+                          height: AppDimention.screenHeight / 14,
+                          decoration: const BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(100)),
+                              color: AppColor.mainColor),
+                          child: Center(
+                            child: Text(
+                              "Xác nhận",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: AppDimention.size20,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                        )
-                      ),
+                          ),
+                        ),
+                      )),
                     SizedBox(
                       height: AppDimention.size40,
                     ),
                     RichText(
                       text: TextSpan(
                           text: "Bạn chưa có tài khoản ?",
-                          style:
-                              TextStyle(color: Colors.grey[500], fontSize: 15),
+                          style: const TextStyle(color: Colors.white, fontSize: 15),
                           children: [
                             TextSpan(
                               recognizer: TapGestureRecognizer()
-                                ..onTap = () => Get.to(() => RegisterPage(),
+                                ..onTap = () => Get.to(() => const RegisterPage(),
                                     transition: Transition.fade),
                               text: " Đăng kí",
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 15, fontWeight: FontWeight.bold),
                             ),
                           ]),
@@ -399,26 +359,77 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       height: AppDimention.size10,
                     ),
                     Center(
-                        child: Container(
+                        child: SizedBox(
                       width: AppDimention.screenWidth / 2,
                       child: Center(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Icon(
-                              Icons.facebook,
-                              color: AppColor.mainColor,
-                              size: AppDimention.size40,
+                            GestureDetector(
+                              onTap: () {
+                                Get.snackbar(
+                                  "Thông báo",
+                                  "Tính năng đang phát triển",
+                                  snackPosition: SnackPosition.TOP,
+                                  backgroundColor: Colors.white,
+                                  colorText: Colors.black,
+                                  icon: const Icon(Icons.card_giftcard_sharp,
+                                      color: Color.fromARGB(255, 168, 175, 76)),
+                                  borderRadius: 10,
+                                  margin: const EdgeInsets.all(10),
+                                  duration: const Duration(milliseconds: 800),
+                                  isDismissible: true,
+                                );
+                              },
+                              child: Icon(
+                                Icons.facebook,
+                                color: Colors.blue,
+                                size: AppDimention.size40,
+                              ),
                             ),
-                            Icon(
-                              Icons.email,
-                              color: AppColor.mainColor,
-                              size: AppDimention.size40,
+                            GestureDetector(
+                              onTap: () {
+                                Get.snackbar(
+                                  "Thông báo",
+                                  "Tính năng đang phát triển",
+                                  snackPosition: SnackPosition.TOP,
+                                  backgroundColor: Colors.white,
+                                  colorText: Colors.black,
+                                  icon: const Icon(Icons.card_giftcard_sharp,
+                                      color: Color.fromARGB(255, 168, 175, 76)),
+                                  borderRadius: 10,
+                                  margin: const EdgeInsets.all(10),
+                                  duration: const Duration(milliseconds: 800),
+                                  isDismissible: true,
+                                );
+                              },
+                              child: Icon(
+                                Icons.email,
+                                color: Colors.white,
+                                size: AppDimention.size40,
+                              ),
                             ),
-                            Icon(
-                              Icons.phone,
-                              color: AppColor.mainColor,
-                              size: AppDimention.size40,
+                            GestureDetector(
+                              onTap: () {
+                                Get.snackbar(
+                                  "Thông báo",
+                                  "Tính năng đang phát triển",
+                                  snackPosition: SnackPosition.TOP,
+                                  backgroundColor: Colors.white,
+                                  colorText: Colors.black,
+                                  icon: const Icon(Icons.card_giftcard_sharp,
+                                      color: Color.fromARGB(255, 168, 175, 76)),
+                                  borderRadius: 10,
+                                  margin: const EdgeInsets.all(10),
+                                  duration: const Duration(milliseconds: 800),
+                                  isDismissible: true,
+                                );
+                              },
+                              child: Icon(
+                                Icons.phone,
+                                color: Colors.yellow,
+                                size: AppDimention.size40,
+                              ),
                             ),
                           ],
                         ),
@@ -434,18 +445,16 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
               left: AppDimention.size110,
               width: AppDimention.size170,
               height: AppDimention.size170,
-              child: Container(
-                child: ClipOval(
-                  child: Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(width: 5, color: AppColor.mainColor),
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: AssetImage("assets/image/logo.png"),
-                        )),
-                  ),
+              child: ClipOval(
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(width: 5, color: AppColor.mainColor),
+                      image: const DecorationImage(
+                        fit: BoxFit.cover,
+                        image: AssetImage("assets/image/logo.png"),
+                      )),
                 ),
               ),
             )

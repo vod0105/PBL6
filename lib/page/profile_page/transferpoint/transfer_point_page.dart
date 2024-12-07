@@ -1,25 +1,22 @@
 import 'dart:math';
 
-import 'package:android_project/data/controller/User_controller.dart';
 import 'package:android_project/page/profile_page/profile_footer.dart';
-import 'package:android_project/route/app_route.dart';
-import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class TransferPointPage extends StatefulWidget {
   const TransferPointPage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   @override
-  _TransferPointPageState createState() => _TransferPointPageState();
+  TransferPointPageState createState() => TransferPointPageState();
 }
 
-class _TransferPointPageState extends State<TransferPointPage> {
+class TransferPointPageState extends State<TransferPointPage> {
   final Random _random = Random();
 
-  void _showDialogAnnounce(int idvoucher) {
+  void _showDialogAnnounce(int idVoucher) {
     int index = _random.nextInt(1);
     showDialog(
       context: context,
@@ -51,11 +48,11 @@ class _TransferPointPageState extends State<TransferPointPage> {
                     Container(
                       width: AppDimention.size60,
                       height: AppDimention.size100,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           border: Border(
                               right:
                                   BorderSide(width: 5, color: Colors.black12))),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           "đ20.000",
                           style: TextStyle(color: Colors.white),
@@ -69,10 +66,10 @@ class _TransferPointPageState extends State<TransferPointPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
+                          SizedBox(
                               width: AppDimention.size100 * 2.3,
                               height: AppDimention.size100 * 0.6,
-                              child: Column(
+                              child: const Column(
                                 children: [
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
@@ -85,23 +82,20 @@ class _TransferPointPageState extends State<TransferPointPage> {
                                   ),
                                   Row(
                                     children: [
-                                      Container(
-                                        
-                                        child: Text("BLACK FRIDAY",
-                                            maxLines: 2,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 12,
-                                                color: Colors.white)),
-                                      )
+                                      Text("BLACK FRIDAY",
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 12,
+                                              color: Colors.white))
                                     ],
                                   )
                                 ],
                               )),
-                          Container(
+                          SizedBox(
                               width: AppDimention.size100 * 2.4,
                               height: AppDimention.size100 * 0.2,
-                              child: Row(
+                              child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Text(
@@ -127,7 +121,7 @@ class _TransferPointPageState extends State<TransferPointPage> {
                     left: AppDimention.size10,
                     right: AppDimention.size10,
                     bottom: AppDimention.size10),
-                child: Center(
+                child: const Center(
                   child: Text("Đổi",style: TextStyle(color: Colors.white),),
                 ),
               )
@@ -142,10 +136,10 @@ class _TransferPointPageState extends State<TransferPointPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Color.fromRGBO(243, 243, 243, 1),
+      backgroundColor: const Color.fromRGBO(243, 243, 243, 1),
       body: Column(
         children: [
-          Container(
+          SizedBox(
             width: AppDimention.screenWidth,
             height: AppDimention.size70,
             child: Row(
@@ -154,7 +148,7 @@ class _TransferPointPageState extends State<TransferPointPage> {
                   onTap: () {
                     Get.back();
                   },
-                  child: Container(
+                  child: SizedBox(
                     width: AppDimention.size70,
                     height: AppDimention.size70,
                     child: Center(
@@ -175,16 +169,19 @@ class _TransferPointPageState extends State<TransferPointPage> {
               children: [
                 Container(
                   width: AppDimention.screenWidth,
-                  height: AppDimention.size100 * 2.5,
-                  decoration: BoxDecoration(color: Colors.blue),
+                  margin: EdgeInsets.only(left: AppDimention.size10),
+                 child: const Row(
+                  children: [
+                    Text("Hiện có :"),
+                    Text(" 200 điểm"),
+                  ],
+                 ),
                 ),
+                
                 SizedBox(
-                  height: AppDimention.size30,
-                ),
-                Container(
                     width: AppDimention.screenWidth,
                     child: ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: 4,
                         itemBuilder: (context, index) {
@@ -213,12 +210,12 @@ class _TransferPointPageState extends State<TransferPointPage> {
                                   Container(
                                     width: AppDimention.size120,
                                     height: AppDimention.size130,
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                         border: Border(
                                             right: BorderSide(
                                                 width: 5,
                                                 color: Colors.black12))),
-                                    child: Center(
+                                    child: const Center(
                                       child: Text(
                                         "đ20.000",
                                         style: TextStyle(color: Colors.white),
@@ -232,12 +229,12 @@ class _TransferPointPageState extends State<TransferPointPage> {
                                         EdgeInsets.all(AppDimention.size10),
                                     child: Column(
                                       children: [
-                                        Container(
+                                        SizedBox(
                                             width: AppDimention.size100 * 2.5,
                                             height: AppDimention.size130 * 0.6,
                                             child: Column(
                                               children: [
-                                                Row(
+                                                const Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.end,
                                                   children: [
@@ -250,10 +247,10 @@ class _TransferPointPageState extends State<TransferPointPage> {
                                                 ),
                                                 Row(
                                                   children: [
-                                                    Container(
+                                                    SizedBox(
                                                       width:
                                                           AppDimention.size100,
-                                                      child: Text(
+                                                      child: const Text(
                                                           "BLACK FRIDAY",
                                                           maxLines: 2,
                                                           style: TextStyle(
@@ -268,10 +265,10 @@ class _TransferPointPageState extends State<TransferPointPage> {
                                                 )
                                               ],
                                             )),
-                                        Container(
+                                        SizedBox(
                                             width: AppDimention.size100 * 2.5,
                                             height: AppDimention.size130 * 0.2,
-                                            child: Row(
+                                            child: const Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.end,
                                               children: [
@@ -293,7 +290,7 @@ class _TransferPointPageState extends State<TransferPointPage> {
               ],
             ),
           )),
-          ProfileFooter(),
+          const ProfileFooter(),
         ],
       ),
     );

@@ -1,11 +1,11 @@
-class Chartdto {
+class ChartDto {
   int? sender;
   int? receiver;
   String? message;
   String? imageBase64;
   bool? isRead;
 
-  Chartdto({
+  ChartDto({
     required this.sender,
     required this.receiver,
     required this.message,
@@ -14,12 +14,12 @@ class Chartdto {
   });
   
   Map<String, dynamic> toJson() {
-    Map<String, dynamic> data = new Map<String, dynamic>();
-    data["sender"] = this.sender;
-    data["receiver"] = this.receiver;
-    data["message"] = this.message;
-    data["imageBase64"] = this.imageBase64;
-    data["isRead"] = this.isRead;
+    Map<String, dynamic> data = <String, dynamic>{};
+    data["sender"] = sender;
+    data["receiver"] = receiver;
+    data["message"] = message;
+    data["imageBase64"] = imageBase64;
+    data["isRead"] = isRead;
     return data;
   }
 }

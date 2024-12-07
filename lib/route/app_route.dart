@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 class AppRoute {
   static String LOGIN_PAGE = "/login";
   static String HOME_PAGE = "/";
@@ -27,15 +29,28 @@ class AppRoute {
   static String NOTIFICATION_PAGE = "/notification";
   static String ORDER_PRODUCT_PAGE = "/product-order";
   static String TRANSFER_POINT_PAGE = "/transfer-point";
+  static String USER_CHAT_DETAIL_PAGE = "/chat-detail";
+  static String SEARCH_CHAT_PAGE = "/search-chat";
+  static String STORE_CHAT_PAGE = "/store-chat";
+  static String STORE_CHAT_DETAIL_PAGE = "/store-chat-detail";
 
-  static String order_combo(int comboid,int drinkid) =>
-      '$ORDER_COMBO_PAGE?comboid=$comboid&drinkid=$drinkid';
+  static String user_chat_detail(int idReceiver) =>
+      '$USER_CHAT_DETAIL_PAGE?idReceiver=$idReceiver';
 
-  static String order_product(int product,String size,int quantity) =>
+  static String store_chat_detail(int storeId) =>
+      '$STORE_CHAT_DETAIL_PAGE?storeId=$storeId';
+
+  static String orderCombo(int comboId, List<int> drinkIds,int quantity) {
+  String drinkIdString = drinkIds.join(",");
+  return '$ORDER_COMBO_PAGE?comboid=$comboId&drinkId=$drinkIdString&quantity=$quantity';
+}
+
+
+  static String order_product(int product, String size, int quantity) =>
       '$ORDER_PRODUCT_PAGE?product=$product&size=$size&quantity=$quantity';
 
-  static String get_store_detail(int storeid) =>
-      '$STORE_DETAIL_PAGE?storeid=$storeid';
+  static String get_store_detail(int storeId) =>
+      '$STORE_DETAIL_PAGE?storeId=$storeId';
 
   static String get_order_detail(String orderCode) =>
       '$ORDER_DETAIL_PAGE?orderCode=$orderCode';
@@ -44,6 +59,6 @@ class AppRoute {
   static String get_product_detail(int productId) =>
       '$PRODUCT_DETAIL?productId=$productId';
   static String get_product_bycategoryid_detail(
-          int categoryid, String categoryname) =>
-      '$CATEGORY_DETAIL_PAGE?categoryid=$categoryid&categoryname=$categoryname';
+          int categoryId, String categoryName) =>
+      '$CATEGORY_DETAIL_PAGE?categoryId=$categoryId&categoryName=$categoryName';
 }

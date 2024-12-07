@@ -8,12 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 class ProductAll extends StatefulWidget{
    const ProductAll({
-       Key? key,
-   }): super(key:key);
+       super.key,
+   });
    @override
-   _ProductAllState createState() => _ProductAllState();
+   ProductAllState createState() => ProductAllState();
 }
-class _ProductAllState extends State<ProductAll>{
+class ProductAllState extends State<ProductAll>{
    @override
    Widget build(BuildContext context) {
       return Scaffold(
@@ -26,7 +26,7 @@ class _ProductAllState extends State<ProductAll>{
                     
                     GetBuilder<ProductController>(builder: (productController){
             return  productController.isLoading  ? ListView.builder(
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: productController.productList.length ,
             itemBuilder: (context , index){
@@ -37,7 +37,7 @@ class _ProductAllState extends State<ProductAll>{
                     },
                     child: Container(
                             margin: EdgeInsets.only(left: AppDimention.size20, right:  AppDimention.size20,bottom: AppDimention.size20),
-                             decoration: BoxDecoration(
+                             decoration: const BoxDecoration(
                                  border: Border(bottom: BorderSide(width: 1,color: Color.fromRGBO(0, 0, 0, 0.5)))
                               ),
                             child: Row(
@@ -66,24 +66,22 @@ class _ProductAllState extends State<ProductAll>{
 
                                           children: [
                                              SizedBox(height: AppDimention.size20,),
-                                              Container(
-                                                child: Text(productController.productList[index].productName!,style: TextStyle(
-                                                    fontSize: AppDimention.size15,
-                                                    fontWeight: FontWeight.w500
-                                                ),),
-                                              ),
+                                              Text(productController.productList[index].productName!,style: TextStyle(
+                                                  fontSize: AppDimention.size15,
+                                                  fontWeight: FontWeight.w500
+                                              ),),
                                               SizedBox(height: AppDimention.size10,),
                                               Row(
                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                   children: [
-                                                    Row(
+                                                    const Row(
                                                       children: [
                                                         Icon(Icons.star,color: Colors.yellow,),
                                                         Text("4.5")
                                                       ],
                                                     ),
                                                     SizedBox(width: AppDimention.size30,),
-                                                     Row(
+                                                     const Row(
                                                       children: [
                                                         Icon(Icons.location_on,color: Colors.blue,),
                                                         Text("2.7 km")
@@ -96,14 +94,14 @@ class _ProductAllState extends State<ProductAll>{
                                                  mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
                                                  Text(
-                                                    "Giá: " + productController.productList[index].price.toString(),
+                                                    "Giá: ${productController.productList[index].price}",
                                                     style: TextStyle(
                                                       fontSize: AppDimention.size10,
                                                       decoration: TextDecoration.lineThrough,color: Colors.red, 
                                                     ),
                                                   ),
                                                   SizedBox(width: AppDimention.size20,),
-                                                  Text(productController.productList[index].discountedPrice.toString()+" vnđ")
+                                                  Text("${productController.productList[index].discountedPrice} vnđ")
                                                 ],
                                               )
                                               
@@ -118,7 +116,7 @@ class _ProductAllState extends State<ProductAll>{
                         ),
                 );
               },
-          ): CircularProgressIndicator();
+          ): const CircularProgressIndicator();
        })
                     
                    

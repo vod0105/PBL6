@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 
 class OrderHeader extends StatefulWidget {
   const OrderHeader({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   @override
-  _OrderHeaderState createState() => _OrderHeaderState();
+  OrderHeaderState createState() => OrderHeaderState();
 }
 
-class _OrderHeaderState extends State<OrderHeader> {
+class OrderHeaderState extends State<OrderHeader> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -18,7 +18,7 @@ class _OrderHeaderState extends State<OrderHeader> {
       width: AppDimention.screenWidth,
       margin: EdgeInsets.only(top: AppDimention.size20),
       height: AppDimention.size60,
-        child: Center(
+        child: const Center(
           child: Text(
             "Đơn hàng của bạn",
             style: TextStyle(color: AppColor.mainColor, fontSize: 20),

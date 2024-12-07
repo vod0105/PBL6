@@ -1,23 +1,22 @@
-class Usermodel {
+class UserModel {
   bool? status;
   String? message;
   User? user;
-  User? get getuser => user;
 
-  Usermodel({this.status, this.message, this.user});
+  UserModel({this.status, this.message, this.user});
 
-  Usermodel.fromJson(Map<String, dynamic> json) {
+  UserModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
-    user = json['data'] != null ? new User.fromJson(json['data']) : null;
+    user = json['data'] != null ? User.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['message'] = this.message;
-    if (this.user != null) {
-      data['data'] = this.user!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['message'] = message;
+    if (user != null) {
+      data['data'] = user!.toJson();
     }
     return data;
   }
@@ -63,24 +62,24 @@ class User {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     accountLocked = json['accountLocked'];
-    role = json['role'] != null ? new Role.fromJson(json['role']) : null;
+    role = json['role'] != null ? Role.fromJson(json['role']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['phoneNumber'] = this.phoneNumber;
-    data['fullName'] = this.fullName;
-    data['avatar'] = this.avatar;
-    data['longitude'] = this.longitude;
-    data['latitude'] = this.latitude;
-    data['email'] = this.email;
-    data['address'] = this.address;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['accountLocked'] = this.accountLocked;
-    if (this.role != null) {
-      data['role'] = this.role!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['phoneNumber'] = phoneNumber;
+    data['fullName'] = fullName;
+    data['avatar'] = avatar;
+    data['longitude'] = longitude;
+    data['latitude'] = latitude;
+    data['email'] = email;
+    data['address'] = address;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['accountLocked'] = accountLocked;
+    if (role != null) {
+      data['role'] = role!.toJson();
     }
     return data;
   }
@@ -98,9 +97,9 @@ class Role {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
     return data;
   }
 }

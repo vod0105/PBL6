@@ -9,21 +9,21 @@ import 'package:get/get.dart';
 
 class CategoryList extends StatefulWidget {
   const CategoryList({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
-  _CategoryListState createState() => _CategoryListState();
+  CategoryListState createState() => CategoryListState();
 }
 
-class _CategoryListState extends State<CategoryList> {
+class CategoryListState extends State<CategoryList> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CategoryController>(builder: (categoryController) {
       return GridView.builder(
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 10.0,
           mainAxisSpacing: 10.0,
@@ -46,7 +46,7 @@ class _CategoryListState extends State<CategoryList> {
               decoration: BoxDecoration(
                 color: AppColor.mainColor,
                 border:
-                    Border.all(width: 1, color: Color.fromRGBO(0, 0, 0, 0.5)),
+                    Border.all(width: 1, color: const Color.fromRGBO(0, 0, 0, 0.5)),
                 borderRadius: BorderRadius.circular(AppDimention.size10),
                 image: DecorationImage(
                   fit: BoxFit.cover,

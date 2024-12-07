@@ -1,28 +1,27 @@
-class Announcemodel {
+class AnnounceModel {
   bool? success;
   String? message;
   List<AnnounceData>? announce;
-  List<AnnounceData>? get getannounce => announce;
 
-  Announcemodel({this.success, this.message, this.announce});
+  AnnounceModel({this.success, this.message, this.announce});
 
-  Announcemodel.fromJson(Map<String, dynamic> json) {
+  AnnounceModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message = json['message'];
     if (json['data'] != null) {
       announce = <AnnounceData>[];
       json['data'].forEach((v) {
-        announce!.add(new AnnounceData.fromJson(v));
+        announce!.add(AnnounceData.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['success'] = this.success;
-    data['message'] = this.message;
-    if (this.announce != null) {
-      data['data'] = this.announce!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['success'] = success;
+    data['message'] = message;
+    if (announce != null) {
+      data['data'] = announce!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -44,11 +43,11 @@ class AnnounceData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['userid'] = this.userid;
-    data['title'] = this.title;
-    data['content'] = this.content;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['userid'] = userid;
+    data['title'] = title;
+    data['content'] = content;
     return data;
   }
 }

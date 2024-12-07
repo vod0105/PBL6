@@ -7,10 +7,10 @@ class CategoryRepo {
   CategoryRepo({
     required this.apiClient,
   });
-  Future<Response> getall() async {
+  Future<Response> getAll() async {
     return await apiClient.getData(Appconstant.CATEGORY_URL);
   }
-  Future<Response> getbystoreid(int id) async {
+  Future<Response> getByStoreId(int id) async {
     return await apiClient.getData(Appconstant.CATEGORY_BYSTOREID_URL.replaceFirst("{storeid}", id.toString()));
   }
 }

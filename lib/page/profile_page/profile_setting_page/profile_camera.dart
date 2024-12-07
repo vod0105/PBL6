@@ -1,16 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:android_project/data/controller/User_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:camera/camera.dart';
-import 'package:android_project/route/app_route.dart';
-import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
-import 'package:get/get_connect/http/src/multipart/multipart_file.dart' as get_multipart;
-
-import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 
 class ProfileCamera extends StatefulWidget {
   const ProfileCamera({
@@ -47,14 +42,36 @@ class ProfileCameraState extends State<ProfileCamera>
     cameraController?.dispose();
     super.dispose();
   }
-
-  Future<void> _setupCameraController() async {
-    List<CameraDescription> _camera = await availableCameras();
-    if (_camera.isNotEmpty) {
+  bool isPicking = false;
+  Future<void> _pickImage() async {
+    if (isPicking) return;
+    setState(() {
+      isPicking = true;
+    });
+    try {
+      final picker = ImagePicker();
+      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        File imageFile = File(pickedFile.path);
+        List<int> imageBytes = await imageFile.readAsBytes();
+        String base64Image = base64Encode(imageBytes);
+        Get.find<UserController>().updateAvatar(base64Image);
+          Get.back();
+       
+      }
+    } finally {
       setState(() {
-        cameras = _camera;
+        isPicking = false;
+      });
+    }
+  }
+  Future<void> _setupCameraController() async {
+    List<CameraDescription> camera = await availableCameras();
+    if (camera.isNotEmpty) {
+      setState(() {
+        cameras = camera;
         cameraController =
-            CameraController(_camera.first, ResolutionPreset.high);
+            CameraController(camera.first, ResolutionPreset.high);
       });
       cameraController?.initialize().then((_) {
         setState(() {});
@@ -82,8 +99,8 @@ class ProfileCameraState extends State<ProfileCamera>
           Get.find<UserController>().updateAvatar(base64Image);
           Get.back();
         }
+      // ignore: empty_catches
       } catch (e) {
-        print('Lỗi khi chụp ảnh: $e');
       }
 
       _animationController.reverse();
@@ -132,16 +149,30 @@ class ProfileCameraState extends State<ProfileCamera>
                   ),
                 ),
                 Positioned(
-                  top: 10,
+                  top: 20,
                   left: 10,
                   child: GestureDetector(
                     onTap: () {
                       Get.back();
                     },
-                    child: Icon(
+                    child: const Icon(
                       Icons.arrow_circle_left,
                       size: 50,
-                      color: AppColor.mainColor,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 10,
+                  right: 10,
+                  child: GestureDetector(
+                    onTap: () {
+                      _pickImage();
+                    },
+                    child: const Icon(
+                      Icons.image,
+                      size: 50,
+                      color: Colors.white,
                     ),
                   ),
                 ),

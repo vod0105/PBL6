@@ -4,19 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 class ShipperRegisterHeader extends StatefulWidget{
    const ShipperRegisterHeader({
-       Key? key,
-   }): super(key:key);
+       super.key,
+   });
    @override
-   _ShipperRegisterHeaderState createState() => _ShipperRegisterHeaderState();
+   ShipperRegisterHeaderState createState() => ShipperRegisterHeaderState();
 }
-class _ShipperRegisterHeaderState extends State<ShipperRegisterHeader>{
+class ShipperRegisterHeaderState extends State<ShipperRegisterHeader>{
    @override
    Widget build(BuildContext context) {
       return Container(
         width: AppDimention.screenWidth,
         height: AppDimention.size60,
         padding: EdgeInsets.only(left: AppDimention.size10),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           border: Border(bottom: BorderSide(width: 1,color: Colors.black26))
         ),
         child: Row(

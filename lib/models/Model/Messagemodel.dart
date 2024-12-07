@@ -1,16 +1,15 @@
-class Messagemodel {
-  List<Usermessage>? listmessage;
-  List<Usermessage>? get getlistmessage => listmessage;
+class MessageModel {
+  List<UserMessage>? listMessage;
   int? eC;
   String? eM;
 
-  Messagemodel({this.listmessage, this.eC, this.eM});
+  MessageModel({this.listMessage, this.eC, this.eM});
 
-  Messagemodel.fromJson(Map<String, dynamic> json) {
+  MessageModel.fromJson(Map<String, dynamic> json) {
     if (json['DT'] != null) {
-      listmessage = <Usermessage>[];
+      listMessage = <UserMessage>[];
       json['DT'].forEach((v) {
-        listmessage!.add(new Usermessage.fromJson(v));
+        listMessage!.add(UserMessage.fromJson(v));
       });
     }
     eC = json['EC'];
@@ -18,40 +17,43 @@ class Messagemodel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.listmessage != null) {
-      data['DT'] = this.listmessage!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (listMessage != null) {
+      data['DT'] = listMessage!.map((v) => v.toJson()).toList();
     }
-    data['EC'] = this.eC;
-    data['EM'] = this.eM;
+    data['EC'] = eC;
+    data['EM'] = eM;
     return data;
   }
 }
 
-class Usermessage {
+class UserMessage {
   String? message;
   String? image;
   int? sender;
   int? receiver;
   String? localTime;
+  String? type;
 
-  Usermessage({this.message, this.image, this.sender, this.receiver, this.localTime});
+  UserMessage({this.message, this.image, this.sender, this.receiver, this.localTime});
 
-  Usermessage.fromJson(Map<String, dynamic> json) {
+  UserMessage.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     image = json['image'];
     sender = json['sender'];
     receiver = json['receiver'];
     localTime = json['local_time'];
+    type = json['type'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['message'] = this.message;
-    data['image'] = this.image;
-    data['sender'] = this.sender;
-    data['receiver'] = this.receiver;
-    data['local_time'] = this.localTime;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['message'] = message;
+    data['image'] = image;
+    data['sender'] = sender;
+    data['receiver'] = receiver;
+    data['local_time'] = localTime;
+    data['type'] = type;
     return data;
   }
 }

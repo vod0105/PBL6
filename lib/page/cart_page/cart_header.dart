@@ -1,18 +1,17 @@
-import 'package:android_project/custom/big_text.dart';
+
 import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class CartHeader extends StatefulWidget {
   const CartHeader({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   @override
-  _CartHeaderState createState() => _CartHeaderState();
+  CartHeaderState createState() => CartHeaderState();
 }
 
-class _CartHeaderState extends State<CartHeader> {
+class CartHeaderState extends State<CartHeader> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -23,7 +22,7 @@ class _CartHeaderState extends State<CartHeader> {
             Container(
                 width: AppDimention.screenWidth,
                 height: 60,
-                decoration: BoxDecoration(color: AppColor.mainColor),
+                decoration: const BoxDecoration(color: AppColor.mainColor),
                 child: Center(
                   child: Text(
                     "Phần ăn đã chọn",

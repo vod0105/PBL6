@@ -11,17 +11,17 @@ import 'package:get/get.dart';
 
 class SearchBody extends StatefulWidget {
   const SearchBody({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
-  _SearchBodyState createState() => _SearchBodyState();
+  SearchBodyState createState() => SearchBodyState();
 }
 
-class _SearchBodyState extends State<SearchBody> {
-  late CategoryController categorycontroller = Get.find<CategoryController>();
+class SearchBodyState extends State<SearchBody> {
+  late CategoryController categoryController = Get.find<CategoryController>();
   late ProductController productController = Get.find<ProductController>();
-  RangeValues _currentRangeValues = RangeValues(0, 200000);
+  RangeValues _currentRangeValues = const RangeValues(0, 200000);
   @override
   void initState() {
     super.initState();
@@ -35,7 +35,7 @@ class _SearchBodyState extends State<SearchBody> {
         );
   }
 
-  List<String> listrecommend = [];
+  List<String> listRecommend = [];
   String? selectedCategory = "Tất cả";
 
   void _filterProduct() {
@@ -43,7 +43,7 @@ class _SearchBodyState extends State<SearchBody> {
       context: context,
       builder: (BuildContext context) {
         List<String> dropdownItems = ["Tất cả"];
-        for (Categoryitem item in categorycontroller.categoryList) {
+        for (CategoryItem item in categoryController.categoryList) {
           dropdownItems.add(item.categoryName!);
         }
         return Dialog(
@@ -64,7 +64,7 @@ class _SearchBodyState extends State<SearchBody> {
                   children: [
                     DropdownButton<String>(
                       value: selectedCategory,
-                      hint: Text('Chọn danh mục'),
+                      hint: const Text('Chọn danh mục'),
                       items: dropdownItems.map((String item) {
                         return DropdownMenuItem<String>(
                           value: item,
@@ -77,41 +77,39 @@ class _SearchBodyState extends State<SearchBody> {
                         });
                       },
                     ),
-                    Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          RangeSlider(
-                            values: _currentRangeValues,
-                            min: 0,
-                            max: 200000,
-                            divisions: 40,
-                            labels: RangeLabels(
-                              _currentRangeValues.start.toStringAsFixed(0),
-                              _currentRangeValues.end.toStringAsFixed(0),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        RangeSlider(
+                          values: _currentRangeValues,
+                          min: 0,
+                          max: 200000,
+                          divisions: 40,
+                          labels: RangeLabels(
+                            _currentRangeValues.start.toStringAsFixed(0),
+                            _currentRangeValues.end.toStringAsFixed(0),
+                          ),
+                          onChanged: (RangeValues values) {
+                            setState(() {
+                              _currentRangeValues = values;
+                            });
+                          },
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                                "đ${_formatNumber(_currentRangeValues.start.toInt())}"),
+                            SizedBox(
+                              width: AppDimention.size60,
                             ),
-                            onChanged: (RangeValues values) {
-                              setState(() {
-                                _currentRangeValues = values;
-                              });
-                            },
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Text(
-                                  "đ${_formatNumber(_currentRangeValues.start.toInt())}"),
-                              SizedBox(
-                                width: AppDimention.size60,
-                              ),
-                              Text(
-                                  "đ${_formatNumber(_currentRangeValues.end.toInt())}"),
-                            ],
-                          ),
-                        ],
-                      ),
+                            Text(
+                                "đ${_formatNumber(_currentRangeValues.end.toInt())}"),
+                          ],
+                        ),
+                      ],
                     ),
-                    Container(
+                    SizedBox(
                       width: AppDimention.screenWidth,
                       child: Center(
                           child: GestureDetector(
@@ -126,7 +124,7 @@ class _SearchBodyState extends State<SearchBody> {
                               borderRadius:
                                   BorderRadius.circular(AppDimention.size5),
                               border: Border.all(width: 1, color: Colors.red)),
-                          child: Center(
+                          child: const Center(
                             child: Text("Lọc"),
                           ),
                         ),
@@ -151,19 +149,19 @@ class _SearchBodyState extends State<SearchBody> {
             width: AppDimention.screenWidth,
             height: AppDimention.size50,
             margin: EdgeInsets.only(left: AppDimention.size10),
-            decoration: BoxDecoration(color: Colors.white),
+            decoration: const BoxDecoration(color: Colors.white),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   GestureDetector(
                     onTap: (){
-                        productController.getallProductSearch();
+                        productController.getAllProductSearch();
                     },
                     child: Container(
                     width: AppDimention.size80,
                     height: AppDimention.size40,
                     margin: EdgeInsets.only(right: AppDimention.size10),
-                    child: Row(
+                    child: const Row(
                       children: [
                         Text("Tất cả"),
                       ],
@@ -180,10 +178,10 @@ class _SearchBodyState extends State<SearchBody> {
                     margin: EdgeInsets.only(right: AppDimention.size10),
                     child: Row(
                       children: [
-                        Text("Giá"),
+                        const Text("Giá"),
                         Transform.rotate(
                           angle: 0 * 3.141592653589793 / 180,
-                          child: Icon(
+                          child: const Icon(
                             Icons.arrow_drop_down_outlined,
                           ),
                         ),
@@ -201,10 +199,10 @@ class _SearchBodyState extends State<SearchBody> {
                     margin: EdgeInsets.only(right: AppDimention.size10),
                     child: Row(
                       children: [
-                        Text("Giá"),
+                        const Text("Giá"),
                         Transform.rotate(
                           angle: 180 * 3.141592653589793 / 180,
-                          child: Icon(
+                          child: const Icon(
                             Icons.arrow_drop_down_outlined,
                           ),
                         ),
@@ -223,10 +221,10 @@ class _SearchBodyState extends State<SearchBody> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("Lọc"),
+                          const Text("Lọc"),
                           Transform.rotate(
                             angle: 180 * 3.141592653589793 / 180,
-                            child: Icon(
+                            child: const Icon(
                               Icons.account_tree_outlined,
                             ),
                           ),
@@ -247,7 +245,7 @@ class _SearchBodyState extends State<SearchBody> {
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: listrecommend.map((item) {
+              children: listRecommend.map((item) {
                 return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
@@ -260,15 +258,15 @@ class _SearchBodyState extends State<SearchBody> {
                         children: [
                           Text(
                             item,
-                            style: TextStyle(color: Colors.black),
+                            style: const TextStyle(color: Colors.black),
                           ),
                           GestureDetector(
                             onTap: () {
                               setState(() {
-                                listrecommend.remove(item);
+                                listRecommend.remove(item);
                               });
                             },
-                            child: Icon(
+                            child: const Icon(
                               Icons.clear,
                               size: 13,
                             ),
@@ -279,14 +277,14 @@ class _SearchBodyState extends State<SearchBody> {
               }).toList(),
             ),
           ),
-          productController.productListSearch.length == 0
-              ? Center(
+          productController.productListSearch.isEmpty
+              ? const Center(
                   child: Text("Không có món ăn nào được hiển thị"),
                 )
               : GridView.builder(
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     childAspectRatio: 0.7,
                   ),
@@ -298,16 +296,17 @@ class _SearchBodyState extends State<SearchBody> {
                               productController
                                   .productListSearch[index].productId!));
                           setState(() {
-                            if (listrecommend.length < 3) {
-                              if (!listrecommend.contains(productController
-                                  .productListSearch[index].productName))
-                                listrecommend.add(productController
-                                    .productListSearch[index].productName!);
-                            } else {
-                              if (!listrecommend.contains(productController
+                            if (listRecommend.length < 3) {
+                              if (!listRecommend.contains(productController
                                   .productListSearch[index].productName)) {
-                                listrecommend.removeAt(0);
-                                listrecommend.add(productController
+                                listRecommend.add(productController
+                                    .productListSearch[index].productName!);
+                              }
+                            } else {
+                              if (!listRecommend.contains(productController
+                                  .productListSearch[index].productName)) {
+                                listRecommend.removeAt(0);
+                                listRecommend.add(productController
                                     .productListSearch[index].productName!);
                               }
                             }
@@ -318,7 +317,7 @@ class _SearchBodyState extends State<SearchBody> {
                             color: Colors.white,
                             border: Border.all(
                                 width: 1,
-                                color: Color.fromRGBO(218, 218, 218, 0.494)),
+                                color: const Color.fromRGBO(218, 218, 218, 0.494)),
                           ),
                           child: Column(
                             children: [
@@ -347,13 +346,13 @@ class _SearchBodyState extends State<SearchBody> {
                                     Text(
                                       productController.productListSearch[index]
                                           .productName!,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: AppColor.mainColor),
                                     ),
                                     Text(
                                       "${_formatNumber(productController.productListSearch[index].price!.toInt())} vnđ",
-                                      style: TextStyle(fontSize: 13),
+                                      style: const TextStyle(fontSize: 13),
                                     ),
                                     Row(
                                       mainAxisAlignment:
@@ -364,11 +363,11 @@ class _SearchBodyState extends State<SearchBody> {
                                             Wrap(
                                               children: List.generate(
                                                   5,
-                                                  (index) => Icon(Icons.star,
+                                                  (index) => const Icon(Icons.star,
                                                       color: AppColor.mainColor,
                                                       size: 8)),
                                             ),
-                                            Text(
+                                            const Text(
                                               "(5)",
                                               style: TextStyle(
                                                   fontSize: 12,
@@ -376,7 +375,7 @@ class _SearchBodyState extends State<SearchBody> {
                                             ),
                                           ],
                                         ),
-                                        Row(
+                                        const Row(
                                           children: [
                                             Text(
                                               "1028",
@@ -394,7 +393,7 @@ class _SearchBodyState extends State<SearchBody> {
                                       ],
                                     ),
                                     SizedBox(height: AppDimention.size15),
-                                    Row(
+                                    const Row(
                                       children: [
                                         Icon(Icons.delivery_dining_sharp),
                                         Text(

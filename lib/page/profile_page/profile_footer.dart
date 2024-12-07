@@ -1,17 +1,16 @@
-import 'package:android_project/data/controller/Order_controller.dart';
 import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ProfileFooter extends StatefulWidget {
-  const ProfileFooter({Key? key}) : super(key: key);
+  const ProfileFooter({super.key});
 
   @override
-  _ProfileFooterState createState() => _ProfileFooterState();
+  ProfileFooterState createState() => ProfileFooterState();
 }
 
-class _ProfileFooterState extends State<ProfileFooter> {
+class ProfileFooterState extends State<ProfileFooter> {
   int _selectedIndex = 4;
 
   void _onItemTapped(int index) {

@@ -7,25 +7,25 @@ class OrderRepo {
   OrderRepo({
     required this.apiClient,
   });
-  Future<Response> getall() async {
+  Future<Response> getAll() async {
     return await apiClient.getData(Appconstant.ORDERT_URL);
   }
 
-  Future<Response> getorderbyordercode(String ordercode) async {
+  Future<Response> getOrderByOrderCode(String orderCode) async {
     return await apiClient.getData(Appconstant.ORDER_BY_ORDERCODE_URL
-        .replaceFirst("{ordercode}", ordercode));
+        .replaceFirst('{ordercode}', orderCode));
   }
 
-  Future<Response> getorderbyorderstatus(String status) async {
+  Future<Response> getOrderByOrderStatus(String status) async {
     return await apiClient.getData(
         Appconstant.ORDER_BY_ORDERSTATUS_URL.replaceFirst("{status}", status));
   }
-   Future<Response> updatefeedback(int orderId) async {
+   Future<Response> updateFeedback(int orderId) async {
     return await apiClient.postData(
         Appconstant.ORDER_UPDATE_FEEDBACK_URL.replaceFirst("{orderid}", orderId.toString()),null);
   }
-  Future<Response> cancelorder(String ordercode) async {
+  Future<Response> cancelOrder(String orderCode) async {
     return await apiClient.postData(
-        Appconstant.ORDERT_CANCEL_URL.replaceFirst("{ordercode}",ordercode),null);
+        Appconstant.ORDERT_CANCEL_URL.replaceFirst("{ordercode}",orderCode),null);
   }
 }

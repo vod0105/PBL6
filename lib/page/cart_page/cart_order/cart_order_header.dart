@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 class CartOrderHeader extends StatefulWidget{
    const CartOrderHeader({
-       Key? key,
-   }): super(key:key);
+       super.key,
+   });
    @override
-   _CartOrderHeaderState createState() => _CartOrderHeaderState();
+   CartOrderHeaderState createState() => CartOrderHeaderState();
 }
-class _CartOrderHeaderState extends State<CartOrderHeader>{
+class CartOrderHeaderState extends State<CartOrderHeader>{
    @override
    Widget build(BuildContext context) {
   return Container(
@@ -16,7 +16,7 @@ class _CartOrderHeaderState extends State<CartOrderHeader>{
             height: AppDimention.size70,
             padding: EdgeInsets.only(
                 left: AppDimention.size20, right: AppDimention.size20),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.white,
                 border: Border(
                     bottom: BorderSide(width: 1, color: Colors.black26))),

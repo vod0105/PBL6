@@ -2,8 +2,11 @@
     "cSpell.words": [
         "Appconstant",
         "Categorymodel",
+        "Chatautodto",
         "Geolocator",
         "Orderproductdto",
+        "Sizeblocs",
         "Storecontroller"
-    ]
+    ],
+    "dart.flutterSdkPath": "~/OneDrive/Desktop/Documents/flutter"
 }

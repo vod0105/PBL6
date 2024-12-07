@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:android_project/data/controller/Category_controller.dart';
 import 'package:android_project/data/controller/Product_controller.dart';
+import 'package:android_project/data/controller/Promotion_controller.dart';
 import 'package:android_project/data/controller/Store_Controller.dart';
-import 'package:android_project/models/Model/Item/ProductItem.dart';
+
 import 'package:android_project/models/Model/Item/StoresItem.dart';
+import 'package:android_project/models/Model/PromotionModel.dart';
 import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
@@ -16,59 +18,63 @@ class StoreDetailPage extends StatefulWidget {
   final int storeId;
   const StoreDetailPage({
     required this.storeId,
-    Key? key,
-  }) : super(key: key);
-  @override
-  _StoreDetailPageState createState() => _StoreDetailPageState();
-}
-
-class _StoreDetailPageState extends State<StoreDetailPage> {
-  bool _isLoad = true;
-int? categorySelected;
-Storesitem? storesitem;
-String? title;
-
-@override
-void initState() {
-  super.initState();
-  _initializeData();  
-}
-
-Future<void> _initializeData() async {
-  await _loadData();      
-  _loadInfomation();      
-}
-
-Future<void> _loadData() async {
-  await Get.find<CategoryController>().getbystoreid(widget.storeId);
-  await Get.find<Storecontroller>().getbyid(widget.storeId);
-  setState(() {
-    _isLoad = false;  
+    super.key,
   });
+  @override
+  StoreDetailPageState createState() => StoreDetailPageState();
 }
 
-void _loadProduct(int storeid, int categoryId) async {
-  await Get.find<ProductController>()
-      .getProductByStoreCategoryId(storeid, categoryId);
-}
+class StoreDetailPageState extends State<StoreDetailPage> {
+  PromotionController promotionController = Get.find<PromotionController>();
+  CategoryController categoryController = Get.find<CategoryController>();
+  Storecontroller storecontroller = Get.find<Storecontroller>();
+  ProductController productController = Get.find<ProductController>();
+  List<PromotionData> listPromotion = [];
+  bool _isLoad = true;
+  int? categorySelected;
+  StoresItem? storesItem;
+  String? title;
 
-String formatTime(String isoDateTime) {
-  DateTime dateTime = DateTime.parse(isoDateTime);
-  return DateFormat('hh:mm').format(dateTime);
-}
-
-void _loadInfomation() {
-  if (!_isLoad) {
-    categorySelected =
-        Get.find<CategoryController>().categoryListStoreId[0].categoryId;
-    title =
-        Get.find<CategoryController>().categoryListStoreId[0].categoryName;
-    storesitem = Get.find<Storecontroller>().storeItem!;
-
-    _loadProduct(storesitem!.storeId!,
-        Get.find<CategoryController>().categoryListStoreId[0].categoryId!);
+  @override
+  void initState() {
+    super.initState();
+    _initializeData();
   }
-}
+
+  Future<void> _initializeData() async {
+    await _loadData();
+    _loadInFoMaTiOn();
+  }
+
+  Future<void> _loadData() async {
+    await promotionController.getByStoreId(widget.storeId);
+    await categoryController.getByStoreId(widget.storeId);
+    await storecontroller.getById(widget.storeId);
+    setState(() {
+      listPromotion = promotionController.listPromotionByStoreId;
+      _isLoad = false;
+    });
+  }
+
+  void _loadProduct(int storeid, int categoryId) async {
+    await productController.getProductByStoreCategoryId(storeid, categoryId);
+  }
+
+  String formatTime(String isoDateTime) {
+    DateTime dateTime = DateTime.parse(isoDateTime);
+    return DateFormat('hh:mm').format(dateTime);
+  }
+
+  void _loadInFoMaTiOn() {
+    if (!_isLoad) {
+      categorySelected = categoryController.categoryListStoreId[0].categoryId;
+      title = categoryController.categoryListStoreId[0].categoryName;
+      storesItem = storecontroller.storeItem!;
+
+      _loadProduct(storesItem!.storeId!,
+          categoryController.categoryListStoreId[0].categoryId!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,8 +83,8 @@ void _loadInfomation() {
           ? Container(
               width: AppDimention.screenWidth,
               height: AppDimention.screenHeight,
-              decoration: BoxDecoration(color: Colors.white),
-              child: Center(
+              decoration: const BoxDecoration(color: Colors.white),
+              child: const Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -103,7 +109,7 @@ void _loadInfomation() {
                     decoration: BoxDecoration(
                         image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: MemoryImage(base64Decode(storesitem!.image!)),
+                      image: MemoryImage(base64Decode(storesItem!.image!)),
                     )),
                     child: Container(
                         width: AppDimention.screenWidth,
@@ -126,7 +132,7 @@ void _loadInfomation() {
                                             132, 255, 255, 255),
                                         borderRadius: BorderRadius.circular(
                                             AppDimention.size30)),
-                                    child: Center(
+                                    child: const Center(
                                       child: Icon(
                                         Icons.arrow_back_ios_new,
                                         color: Colors.white,
@@ -146,7 +152,7 @@ void _loadInfomation() {
                                             132, 255, 255, 255),
                                         borderRadius: BorderRadius.circular(
                                             AppDimention.size30)),
-                                    child: Center(
+                                    child: const Center(
                                       child: Icon(
                                         Icons.shopping_cart_outlined,
                                         color: Colors.white,
@@ -163,9 +169,10 @@ void _loadInfomation() {
                 Positioned(
                   left: 0,
                   top: AppDimention.size100 * 2,
-                  child: Container(
+                  child: SizedBox(
                       width: AppDimention.screenWidth,
-                      height: 600,
+                 
+                      
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
@@ -173,7 +180,7 @@ void _loadInfomation() {
                               height: AppDimention.size80,
                             ),
                             Text(
-                              storesitem!.storeName.toString(),
+                              storesItem!.storeName.toString(),
                               style: TextStyle(
                                   fontSize: AppDimention.size20,
                                   fontWeight: FontWeight.bold),
@@ -185,11 +192,11 @@ void _loadInfomation() {
                                   right: AppDimention.size10),
                               child: Center(
                                 child: Text(
-                                  "Địa chỉ :${storesitem!.location} ",
+                                  "Địa chỉ :${storesItem!.location} ",
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.black38),
+                                  style: const TextStyle(color: Colors.black38),
                                 ),
                               ),
                             ),
@@ -201,12 +208,12 @@ void _loadInfomation() {
                                 Container(
                                   width: AppDimention.size130,
                                   height: AppDimention.size60,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                       border: Border(
                                     right: BorderSide(
                                         width: 1, color: Colors.black26),
                                   )),
-                                  child: Column(
+                                  child: const Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Row(
@@ -238,12 +245,12 @@ void _loadInfomation() {
                                 Container(
                                   width: AppDimention.size130,
                                   height: AppDimention.size60,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                       border: Border(
                                     right: BorderSide(
                                         width: 1, color: Colors.black26),
                                   )),
-                                  child: Column(
+                                  child: const Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Row(
@@ -272,13 +279,13 @@ void _loadInfomation() {
                                     ],
                                   ),
                                 ),
-                                Container(
+                                SizedBox(
                                   width: AppDimention.size120,
                                   height: AppDimention.size60,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Row(
+                                      const Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
@@ -288,15 +295,13 @@ void _loadInfomation() {
                                           ),
                                         ],
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 5,
                                       ),
                                       Text(
-                                        formatTime(storesitem!.openingTime!) +
-                                            " - " +
-                                            formatTime(
-                                                storesitem!.closingTime!),
-                                        style: TextStyle(
+                                        "${formatTime(storesItem!.openingTime!)} - ${formatTime(
+                                                storesItem!.closingTime!)}",
+                                        style: const TextStyle(
                                             fontWeight: FontWeight.w500),
                                       ),
                                     ],
@@ -304,24 +309,96 @@ void _loadInfomation() {
                                 )
                               ],
                             ),
-                            SizedBox(
-                              height: AppDimention.size15,
-                            ),
+                            if (listPromotion.isNotEmpty)
+                              Column(
+                                children: [
+                                  
+                                  Container(
+                                    width: AppDimention.screenWidth,
+                                    height: AppDimention.size60,
+                                    decoration: BoxDecoration(
+                                      
+                                        border: Border(
+                                            bottom: BorderSide(
+                                                width: 1,
+                                                color: Colors.grey[200]!),
+                                            top: BorderSide(
+                                                width: 1,
+                                                color: Colors.grey[200]!))),
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      padding: EdgeInsets.only(right: AppDimention.size10),
+                                      child: Row(
+                                        children: listPromotion
+                                            .map((item) => Container(
+                                                  width: AppDimention.size100 *
+                                                      2.5,
+                                                  height: AppDimention.size40,
+                                                  padding: EdgeInsets.only(
+                                                      left: AppDimention.size10,
+                                                      right:
+                                                          AppDimention.size10),
+                                                  margin: EdgeInsets.only(
+                                                      left:
+                                                          AppDimention.size10),
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius: BorderRadius.circular(AppDimention.size5),
+                                                      image: DecorationImage(image: promotionController.checkVoucher(item.code!) ? const AssetImage("assets/image/Voucher0.png") :const AssetImage("assets/image/Voucher2.png") ,fit: BoxFit.cover)),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          Text(
+                                                              "${item.discountPercent!.toInt()}%"),
+                                                          SizedBox(
+                                                            width: AppDimention
+                                                                .size10,
+                                                          ),
+                                                          Text("${item.code}")
+                                                        ],
+                                                      ),
+                                                      if(promotionController.checkVoucher(item.code!))
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            promotionController.savePromotion(item.voucherId!);
+                                                          },
+                                                          child: const Text("Lưu"),
+                                                        ),
+                                                      if(!promotionController.checkVoucher(item.code!))
+                                                      GestureDetector(
+                                                          onTap: () {},
+                                                          child: const Text("Đã có"),
+                                                        )
+
+                                                    ],
+                                                  ),
+                                                ))
+                                            .toList(),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                           
                             Container(
                               width: AppDimention.screenWidth,
                               height: AppDimention.size60,
                               padding:
                                   EdgeInsets.only(right: AppDimention.size10),
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                   border: Border(
                                       bottom: BorderSide(
-                                          width: 1, color: Colors.black26),
+                                          width: 1, color: Colors.black12),
                                       top: BorderSide(
-                                          width: 1, color: Colors.black26))),
+                                          width: 1, color: Colors.black12))),
                               child: SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: Row(
-                                  children: Get.find<CategoryController>()
+                                  children: categoryController
                                       .categoryListStoreId
                                       .map((item) => Row(
                                             children: [
@@ -330,24 +407,27 @@ void _loadInfomation() {
                                                   setState(() {
                                                     categorySelected =
                                                         item.categoryId;
-                                                        title = item.categoryName;
+                                                    title = item.categoryName;
                                                   });
 
                                                   _loadProduct(
-                                                      storesitem!.storeId!,
+                                                      storesItem!.storeId!,
                                                       categorySelected!);
                                                 },
                                                 child: Container(
                                                   margin: EdgeInsets.only(
                                                       left:
                                                           AppDimention.size10),
-                                                  width: AppDimention.size150,
+                                                  padding: EdgeInsets.only(
+                                                      left: AppDimention.size20,
+                                                      right:
+                                                          AppDimention.size20),
                                                   height: AppDimention.size50,
                                                   decoration: BoxDecoration(
                                                       color: item.categoryId ==
                                                               categorySelected
                                                           ? Colors.amber
-                                                          : Colors.grey[400],
+                                                          : Colors.grey[200],
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               AppDimention
@@ -355,10 +435,12 @@ void _loadInfomation() {
                                                   child: Center(
                                                     child: Text(
                                                       item.categoryName!,
-                                                      style: TextStyle(
-                                                          fontSize: 18,
+                                                      style: const TextStyle(
+                                                          fontSize: 16,
                                                           fontWeight:
-                                                              FontWeight.w400),
+                                                              FontWeight.w400,
+                                                          color:
+                                                              Colors.black54),
                                                     ),
                                                   ),
                                                 ),
@@ -369,9 +451,6 @@ void _loadInfomation() {
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              height: AppDimention.size20,
-                            ),
                             Container(
                               width: AppDimention.screenWidth,
                               padding: EdgeInsets.only(
@@ -381,19 +460,20 @@ void _loadInfomation() {
                                 title!,
                                 style: TextStyle(
                                     fontSize: AppDimention.size25,
-                                    fontWeight: FontWeight.w500),
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black54),
                               ),
                             ),
                             SizedBox(
                               height: AppDimention.size20,
                             ),
                             GetBuilder<ProductController>(
-                                builder: (productcontroller) {
-                              return productcontroller.isLoadingStoreCategory
-                                  ? CircularProgressIndicator()
+                                builder: (productController) {
+                              return productController.isLoadingStoreCategory
+                                  ? const CircularProgressIndicator()
                                   : Column(
                                       children: Get.find<ProductController>()
-                                          .productListBycategorystore
+                                          .productListByCategoryStore
                                           .map((item) => Container(
                                                 width: AppDimention.screenWidth,
                                                 height: AppDimention.size130,
@@ -405,8 +485,7 @@ void _loadInfomation() {
                                                     bottom:
                                                         AppDimention.size10),
                                                 decoration: BoxDecoration(
-                                                    color: const Color.fromARGB(
-                                                        61, 255, 193, 7)),
+                                                    color: Colors.grey[100]),
                                                 child: Row(
                                                   children: [
                                                     Container(
@@ -436,7 +515,7 @@ void _loadInfomation() {
                                                               .start,
                                                       children: [
                                                         Text(item.productName!,
-                                                            style: TextStyle(
+                                                            style: const TextStyle(
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w500,
@@ -444,21 +523,50 @@ void _loadInfomation() {
                                                         Row(
                                                           children: [
                                                             Wrap(
-                                                              children: List.generate(
-                                                                  5,
-                                                                  (index) => Icon(
+                                                              children:
+                                                                  List.generate(
+                                                                      5,
+                                                                      (index) {
+                                                                if (index <
+                                                                    item.averageRate!
+                                                                        .floor()) {
+                                                                  return Icon(
                                                                       Icons
                                                                           .star,
                                                                       color: Colors
                                                                           .amber,
-                                                                      size:
-                                                                          12)),
+                                                                      size: AppDimention
+                                                                          .size15);
+                                                                } else if (index ==
+                                                                        item.averageRate!
+                                                                            .floor() &&
+                                                                    item.averageRate! %
+                                                                            1 !=
+                                                                        0) {
+                                                                  return Icon(
+                                                                      Icons
+                                                                          .star_half,
+                                                                      color: Colors
+                                                                          .amber,
+                                                                      size: AppDimention
+                                                                          .size15);
+                                                                } else {
+                                                                  return Icon(
+                                                                      Icons
+                                                                          .star_border,
+                                                                      color: Colors
+                                                                          .amber,
+                                                                      size: AppDimention
+                                                                          .size15);
+                                                                }
+                                                              }),
                                                             ),
                                                             Text(
-                                                              "( ${item.averageRate} )",
-                                                              style: TextStyle(
+                                                              "(${item.averageRate})",
+                                                              style: const TextStyle(
                                                                   color: Colors
-                                                                      .black38),
+                                                                      .amber,
+                                                                  fontSize: 12),
                                                             )
                                                           ],
                                                         ),
@@ -467,9 +575,9 @@ void _loadInfomation() {
                                                             Text(
                                                               item.discountedPrice !=
                                                                       0
-                                                                  ? "${item.discountedPrice!.toInt()} vnđ"
-                                                                  : "${item.price!.toInt()} vnđ",
-                                                              style: TextStyle(
+                                                                  ? "đ${item.discountedPrice!.toInt()}"
+                                                                  : "đ${item.price!.toInt()}",
+                                                              style: const TextStyle(
                                                                   color: AppColor
                                                                       .mainColor),
                                                             ),
@@ -486,10 +594,10 @@ void _loadInfomation() {
                                                                 Text(
                                                                   item.discountedPrice !=
                                                                           0
-                                                                      ? "${item.price!.toInt()}"
+                                                                      ? "đ${item.price!.toInt()}"
                                                                       : "",
                                                                   style:
-                                                                      TextStyle(
+                                                                      const TextStyle(
                                                                     color: Colors
                                                                         .black26,
                                                                     fontSize:
@@ -516,7 +624,7 @@ void _loadInfomation() {
                                                         ),
                                                         Row(
                                                           children: [
-                                                            Row(
+                                                            const Row(
                                                               children: [
                                                                 Icon(
                                                                   Icons
@@ -552,8 +660,9 @@ void _loadInfomation() {
                                                                 },
                                                                 child:
                                                                     Container(
-                                                                  width: AppDimention
-                                                                      .size80,
+                                                                  width:
+                                                                      AppDimention
+                                                                          .size80,
                                                                   height: AppDimention
                                                                           .size40 -
                                                                       1,
@@ -563,7 +672,7 @@ void _loadInfomation() {
                                                                       borderRadius:
                                                                           BorderRadius.circular(
                                                                               AppDimention.size5)),
-                                                                  child: Center(
+                                                                  child: const Center(
                                                                     child: Text(
                                                                       "Mua",
                                                                       style: TextStyle(
@@ -580,7 +689,10 @@ void _loadInfomation() {
                                                 ),
                                               ))
                                           .toList());
-                            })
+                            }),
+                            SizedBox(
+                              height: AppDimention.size40,
+                            ),
                           ],
                         ),
                       )),
@@ -592,7 +704,7 @@ void _loadInfomation() {
                     left: 0,
                     child: Column(
                       children: [
-                        Container(
+                        SizedBox(
                           width: AppDimention.screenWidth,
                           height: AppDimention.size150,
                           child: Center(
@@ -606,7 +718,7 @@ void _loadInfomation() {
                                   image: DecorationImage(
                                     fit: BoxFit.cover,
                                     image: MemoryImage(
-                                        base64Decode(storesitem!.image!)),
+                                        base64Decode(storesItem!.image!)),
                                   )),
                             ),
                           ),

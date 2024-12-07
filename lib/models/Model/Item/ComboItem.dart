@@ -1,6 +1,6 @@
 import 'package:android_project/models/Model/Item/ProductItem.dart';
 
-class Comboitem {
+class ComboItem {
   int? comboId;
   String? comboName;
   double? price;
@@ -9,7 +9,7 @@ class Comboitem {
   String? description;
   List<Productitem>? products;
 
-  Comboitem(
+  ComboItem(
       {this.comboId,
       this.comboName,
       this.price,
@@ -18,7 +18,7 @@ class Comboitem {
       this.description,
       this.products});
 
-  Comboitem.fromJson(Map<String, dynamic> json) {
+  ComboItem.fromJson(Map<String, dynamic> json) {
     comboId = json['comboId'];
     comboName = json['comboName'];
     price = json['price'];
@@ -28,20 +28,20 @@ class Comboitem {
     if (json['products'] != null) {
       products = <Productitem>[];
       json['products'].forEach((v) {
-        products!.add(new Productitem.fromJson(v));
+        products!.add(Productitem.fromJson(v));
       });
     }
   }
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['comboId'] = this.comboId;
-    data['comboName'] = this.comboName;
-    data['averageRate'] = this.averageRate;
-    data['price'] = this.price;
-    data['image'] = this.image;
-    data['description'] = this.description;
-    if (this.products != null) {
-      data['products'] = this.products!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['comboId'] = comboId;
+    data['comboName'] = comboName;
+    data['averageRate'] = averageRate;
+    data['price'] = price;
+    data['image'] = image;
+    data['description'] = description;
+    if (products != null) {
+      data['products'] = products!.map((v) => v.toJson()).toList();
     }
     return data;
   }

@@ -8,16 +8,16 @@ import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HomeProduct extends StatefulWidget {
-  const HomeProduct({
-    Key? key,
-  }) : super(key: key);
+class HomeProductRecommend extends StatefulWidget {
+  const HomeProductRecommend({
+    super.key,
+  });
 
   @override
-  _HomeProductState createState() => _HomeProductState();
+  HomeProductRecommendState createState() => HomeProductRecommendState();
 }
 
-class _HomeProductState extends State<HomeProduct> {
+class HomeProductRecommendState extends State<HomeProductRecommend> {
   @override
   void initState() {
     super.initState();
@@ -33,11 +33,12 @@ class _HomeProductState extends State<HomeProduct> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ProductController>(builder: (productController) {
+      productController.getProductRecommend();
       return productController.isLoading
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
-          : Column(
+          : productController.listProductRecommend.isEmpty ? const Center(child: Text("Hiện chưa có sản phẩm gợi ý cho bạn"),)  :  Column(
               children: [
                 Row(
                   children: [
@@ -45,24 +46,26 @@ class _HomeProductState extends State<HomeProduct> {
                       width: AppDimention.size10,
                     ),
                     Text(
-                      "Sản phẩm bán chạy",
+                      "Sản phẩm ưu thích của bạn",
                       style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.w600,color: Colors.black.withOpacity(0.7)),
                     ),
                   ],
                 ),
                 GridView.builder(
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     childAspectRatio: 0.7,
                   ),
                   itemCount: 10,
                   itemBuilder: (context, index) {
-                    Productitem item = productController.productList[index];
+                    Productitem item = productController.listProductRecommend[index];
+                    
                     return GestureDetector(
                       onTap: () {
+                       
                         Get.toNamed(
                             AppRoute.get_product_detail(item.productId!));
                       },
@@ -71,7 +74,7 @@ class _HomeProductState extends State<HomeProduct> {
                           color: Colors.white,
                           border: Border.all(
                               width: 1,
-                              color: Color.fromRGBO(218, 218, 218, 0.494)),
+                              color: const Color.fromRGBO(218, 218, 218, 0.494)),
                         ),
                         child: Column(
                           children: [
@@ -81,7 +84,7 @@ class _HomeProductState extends State<HomeProduct> {
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: MemoryImage(base64Decode(item.image!)),
+                                  image:item.image != null ?  MemoryImage(base64Decode(item.image!)) : const AssetImage("assets/image/LoadingBg.png"),
                                 ),
                               ),
                             ),
@@ -96,15 +99,14 @@ class _HomeProductState extends State<HomeProduct> {
                                     height: AppDimention.size5,
                                   ),
                                   Text(
-                                    productController
-                                        .productList[index].productName!,
-                                    style: TextStyle(
+                                    item.productName!,
+                                    style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: AppColor.mainColor),
                                   ),
                                   Text(
                                     "đ${_formatNumber(item.price!.toInt())}",
-                                    style: TextStyle(fontSize: 13),
+                                    style: const TextStyle(fontSize: 13),
                                   ),
                                   Row(
                                     mainAxisAlignment:
@@ -133,7 +135,7 @@ class _HomeProductState extends State<HomeProduct> {
                                               }
                                             }),
                                           ),
-                                          Text(
+                                          const Text(
                                             "(5)",
                                             style: TextStyle(
                                                 fontSize: 12,
@@ -141,7 +143,7 @@ class _HomeProductState extends State<HomeProduct> {
                                           ),
                                         ],
                                       ),
-                                      Row(
+                                      const Row(
                                         children: [
                                           Text(
                                             "1028",
@@ -161,10 +163,10 @@ class _HomeProductState extends State<HomeProduct> {
                                   SizedBox(height: AppDimention.size15),
                                   Row(
                                     children: [
-                                      Icon(Icons.delivery_dining_sharp),
+                                      const Icon(Icons.delivery_dining_sharp),
                                       Text(
                                         "Miễn phí vận chuyển",
-                                        style: TextStyle(fontSize: 10),
+                                        style: TextStyle(fontSize: 10,color: Colors.black.withOpacity(0.7)),
                                         overflow: TextOverflow.ellipsis,
                                       )
                                     ],

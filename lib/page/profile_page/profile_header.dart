@@ -1,28 +1,25 @@
 import 'dart:convert';
 
 import 'package:android_project/custom/big_text.dart';
-import 'package:android_project/data/controller/Cart_controller.dart';
+
 import 'package:android_project/data/controller/User_controller.dart';
-import 'package:android_project/route/app_route.dart';
-import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ProfileHeader extends StatefulWidget {
   const ProfileHeader({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   @override
-  _ProfileHeaderState createState() => _ProfileHeaderState();
+  ProfileHeaderState createState() => ProfileHeaderState();
 }
 
-class _ProfileHeaderState extends State<ProfileHeader> {
-  
+class ProfileHeaderState extends State<ProfileHeader> {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<UserController>(builder: (usercontroller) {
-      return Container(
+    return GetBuilder<UserController>(builder: (userController) {
+      return SizedBox(
         width: AppDimention.screenWidth,
         height: AppDimention.size100 * 2,
         child: Column(
@@ -32,7 +29,9 @@ class _ProfileHeaderState extends State<ProfileHeader> {
               padding: EdgeInsets.only(top: AppDimention.size20),
               width: AppDimention.screenWidth,
               child: Center(
-                child: Text("Hồ sơ",style: TextStyle(fontSize: AppDimention.size25,color: Colors.white)),
+                child: Text("Hồ sơ",
+                    style: TextStyle(
+                        fontSize: AppDimention.size25, color: Colors.white)),
               ),
             ),
             Row(
@@ -43,12 +42,15 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                   margin: EdgeInsets.only(
                       left: AppDimention.size30, top: AppDimention.size30),
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(50)),
+                      borderRadius: const BorderRadius.all(Radius.circular(50)),
                       image: DecorationImage(
                           fit: BoxFit.cover,
-                          image:usercontroller.userprofile?.avatar == null? MemoryImage(base64Decode(usercontroller.userprofile!.avatar!)) : AssetImage("assets/image/avatar.jpg")
-                          )
-                          ),
+                          image: (userController.userProfile?.avatar != null &&
+                                  userController
+                                      .userProfile!.avatar!.isNotEmpty)
+                              ? MemoryImage(base64Decode(
+                                  userController.userProfile!.avatar!))
+                              : const AssetImage("assets/image/avatar.jpg"))),
                 ),
                 SizedBox(
                   width: AppDimention.size20,
@@ -60,15 +62,14 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                       height: AppDimention.size30,
                     ),
                     BigText(
-                      text: usercontroller.userprofile?.fullName ??
+                      text: userController.userProfile?.fullName ??
                           'Default Name',
                       color: Colors.white,
                     ),
                     Text(
-                      "ID: ${usercontroller.userprofile?.id}MA04990",
-                      style: TextStyle(color: Colors.white),
+                      "ID: ${userController.userProfile?.id}",
+                      style: const TextStyle(color: Colors.white),
                     ),
-                    
                   ],
                 )
               ],

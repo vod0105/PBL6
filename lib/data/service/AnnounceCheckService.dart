@@ -5,7 +5,7 @@ import 'package:android_project/models/Model/AnnounceModel.dart';
 import 'package:get/get.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-class Announcecheckservice extends GetxService {
+class AnnounceCheckService extends GetxService {
   Timer? _timer;
   int? previousLength = -1;
   late UserController userController = Get.find<UserController>();
@@ -14,16 +14,16 @@ class Announcecheckservice extends GetxService {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  Future<Announcecheckservice> initService() async {
+  Future<AnnounceCheckService> initService() async {
     userController = Get.find<UserController>();
     _timer = Timer.periodic(const Duration(seconds: 10), (Timer timer) async {
-      if (authController.IsLogin.value) {
-        await userController.getannounce();
-        if (!userController.getloadingannouce) {
-          int currentLength = userController.getlistannouce.length;
+      if (authController.isLogin.value) {
+        await userController.getAnnounce();
+        if (!userController.loadingAnnoUce) {
+          int currentLength = userController.listAnnoUce.length;
 
           if (previousLength! < currentLength && previousLength != -1) {
-            AnnounceData data = userController.getlistannouce.last;
+            AnnounceData data = userController.listAnnoUce.last;
             await showNotification(data.title!, data.content!);
           }
           previousLength = currentLength;

@@ -1,36 +1,40 @@
-class Ordercombodto {
+class OrderComboDto {
   String? paymentMethod;
   int? comboId;
-  int? drinkId;
+  List<int>? drinkIds;
   int? storeId;
   int? quantity;
   String? size;
   String? deliveryAddress;
   double? latitude;
   double? longitude;
+  String? discountCode;
 
-  Ordercombodto(
-      {this.paymentMethod,
-      this.comboId,
-      this.drinkId,
-      this.storeId,
-      this.quantity,
-      this.size,
-      this.deliveryAddress,
-      this.latitude,
-      this.longitude});
+  OrderComboDto({
+    this.paymentMethod,
+    this.comboId,
+    this.drinkIds,
+    this.storeId,
+    this.quantity,
+    this.size,
+    this.deliveryAddress,
+    this.discountCode,
+    this.latitude,
+    this.longitude,
+  });
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['paymentMethod'] = this.paymentMethod;
-    data['comboId'] = this.comboId;
-    data['drinkId'] = this.drinkId;
-    data['storeId'] = this.storeId;
-    data['quantity'] = this.quantity;
-    data['size'] = this.size;
-    data['deliveryAddress'] = this.deliveryAddress;
-    data['latitude'] = this.latitude;
-    data['longitude'] = this.longitude;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['paymentMethod'] = paymentMethod;
+    data['comboId'] = comboId;
+    data['drinkId'] = drinkIds;
+    data['storeId'] = storeId;
+    data['quantity'] = quantity;
+    data['discountCode'] = discountCode;
+    data['size'] = size;
+    data['deliveryAddress'] = deliveryAddress;
+    data['latitude'] = latitude;
+    data['longitude'] = longitude;
     return data;
   }
 }

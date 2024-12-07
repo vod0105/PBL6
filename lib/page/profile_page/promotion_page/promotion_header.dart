@@ -1,24 +1,24 @@
-import 'package:android_project/route/app_route.dart';
-import 'package:android_project/theme/app_color.dart';
+
+import 'package:android_project/page/profile_page/promotion_page/user_promotion.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PromotionHeader extends StatefulWidget {
   const PromotionHeader({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   @override
-  _PromotionHeaderState createState() => _PromotionHeaderState();
+  PromotionHeaderState createState() => PromotionHeaderState();
 }
 
-class _PromotionHeaderState extends State<PromotionHeader> {
+class PromotionHeaderState extends State<PromotionHeader> {
   @override
   Widget build(BuildContext context) {
     return Container(
       width: AppDimention.screenWidth,
       height: AppDimention.size70,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         border: Border(bottom: BorderSide(width: 1,color: Colors.black26))
       ),
       child: Row(
@@ -35,8 +35,8 @@ class _PromotionHeaderState extends State<PromotionHeader> {
               color: Colors.black,
             ),
           ),
-         Container(
-          width: AppDimention.size100 * 3.5,
+         SizedBox(
+          width: AppDimention.size100 * 3,
           child: Center(
             child:  Text("Khuyến mãi",
               style: TextStyle(
@@ -44,6 +44,12 @@ class _PromotionHeaderState extends State<PromotionHeader> {
                   color: Colors.black,
             )),
           ),
+         ),
+         GestureDetector(
+          onTap:(){
+              Get.to(const UserPromotion());
+          },
+          child:const Text("Kho"),
          )
          
         ],

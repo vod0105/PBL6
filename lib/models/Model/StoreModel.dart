@@ -1,30 +1,29 @@
 import 'package:android_project/models/Model/Item/StoresItem.dart';
 
-class Storesmodel {
+class StoresModel {
   bool? status;
   String? message;
-  List<Storesitem>? liststores;
-  List<Storesitem>? get get_liststores => liststores;
+  List<StoresItem>? listStores;
 
-  Storesmodel({this.status, this.message, this.liststores});
+  StoresModel({this.status, this.message, this.listStores});
 
-  Storesmodel.fromJson(Map<String, dynamic> json) {
+  StoresModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
     if (json['data'] != null) {
-      liststores = <Storesitem>[];
+      listStores = <StoresItem>[];
       json['data'].forEach((v) {
-        liststores!.add(new Storesitem.fromJson(v));
+        listStores!.add(StoresItem.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['message'] = this.message;
-    if (this.liststores != null) {
-      data['data'] = this.liststores!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['message'] = message;
+    if (listStores != null) {
+      data['data'] = listStores!.map((v) => v.toJson()).toList();
     }
     return data;
   }

@@ -9,58 +9,41 @@ class CategoryController extends GetxController {
     required this.categoryRepo,
   });
 
-  // **************************************************************************** Khai báo biến
+  bool? isLoading;
 
-  // * load dữ liệu danh mục
-  bool? _isLoading;
-  bool? get isLoading => _isLoading;
+  bool isLoadingStore = false;
 
-  // * load dữ liệu danh mục trong cửa hàng
-  bool _isLoadingStore = false;
-  bool get isLoadingStore => _isLoadingStore;
+  List<CategoryItem> categoryList = [];
 
-  // * danh sách danh mục sản phẩm
-  List<Categoryitem> _categoryList = [];
-  List<Categoryitem> get categoryList => _categoryList;
+  List<CategoryItem> categoryListStoreId = [];
 
-  // * danh sách danh mục trong một cửa hàng
-  List<Categoryitem> _categoryListStoreId = [];
-  List<Categoryitem> get categoryListStoreId => _categoryListStoreId;
-
-  // * Hết khai báo biến ------------------------------------------------------------------------
-
-
-  // **************************************************************************** Khai báo hàm
-
-  // * Hàm lấy danh sách danh mục
-  Future<void> getall() async {
-    _isLoading = true;
-    Response response = await categoryRepo.getall();
+  Future<void> getAll() async {
+    isLoading = true;
+    Response response = await categoryRepo.getAll();
     if (response.statusCode == 200) {
       var data = response.body;
-      _categoryList = [];
-      _categoryList.addAll(Categorymodel.fromJson(data).get_listCategory ?? []);
+      categoryList = [];
+      categoryList.addAll(CategoryModel.fromJson(data).listCategory ?? []);
     } else {
-      _categoryList = [];
+      categoryList = [];
     }
-    _isLoading = false;
+    isLoading = false;
     update();
   }
 
-  // * Hàm lấy danh mục của cửa hàng
-  Future<void> getbystoreid(int id) async {
-    _isLoadingStore = true;
-    Response response = await categoryRepo.getbystoreid(id);
+  Future<void> getByStoreId(int id) async {
+    isLoadingStore = true;
+    Response response = await categoryRepo.getByStoreId(id);
 
     if (response.statusCode == 200) {
       var data = response.body;
-      _categoryListStoreId = [];
-      _categoryListStoreId.addAll(Categorymodel.fromJson(data).get_listCategory ?? []);
+      categoryListStoreId = [];
+      categoryListStoreId
+          .addAll(CategoryModel.fromJson(data).listCategory ?? []);
     } else {
-      _categoryListStoreId = [];
+      categoryListStoreId = [];
     }
-    _isLoadingStore = false;
+    isLoadingStore = false;
     update();
   }
-  
 }

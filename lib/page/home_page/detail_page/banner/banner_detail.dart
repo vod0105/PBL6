@@ -8,10 +8,10 @@ import 'package:get/get.dart';
 
 class BannerDetail extends StatelessWidget {
   final int pageId;
-  BannerDetail({
+  const BannerDetail({
     required this.pageId,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   @override
   Widget build(BuildContext context) {
     var product = Get.find<ComboController>().comboList[pageId];
@@ -57,7 +57,7 @@ class BannerDetail extends StatelessWidget {
           width: AppDimention.screenWidth,
           height: AppDimention.size60,
           child: Container(
-            decoration: BoxDecoration(color: AppColor.yellowColor),
+            decoration: const BoxDecoration(color: AppColor.yellowColor),
           ),
         ),
         //Announce container

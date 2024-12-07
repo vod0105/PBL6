@@ -1,8 +1,3 @@
-import 'dart:convert';
-
-import 'package:android_project/data/controller/Combo_controller.dart';
-import 'package:android_project/models/Model/ComboModel.dart';
-import 'package:android_project/models/Model/Item/ComboItem.dart';
 import 'package:android_project/route/app_route.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
@@ -11,13 +6,13 @@ import 'package:android_project/theme/app_dimention.dart';
 import 'package:get/get.dart';
 
 class HomeBanner extends StatefulWidget {
-  const HomeBanner({Key? key}) : super(key: key);
+  const HomeBanner({super.key});
 
   @override
-  _HomeBannerState createState() => _HomeBannerState();
+  HomeBannerState createState() => HomeBannerState();
 }
 
-class _HomeBannerState extends State<HomeBanner> {
+class HomeBannerState extends State<HomeBanner> {
   PageController pageController = PageController(viewportFraction: 1);
   double currentPageValue = 0.0;
   final double _scaleFactor = 0.8;
@@ -43,12 +38,12 @@ class _HomeBannerState extends State<HomeBanner> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: _height,
       width: double.maxFinite,
       child: Column(
         children: [
-          Container(
+          SizedBox(
             height: AppDimention.size100 * 2.5,
            
             child: PageView.builder(
@@ -111,7 +106,7 @@ class _HomeBannerState extends State<HomeBanner> {
                margin: EdgeInsets.only(left: AppDimention.size10,right: AppDimention.size10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(AppDimention.size10),
-                color: Color(0xFF69c5df),
+                color: const Color(0xFF69c5df),
                 image: DecorationImage(
                   fit: BoxFit.cover,
                   image: AssetImage("assets/image/banner_${index + 1}.jpg"),

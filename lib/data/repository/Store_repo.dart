@@ -6,11 +6,11 @@ import '../api/AppConstant.dart';
 class StoreRepo {
   final ApiClient apiClient;
   StoreRepo({required this.apiClient});
-  Future<Response> getall() async {
+  Future<Response> getAll() async {
     return await apiClient.getData(Appconstant.STORE_URL);
   }
 
-  Future<Response> getbyid(int id) async {
+  Future<Response> getById(int id) async {
     return await apiClient.getData(
         Appconstant.STORE_BY_ID_URL.replaceFirst("{id}", id.toString()));
   }

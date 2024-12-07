@@ -1,17 +1,16 @@
-import 'package:android_project/data/controller/Order_controller.dart';
 import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomeFooter extends StatefulWidget {
-  const HomeFooter({Key? key}) : super(key: key);
+  const HomeFooter({super.key});
 
   @override
-  _HomeFooterState createState() => _HomeFooterState();
+  HomeFooterState createState() => HomeFooterState();
 }
 
-class _HomeFooterState extends State<HomeFooter> {
+class HomeFooterState extends State<HomeFooter> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {

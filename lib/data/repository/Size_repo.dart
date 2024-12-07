@@ -5,11 +5,11 @@ import 'package:get/get.dart';
 class SizeRepo {
   final ApiClient apiClient;
   SizeRepo({required this.apiClient});
-  Future<Response> getall() async {
+  Future<Response> getAll() async {
     return await apiClient.getData(Appconstant.SIZE_URL);
   }
 
-  Future<Response> getbyid(int id) async {
+  Future<Response> getById(int id) async {
     return await apiClient.getData(
         Appconstant.SIZE_BY_ID_URL.replaceFirst(("{id}"), id.toString()));
   }

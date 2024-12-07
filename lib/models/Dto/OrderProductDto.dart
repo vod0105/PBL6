@@ -7,6 +7,7 @@ class Orderproductdto {
   String? deliveryAddress;
   double? latitude;
   double? longitude;
+  String? discountCode;
 
   Orderproductdto(
       {this.paymentMethod,
@@ -15,20 +16,21 @@ class Orderproductdto {
       this.quantity,
       this.size,
       this.deliveryAddress,
+      this.discountCode,
       this.latitude,
       this.longitude});
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['paymentMethod'] = this.paymentMethod;
-    data['productId'] = this.productId;
-
-    data['storeId'] = this.storeId;
-    data['quantity'] = this.quantity;
-    data['size'] = this.size;
-    data['deliveryAddress'] = this.deliveryAddress;
-    data['latitude'] = this.latitude;
-    data['longitude'] = this.longitude;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['paymentMethod'] = paymentMethod;
+    data['productId'] = productId;
+    data['discountCode'] = discountCode;
+    data['storeId'] = storeId;
+    data['quantity'] = quantity;
+    data['size'] = size;
+    data['deliveryAddress'] = deliveryAddress;
+    data['latitude'] = latitude;
+    data['longitude'] = longitude;
     return data;
   }
 }
