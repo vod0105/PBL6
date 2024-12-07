@@ -95,9 +95,6 @@ public class CategoryServiceImpl  implements ICategoryService {
          if (categoryRepository.findById(id).isEmpty()) {
              return ResponseEntity.badRequest().body(new APIRespone(false, "Category not found", ""));
          }
-//         if (categoryRepository.existsByCategoryName(categoryRequest.getCategoryName())) {
-//             return ResponseEntity.badRequest().body(new APIRespone(, "Category already exists", ""));
-//         }
         Category category = categoryRepository.findById(id).get();
         category.setCategoryName(categoryRequest.getCategoryName());
         try {

@@ -1,4 +1,4 @@
-package com.example.BE_PBL6_FastOrderSystem.utils.Helper;
+package com.example.BE_PBL6_FastOrderSystem.utils.helper;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;

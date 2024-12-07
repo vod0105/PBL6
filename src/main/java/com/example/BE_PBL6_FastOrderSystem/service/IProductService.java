@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IProductService {
-    ResponseEntity<APIRespone> getAllProduct();
+    List<ProductResponse> getAllProduct();
+
     ResponseEntity<APIRespone> getProductById(Long productId);
     ResponseEntity<APIRespone> getProductsByStoreId(Long storeId);
 
-    Long calculateOrderNowAmountProduct(Long productId, int quantity);
     ResponseEntity<APIRespone> getProductsByStore_CategoryId(Long storeId,Long categoryId);
 
     ResponseEntity<APIRespone> applyAllProductsToAllStores(int quantity);

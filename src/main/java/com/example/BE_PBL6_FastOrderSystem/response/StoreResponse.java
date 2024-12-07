@@ -18,13 +18,14 @@ public class StoreResponse {
     private String numberPhone;
     private LocalDateTime openingTime;
     private LocalDateTime closingTime;
-    @JsonIgnore
-    private UserResponse user;
-    private String managerName;
+//    @JsonIgnore // @JsonIgnore để tránh việc lặp vô hạn khi lấy thông tin của người quản lý
+//    private UserResponse user;
+//    private String managerName;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    // Constructor cũ
-    public StoreResponse(Long storeId, String storeName,String image ,String location, Double longitude, Double latitude, String numberPhone, LocalDateTime openingTime, LocalDateTime closingTime, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    private Integer stockQuantity;
+    // Constructor cho việc lấy thông tin cơ bản của cửa hàng và số lượng hàng tồn kho của product hiện tại
+    public StoreResponse(Long storeId, String storeName,String image ,String location, Double longitude, Double latitude, String numberPhone, LocalDateTime openingTime, LocalDateTime closingTime, LocalDateTime createdAt, LocalDateTime updatedAt, Integer stockQuantity) {
         this.storeId = storeId;
         this.storeName = storeName;
         this.image = image;
@@ -36,8 +37,9 @@ public class StoreResponse {
         this.closingTime = closingTime;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.stockQuantity = stockQuantity;
     }
-    // Constructor mới
+    // Constructor cho việc lấy thông tin cơ bản của cửa hàng và thông tin của người quản lý
     public StoreResponse(Long storeId, String storeName, String image, String location, Double longitude, Double latitude,String numberPhone,LocalDateTime openingTime,LocalDateTime closingTime, LocalDateTime createdAt, LocalDateTime updatedAt,Long managerId) {
         this.storeId = storeId;
         this.storeName = storeName;

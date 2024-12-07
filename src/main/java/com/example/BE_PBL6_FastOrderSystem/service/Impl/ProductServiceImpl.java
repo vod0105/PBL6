@@ -29,15 +29,25 @@ public class ProductServiceImpl implements IProductService {
     private final StoreRepository storeRepository;
     private final ProductStoreRepository productStoreRepository;
 
+//    @Override
+//    public ResponseEntity<APIRespone> getAllProduct() {
+//        if (productRepository.findAll().isEmpty()) {
+//            return new ResponseEntity<>(new APIRespone(false, "No product found", ""), HttpStatus.NOT_FOUND);
+//        }
+//        List<ProductResponse> productResponses = productRepository.findAll().stream()
+//                .map(ResponseConverter::convertToProductResponse)
+//                .collect(Collectors.toList());
+//        return new ResponseEntity<>(new APIRespone(true, "Success", productResponses), HttpStatus.OK);
+//    }
     @Override
-    public ResponseEntity<APIRespone> getAllProduct() {
+    public List<ProductResponse> getAllProduct(){
         if (productRepository.findAll().isEmpty()) {
-            return new ResponseEntity<>(new APIRespone(false, "No product found", ""), HttpStatus.NOT_FOUND);
+            return null;
         }
         List<ProductResponse> productResponses = productRepository.findAll().stream()
                 .map(ResponseConverter::convertToProductResponse)
                 .collect(Collectors.toList());
-        return new ResponseEntity<>(new APIRespone(true, "Success", productResponses), HttpStatus.OK);
+        return productResponses;
     }
 
     @Override
@@ -81,15 +91,6 @@ public class ProductServiceImpl implements IProductService {
         }
 
         return new ResponseEntity<>(new APIRespone(true, "Success", product_storeAndcategory), HttpStatus.OK);
-    }
-
-    @Override
-    public Long calculateOrderNowAmountProduct(Long productId, int quantity) {
-        Optional<Product> product = productRepository.findById(productId);
-        if (product.isEmpty()) {
-            return null;
-        }
-        return (long) (product.get().getPrice() * quantity);
     }
 
     @Override

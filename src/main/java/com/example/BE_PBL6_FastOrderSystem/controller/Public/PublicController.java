@@ -35,8 +35,9 @@ public class PublicController {
         return categoryService.getCategoryById(id);
     }
     @GetMapping("/products/all")
-    public ResponseEntity<APIRespone> getAllProducts() throws SQLException {
-       return productService.getAllProduct();
+    public ResponseEntity<APIRespone> getAllProducts() {
+        List<ProductResponse> productResponses = productService.getAllProduct();
+        return ResponseEntity.ok(new APIRespone(true, "Success", productResponses));
     }
     @GetMapping("/products/{storeid}/{categoryid}")
     public ResponseEntity<APIRespone> getProduct_ByStoreAndCategoryById(@PathVariable("storeid") Long storeId,@PathVariable("categoryid") Long categoryid) {

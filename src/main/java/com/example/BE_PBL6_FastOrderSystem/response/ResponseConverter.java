@@ -27,7 +27,8 @@ public class ResponseConverter {
                             store.getOpeningTime(),
                             store.getClosingTime(),
                             store.getCreatedAt(),
-                            store.getUpdatedAt()
+                            store.getUpdatedAt(),
+                            productStore.getStockQuantity()
                     );
                 })
                 .collect(Collectors.toList());
@@ -69,7 +70,6 @@ public class ResponseConverter {
         List<ProductResponse> productResponses = combo.getProducts().stream()
                 .map(ResponseConverter::convertToProductResponse)
                 .collect(Collectors.toList());
-        // Calculate average rate if rates = null thi average rate = 0
         double averageRate = 0.0;
         if (combo.getRates() != null && !combo.getRates().isEmpty()) {
             averageRate = combo.getRates().stream()
