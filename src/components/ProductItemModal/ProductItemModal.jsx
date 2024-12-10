@@ -95,13 +95,13 @@ const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, 
           // const store = product.stores.find(store => +store.storeId === +selectedStore.storeId);
           // if (quantity > +store.stockQuantity) {
 
-          if (quantity > product.stockQuantity) {
-            toast.error("Số lượng sản phẩm vượt quy định!")
-          }
-          else { // Giả sử thêm vào thành công (Chưa xủ lý các điều kiện -> BE chưa làm)
+          // if (quantity > product.stockQuantity) {
+          //   toast.error("Số lượng sản phẩm vượt quy định!")
+          // }
+          // else { // Giả sử thêm vào thành công (Chưa xủ lý các điều kiện -> BE chưa làm)
             dispatch(addToCartProduct(product.productId, quantity, selectedStore.storeId, selectedSize, 'Pending'));
             handleModalClose();
-          }
+          // }
         }
       }
     }
@@ -129,14 +129,14 @@ const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, 
           //    3. Chuyển cửa hàng -> Chuyển listSizes + Default size + Số lượng
 
           // else: Mua được
-          if (quantity > product.stockQuantity) {
-            toast.error("Số lượng sản phẩm vượt quy định!");
-          }
-          else { // Giả sử thêm vào thành công (Chưa xủ lý các điều kiện -> BE chưa làm)
+          // if (quantity > product.stockQuantity) {
+          //   toast.error("Số lượng sản phẩm vượt quy định!");
+          // }
+          // else { // Giả sử thêm vào thành công (Chưa xủ lý các điều kiện -> BE chưa làm)
             dispatch(placeOrderUsingBuyNow(product, finalPrice, quantity, selectedStore, selectedSize));
             navigate('/checkout');
             handleModalClose();
-          }
+          // }
         }
       }
     }

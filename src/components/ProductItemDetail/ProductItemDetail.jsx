@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import './ProductItemDetail.scss'
-import { assets } from '../../assets/assets'
 import logoStar from '../../assets/logo/star.png'
 import logoStarNobgColor from '../../assets/logo/star_no_bgcolor.png'
 import logoUser from '../../assets/logo/user.png'
@@ -71,10 +70,14 @@ const ProductItemDetail = () => {
   })
 
   const account = useSelector((state) => state.auth.account); // Khách hàng đã đánh giá sản phẩm ni -> Vô coi đánh giá sản phẩm -> hiện "Bạn"
+  // useEffect(() => {
+  //   window.scrollTo(0, 0);
+  // }, []);
   useEffect(() => {
     dispatch(fetchProductById(id));
     dispatch(fetchRatingProductById(id));
     dispatch(fetchSimilarProducts(id));
+    window.scrollTo(0, 0);
   }, [id]);
 
   // Select -> Lọc số sao ở review
@@ -243,7 +246,7 @@ const ProductItemDetail = () => {
         </div>
         {/* Modal preview ảnh */}
         <ImagePreviewModal
-          show={showImagePreview}
+          show={showImagePreview} // boolean
           image={previewImage}
           onClose={handleCloseImagePreview}
         />

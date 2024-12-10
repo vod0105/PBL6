@@ -27,9 +27,10 @@ const Store = () => {
   const listStores = useSelector((state) => {
     return state.store.listStores;
   })
-  // useEffect(() => {
-  //   dispatch(fetchAllStores());
-  // }, []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
 
   // Reset contentRef khi component unmounts
   useEffect(() => {

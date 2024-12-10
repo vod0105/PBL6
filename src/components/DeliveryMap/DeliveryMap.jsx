@@ -206,9 +206,9 @@ const DeliveryMap = () => {
         response.data.routes[0].geometry
       ) {
         const routeDistance = response.data.routes[0].segments[0].distance; // mét
-        const routeDuration = response.data.routes[0].segments[0].duration; // Đơn vị: giây
+        const routeDuration = response.data.routes[0].segments[0].duration; // giây
         setDistance((routeDistance / 1000).toFixed(2)); // m -> km
-        setDuration((routeDuration / 60).toFixed(2));   // Chuyển đổi sang phút
+        setDuration((routeDuration / 60).toFixed(2));   // s -> m
         // console.log('>>> res 2 điểm trên map: ', response);
         console.log('>>> tọa độ nhận hàng: ', orderCoords);
         console.log('Số km: ', distance);
@@ -222,7 +222,7 @@ const DeliveryMap = () => {
     }
   };
   // geometry -> 2 điểm 
-  const decodePolyline = (encoded) => {
+  const decodePolyline = (encoded) => { // encoded: Chuỗi mã hóa
     const decodedCoords = polyline.decode(encoded);
     // Chuyển đổi [lng, lat] sang [lat, lng]
     return decodedCoords.map(coord => ({ lat: coord[0], lng: coord[1] }));

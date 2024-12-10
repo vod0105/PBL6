@@ -38,6 +38,10 @@ const Home = () => {
   //   dispatch(fetchProductsBestSale());
   // }, []);
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
+  useEffect(() => {
     if (account) {
       dispatch(fetchFavouriteProducs(account.id));
     }

@@ -11,21 +11,20 @@ const ReviewModal = ({ showModal, handleClose, orderDetails }) => {
   const [listCombos, setListCombos] = useState([]);
   const [rating, setRating] = useState(5);  // Số lượng sao được chọn
   const [ratingQuality, setRatingQuality] = useState('Tuyệt vời');
-  const [images, setImages] = useState([]);  // Các image đã chọn
+  const [images, setImages] = useState([]);  // Mỗi element: {preview: base64, file}
   const [commentContent, setCommentContent] = useState('');
   const dispatch = useDispatch();
   useEffect(() => {
     if (orderDetails) {
       setListProducts(orderDetails.orderDetails.filter(item => item.type === 'product'));
       setListCombos(orderDetails.orderDetails.filter(item => item.type === 'combo'));
-      // console.log('>>> check list products: ', listProducts);
     }
   }, [orderDetails]);
 
-  // Hàm xử lý khi nhấn vào ngôi sao
+  // Nhấn vào 1 img star
   const handleStarClick = (index) => {
     setRating(index);  // Cập nhật số lượng sao được chọn
-    switch (index) {
+    switch (index) { // rating <=> Mức độ hài lòng
       case 1:
         setRatingQuality('Tệ');
         break;
@@ -45,7 +44,7 @@ const ReviewModal = ({ showModal, handleClose, orderDetails }) => {
         setRatingQuality('Tuyệt vời');
     }
   };
-  // Cập nhật hàm handleImageUpload
+
   const handleImageUpload = (event, index) => {
     const file = event.target.files[0];
     if (file) {
@@ -62,14 +61,13 @@ const ReviewModal = ({ showModal, handleClose, orderDetails }) => {
     setCommentContent(event.target.value);
   };
   const handleSubmit = () => {
-    // console.log('>>> order detail đây nè: ', orderDetails);
     const listProductIds = listProducts.map((product) => product.productDetail.productId)
       .join(',');
     const listComboIds = listCombos.map((combo) => combo.comboDetail.comboId)
       .join(',');
     const rate = rating;
-    const listImageFiles = images.filter((image) => image && image.file) // Lọc ra những phần tử có file
-      .map((image) => image.file);  // Trả về chỉ file gốc
+    const listImageFiles = images.filter((image) => image && image.file) // Lọc những element có "key: file"
+      .map((image) => image.file);  // Trả về chỉ file gốc (Ko lấy preview: base64)
     const comment = commentContent;
     dispatch(reviewOrder(listProductIds, listComboIds, rate, listImageFiles, comment));
     handleClose();
@@ -147,14 +145,14 @@ const ReviewModal = ({ showModal, handleClose, orderDetails }) => {
               <span>Chất lượng sản phẩm</span>
             </div>
             <div className="rating-star-container">
-              {/* Render các ngôi sao với sự kiện onClick */}
+              {/* Render các ngôi sao với onClick */}
               {[1, 2, 3, 4, 5].map((star, index) => (
                 <img
                   key={index}
-                  src={star <= rating ? logoStar : logoStarNobgColor}  // Hiển thị sao đầy hoặc sao trống
+                  src={star <= rating ? logoStar : logoStarNobgColor}  // star/no_star
                   alt=""
-                  onClick={() => handleStarClick(star)}  // Cập nhật khi nhấn vào ngôi sao
-                  style={{ cursor: 'pointer' }}  // Thay đổi con trỏ khi hover
+                  onClick={() => handleStarClick(star)}  // setRating(số sao)
+                  style={{ cursor: 'pointer' }}  
                 />
               ))}
             </div>
@@ -162,25 +160,27 @@ const ReviewModal = ({ showModal, handleClose, orderDetails }) => {
               <span>{ratingQuality}</span>  {/* Hiển thị đánh giá chất lượng */}
             </div>
           </div>
-          {/* Phần upload hình ảnh */}
+          {/* upload images */}
           <div className="review-images-container">
             <span>Đăng tải hình ảnh</span>
             <div className="images-container">
-              {Array.from({ length: 5 }).map((_, index) => (
+              {[...Array(5)].map((_, index) => ( // index: 0 -> 4
                 <div key={index} className="image-upload-container">
                   <input
                     type="file"
                     accept="image/*"
                     onChange={(e) => handleImageUpload(e, index)}
                     style={{ display: 'none' }} // Ẩn input file
-                    id={`file-input-${index}`} // ID cho input
+                    id={`file-input-${index}`} // ID input
                   />
                   <label htmlFor={`file-input-${index}`} className="image-upload-label">
-                    {images[index] && images[index].preview ? (
-                      <img src={images[index].preview} alt={`Preview ${index}`} className="image-preview" />
-                    ) : (
-                      <div className="image-upload-placeholder">Chọn ảnh</div>
-                    )}
+                    {
+                      images[index]?.preview ? (
+                        <img src={images[index].preview} alt={`Preview ${index}`} className="image-preview" />
+                      ) : (
+                        <div className="image-upload-placeholder">Chọn ảnh</div>
+                      )
+                    }
                   </label>
                 </div>
               ))}

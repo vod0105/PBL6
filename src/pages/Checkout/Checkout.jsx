@@ -153,7 +153,7 @@ const Checkout = () => {
     // const [clickedCoords, setClickedCoords] = useState(null); // Tọa độ click
     const apiKey = '5b3ce3597851110001cf6248d480712f52d0466d8d71a3927b194e84Y';
 
-    // Lấy tọa độ hiện tại
+    // Lấy tọa độ hiện tại (Mới vô MAP)
     const getCurrentCoors = () => {
         if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition(
@@ -178,7 +178,7 @@ const Checkout = () => {
             );
 
         } else {
-            console.error("Geolocation is not supported by this browser.");
+            console.error("Trình duyệt của bạn không hỗ trợ lấy vị trí.");
             alert("Trình duyệt của bạn không hỗ trợ lấy vị trí.");
         }
     }
@@ -198,7 +198,7 @@ const Checkout = () => {
 
     // Tọa độ -> Địa chỉ
     const fetchAddressFromCoordinates = async (latitude, longitude) => {
-        console.log('lấy tọa độ từ địa chỉ');
+        // console.log('lấy tọa độ từ địa chỉ');
         try {
             const response = await axios.get(
                 `https://api.openrouteservice.org/geocode/reverse?point.lon=${longitude}&point.lat=${latitude}&size=1`,
@@ -221,20 +221,19 @@ const Checkout = () => {
     // Tính phí giao hàng dựa vào khoảng cách (đường chim bay)
     const [shippingFee, setShippingFee] = useState(0);
     const [distance, setDistance] = useState(0);
-    function toRad(deg) {
+    function toRad(deg) { // độ -> radian
         return deg * (Math.PI / 180);
     }
     function getDistance(lat1, lon1, lat2, lon2) {
-        const R = 6371; // bán kính trái đất tính bằng km
+        const R = 6371; // bán kính trái đất (km)
         const dLat = toRad(lat2 - lat1);
         const dLon = toRad(lon2 - lon1);
         const a =
             Math.sin(dLat / 2) * Math.sin(dLat / 2) +
             Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
             Math.sin(dLon / 2) * Math.sin(dLon / 2);
-
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        const distance = R * c; // khoảng cách tính bằng km
+        const distance = R * c; // khoảng cách (km)
         return distance.toFixed(2); // km
     }
     const customIconStore = new L.Icon({
@@ -350,7 +349,7 @@ const Checkout = () => {
                                 )}
 
                                 {/* note: thay tọa độ sau bằng tọa độ cửa hàng */}
-                                <Marker position={[16.0471, 108.2068]} icon={customIconStore}>
+                                <Marker position={[selectedStore?.latitude ? +selectedStore.latitude : 16.0471, selectedStore?.longitude ? +selectedStore.longitude : 108.206]} icon={customIconStore}>
                                     <Popup>Vị trí của cửa hàng</Popup>
                                 </Marker>
                                 {/* {clickedCoords && (

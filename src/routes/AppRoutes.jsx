@@ -59,7 +59,6 @@ const AppRoutes = (props) => {
                 {/* <Route path="/account/*" element={<Account />} /> */}
                 {/* <Route path="/checkout" element={<Checkout />} /> */}
                 {/* <Route path="/order-complete" element={<OrderComplete />} /> */}
-                {/* <Route path="/test-loading" element={<Loading />} /> */}
                 {/* <Route path="/order-in-transit/:orderCode" element={<DeliveryMap />} /> */}
 
                 <Route path="*" element={<div>404 Not Found!!!</div>} />

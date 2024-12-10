@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect} from 'react'
 import './Introduce.scss'
 import { Container, Row, Col, Carousel } from "react-bootstrap";
 import Introduce_1 from "../../assets/image_gg/introduce_1.png";
@@ -14,6 +14,9 @@ import saving from "../../assets/blog/saving.png";
 
 
 const Introduce = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div>
       <section className="introduce-section-1">

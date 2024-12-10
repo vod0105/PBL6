@@ -25,8 +25,8 @@ const Cart = () => {
     return state.user.listCombosInCart;
   })
 
-  // State to track checked items in the cart
-  const [checkedItems, setCheckedItems] = useState([]); // Added state for tracking selected items
+  // Array chứa list cartIds đã check
+  const [checkedItems, setCheckedItems] = useState([]);
 
   useEffect(() => {
     dispatch(fetchProductsInCart());
@@ -36,7 +36,6 @@ const Cart = () => {
   useEffect(() => {
     if (Array.isArray(listProductsInCart) && Array.isArray(listCombosInCart)) {
       const allItems = [...listProductsInCart, ...listCombosInCart];
-
       if (allItems.length > 0) {
         const firstStore = allItems.find((item) => item.product || item.combo);
         setSelectedStore(+firstStore?.product?.storeId || +firstStore?.combo?.storeId || 0);
@@ -46,13 +45,11 @@ const Cart = () => {
     }
   }, [listProductsInCart, listCombosInCart]);
 
-
-  // Handle checkbox toggle for each cart item
   const handleCheckboxChange = (cartId) => {
     setCheckedItems((prevCheckedItems) =>
-      prevCheckedItems.includes(cartId)
-        ? prevCheckedItems.filter((id) => id !== cartId)
-        : [...prevCheckedItems, cartId]
+      prevCheckedItems.includes(cartId) // array chứa cartID
+        ? prevCheckedItems.filter((id) => id !== cartId) // remove
+        : [...prevCheckedItems, cartId] // add
     );
   };
 
@@ -70,7 +67,7 @@ const Cart = () => {
   };
 
   const handleDecreaseQuantity = (item) => {
-    if ((item.product && item.product.quantity > 1) || (item.combo && item.combo.quantity > 1)) {
+    if ((item?.product?.quantity > 1) || (item?.combo?.quantity > 1)) {
       let quantity;
       if (item.product) {
         quantity = +item.product.quantity;
@@ -91,8 +88,8 @@ const Cart = () => {
     for (let i = 0; i < listProductsInCart?.length; i++) {
       const item = listProductsInCart[i];
       if (
-        checkedItems.includes(item.cartId) && // Row checked
-        +item.product?.dataStore?.storeId === selectedStore  // Cửa hàng đang chọn
+        checkedItems.includes(item.cartId) && // checked
+        +item.product?.dataStore?.storeId === selectedStore  // Cửa hàng đang chọn ở select
       ) {
         total += item.product.unitPrice * item.product.quantity;
       }
@@ -130,7 +127,7 @@ const Cart = () => {
             +item.combo?.dataStore?.storeId === selectedStore
         );
         // console.log('selectedProducts: ', selectedProducts);
-        console.log('id selectedStore: ', selectedStore);
+        // console.log('id selectedStore: ', selectedStore);
 
         dispatch(placeOrderUsingAddToCart(selectedProducts, selectedCombos, selectedStore));
         navigate('/checkout');
@@ -156,9 +153,8 @@ const Cart = () => {
       ...listProductsInCart,
       ...listCombosInCart
     ].filter((item) => {
-      const storeId = item.product ? item.product.storeId : item.combo.storeId;
-      const name = item.product ? item.product.productName : item.combo.comboName;
-      // const isStoreMatch = selectedStore === "all" || +storeId === +selectedStore; // select cửa hàng
+      const storeId = item.product ? item.product.storeId : item.combo.storeId; // storeId product/combo
+      const name = item.product ? item.product.productName : item.combo.comboName; // name product/combo
       const isStoreMatch = +storeId === +selectedStore;
       const isSearchMatch = name.toLowerCase().includes(searchTerm.toLowerCase()); // input search
       return isStoreMatch && isSearchMatch;
@@ -197,7 +193,8 @@ const Cart = () => {
                 aria-label="Default select example"
               >
                 {/* <option value="all">Tất cả cửa hàng</option> */}
-                {
+                {/* {
+                  // Tìm các store khác nhau trong cart
                   Array.isArray(listProductsInCart) && Array.isArray(listCombosInCart) &&
                   listProductsInCart.concat(listCombosInCart)
                     .map((item) => (item.product ? item.product.dataStore : item.combo.dataStore))
@@ -207,6 +204,23 @@ const Cart = () => {
                         {store.storeName}
                       </option>
                     ))
+                } */}
+                {
+                  Array.isArray(listProductsInCart) && Array.isArray(listCombosInCart) &&
+                  [
+                    // Lọc các store khác nhau trong cart
+                    ...new Map(
+                      listProductsInCart.concat(listCombosInCart)
+                        .map((item) => item.product ? item.product.dataStore : item.combo.dataStore)
+                        .filter(Boolean) // Loại bỏ giá trị null/undefined/...
+                        .map((store) => [store.storeId, store]) // [key, value] 
+                    ).values()
+                  ] // => Array chứa các object store khác nhau
+                  .map((store) => (
+                    <option key={store.storeId} value={store.storeId}>
+                      {store.storeName}
+                    </option>
+                  ))
                 }
               </select>
             </div>)

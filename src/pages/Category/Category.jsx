@@ -29,19 +29,19 @@ export default function Category() {
     dispatch(fetchProductsByIdCategory(id));
   }, [id, dispatch]); // 'id' category thay đổi -> lấy lại list products
 
-  // Hàm xử lý thay đổi từ khóa tìm kiếm
+  // Thay đổi từ khóa tìm kiếm
   const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
+  setSearchTerm(event.target.value);
     setActivePage(1); // Reset về trang 1 khi tìm kiếm mới
   };
 
-  // Hàm xử lý thay đổi sắp xếp
+  // Thay đổi sắp xếp
   const handleSortChange = (event) => {
     setSelectedSort(event.target.value);
     setActivePage(1); // Reset về trang 1 khi thay đổi sắp xếp
   };
 
-  // Lọc và sắp xếp sản phẩm theo từ khóa và giá
+  // Lọc và sắp xếp sản phẩm theo từ khóa và giá (search & select)
   const filteredProducts = listProducts
     .filter((product) =>
       product.productName.toLowerCase().includes(searchTerm.toLowerCase()) &&
@@ -53,7 +53,7 @@ export default function Category() {
       return 0; // Mặc định
     });
 
-  // Lấy sản phẩm cho trang hiện tại
+  // Lấy list sản phẩm cho trang hiện tại
   const currentProducts = filteredProducts.slice(
     (activePage - 1) * itemsPerPage,
     activePage * itemsPerPage
@@ -78,7 +78,7 @@ export default function Category() {
     }
   };
 
-  // AI file upload
+  // Image -> base64
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     return new Promise((resolve, reject) => {
@@ -89,22 +89,23 @@ export default function Category() {
           resolve(base64String); // Trả về chuỗi base64
         };
         reader.onerror = (error) => reject(error);
-        reader.readAsDataURL(file); // Đọc file dưới dạng chuỗi base64
+        reader.readAsDataURL(file); // Async -> Trả về chuỗi Data URL (chuỗi Base64 + tiền tố MIME: data:image/png;base64).
+        // readAsText, readAsArrayBuffer, readAsDataURL
       } else {
         reject("No file selected");
       }
     });
   };
+  // AI file upload
   const onFileSelected = async (event) => {
     try {
       const base64FileImage = await handleFileChange(event);
-      // console.log("Chuỗi base64:", base64FileImage);
       // AI: Tìm product bằng AI -> upload file
       try {
         const responseAI = await axios.post(`http://localhost:5000/predict`, {
           image: base64FileImage
         });
-        console.log("response AI:", responseAI);
+        // console.log("response AI:", responseAI);
         if (responseAI?.data) {
           const nameProduct = responseAI.data;
           // setSearchTermAI(nameProduct);
@@ -180,7 +181,7 @@ export default function Category() {
                   currentProducts.map((product, index) => (
                     <React.Fragment key={index}>
                       <ProductItem product={product} />
-                      {(index + 1) % 4 === 0 && (index + 1) !== currentProducts.length && (
+                      {(index + 1) % 4 === 0 && (index + 1) !== currentProducts.length && (  // Vẽ kẻ ngang
                         <hr className="hr-separate" />
                       )}
                     </React.Fragment>
@@ -191,7 +192,7 @@ export default function Category() {
               <div className="pagination-container">
                 <Pagination>
                   <Pagination.Prev onClick={handlePrevious} disabled={activePage === 1} />
-                  {[...Array(totalPages)].map((_, number) => (
+                  {[...Array(totalPages)].map((_, number) => ( // Array chạy từ 0
                     <Pagination.Item
                       key={number + 1}
                       active={number + 1 === activePage}

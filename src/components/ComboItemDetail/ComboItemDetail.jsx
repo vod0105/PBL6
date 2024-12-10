@@ -94,12 +94,15 @@ const ComboItemDetail = () => {
     return state.product.ratingCombo;
   })
   const account = useSelector((state) => state.auth.account); // Khách hàng đã đánh giá sản phẩm ni -> Vô coi đánh giá sản phẩm -> hiện "Bạn"
+  // useEffect(() => {
+  //   window.scrollTo(0, 0);
+  // }, []);
   useEffect(() => {
     dispatch(fetchComboById(id));
     dispatch(fetchAllStores());
     dispatch(fetchSimilarCombos(id));
     dispatch(fetchRatingComboById(id));
-
+    window.scrollTo(0, 0);
   }, [id]);
 
   // Select -> Lọc số sao ở review
