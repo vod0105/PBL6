@@ -1,7 +1,7 @@
-import axios from "../setup/axios"; // an instance of axios
+import instance from "../setup/instanceAxios"; 
 
 const fetchAllSizesService = () => {
-    return axios({
+    return instance({
         method: 'get',
         url: `/api/v1/public/sizes/all`,
     });

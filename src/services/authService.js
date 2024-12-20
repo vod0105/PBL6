@@ -1,4 +1,4 @@
-import instance from "../setup/axios";
+import instance from "../setup/instanceAxios";
 
 const registerNewUserService = (fullName, password, phoneNumber, email, address) => {
     return instance({ // return response: Object

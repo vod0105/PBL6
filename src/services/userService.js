@@ -1,4 +1,4 @@
-import instance from "../setup/axios"; // an instance of axios
+import instance from "../setup/instanceAxios"; // an instance of axios
 import axios from "axios";
 const updateProfileService = (fullName, avatar, email, address) => {
     const formData = new FormData();
@@ -260,9 +260,10 @@ const fetchVouchersService = () => {
     });
 }
 const fetchFavouriteProducsService = (idUser) => {
+    let urlAI =import.meta.env.VITE_AI_URL || `http://localhost:5000`;
     return axios({
         method: 'get',
-        url: `http://localhost:5000/cross-sell/${idUser}`,
+        url: `${urlAI}/cross-sell/${idUser}`,
     });
 }
 const saveVoucherService = (voucherId) => {

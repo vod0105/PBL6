@@ -1,4 +1,4 @@
-import instance from "../setup/axios";
+import instance from "../setup/instanceAxios";
 
 const fetchAllPromotionsService = () => {
     return instance({

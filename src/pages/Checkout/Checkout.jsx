@@ -151,7 +151,7 @@ const Checkout = () => {
     const [currentCoords, setCurrentCoords] = useState([16.075966, 108.149805]); // Tọa độ hiện tại của mình
     // const [error, setError] = useState(null);
     // const [clickedCoords, setClickedCoords] = useState(null); // Tọa độ click
-    const apiKey = '5b3ce3597851110001cf6248d480712f52d0466d8d71a3927b194e84Y';
+    const apiKey = import.meta.env.VITE_API_KEY_MAP;
 
     // Lấy tọa độ hiện tại (Mới vô MAP)
     const getCurrentCoors = () => {
@@ -168,7 +168,7 @@ const Checkout = () => {
                 },
                 (error) => {
                     console.error("Error getting location:", error);
-                    alert("Không thể lấy vị trí hiện tại. Vui lòng kiểm tra cài đặt vị trí.");
+                    // alert("Không thể lấy vị trí hiện tại. Vui lòng kiểm tra cài đặt vị trí.");
                 },
                 {
                     enableHighAccuracy: true,  // Yêu cầu độ chính xác cao

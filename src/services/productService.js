@@ -1,57 +1,57 @@
-import axios from "../setup/axios"; // an instance of axios
+import instance from "../setup/instanceAxios"; 
 
 const fetchProductsBestSaleService = () => {
-    return axios({
+    return instance({
         method: 'get',
         url: `/api/v1/public/products/best-sale`,
     });
 }
 const fetchProductsByIdCategoryService = (id) => {
-    return axios({
+    return instance({
         method: 'get',
         url: `/api/v1/public/products/category/${id}`,
     });
 }
 const fetchAllCombosService = () => {
-    return axios({
+    return instance({
         method: 'get',
         url: `/api/v1/public/combo/all`,
     });
 }
 const fetchAllDrinksService = (drinkId) => {
     console.log('>>> drink id: ', drinkId);
-    return axios({
+    return instance({
         method: 'get',
         url: `/api/v1/public/products/category/${drinkId}`,
     });
 }
 
 const fetchProductByIdService = (id) => {
-    return axios({
+    return instance({
         method: 'get',
         url: `/api/v1/public/products/${id}`,
     });
 }
 const fetchComboByIdService = (id) => {
-    return axios({
+    return instance({
         method: 'get',
         url: `/api/v1/public/combo/${id}`,
     });
 }
 const fetchProductsByIdStoreService = (id) => {
-    return axios({
+    return instance({
         method: 'get',
         url: `/api/v1/public/products/store/${id}`,
     });
 }
 const fetchRatingProductByIdService = (id) => {
-    return axios({
+    return instance({
         method: 'get',
         url: `/api/v1/public/rate/product/${id}`,
     });
 }
 const fetchRatingComboByIdService = (id) => {
-    return axios({
+    return instance({
         method: 'get',
         url: `/api/v1/public/rate/combo/${id}`,
     });
@@ -59,7 +59,7 @@ const fetchRatingComboByIdService = (id) => {
 
 // Tất cả sp -> Page: All Products
 const fetchAllProductsService = () => {
-    return axios({
+    return instance({
         method: 'get',
         url: `/api/v1/public/products/all`,
     });

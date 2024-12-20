@@ -1,5 +1,5 @@
 // Chưa có API trả về all paymentMethods
-// import axios from "../setup/axios"; // an instance of axios
+// import axios from "../setup/instanceAxios"; // an instance of axios
 
 // const fetchAllPaymentMethodsService = () => {
 //     return axios({

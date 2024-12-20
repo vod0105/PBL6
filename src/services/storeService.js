@@ -1,13 +1,13 @@
-import axios from "../setup/axios"; // an instance of axios
+import instance from "../setup/instanceAxios"; 
 
 const fetchAllStoresService = () => {
-    return axios({
+    return instance({
         method: 'get',
         url: `/api/v1/public/stores/all`,
     });
 }
 const fetchStoreByIdService = (id) => {
-    return axios({
+    return instance({
         method: 'get',
         url: `/api/v1/public/stores/${id}`,
     });

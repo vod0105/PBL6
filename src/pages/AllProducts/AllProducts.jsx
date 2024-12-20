@@ -99,7 +99,8 @@ export default function AllProducts() {
       // console.log("Chuỗi base64:", base64FileImage);
       // AI: Tìm product bằng AI -> upload file
       try {
-        const responseAI = await axios.post(`http://localhost:5000/predict`, {
+        let urlAI = import.meta.env.VITE_AI_URL || `http://localhost:5000`;
+        const responseAI = await axios.post(`${urlAI}/predict`, {
           image: base64FileImage
         });
         console.log("response AI:", responseAI);

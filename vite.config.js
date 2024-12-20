@@ -1,10 +1,13 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import dotenv from 'dotenv';
 
-// https://vitejs.dev/config/
+// Load biến môi trường từ file `.env`
+dotenv.config();
+
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 3000,
+    port: parseInt(process.env.VITE_PORT) || 3000,
   },
-})
+});

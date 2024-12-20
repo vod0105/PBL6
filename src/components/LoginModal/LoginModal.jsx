@@ -7,7 +7,7 @@ import { hideLoginModal, showRegisterModal } from '../../redux/actions/modalActi
 import { loginUser, loginGoogle } from '../../redux/actions/authActions';
 
 import { GoogleLogin } from '@react-oauth/google';
-import FacebookLogin from 'react-facebook-login';
+// import FacebookLogin from 'react-facebook-login';
 import fbIcon from '../../assets/logo/facebook.png'
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -68,7 +68,8 @@ const LoginModal = () => {
   // GG
   const handleSuccessGoogle = async (credentialResponse) => {
     // dispatch(loginGoogle(credentialResponse.credential));
-    window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+    let urlBE = import.meta.env.BE_URL || `http://localhost:8080`;
+    window.location.href = `${urlBE}/oauth2/authorization/google`;
   }
   const handleErrorGoogle = () => {
     alert('Lỗi tùm lum');
@@ -77,7 +78,8 @@ const LoginModal = () => {
   // FB
   const handleSuccessFacebook = async () => {
     // dispatch(loginGoogle(credentialResponse.credential));
-    window.location.href = 'http://localhost:8080/oauth2/authorization/facebook';
+    let urlBE = import.meta.env.BE_URL || `http://localhost:8080`;
+    window.location.href = `${urlBE}/oauth2/authorization/facebook`;
   }
   const handleErrorFacebook = () => {
     alert('Lỗi tùm lum');

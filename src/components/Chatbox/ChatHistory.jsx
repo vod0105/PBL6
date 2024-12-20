@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState, useContext } from "react";
 // import { store } from "../../redux/store";
 import { format, parseISO } from 'date-fns';
-import 'react-image-lightbox/style.css';
-import Lightbox from 'react-image-lightbox';
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import './ChatButton.css';
@@ -99,9 +99,10 @@ const ChatHistory = (props) => {
     }, [chatHistory]);
 
     useEffect(() => {
+        const urlBE = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080';
+        let urlWS = urlBE.split("//")[1];
         // Set up WebSocket connection once
-        const socket = new WebSocket('ws://localhost:8080/ws/chat');
-
+        const socket = new WebSocket(`ws://${urlWS}/ws/chat`);
         socket.onopen = () => {
             // console.log('Connected to the WebSocket server');
             // Send userId information when connected
@@ -230,7 +231,8 @@ const ChatHistory = (props) => {
                     question: question
                 };
                 try {
-                    const response = await fetch("http://localhost:5000/intent-detection", {
+                    let urlAI = import.meta.env.VITE_AI_URL || `http://localhost:5000`;
+                    const response = await fetch(`${urlAI}/intent-detection`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"

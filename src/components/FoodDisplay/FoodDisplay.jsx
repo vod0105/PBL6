@@ -9,7 +9,7 @@ const FoodDisplay = ({ listProducts, isLoading, itemsPerPage = 4 }) => {
   const [activePage, setActivePage] = useState(1);
 
   // Tính toán số trang dựa trên danh sách sản phẩm và số sản phẩm mỗi trang
-  const totalPages = Math.ceil(listProducts.length / itemsPerPage);
+  const totalPages = Math.ceil(listProducts ? listProducts.length : 0 / itemsPerPage);
 
   // Lấy danh sách sản phẩm cho trang hiện tại
   const currentProducts = listProducts && listProducts.length > 0 ? (listProducts.slice(
