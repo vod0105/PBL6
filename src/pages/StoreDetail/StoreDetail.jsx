@@ -1,15 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import './StoreDetail.scss'
-import test_product from "../../assets/food-yummy/product1.jpg";
-import { assets } from '../../assets/assets'
-
-import DownloadImage from "../../assets/shop/ggmap.jpg";
 import FoodDisplay from '../../components/FoodDisplay/FoodDisplay';
-import store7 from "../../assets/image_gg/introduce_7.png";
-import store8 from "../../assets/image_gg/introduce_8.png";
-import store9 from "../../assets/image_gg/introduce_9.png";
-import store10 from "../../assets/image_gg/introduce_10.png";
-
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchStoreById } from "../../redux/actions/storeActions";

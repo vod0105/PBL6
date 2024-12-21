@@ -130,7 +130,9 @@ const AccountInfo = () => {
                 className="form-control"
                 id="phonenumber"
                 value={phonenumber}
-                disabled={true}
+                // disabled={true}
+                onChange={(event) => setPhonenumber(event.target.value)}
+                disabled={!isEditing}
               />
             </div>
           </div>

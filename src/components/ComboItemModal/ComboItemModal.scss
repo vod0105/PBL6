@@ -8,10 +8,14 @@
             display: flex;
             .infor-left{
                 flex: 1;
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 .img-container {
                     img {
-                      height: 500px;
-                      width: auto; 
+                      // height: 500px;
+                      height: 100%;
+                      width: 100%; 
                       object-fit: contain; /* Đảm bảo tỉ lệ hình ảnh không bị biến dạng */
                     }
                   }
@@ -20,6 +24,7 @@
                 flex: 1;
                 display: flex;
                 flex-direction: column;
+                max-width: 50%;
                 .category{
                     font-size: 20px;
                     font-weight: 500;
@@ -42,7 +47,6 @@
                     border: 1px solid #E7E7E7;
                     max-width: 500px; 
                     overflow-x: auto; /* Cuộn ngang */
-                    overflow-y: hidden; 
                       .product-item{
                         flex: 1;
                         display: flex;
@@ -63,10 +67,12 @@
                         .product-item-infor{
                             display: flex;
                             flex-direction: column;
-                            margin: 10px 5px;
+                            margin: 0 5px;
                             justify-content: center;
                             p{
                                 margin: 0;
+                                max-width: 140px;
+                                
                             }
                             .infor-price-quantity{
                                 display: flex;

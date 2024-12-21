@@ -125,7 +125,7 @@ const ProductItemDetail = () => {
               </span>
             </div>
             <div className="infor-right-description">
-              <span>Mô tả: {productDetail.description}</span>
+              <span>&#128073; Mô tả: {productDetail.description}</span>
             </div>
             <hr />
             <div className="infor-right-btn-container">
@@ -145,7 +145,7 @@ const ProductItemDetail = () => {
             <div className="infor-right-store">
               <hr />
               <div className="infor-right-store-title">
-                <span>* Danh sách cửa hàng hiện có</span>
+                <span>&#128073;  Danh sách cửa hàng hiện có</span>
               </div>
               <StoreList stores={productDetail.stores} />
             </div>

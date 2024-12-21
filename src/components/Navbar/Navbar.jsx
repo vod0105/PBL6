@@ -5,6 +5,7 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { showLoginModal, showRegisterModal } from "../../redux/actions/modalActions";
 // import { fetchAllCategories } from "../../redux/actions/categoryActions";
+import logoStore from '../../assets/logo4.png'
 import logoCart from '../../assets/logo/cart.png'
 import logoUser from '../../assets/logo/user.png'
 
@@ -69,7 +70,7 @@ const Navbar = () => {
         to="/" className="logo"
         end // 'end' đảm bảo rằng chỉ '/' (Trang Chủ) được kích hoạt
       >
-        <img src={assets.logo} alt="" className="logo-image" />
+        <img src={logoStore} alt="" className="logo-image" />
       </NavLink>
       <ul className="navbar-menu">
         <NavLink

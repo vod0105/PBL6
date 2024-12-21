@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import { Routes, Route, NavLink, Navigate, useNavigate } from 'react-router-dom';
 import './Account.scss';
 import AccountInfo from '../../components/AccountInfo/AccountInfo';
@@ -20,6 +20,10 @@ const Account = () => {
     dispatch(logoutUser());
     navigate('/');
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []); 
   return (
     <div className="account-page">
       {/* Header */}

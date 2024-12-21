@@ -141,7 +141,7 @@ const ComboItemDetail = () => {
             </div>
             <hr />
             <div className="infor-right-products">
-              <span>Danh sách sản phẩm trong combo</span>
+              <span>&#128073; Danh sách sản phẩm trong combo</span>
               <div className="products-container">
                 {
                   comboDetail?.products && comboDetail.products.length > 0 ? (comboDetail.products.map((item, index) => {
@@ -168,13 +168,13 @@ const ComboItemDetail = () => {
             </div>
             <hr />
             <div className="infor-right-price-container">
-              <span className='title'>Giá bán: </span>
+              <span className='title'>&#128073; Giá bán: </span>
               <span className="infor-right-price-discount">
                 {Number(comboDetail.price).toLocaleString('vi-VN')} đ
               </span>
             </div>
             <div className="infor-right-description">
-              <span>Mô tả: {comboDetail.description}</span>
+              <span>&#128073; Mô tả: {comboDetail.description}</span>
             </div>
             <hr />
             <div className="infor-right-btn-container">
@@ -194,7 +194,7 @@ const ComboItemDetail = () => {
             <div className="infor-right-store">
               <hr />
               <div className="infor-right-store-title">
-                <span>* Danh sách cửa hàng hiện có</span>
+                <span>&#128073; Danh sách cửa hàng hiện có</span>
               </div>
               {/* <StoreList stores={productDetail.stores} /> */}
               <StoreList stores={filterStoresWithAllComboProducts(comboDetail)} />

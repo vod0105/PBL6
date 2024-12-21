@@ -10,29 +10,16 @@
             flex: 3;
             display: flex;
             flex-direction: column;
-            // .infor-left-img-container {   
-            //     img {
-            //         width: 100%;
-            //         height: 270px;
-            //         border-radius: 15px; 
-            //         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ cho hình ảnh */
-            //         transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; 
-                    
-            //         &:hover {
-            //             transform: scale(1.05); /* Phóng to ảnh nhẹ khi hover */
-            //             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); 
-            //         }
-            //     }
-            // }
             .infor-left-voucher-container {
-
+              height: 40vh;
             }
             .infor-left-infor-container {
                 border: 1px solid #e60000; 
                 padding: 10px 30px;
-                margin-top: 20px;
+                margin-top: 2vh;
                 border-radius: 10px; 
                 background-color: #fff; 
+                height: 40vh;
               
                 .infor-left-name {
                   font-size: 20px;
@@ -47,7 +34,7 @@
                   display: flex;
                   flex-direction: column;
                   gap: 10px; 
-                  
+            
                   span {
                     display: flex;
                     align-items: center; /* Căn giữa icon và nội dung */

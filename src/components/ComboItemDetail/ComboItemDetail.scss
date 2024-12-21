@@ -75,6 +75,7 @@
                         flex-direction: column;
                         margin: 10px 15px;
                         justify-content: center;
+                        max-width: 200px;
                         p{
                             margin: 0;
                         }
@@ -102,11 +103,18 @@
           .infor-right-description{
             padding: 0;
           }
+          .infor-right-store{
+            .infor-right-store-title{
+              span {
+                font-size: 16px;
+              }
+            }
+          }
         }
     }
     .similar-combos-container{
       text-align: center;
-      margin: 100px 0;
+      margin: 150px 0 70px 0;
       h2{
           margin-bottom: 20px;
       }

@@ -32,6 +32,7 @@ const productReducer = (state = INITIAL_STATE, action) => {
             };
 
         case types.FETCH_PRODUCT_BEST_SALE_SUCCESS:
+            console.log('>>> best sale: ', action.dataProducts);
             return {
                 ...state,
                 listProductsBestSale: action.dataProducts,

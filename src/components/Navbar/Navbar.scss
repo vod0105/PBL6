@@ -102,7 +102,10 @@
       border: 1px solid red;
       list-style: none;
       justify-content: space-around;
-      
+      /* Animation mờ dần khi hiển thị dropdown */
+      opacity: 1; 
+      visibility: visible; 
+      animation: fadeIn 0.5s ease-in-out; /* Tăng thời gian animation nếu cần */
     }
 
     .navbar-category-dropdown {
@@ -116,6 +119,10 @@
       box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
       color: black;
       margin-top: 5px; 
+      /* Thêm hiệu ứng chuyển mượt mà khi hiện/ẩn */
+      opacity: 0;
+      visibility: hidden; 
+      transition: opacity 0.5s ease-in-out, visibility 0s linear 0.5s;
 
       .navbar-category-item {
         display: flex;
@@ -208,4 +215,15 @@
 // Đảm bảo nội dung không bị navbar che khuất
 .navbar + .content {
   padding-top: 80px;
+}
+/* Keyframes cho hiệu ứng mờ dần */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

@@ -78,6 +78,8 @@ export default function Category() {
     }
   };
 
+  // State để lưu trữ URL preview của hình ảnh
+  const [previewImage, setPreviewImage] = useState(null);
   // Image -> base64
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -87,6 +89,7 @@ export default function Category() {
         reader.onloadend = () => {
           const base64String = reader.result.split(",")[1]; // Chuyển thành base64
           resolve(base64String); // Trả về chuỗi base64
+          setPreviewImage(reader.result);
         };
         reader.onerror = (error) => reject(error);
         reader.readAsDataURL(file); // Async -> Trả về chuỗi Data URL (chuỗi Base64 + tiền tố MIME: data:image/png;base64).
@@ -130,13 +133,30 @@ export default function Category() {
           <input
             type="file"
             id="file-input"
+            accept="image/*"
             onChange={onFileSelected}
             style={{ display: "none" }}
           />
-          <label htmlFor="file-input">
-            <i className="fa-solid fa-robot"></i>
-            Tìm hình bằng AI
+          <label htmlFor="file-input" className="image-upload-label">
+            {
+              previewImage ? (
+                <img
+                  src={previewImage}
+                  alt="Preview"
+                  className="image-preview"
+                />
+              ) : (
+                <div className="image-upload-placeholder">
+                  {/* <i className="fa-solid fa-robot"></i> */}
+                  AI
+              </div>
+              )
+            }
           </label>
+          {/* <label htmlFor="file-input">
+            <i className="fa-solid fa-robot"></i>
+            AI
+          </label> */}
         </div>
 
         <div className="search-container">

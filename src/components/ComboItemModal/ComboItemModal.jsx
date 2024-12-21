@@ -184,7 +184,7 @@ const ComboItemModal = ({ showModalCombo, handleCloseModalCombo, combo, stores, 
                   <div className="infor-right">
                     <div className="name">{combo.storeName}</div>
                     <div className="products-container">
-                      <span className='title'>Danh sách sản phẩm</span>
+                      <span className='title'>&#128073; Danh sách sản phẩm</span>
                       <div className="list-products">
                         {
                           combo?.products && combo.products.length > 0 ? (combo.products.map((item, index) => {
@@ -210,7 +210,7 @@ const ComboItemModal = ({ showModalCombo, handleCloseModalCombo, combo, stores, 
                       </div>
                     </div>
                     <div className="drinks-container">
-                      <span className='title'>Chọn nước</span>
+                      <span className='title'>&#128073; Chọn nước</span>
                       <div className="list-drinks">
                         <Form.Select
                           className="drink-select"
@@ -252,7 +252,7 @@ const ComboItemModal = ({ showModalCombo, handleCloseModalCombo, combo, stores, 
                     </div>
                     <div className="store">
                       <div className="store-title">
-                        {selectedStore ? <span>Cửa hàng đã chọn: {selectedStore.storeName}</span> : <span>Chọn cửa hàng</span>}
+                        {selectedStore ? <span>Cửa hàng đã chọn: {selectedStore.storeName}</span> : <span>&#128073; Chọn cửa hàng</span>}
                       </div>
                       <StoreList stores={stores} onSelectStore={handleStoreSelect} selectedStore={selectedStore} />
                     </div>
@@ -262,7 +262,7 @@ const ComboItemModal = ({ showModalCombo, handleCloseModalCombo, combo, stores, 
                       // selectedStore ? (
                       <>
                         <div className="size-container">
-                          <span className='title'>Chọn kích cỡ</span>
+                          <span className='title'>&#128073; Chọn kích cỡ</span>
                           <div className="list-size">
                             {listSizes.map((size, index) => ( // Note: Sửa lại listSizes là của sản phẩm ở cửa hàng được chọn => Default size: first item
                               <div

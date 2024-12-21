@@ -59,7 +59,7 @@ instance.interceptors.response.use(function (response) {
         // localStorage.removeItem('token');
 
         try {
-            let urlBE = import.meta.env.BE_URL || `http://localhost:8080`;
+            let urlBE = import.meta.env.VITE_BACKEND_URL || `http://localhost:8080`;
             const response = await axios.post(`${urlBE}/auth/refresh`, { refreshToken });
             const newToken = response?.data?.data ? response.data.data : refreshToken; // Lấy token mới từ response -> note: Lỗi thì giữ nguyên token cũ ko refresh
             localStorage.setItem("token", newToken); // Lưu token mới vào localStorage

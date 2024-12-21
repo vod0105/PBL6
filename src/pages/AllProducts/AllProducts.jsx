@@ -76,6 +76,7 @@ export default function AllProducts() {
     }
   };
 
+  const [previewImage, setPreviewImage] = useState(null);
   // AI file upload
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -85,6 +86,7 @@ export default function AllProducts() {
         reader.onloadend = () => {
           const base64String = reader.result.split(",")[1]; // Chuyển thành base64
           resolve(base64String); // Trả về chuỗi base64
+          setPreviewImage(reader.result);
         };
         reader.onerror = (error) => reject(error);
         reader.readAsDataURL(file); // Đọc file dưới dạng chuỗi base64
@@ -96,8 +98,6 @@ export default function AllProducts() {
   const onFileSelected = async (event) => {
     try {
       const base64FileImage = await handleFileChange(event);
-      // console.log("Chuỗi base64:", base64FileImage);
-      // AI: Tìm product bằng AI -> upload file
       try {
         let urlAI = import.meta.env.VITE_AI_URL || `http://localhost:5000`;
         const responseAI = await axios.post(`${urlAI}/predict`, {
@@ -123,15 +123,28 @@ export default function AllProducts() {
       <div className="search-filter-container">
         {/* AI */}
         <div className="file-upload-AI-container">
-          <input
+        <input
             type="file"
             id="file-input"
+            accept="image/*"
             onChange={onFileSelected}
             style={{ display: "none" }}
           />
-          <label htmlFor="file-input">
-            <i className="fa-solid fa-robot"></i>
-            Tìm hình bằng AI
+          <label htmlFor="file-input" className="image-upload-label">
+            {
+              previewImage ? (
+                <img
+                  src={previewImage}
+                  alt="Preview"
+                  className="image-preview"
+                />
+              ) : (
+                <div className="image-upload-placeholder">
+                  {/* <i className="fa-solid fa-robot"></i> */}
+                  AI
+              </div>
+              )
+            }
           </label>
         </div>
 

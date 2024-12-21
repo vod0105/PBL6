@@ -295,14 +295,14 @@ const Checkout = () => {
                             required
                         />
                         <div className="form-group col-md-12">
-                            <label htmlFor="">Số điện thoại</label>
+                            <label htmlFor="">Nhập số điện thoại</label>
                             <input
                                 // className="input-no-change"
                                 className="form-control"
                                 type="text"
                                 placeholder="Số điện thoại"
                                 value={phonenumber}
-                                disabled={true}
+                                // disabled={true}
                                 required
                             />
                         </div>
