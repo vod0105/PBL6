@@ -111,7 +111,6 @@ const Category = ({ url }) => {
         <table
           className="table table-hover text-center align-items-center tb-product"
           style={{
-            backgroundColor: "red",
             tableLayout: "fixed",
             textAlign: "center",
             verticalAlign: "center",
@@ -144,7 +143,7 @@ const Category = ({ url }) => {
                   <td>{data.categoryId}</td>
                   <td>
                     <img
-                      src={`data:image/jpeg;base64,${data.image}`}
+                      src={`${url}/api/v1/public/uploads/images/${data.image}`}
                       className="img-cate"
                       alt="Image cate"
                       style={{

@@ -146,7 +146,7 @@ const Order = ({ url }) => {
               <label htmlFor="">Tìm kiếm</label>
               <input
                 type="text"
-                placeholder="Search Name Product"
+                placeholder="Search Order"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 style={{ padding: "5px 15px", outlineColor: "tomato" }}

@@ -95,7 +95,7 @@ const ChatHistory = (props) => {
 
   useEffect(() => {
     // Set up WebSocket connection once
-    const socket = new WebSocket(`ws://10.10.27.227:8080/ws/chat`);
+    const socket = new WebSocket(`ws://192.168.86.220:8080/ws/chat`);
 
     socket.onopen = () => {
       console.log("Connected to the WebSocket server");

@@ -12,8 +12,7 @@ import { faBackward } from "@fortawesome/free-solid-svg-icons";
 import { faForward } from "@fortawesome/free-solid-svg-icons";
 
 import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+import { FcApprove } from "react-icons/fc";
 import Load from "../../components/Load/Load.jsx";
 
 const Shiper = ({ url }) => {
@@ -32,10 +31,9 @@ const Shiper = ({ url }) => {
           Authorization: `Bearer ${tk}`,
           "Content-Type": "application/json",
         };
-        const response = await axios.get(
-          `${url}/api/v1/shipper/order/all-of-shipper`,
-          { headers }
-        );
+        const response = await axios.get(`${url}/api/v1/admin/shippers/all`, {
+          headers,
+        });
         console.log("Data", response);
         setData(response.data.data);
       } catch (err) {
@@ -72,9 +70,34 @@ const Shiper = ({ url }) => {
     }
   };
   // chuyen huong update store
-  const handleUpdateClick = (id) => {
-    // navigate(`admin/UpdateCategory/${cateId}`);
-    navigate(`/admin/UpdateCombo/${id}`);
+  const approve = async (email, name) => {
+    try {
+      console.log("email", email);
+      console.log("name", name);
+      const tk = localStorage.getItem("access_token");
+      const headers = {
+        Authorization: `Bearer ${tk}`,
+      };
+      const frm = new FormData();
+      frm.append("email", email);
+      frm.append("name", name);
+      await axios.post(
+        `${url}/api/v1/admin/shippers/send-email-to-shipper`,
+        frm,
+        {
+          headers,
+        }
+      );
+      toast.success("Approve shiper successfull");
+    } catch (error) {
+      if (error.response) {
+        console.error("Error Response Data:", error.response.data);
+        toast.error(error.response.data.message || "Something went wrong.");
+      } else {
+        console.error("Error:", error.message);
+        toast.error("Something went wrong.");
+      }
+    }
   };
   //
 
@@ -92,7 +115,7 @@ const Shiper = ({ url }) => {
 
   // Xử lý từ khóa tìm kiếm
   const filteredData = data.filter((item) =>
-    item.comboName.toLowerCase().includes(searchTerm.toLowerCase())
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Xác định các phần tử cần hiển thị trên trang hiện tại
@@ -114,7 +137,7 @@ const Shiper = ({ url }) => {
             alignItems: "center",
           }}
         >
-          <h1 className="h-product">List Comnbo</h1>
+          <h1 className="h-product">Shiper</h1>
           <div className="store-search">
             <input
               type="text"
@@ -147,15 +170,16 @@ const Shiper = ({ url }) => {
             }}
           >
             <tr>
-              <th scope="col" style={{ width: "10%" }}>
-                Id
-              </th>
+              <th scope="col">Id</th>
               <th scope="col">Image</th>
               <th scope="col">Name</th>
-
-              <th scope="col">Price</th>
-              <th scope="col">Description</th>
-              <th scope="col">Food</th>
+              <th scope="col" style={{ width: "20%" }}>
+                Email
+              </th>
+              <th scope="col">Phone</th>
+              <th scope="col">Address</th>
+              <th scope="col">Vehicle</th>
+              <th scope="col">Driver Licence</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -163,53 +187,42 @@ const Shiper = ({ url }) => {
             {currentItems.length > 0 ? (
               currentItems.map((data) => (
                 <tr
-                  key={data.comboId}
+                  key={data.id}
                   style={{ borderBottom: "2px solid rgb(228, 223, 223)" }}
                 >
-                  <td>{data.comboId}</td>
+                  <td>{data.id}</td>
                   <td>
                     <img
-                      src={`data:image/jpeg;base64,${data.image}`}
+                      src={`data:image/jpeg;base64,${data.imageCitizenFront}`}
                       className="img-product"
                       alt="Image cate"
                       style={{
                         height: "100px",
                         width: "100px",
-                        objectFit: "contain",
+                        objectFit: "cover",
                         borderRadius: "5px",
                       }}
                     />
                   </td>
-                  <td>{data.comboName}</td>
-                  <td>{data.price}</td>
+                  <td>{data.name}</td>
+                  <td>{data.email}</td>
 
-                  <td>{data.description}</td>
-                  <td>A</td>
+                  <td>{data.phone}</td>
+                  <td>{data.address}</td>
+                  <td>{data.vehicle}</td>
+                  <td>{data.driverLicense}</td>
                   <td>
                     <button
                       style={{
                         border: "2px solid gray",
-                        marginRight: "5px",
-                        borderRadius: "50%",
-                      }}
-                      className="btndelete"
-                      onClick={() => handleUpdateClick(data.comboId)}
-                    >
-                      <IconButton aria-label="delete" size="medium">
-                        <EditIcon />
-                      </IconButton>
-                    </button>
-                    <button
-                      style={{
-                        border: "2px solid gray",
 
                         borderRadius: "50%",
                       }}
                       className="btndelete"
-                      onClick={() => deleteComboid(data.comboId)}
+                      onClick={() => approve(data.email, data.name)}
                     >
                       <IconButton aria-label="delete" size="medium">
-                        <DeleteIcon />
+                        <FcApprove />
                       </IconButton>
                     </button>
                   </td>

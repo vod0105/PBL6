@@ -122,7 +122,6 @@ const Product = ({ url }) => {
         <table
           className="table table-hover text-center align-items-center tb-product"
           style={{
-            backgroundColor: "red",
             tableLayout: "fixed",
             textAlign: "center",
             verticalAlign: "center",
@@ -159,7 +158,7 @@ const Product = ({ url }) => {
                   <td>{data.productId}</td>
                   <td>
                     <img
-                      src={`data:image/jpeg;base64,${data.image}`}
+                      src={`${url}/api/v1/public/uploads/images/${data.image}`}
                       className="img-product"
                       alt="Image cate"
                       style={{
@@ -171,7 +170,7 @@ const Product = ({ url }) => {
                     />
                   </td>
                   <td>{data.productName}</td>
-                  <td>{data.description}</td>
+                  <td className="block-ellipsis">{data.description}</td>
 
                   <td>{data.price}</td>
                   <td>{data.category.categoryName}</td>

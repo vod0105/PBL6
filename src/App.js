@@ -43,6 +43,7 @@ import OwnerAddProductToStorev2 from "./PagesOwner/Product/OwnerAddproductToStor
 import OrderDetail from "./PagesOwner/Order/OrderDetails";
 import SoundNotification from "./components/Notify/Notify";
 import Shiper from "./pages/Shiper/Shiper";
+import PaginationExample from "./pages/test1/Test1";
 
 const notificationSound = new Audio("/sound/tingting.mp3");
 const App = () => {
@@ -80,10 +81,6 @@ const App = () => {
         />
       )}
       <Routes>
-        {/* <Route
-          path="/register"
-          element={!isAuthenticated ? <Register /> : <Navigate to="/" />}
-        /> */}
         {userRole === "ROLE_ADMIN" && (
           <>
             <Route
@@ -110,6 +107,25 @@ const App = () => {
 
                       <div className="dashboard-content">
                         <Dashboard />
+                      </div>
+                    </div>
+                  </>
+                )
+              }
+            />
+            <Route
+              path="/admin/test"
+              element={
+                !isAuthenticated ? (
+                  <Navigate to="/" />
+                ) : (
+                  <>
+                    <div className="dashboard">
+                      {/* <div className="side-bar collapse"><Sidebar /></div> */}
+                      <Sidebar />
+
+                      <div className="dashboard-content">
+                        <PaginationExample />
                       </div>
                     </div>
                   </>
@@ -153,6 +169,7 @@ const App = () => {
                 )
               }
             />
+
             <Route
               path="/UpdateStore/:id"
               element={

@@ -151,6 +151,9 @@ const Sidebar = () => {
                           Add Product To Store
                         </Link>
                       </li>
+                      {/* <li onClick={(e) => e.stopPropagation()}>
+                        <Link to="/admin/test">Test</Link>
+                      </li> */}
                     </ul>
                   </div>
                 </p>
