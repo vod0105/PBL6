@@ -33,7 +33,7 @@ const ProductItem = ({ product, index }) => {
     <div className={(index + 1) % 4 !== 0 ? "category-product-item" : "category-product-item product-no-border-right"} key={index}>
       <div className="product-item-img-container">
         <Link to={`/product-detail/${product.productId}`}>
-          <img src={'data:image/png;base64,' + product.image} alt="" className="product-item-image" />
+          <img src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${product.image}`} alt="" className="product-item-image" />
         </Link>
         <div className='product-item-addtocart' onClick={handleAddToCartClick}>
           <i className="fa-solid fa-cart-plus"></i>

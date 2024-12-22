@@ -18,14 +18,22 @@ const Download = () => {
                     </NavLink> */}
                 </div>
                 <div className="btn-container">
-                    <div className="btn-download">
+                    <a 
+                        href={iconUser} 
+                        download="user-app.png"
+                        className="btn-download"
+                    >
                         <img src={iconUser} alt="" />
                         <span>Người dùng</span>
-                    </div>
-                    <div className="btn-download">
+                    </a>
+                    <a 
+                        href={iconUser}  
+                        download="user-app.png"
+                        className="btn-download"
+                    >
                         <img src={iconShipper} alt="" />
                         <span>Shipper</span>
-                    </div>
+                    </a>
                 </div>
             </div>
         </div>

@@ -6,7 +6,7 @@ import { fetchAllProducts } from "../../redux/actions/productActions";
 import Pagination from 'react-bootstrap/Pagination';
 import axios from 'axios';
 import { toast } from "react-toastify";
-import MoonLoader from 'react-spinners/MoonLoader';
+import PacmanLoader from 'react-spinners/PacmanLoader';
 
 export default function AllProducts() {
   const dispatch = useDispatch();
@@ -99,7 +99,7 @@ export default function AllProducts() {
     try {
       const base64FileImage = await handleFileChange(event);
       try {
-        let urlAI = import.meta.env.VITE_AI_URL || `http://localhost:5000`;
+        let urlAI = import.meta.env.VITE_AI_URL || `http://10.10.2.94:5000`;
         const responseAI = await axios.post(`${urlAI}/predict`, {
           image: base64FileImage
         });
@@ -220,9 +220,9 @@ export default function AllProducts() {
           )
         ) : (
           <div className="loading-container">
-            <MoonLoader size={50} color={"#ff0000"} loading={isLoading} />
-            <span>
-              Đang lấy dữ liệu
+            <PacmanLoader size={20} color={"#ff0000"} loading={isLoading} />
+            <span className="loading-data">
+              Đang tải dữ liệu
             </span>
           </div>
         )

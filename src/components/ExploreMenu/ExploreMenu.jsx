@@ -30,7 +30,7 @@ const ExploreMenu = () => {
             return (
               <NavLink to={`/category/${category.categoryId}`} key={index}>
                 <div key={index} className='explore-menu-list-item'>
-                  <img className='active' src={'data:image/png;base64,' + category.image} alt="alt-category" />
+                  <img className='active' src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${category.image}`} alt="alt-category" />
                   <p>{category.categoryName}</p>
                 </div>
               </NavLink>

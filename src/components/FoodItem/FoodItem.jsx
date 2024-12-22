@@ -30,7 +30,7 @@ const FoodItem = ({ product }) => { // product => combo/product
     <div className='food-item'>
       <div className="food-item-img-container">
         <Link to={`/product-detail/${product.productId}`}>
-          <img src={'data:image/png;base64,' + product.image} alt="" className="food-item-image" />
+          <img src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${product.image}`} alt="" className="food-item-image" />
         </Link>
         <div className='food-item-addtocart' onClick={handleAddToCartClick}>
           <i className="fa-solid fa-cart-plus"></i>

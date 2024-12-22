@@ -12,7 +12,7 @@ const StoreList = ({ stores, onSelectStore, selectedStore }) => {
             className={`store-item ${selectedStore && selectedStore.storeName === store.storeName ? 'selected-store-item' : ''}`}
             onClick={() => onSelectStore(store)}
           >
-            <img src={'data:image/png;base64,' + store.image} alt={store.storeName} className="store-image" />
+            <img src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${store.image}`} alt={store.storeName} className="store-image" />
             <div className="store-info">
               <span className="store-name">{store.storeName}</span>
               <p className="store-address"><i className="fa-solid fa-location-dot"></i>{store.location}</p>

@@ -30,7 +30,7 @@ const fetchAllCategories = () => {
             const data = res && res.data ? res.data.data : [];
             // console.log('cate: ', data);
             // Sau khi lấy all categories -> Tìm cateId có categoryName ==='Drinks'
-            const drinkCategoryId = data.find(item => item.categoryName.toLowerCase().includes("đồ uống")).categoryId;
+            const drinkCategoryId = data.find(item => item.categoryName.toLowerCase().includes("hamburger")).categoryId;
             dispatch(fetchAllDrinks(drinkCategoryId));
             dispatch(fetchCategoriesSuccess(data, drinkCategoryId));
 

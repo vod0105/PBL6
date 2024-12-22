@@ -91,7 +91,7 @@ const ReviewModal = ({ showModal, handleClose, orderDetails }) => {
               listProducts && listProducts.length > 0 && listProducts.map((item, index) => (
                 <div className="order-detail-product-item" key={index}>
                   <div className="product-item-image">
-                    <img src={'data:image/png;base64,' + item.productDetail?.productImage} alt="" />
+                    <img src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${item.productDetail?.productImage}`} alt="" />
                   </div>
                   <div className="product-item-infor">
                     <p className="infor-name">{item.productDetail?.productName} ({item.productDetail.size})</p>
@@ -117,7 +117,7 @@ const ReviewModal = ({ showModal, handleClose, orderDetails }) => {
               listCombos && listCombos.length > 0 && listCombos.map((item, index) => (
                 <div className="order-detail-product-item" key={index}>
                   <div className="product-item-image">
-                    <img src={'data:image/png;base64,' + item.comboDetail?.comboImage} alt="Ảnh combo" />
+                    <img src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${item.comboDetail?.image}`} alt="Ảnh combo" />
                   </div>
                   <div className="product-item-infor">
                     <p className="infor-name">{item.comboDetail?.comboName} ({item.comboDetail.size})</p>

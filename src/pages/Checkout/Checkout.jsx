@@ -388,7 +388,7 @@ const Checkout = () => {
                                             <div className="order-detail-product-item" key={index}>
                                                 <div className="product-item-infor">
                                                     <div className="product-item-image">
-                                                        <img src={'data:image/png;base64,' + item.product.image} alt="" />
+                                                        <img src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${item.product.image}`} alt="" />
                                                     </div>
                                                     <div className="product-item-infor">
                                                         <p className="infor-name">{item.product.productName} (L)</p>
@@ -411,7 +411,7 @@ const Checkout = () => {
                                             <div className="order-detail-product-item" key={index}>
                                                 <div className="product-item-infor">
                                                     <div className="product-item-image">
-                                                        <img src={'data:image/png;base64,' + item.combo.image} alt="" />
+                                                        <img src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${item.combo.image}`} alt="" />
                                                     </div>
                                                     <div className="product-item-infor">
                                                         <p className="infor-name">{item.combo.comboName} {item.combo.dataDrink.productName} ({item.combo.size})</p>
@@ -436,7 +436,7 @@ const Checkout = () => {
                                         <div className="order-detail-product-item">
                                             <div className="product-item-infor">
                                                 <div className="product-item-image">
-                                                    <img src={'data:image/png;base64,' + productDetailBuyNow?.product?.image} alt="Ảnh sản phẩm" />
+                                                    <img src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${productDetailBuyNow?.product?.image}`} alt="Ảnh sản phẩm" />
                                                 </div>
                                                 <div className="product-item-infor">
                                                     <p className="infor-name">{productDetailBuyNow?.product?.productName} ({productDetailBuyNow?.size})</p>
@@ -458,7 +458,7 @@ const Checkout = () => {
                                         <div className="order-detail-product-item">
                                             <div className="product-item-infor">
                                                 <div className="product-item-image">
-                                                    <img src={'data:image/png;base64,' + comboDetailBuyNow?.combo?.image} alt="" />
+                                                    <img src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${comboDetailBuyNow?.combo?.image}`} alt="" />
                                                 </div>
                                                 <div className="product-item-infor">
                                                     <p className="infor-name">{comboDetailBuyNow?.combo?.comboName} + {comboDetailBuyNow?.drink?.productName} ({comboDetailBuyNow?.size})</p>

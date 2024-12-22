@@ -78,6 +78,7 @@ const ProductItemDetail = () => {
     dispatch(fetchRatingProductById(id));
     dispatch(fetchSimilarProducts(id));
     window.scrollTo(0, 0);
+    console.log(`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${id}`);
   }, [id]);
 
   // Select -> Lọc số sao ở review
@@ -92,13 +93,14 @@ const ProductItemDetail = () => {
   if (!productDetail) {
     return <div>Không có thông tin sản phẩm.</div>;
   }
+  
   else return (
     <div className="page-product-detail">
       <div className="container">
         <div className="product-detail-infor">
           <div className="infor-left">
             <div className="infor-left-img-container">
-              <img src={'data:image/png;base64,' + productDetail.image} alt="" />
+              <img src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${productDetail.image}`} alt="" />
             </div>
           </div>
           <div className="infor-right">

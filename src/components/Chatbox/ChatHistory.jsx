@@ -99,7 +99,7 @@ const ChatHistory = (props) => {
     }, [chatHistory]);
 
     useEffect(() => {
-        const urlBE = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080';
+        const urlBE = import.meta.env.VITE_BACKEND_URL || 'http://10.10.2.94:8080';
         let urlWS = urlBE.split("//")[1];
         // Set up WebSocket connection once
         const socket = new WebSocket(`ws://${urlWS}/ws/chat`);
@@ -231,7 +231,7 @@ const ChatHistory = (props) => {
                     question: question
                 };
                 try {
-                    let urlAI = import.meta.env.VITE_AI_URL || `http://localhost:5000`;
+                    let urlAI = import.meta.env.VITE_AI_URL || `http://10.10.2.94:5000`;
                     const response = await fetch(`${urlAI}/intent-detection`, {
                         method: "POST",
                         headers: {

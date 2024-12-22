@@ -178,7 +178,7 @@ const ComboItemModal = ({ showModalCombo, handleCloseModalCombo, combo, stores, 
                 <div className="product-detail-infor">
                   <div className="infor-left">
                     <div className="img-container">
-                      <img src={'data:image/png;base64,' + combo.image} alt="" />
+                      <img src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${combo.image}`} alt="" />
                     </div>
                   </div>
                   <div className="infor-right">
@@ -192,7 +192,7 @@ const ComboItemModal = ({ showModalCombo, handleCloseModalCombo, combo, stores, 
                               <div className="product-item" key={index}>
                                 <div className="product-item-image">
                                   <img
-                                    src={'data:image/png;base64,' + item.image}
+                                    src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${item.image}`}
                                     alt='Ảnh sản phẩm'
                                   // onClick={() => handleImageClick('data:image/png;base64,' + item.productDetail.productImage)} // Gọi modal preview
                                   />

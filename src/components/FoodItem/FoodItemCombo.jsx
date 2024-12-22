@@ -51,7 +51,7 @@ const FoodItemCombo = ({ combo }) => {
     <div className='food-item'>
       <div className="food-item-img-container">
         <Link to={`/combo-detail/${combo.comboId}`}>
-          <img src={'data:image/png;base64,' + combo.image} alt="" className="food-item-image" />
+          <img src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${combo.image}`} alt="" className="food-item-image" />
         </Link>
         <div className='food-item-addtocart' onClick={handleAddToCartClick}>
           <i className="fa-solid fa-cart-plus"></i>

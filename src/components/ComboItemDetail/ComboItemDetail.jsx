@@ -123,7 +123,7 @@ const ComboItemDetail = () => {
         <div className="product-detail-infor">
           <div className="infor-left">
             <div className="infor-left-img-container">
-              <img src={'data:image/png;base64,' + comboDetail.image} alt="" />
+              <img src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${comboDetail.image}`} alt="" />
             </div>
           </div>
           <div className="infor-right">
@@ -149,7 +149,7 @@ const ComboItemDetail = () => {
                       <div className="product-item" key={index}>
                         <div className="product-item-image">
                           <img
-                            src={'data:image/png;base64,' + item.image}
+                            src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${item.image}`}
                             alt='Ảnh sản phẩm'
                           // onClick={() => handleImageClick('data:image/png;base64,' + item.productDetail.productImage)} // Gọi modal preview
                           />

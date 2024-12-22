@@ -113,7 +113,7 @@ const Navbar = () => {
                       key={index}
                       className={({ isActive }) => (isActive ? "active-category-item" : "")}
                     >
-                      <img src={'data:image/png;base64,' + category.image} alt="" />
+                      <img src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${category.image}`} alt="" />
                       <p>{category.categoryName}</p>
                     </NavLink>
                   </li>

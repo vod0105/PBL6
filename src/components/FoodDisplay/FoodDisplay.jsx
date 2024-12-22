@@ -3,7 +3,7 @@ import './FoodDisplay.scss';
 import FoodItem from '../FoodItem/FoodItem';
 import Pagination from 'react-bootstrap/Pagination';
 import FoodItemCombo from "../FoodItem/FoodItemCombo";
-import MoonLoader from 'react-spinners/MoonLoader';
+import PacmanLoader from 'react-spinners/PacmanLoader';
 
 const FoodDisplay = ({ listProducts, isLoading, itemsPerPage = 4 }) => {
   const [activePage, setActivePage] = useState(1);
@@ -75,8 +75,8 @@ const FoodDisplay = ({ listProducts, isLoading, itemsPerPage = 4 }) => {
           </div>
         ) : (
           <div className="loading-container">
-            <MoonLoader size={50} color={"#ff0000"} loading={isLoading} />
-            <span>Đang lấy dữ liệu</span>
+            <PacmanLoader size={20} color={"#ff0000"} loading={isLoading} />
+            <span className="loading-data">Đang tải dữ liệu</span>
           </div>
         )
       }

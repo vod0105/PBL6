@@ -69,9 +69,12 @@ const Store = () => {
               <div key={index} className="store">
                 <div
                   className="store-image"
-                  style={{ background: `url(data:image/png;base64,${store.image}) no-repeat center center`, backgroundSize: 'cover' }}>
+                  style={{
+                    background: `url(${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${store.image}) no-repeat center center`,
+                    backgroundSize: 'cover',
+                  }}
+                >
                 </div>
-
                 <div className="store-content">
                   <div className="store-name">
                     {store.storeName}

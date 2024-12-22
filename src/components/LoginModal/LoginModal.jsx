@@ -68,7 +68,7 @@ const LoginModal = () => {
   // GG
   const handleSuccessGoogle = async (credentialResponse) => {
     // dispatch(loginGoogle(credentialResponse.credential));
-    let urlBE = import.meta.env.VITE_BACKEND_URL || `http://localhost:8080`;
+    let urlBE = import.meta.env.VITE_BACKEND_URL || `http://10.10.2.94:8080`;
     window.location.href = `${urlBE}/oauth2/authorization/google`;
   }
   const handleErrorGoogle = () => {
@@ -78,7 +78,7 @@ const LoginModal = () => {
   // FB
   const handleSuccessFacebook = async () => {
     // dispatch(loginGoogle(credentialResponse.credential));
-    let urlBE = import.meta.env.VITE_BACKEND_URL || `http://localhost:8080`;
+    let urlBE = import.meta.env.VITE_BACKEND_URL || `http://10.10.2.94:8080`;
     window.location.href = `${urlBE}/oauth2/authorization/facebook`;
   }
   const handleErrorFacebook = () => {

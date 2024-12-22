@@ -123,17 +123,18 @@
     justify-content: center;
     grid-column: 1 / -1; /* Trải rộng trên toàn grid */
   }
-  .loading-container{
-    font-size: 35px;
+  .loading-container{   
+    font-size: 20px;
     text-align: center;
-    font-weight: bold;
+    font-weight: 500;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     grid-column: 1 / -1; /* Trải rộng trên toàn grid */
-    span{
+    .loading-data{
       color: black;
+      margin-top: 20px;
     }
   }
 

@@ -48,11 +48,12 @@ const ComboItem = ({ combo, index }) => {
     // console.log('list stores: ', filteredStores);
     return filteredStores;
   };
+
   return (
     <div className={(index + 1) % 4 !== 0 ? "category-product-item" : "category-product-item product-no-border-right"} key={index}>
       <div className="product-item-img-container">
         <Link to={`/combo-detail/${combo.comboId}`}>
-          <img src={'data:image/png;base64,' + combo.image} alt="" className="product-item-image" />
+          <img src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${combo.image}`} alt="" className="product-item-image" />
         </Link>
         <div className='product-item-addtocart' onClick={handleAddToCartClick}>
           <i className="fa-solid fa-cart-plus"></i>

@@ -132,7 +132,7 @@ const OrderDetailModal = ({ showModal, handleClose, orderDetails, statusOrderInt
                       <div className="product-item-image">
                         {/* <img src={'data:image/png;base64,' + item.productDetail.productImage} alt="" /> */}
                         <img
-                          src={'data:image/png;base64,' + item.productDetail.productImage}
+                          src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${item.productDetail.productImage}`}
                           alt='Ảnh sản phẩm'
                           onClick={() => handleImageClick('data:image/png;base64,' + item.productDetail.productImage)} // Gọi modal preview
                         />
@@ -166,7 +166,7 @@ const OrderDetailModal = ({ showModal, handleClose, orderDetails, statusOrderInt
                       <div className="product-item-image">
                         {/* <img src={'data:image/png;base64,' + item.productDetail.productImage} alt="" /> */}
                         <img
-                          src={'data:image/png;base64,' + item.comboDetail?.image} // note: Trả image nựa trời
+                          src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${item.comboDetail.image}`} // note: Trả image nựa trời
                           alt='Ảnh combo'
                         // onClick={() => handleImageClick('data:image/png;base64,' + item.comboDetail.productImage)} // Gọi modal preview
                         />

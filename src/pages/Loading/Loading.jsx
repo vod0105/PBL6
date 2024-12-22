@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import MoonLoader from 'react-spinners/MoonLoader';
+import PacmanLoader from 'react-spinners/PacmanLoader';
 
 const Loading = () => {
   const [loading, setLoading] = useState(true);
@@ -14,7 +14,7 @@ const Loading = () => {
     <div>
       {loading ? (
         <div className="spinner">
-          <MoonLoader size={50} color={"#ff0000"} loading={loading} />
+          <PacmanLoader size={20} color={"#ff0000"} loading={loading} />
         </div>
       ) : (
         <div>

@@ -264,7 +264,7 @@ const Cart = () => {
                     onChange={() => handleCheckboxChange(item.cartId)} // Toggles item selection
                   />
                   <Link to={isProduct ? `/product-detail/${data.productId}` : `/combo-detail/${data.comboId}`}>
-                    <img src={`data:image/png;base64,${itemImage}`} alt="" />
+                    <img src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${itemImage}`} alt="" />
                   </Link>
                   <p>{itemName}</p>
                   <p>{itemSize}</p>

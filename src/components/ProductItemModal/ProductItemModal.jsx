@@ -171,7 +171,7 @@ const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, 
                 <div className="product-detail-infor">
                   <div className="infor-left">
                     <div className="img-container">
-                      <img src={'data:image/png;base64,' + product.image} alt="" />
+                      <img src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${product.image}`} alt="" />
                     </div>
                   </div>
                   <div className="infor-right">
