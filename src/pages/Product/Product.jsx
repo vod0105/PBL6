@@ -137,14 +137,14 @@ const Product = ({ url }) => {
             }}
           >
             <tr>
-              <th scope="col">Product Id</th>
-              <th scope="col">Image</th>
-              <th scope="col">Name</th>
-              <th scope="col">Description</th>
-              <th scope="col">Price</th>
-              <th scope="col">Category Name</th>
-              <th scope="col">Stock Quantity</th>
-              <th scope="col">Best Sale</th>
+              <th scope="col" style={{width:'10%'}}>Id</th>
+              <th scope="col">Hình ảnh</th>
+              <th scope="col">Tên</th>
+              <th scope="col">Mô tả</th>
+              <th scope="col">Giá</th>
+              <th scope="col">Tên danh mục</th>
+              <th scope="col">Số lượng</th>
+              <th scope="col">Bán chạy</th>
               <th scope="col">Action</th>
             </tr>
           </thead>

@@ -80,8 +80,8 @@ const UpdateStore = ({ url }) => {
           Close: response.data.data.closingTime,
           longitude: response.data.data.longitude,
           apiimg: response.data.data.image,
-          
         });
+        setSelectedUserId(response.data.data.managerId);
         console.log("vao1");
         // console.log("image",response.data.data.image)
         if (response.data.data.image) {
@@ -89,11 +89,9 @@ const UpdateStore = ({ url }) => {
             response.data.data.image,
             "store-image.png"
           );
-          
+
           setImage(file);
         }
-        
-        
       } catch (err) {
         setError(err);
       } finally {
@@ -130,7 +128,7 @@ const UpdateStore = ({ url }) => {
 
     const formData = new FormData();
     formData.append("storeName", data.storeName);
-    formData.append("phoneNumber", Number(data.PhoneNumber));
+    formData.append("phoneNumber", data.PhoneNumber);
     formData.append("location", data.Location);
     formData.append("latitude", data.Latitude);
     formData.append("longitude", data.longitude);
@@ -138,6 +136,7 @@ const UpdateStore = ({ url }) => {
     formData.append("openingTime", data.Open);
     formData.append("closingTime", data.Close);
     formData.append("managerId", selectedUserId);
+    console.log("phone", data.PhoneNumber);
 
     try {
       const response = await axios.put(
@@ -186,7 +185,7 @@ const UpdateStore = ({ url }) => {
                 src={
                   image
                     ? URL.createObjectURL(image)
-                    : `data:image/jpeg;base64,${data.apiimg}`
+                    : `${url}/api/v1/public/uploads/images/${data.apiimg}`
                 }
                 // src={`data:image/jpeg;base64,${store.image}`}
                 alt=""
@@ -197,7 +196,6 @@ const UpdateStore = ({ url }) => {
               type="file"
               id="image"
               hidden
-              required
             />
           </div>
           <div className="flex-ip">
@@ -211,33 +209,6 @@ const UpdateStore = ({ url }) => {
                 placeholder="Type here"
               />
             </div>
-            <div>
-              <div className="add-product-description flex-col">
-                <p> longitude</p>
-                <input
-                  name="longitude"
-                  type="text"
-                  placeholder="Write content here"
-                  id=""
-                  onChange={onChangeHandler}
-                  value={data.longitude}
-                ></input>
-              </div>
-            </div>
-          </div>
-          <div className="add-product-description flex-col">
-            <p>Phone Number</p>
-            <input
-              name="PhoneNumber"
-              type="text"
-              placeholder="Write content here"
-              id=""
-              onChange={onChangeHandler}
-              value={data.PhoneNumber}
-            ></input>
-          </div>
-          <div></div>
-          <div className="flex-ip">
             <div className="add-product-description flex-col">
               <p>Location</p>
               <input
@@ -249,6 +220,22 @@ const UpdateStore = ({ url }) => {
                 value={data.Location}
               ></input>
             </div>
+          </div>
+
+          <div></div>
+          <div className="flex-ip">
+            <div className="add-product-description flex-col">
+              <p> longitude</p>
+              <input
+                name="longitude"
+                type="text"
+                placeholder="Write content here"
+                id=""
+                onChange={onChangeHandler}
+                value={data.longitude}
+              ></input>
+            </div>
+
             <div className="add-product-description flex-col">
               <p> Latitude</p>
               <input
@@ -274,25 +261,26 @@ const UpdateStore = ({ url }) => {
               ></input>
             </div>
             <div className="add-product-description flex-col">
-              <p> Close</p>
+              <p>Phone Number</p>
               <input
-                name="Close"
+                name="PhoneNumber"
                 type="text"
                 placeholder="Write content here"
                 id=""
                 onChange={onChangeHandler}
-                value={data.Close}
+                value={data.PhoneNumber}
               ></input>
             </div>
           </div>
 
-          <div className="add-category-price">
+          <div className="add-category-price flex-col">
             <div className="add-category flex-col">
               <p>Manager</p>
               <select
                 className="select-manager"
                 onChange={(e) => setSelectedUserId(e.target.value)}
                 name="Manager"
+                value={selectedUserId}
               >
                 <option value="">-- Select Manager --</option>
                 {users.map((user) => (

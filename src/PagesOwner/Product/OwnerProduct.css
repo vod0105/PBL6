@@ -18,3 +18,17 @@
   padding-right: 8px;
   font-weight: 600;
 }
+.block-ellipsis {
+  display: flex;
+  display: -webkit-box;
+  max-width: 100%;
+  height: 80px;
+  margin: 0 auto;
+  font-size: 14px;
+  line-height: 1;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  align-items: center;
+}

@@ -190,13 +190,14 @@ const Store = ({ url }) => {
             }}
           >
             <tr>
-              <th scope="col">storeId</th>
-              <th scope="col">Image</th>
-              <th scope="col">storeName</th>
-              <th scope="col">location</th>
-              <th scope="col">managerName</th>
-              <th scope="col">numberPhone</th>
-              <th scope="col">openingTime</th>
+              <th scope="col" style={{ width: "50px" }}>
+                ID
+              </th>
+              <th scope="col">Hình ảnh</th>
+              <th scope="col">Tên cửa hàng</th>
+              <th scope="col">Vị trí</th>
+              <th scope="col">Thời gian mở</th>
+              <th scope="col">Số điện thoại</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -205,9 +206,10 @@ const Store = ({ url }) => {
               currentItems.map((store) => (
                 <tr key={store.storeId}>
                   <td>{store.storeId}</td>
+                  {/* api/v1/public/uploads/images/ */}
                   <td>
                     <img
-                      src={`data:image/jpeg;base64,${store.image}`}
+                      src={`${url}/api/v1/public/uploads/images/${store.image}`}
                       className="img-product"
                       alt="Image cate"
                       style={{
@@ -220,9 +222,8 @@ const Store = ({ url }) => {
                   </td>
                   <td>{store.storeName}</td>
                   <td>{store.location}</td>
-                  <td>{store.managerName}</td>
-                  <td>{store.numberPhone}</td>
                   <td>{store.openingTime}</td>
+                  <td>{store.numberPhone}</td>
                   <td>
                     <button
                       style={{

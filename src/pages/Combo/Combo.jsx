@@ -161,7 +161,7 @@ const Combo = ({ url }) => {
                   <td>{data.comboId}</td>
                   <td>
                     <img
-                      src={`data:image/jpeg;base64,${data.image}`}
+                      src={`${url}/api/v1/public/uploads/images/${data.image}`}
                       className="img-product"
                       alt="Image cate"
                       style={{

@@ -88,7 +88,6 @@ const OrderDetail = ({ url }) => {
 
   return (
     <div className="product">
-   
       <div className="content">
         <div
           className="heading"
@@ -132,8 +131,6 @@ const OrderDetail = ({ url }) => {
           >
             <tr>
               <th scope="col">orderDetailId</th>
-              {/* <th scope="col">totalPrice</th> */}
-              {/* <th scope="col">Combo Id</th> */}
               <th scope="col">Name</th>
               <th scope="col">Image</th>
               <th scope="col">Id</th>
@@ -141,45 +138,64 @@ const OrderDetail = ({ url }) => {
               <th scope="col">Unit Price</th>
               <th scope="col">Total Price</th>
               <th scope="col">Size</th>
-              {/* <th scope="col">Description</th>
-              <th scope="col">Price</th>
-              <th scope="col">Category Name</th>
-              <th scope="col">Stock Quantity</th>
-              <th scope="col">Best Sale</th>
-              <th scope="col">Sửa</th>
-              <th scope="col">Xóa</th> */}
             </tr>
           </thead>
-          {/* <tbody className="align-middle">
+          <tbody className="align-middle">
             {data.length > 0 ? (
-              data.map((data) => (
-              
-                
+              data.map((item) => (
                 <tr
-                  key={data.comboDetail.orderDetailId}
+                  key={
+                    item.comboDetail?.orderDetailId ||
+                    item.productDetail?.orderDetailId
+                  }
                   style={{ borderBottom: "2px solid rgb(228, 223, 223)" }}
                 >
-                  <td>{data.comboDetail.orderDetailId}</td>
-                  <td>{data.comboDetail.comboName}</td>
-                  <td>
-                    <img
-                      src={`data:image/jpeg;base64,${data.comboDetail.image}`}
-                      className="img-product"
-                      alt="Image cate"
-                      style={{
-                        height: "100px",
-                        width: "100px",
-                        objectFit: "contain",
-                        // borderRadius: "50%",
-                      }}
-                    />
-                  </td>
-                  <td>{data.comboDetail.comboId}</td>
-                  <td>{data.comboDetail.quantity}</td>
-
-                  <td>{data.comboDetail.unitPrice}</td>
-                  <td>{data.comboDetail.totalPrice}</td>
-                  <td>{data.comboDetail.size}</td>
+                  {/* Kiểm tra loại dữ liệu là combo hay product và hiển thị tương ứng */}
+                  {item.type === "combo" ? (
+                    <>
+                      <td>{item.comboDetail.orderDetailId}</td>
+                      <td>{item.comboDetail.comboName}</td>
+                      <td>
+                        <img
+                          src={`${url}/api/v1/public/uploads/images/${item.comboDetail.image}`}
+                          className="img-product"
+                          alt="Combo Image"
+                          style={{
+                            height: "110px",
+                            width: "110px",
+                            objectFit: "contain",
+                          }}
+                        />
+                      </td>
+                      <td>{item.comboDetail.comboId}</td>
+                      <td>{item.comboDetail.quantity}</td>
+                      <td>{item.comboDetail.unitPrice}</td>
+                      <td>{item.comboDetail.totalPrice}</td>
+                      <td>{item.comboDetail.size}</td>
+                    </>
+                  ) : (
+                    <>
+                      <td>{item.productDetail.orderDetailId}</td>
+                      <td>{item.productDetail.productName}</td>
+                      <td>
+                        <img
+                          src={`data:image/jpeg;base64,${item.productDetail.image}`}
+                          className="img-product"
+                          alt="Product Image"
+                          style={{
+                            height: "100px",
+                            width: "100px",
+                            objectFit: "contain",
+                          }}
+                        />
+                      </td>
+                      <td>{item.productDetail.productId}</td>
+                      <td>{item.productDetail.quantity}</td>
+                      <td>{item.productDetail.unitPrice}</td>
+                      <td>{item.productDetail.totalPrice}</td>
+                      <td>{item.productDetail.size}</td>
+                    </>
+                  )}
                 </tr>
               ))
             ) : (
@@ -187,68 +203,7 @@ const OrderDetail = ({ url }) => {
                 <td colSpan="8">No data available</td>
               </tr>
             )}
-          </tbody> */}
-          <tbody className="align-middle">
-  {data.length > 0 ? (
-    data.map((item) => (
-      <tr
-        key={item.comboDetail?.orderDetailId || item.productDetail?.orderDetailId}
-        style={{ borderBottom: "2px solid rgb(228, 223, 223)" }}
-      >
-        {/* Kiểm tra loại dữ liệu là combo hay product và hiển thị tương ứng */}
-        {item.type === "combo" ? (
-          <>
-            <td>{item.comboDetail.orderDetailId}</td>
-            <td>{item.comboDetail.comboName}</td>
-            <td>
-              <img
-                src={`data:image/jpeg;base64,${item.comboDetail.image}`}
-                className="img-product"
-                alt="Combo Image"
-                style={{
-                  height: "100px",
-                  width: "100px",
-                  objectFit: "contain",
-                }}
-              />
-            </td>
-            <td>{item.comboDetail.comboId}</td>
-            <td>{item.comboDetail.quantity}</td>
-            <td>{item.comboDetail.unitPrice}</td>
-            <td>{item.comboDetail.totalPrice}</td>
-            <td>{item.comboDetail.size}</td>
-          </>
-        ) : (
-          <>
-            <td>{item.productDetail.orderDetailId}</td>
-            <td>{item.productDetail.productName}</td>
-            <td>
-              <img
-                src={`data:image/jpeg;base64,${item.productDetail.image}`}
-                className="img-product"
-                alt="Product Image"
-                style={{
-                  height: "100px",
-                  width: "100px",
-                  objectFit: "contain",
-                }}
-              />
-            </td>
-            <td>{item.productDetail.productId}</td>
-            <td>{item.productDetail.quantity}</td>
-            <td>{item.productDetail.unitPrice}</td>
-            <td>{item.productDetail.totalPrice}</td>
-            <td>{item.productDetail.size}</td>
-          </>
-        )}
-      </tr>
-    ))
-  ) : (
-    <tr>
-      <td colSpan="8">No data available</td>
-    </tr>
-  )}
-</tbody>
+          </tbody>
         </table>
         {/* <div
           className="pagination pagenigate-pd pd"

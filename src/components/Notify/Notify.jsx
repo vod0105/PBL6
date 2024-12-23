@@ -27,7 +27,6 @@ const SoundNotification = ({ url }) => {
         mess.current = response.data.data[newCount - 1].content;
         console.log("mes", mess.current);
 
-        // Chỉ phát âm thanh nếu có thông báo mới
         if (newCount > vlcurrent.current) {
           vlcurrent.current = newCount;
           setApiResult(true);

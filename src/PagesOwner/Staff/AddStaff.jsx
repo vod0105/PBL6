@@ -14,7 +14,7 @@ const AddStaff = ({ url }) => {
     employeeName: "",
     staff_code: "",
     department: "",
-    storeId: "",
+    // storeId: "",
   });
 
   //get user
@@ -49,7 +49,7 @@ const AddStaff = ({ url }) => {
     formData.append("employeeName", data.employeeName);
     formData.append("staff_code", data.staff_code);
     formData.append("department", data.department);
-    formData.append("storeId", data.storeId);
+    // formData.append("storeId", data.storeId);
 
     try {
       const response = await axios.post(
@@ -157,7 +157,7 @@ const AddStaff = ({ url }) => {
                   />
                 </td>
               </tr>
-              <tr>
+              {/* <tr>
                 <td>Store ID</td>
                 <td>
                   <input
@@ -169,7 +169,7 @@ const AddStaff = ({ url }) => {
                     required
                   />
                 </td>
-              </tr>
+              </tr> */}
             </tbody>
           </table>
 

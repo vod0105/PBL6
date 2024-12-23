@@ -332,7 +332,7 @@ const AddProducToStore = ({ url }) => {
                     </td>
                     <td>
                       <img
-                        src={`data:image/jpeg;base64,${store.image}`}
+                        src={`${url}/api/v1/public/uploads/images/${store.image}`}
                         className="img-product"
                         alt="Store"
                         style={{
@@ -454,7 +454,7 @@ const AddProducToStore = ({ url }) => {
                     <td>{product.productId}</td>
                     <td>
                       <img
-                        src={`data:image/jpeg;base64,${product.image}`}
+                        src={`${url}/api/v1/public/uploads/images/${product.image}`}
                         className="img-product"
                         alt="Product"
                         style={{

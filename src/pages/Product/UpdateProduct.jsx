@@ -179,7 +179,7 @@ const UpdateProduct = ({ url }) => {
                       src={
                         image
                           ? URL.createObjectURL(image)
-                          : `data:image/png;base64,${data.apiimg}`
+                          : `${url}/api/v1/public/uploads/images/${data.apiimg}`
                       }
                       alt=""
                     />
@@ -293,7 +293,7 @@ const UpdateProduct = ({ url }) => {
           src={
             image
               ? URL.createObjectURL(image)
-              : `data:image/png;base64,${data.apiimg}`
+              :  `${url}/api/v1/public/uploads/images/${data.apiimg}`
           }
           alt=""
         />

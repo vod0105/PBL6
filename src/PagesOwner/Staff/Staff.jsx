@@ -127,7 +127,6 @@ const StaffList = ({ url }) => {
 
   return (
     <div className="product">
-     
       <div className="content">
         <div
           className="heading"
@@ -170,11 +169,11 @@ const StaffList = ({ url }) => {
             }}
           >
             <tr>
-              <th scope="col">Id</th>
-              <th scope="col">Employee Name</th>
               <th scope="col">Staff Code</th>
+              <th scope="col">Employee Name</th>
+
               <th scope="col">Department</th>
-              <th scope="col">Store Id</th>
+              <th scope="col">Store name</th>
 
               <th scope="col">Action</th>
             </tr>
@@ -186,7 +185,6 @@ const StaffList = ({ url }) => {
                   key={data.id}
                   style={{ borderBottom: "2px solid rgb(228, 223, 223)" }}
                 >
-                  <td>{data.id}</td>
                   {/* <td>
                     <img
                       src={`data:image/jpeg;base64,${data.image}`}
@@ -199,11 +197,11 @@ const StaffList = ({ url }) => {
                       }}
                     />
                   </td> */}
-                  <td>{data.employeeName}</td>
                   <td>{data.staff_code}</td>
+                  <td>{data.employeeName}</td>
 
                   <td>{data.department}</td>
-                  <td>{data.storeId}</td>
+                  <td>{data.storeName}</td>
 
                   <td>
                     <button
