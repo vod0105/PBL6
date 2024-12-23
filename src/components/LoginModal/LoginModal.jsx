@@ -69,7 +69,7 @@ const LoginModal = () => {
   const handleSuccessGoogle = async (credentialResponse) => {
     // dispatch(loginGoogle(credentialResponse.credential));
     let urlBE = import.meta.env.VITE_BACKEND_URL || `http://10.10.2.94:8080`;
-    window.location.href = `${urlBE}/oauth2/authorization/google`;
+    window.location.href = `https://pbl6-fastordersystem.onrender.com/oauth2/authorization/google`;
   }
   const handleErrorGoogle = () => {
     alert('Lỗi tùm lum');

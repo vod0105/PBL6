@@ -19,6 +19,7 @@ import {
     fetchFavouriteProducsService,
     saveVoucherService
 } from "../../services/userService";
+import { getUserAccount } from "./authActions";
 import { fetchStoreByIdService } from "../../services/storeService";
 import { fetchProductByIdService } from "../../services/productService";
 import { toast } from "react-toastify";
@@ -43,6 +44,7 @@ const updateProfile = (fullName, avatar, email, address) => {
             const isSuccess = res && res.data ? res.data.success : false;
             if (isSuccess) {
                 dispatch(updateProfileSuccess());
+                dispatch(getUserAccount());
                 toast.success(res.data.message);
             } else {
                 // Handle case where registration was unsuccessful but no error was thrown

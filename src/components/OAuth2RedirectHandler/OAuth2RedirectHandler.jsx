@@ -9,23 +9,24 @@ const OAuth2RedirectHandler = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   useEffect(() => {
-    console.log('Current URL:', window.location.href); // Kiểm tra URL đầy đủ
     const params = new URLSearchParams(location.search);
     const token = params.get('token');
-    // console.log("params", params);
-
+  
     if (token) {
-      localStorage.setItem('token', token);
-      dispatch(getUserAccount());
-      navigate('/');
-      // alert('GG thành công -> Homepage');
+      try {
+        localStorage.setItem('token', token);
+        console.log('Token saved to localStorage:', token);
+        dispatch(getUserAccount());
+        navigate('/');
+      } catch (error) {
+        console.error('Failed to save token:', error);
+      }
     } else {
-      // navigate('/login');
-      // alert('GG không thành công -> Login')
+      console.warn('No token found in URL.');
+      navigate('/login');
     }
-  }, [navigate, location]);
-
-
+  }, [dispatch, location.search, navigate]);
+  
   return <p>Redirecting...</p>;
 };
 

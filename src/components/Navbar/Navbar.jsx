@@ -21,6 +21,7 @@ const Navbar = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const listProductsInCart = useSelector((state) => state.user.listProductsInCart); // lấy listProducts in cart -> hiển thị chấm đỏ
 
+  const [avatar, setAvatar] = useState(account?.avatar);
   const [product, setProduct] = useState(null);
   const [st, setST] = useState(null);
 
@@ -36,9 +37,10 @@ const Navbar = () => {
   const listCategories = useSelector((state) => {
     return state.category.listCategories;
   })
-  // useEffect(() => {
-  //   dispatch(fetchAllCategories());
-  // }, []);
+
+  useEffect(() => {
+    setAvatar(account.avatar)
+  }, [account]);
 
   // Mỗi li ở ul thực đơn được nhấn -> active cho THỰC ĐƠN -> Dùng path trên URL 
   const location = useLocation(); // useLocation -> Tự động re-render cho component nào sử dụng Hook này
@@ -186,8 +188,8 @@ const Navbar = () => {
                 className="navbar-profile"
               >
                 {
-                  account && account.avatar ? (
-                    <img src={'data:image/png;base64,' + account.avatar} alt="avatar-user" title="Quản lý tài khoản" />
+                  avatar ? (
+                    <img src={'data:image/png;base64,' + avatar} alt="avatar-user" title="Quản lý tài khoản" />
                   )
                     : (
                       <img src={logoUser} alt="avatar-user" />

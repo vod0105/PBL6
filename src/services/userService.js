@@ -2,10 +2,10 @@ import instance from "../setup/instanceAxios"; // an instance of axios
 import axios from "axios";
 const updateProfileService = (fullName, avatar, email, address) => {
     const formData = new FormData();
-    formData.append('fullName', fullName);
-    formData.append('avatar', avatar); // Thêm tệp avatar
-    formData.append('email', email);
-    formData.append('address', address);
+    if (fullName) formData.append('fullName', fullName);
+    if (avatar) formData.append('avatar', avatar); // Thêm tệp avatar
+    if (email) formData.append('email', email);
+    if (address) formData.append('address', address);
 
     return instance({
         method: 'put',

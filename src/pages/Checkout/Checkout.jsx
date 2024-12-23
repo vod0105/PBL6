@@ -391,7 +391,7 @@ const Checkout = () => {
                                                         <img src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${item.product.image}`} alt="" />
                                                     </div>
                                                     <div className="product-item-infor">
-                                                        <p className="infor-name">{item.product.productName} (L)</p>
+                                                        <p className="infor-name">{item.product.productName} ({item.product.size})</p>
                                                         <div className="infor-price-quantity">
                                                             <p className="infor-price">
                                                                 {Number(item.product.unitPrice).toLocaleString('vi-VN')} đ
@@ -549,7 +549,7 @@ const Checkout = () => {
                                     }
                                 }}
                             >
-                                <option value="0">Không chọn</option>
+                                <option value="0">Không áp dụng</option>
                                 {
                                     filteredVouchers && filteredVouchers.length > 0 && filteredVouchers.map((voucher, index) => (
                                         <option key={index} value={voucher.voucherId}>

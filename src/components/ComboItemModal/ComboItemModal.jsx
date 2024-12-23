@@ -252,7 +252,7 @@ const ComboItemModal = ({ showModalCombo, handleCloseModalCombo, combo, stores, 
                     </div>
                     <div className="store">
                       <div className="store-title">
-                        {selectedStore ? <span>Cửa hàng đã chọn: {selectedStore.storeName}</span> : <span>&#128073; Chọn cửa hàng</span>}
+                        {selectedStore ? <span>&#128073; Cửa hàng đã chọn: {selectedStore.storeName}</span> : <span>&#128073; Chọn cửa hàng</span>}
                       </div>
                       <StoreList stores={stores} onSelectStore={handleStoreSelect} selectedStore={selectedStore} />
                     </div>

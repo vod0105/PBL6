@@ -18,8 +18,7 @@ const AccountInfo = () => {
   const handleSaveChangeClick = () => {
     setIsEditing(false); // update
     dispatch(updateProfile(fullname, avatarFile, email, address));
-    // dispatch(getUserAccount());
-    dispatch(updateAccountAuth(fullname, avatarPreview.slice(22), email, address));
+    // dispatch(updateAccountAuth(fullname, avatarPreview.slice(22), email, address));
   };
 
   const handleCancelClick = () => {
@@ -130,9 +129,9 @@ const AccountInfo = () => {
                 className="form-control"
                 id="phonenumber"
                 value={phonenumber}
-                // disabled={true}
-                onChange={(event) => setPhonenumber(event.target.value)}
-                disabled={!isEditing}
+                disabled={true}
+                // onChange={(event) => setPhonenumber(event.target.value)}
+                // disabled={!isEditing}
               />
             </div>
           </div>

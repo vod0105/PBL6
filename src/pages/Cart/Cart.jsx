@@ -264,7 +264,7 @@ const Cart = () => {
                     onChange={() => handleCheckboxChange(item.cartId)} // Toggles item selection
                   />
                   <Link to={isProduct ? `/product-detail/${data.productId}` : `/combo-detail/${data.comboId}`}>
-                    <img src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${itemImage}`} alt="" />
+                    <img src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${itemImage}`} alt="Ảnh sản phẩm" />
                   </Link>
                   <p>{itemName}</p>
                   <p>{itemSize}</p>
@@ -273,7 +273,7 @@ const Cart = () => {
                   <div className="quantity-controls">
                     <button onClick={() => handleDecreaseQuantity(item)}> <i className="fa-solid fa-minus"></i></button>
                     <p>{itemQuantity}</p>
-                    <button onClick={() => handleIncreaseQuantity(item)}><i className="fa-solid fa-plus"></i></button>
+                  <button onClick={() => handleIncreaseQuantity(item)}><i className="fa-solid fa-plus"></i></button>
                   </div>
                   <p>{Number(itemTotalPrice).toLocaleString('vi-VN')} đ</p>
                   <p onClick={() => handleRemoveProductInCart(item.cartId)}>
