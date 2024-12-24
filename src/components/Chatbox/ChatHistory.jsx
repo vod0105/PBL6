@@ -192,7 +192,7 @@ const ChatHistory = (props) => {
 
     const fetchChatHistory = async () => {
         const res = await GetChatHistory(prevselectedUser.current.id);
-        console.log("data chathistory: ", res);
+        // console.log("data chathistory: ", res);
         if (res.data.EC === 0) {
             setChatHistory(res.data.DT);
         }
@@ -211,9 +211,9 @@ const ChatHistory = (props) => {
 
             ws.send(JSON.stringify(messagePayload));
             setInputMessage('');
-            console.log("Owner trước khi includes: ", owner)
+            // console.log("Owner trước khi includes: ", owner)
             if (owner.includes(selectedUser.id)) {
-                console.log("dava")
+                // console.log("dava")
                 setTimeout(() => {
                     sendData(idU, selectedUser.id, inputMessage);
                 }, 2000); // Chờ 2000ms (2 giây)
@@ -257,7 +257,7 @@ const ChatHistory = (props) => {
                                 message: formattedMessage,
                                 local_time: currentTime // Add time to payload
                             };
-                            console.log("meeagePay: ", messagePayload)
+                            // console.log("meeagePay: ", messagePayload)
                             setTimeout(() => {
                                 ws.send(JSON.stringify(messagePayload));
                             }, 2000);

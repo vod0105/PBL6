@@ -91,7 +91,7 @@ const StoreDetail = () => {
     const mess = `Xin chào mừng bạn đến với cửa hàng ${storeDetail.storeName},cửa hàng chúng tôi tự hào bán những sản phẩm chất lượng và an toàn. Bạn cần sự giúp đỡ gì từ chúng tôi đây?`;
     try {
       let res = await PostSaveMess(sender, receiver, isRead, mess);
-      console.log(res);
+      // console.log(res);
     } catch (exception) {
       console.error('Error sending image:', exception);
     }
@@ -99,7 +99,7 @@ const StoreDetail = () => {
 
   const SearchOwner = async () => {
     const res = await searchOwnerForStore(id);
-    console.log("owner: ", res)
+    // console.log("owner: ", res)
     if (res.data.EC === 0) {
       return res.data.DT;
     }
@@ -152,8 +152,6 @@ const StoreDetail = () => {
     });
     // console.log('updatedListVouchersStore: ', updatedListVouchersStore);
     setVouchers(updatedListVouchersStore);
-    console.log('voucher cửa hàng: ', listVouchersStore);
-    console.log('voucher user: ', listVouchersUser);
   }, [listVouchersUser, listVouchersStore]);
 
   // useEffect(() => {

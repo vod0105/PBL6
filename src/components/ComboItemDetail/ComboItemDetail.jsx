@@ -68,7 +68,7 @@ const ComboItemDetail = () => {
   const isLoading = useSelector((state) => state.product.isLoadingListSimilarCombos);
   // Tìm store chứa tất cả product trong combo
   const filterStoresWithAllComboProducts = (combo) => {
-    console.log('>>> combo detail: ',combo);
+    // console.log('>>> combo detail: ',combo);
     if (!combo || !combo.products || combo.products.length === 0) return [];
     // Tạo một mảng gồm các storeId từ sản phẩm đầu tiên trong combo
     let commonStores = combo.products[0].stores.map(store => store.storeId);

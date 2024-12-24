@@ -183,7 +183,7 @@ const fetchSimilarCombos = (idCombo) => {
             dispatch(fetchSimilarCombosRequest());
             const resCombo = await fetchAllCombosService(); // Tìm all combo
             const dataCombo = resCombo?.data?.data ? resCombo.data.data : [];
-            console.log('dataCombo: ', dataCombo);
+            // console.log('dataCombo: ', dataCombo);
             // Lọc các combo có comboId khác idCombo truyền vào
             let filteredData = dataCombo.filter(combo => +combo.comboId !== +idCombo);
             // Lấy 5 combo đầu tiên

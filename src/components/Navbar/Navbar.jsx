@@ -220,29 +220,30 @@ const Navbar = () => {
           Tải ngay
         </NavLink>
 
-        <NavLink
+        {/* <NavLink
           to="/test-map"
           className={({ isActive }) => (isActive ? 'active' : '')}
         >
           TEST MAP 2
-        </NavLink>
+        </NavLink> */}
 
       </ul >
       <div className="navbar-right">
         {
           isAuthenticated === true
             ? <>
-              <Link
+              <NavLink
                 to="/cart"
-                className="navbar-cart-icon"
+                // className="navbar-cart-icon"
+                className={({ isActive }) => (isActive ? 'active navbar-cart-icon' : 'navbar-cart-icon')}
               >
                 <img src={logoCart} alt="" />
                 {
                   listProductsInCart && listProductsInCart.length > 0 && <div className='dot'></div>
                 }
 
-              </Link>
-              <Link
+              </NavLink>
+              <NavLink
                 to="/account"
                 className="navbar-profile"
               >
@@ -254,7 +255,7 @@ const Navbar = () => {
                       <img src={logoUser} alt="avatar-user" />
                     )
                 }
-              </Link>
+              </NavLink>
               <ChatButton
                 product={product}
                 setProduct={setProduct}

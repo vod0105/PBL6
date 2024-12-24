@@ -244,7 +244,7 @@ const placeOrderBuyNowError = () => {
 
 const placeOrderBuyNow = (paymentMethod, productDetailBuyNow, address, longitude, latitude, navigate, voucher) => {
     return async (dispatch) => {
-        console.log('>>> voucher: ', voucher);
+        // console.log('>>> voucher: ', voucher);
         try {
             // dispatch(placeOrderBuyNowSuccess());
 
@@ -289,7 +289,7 @@ const placeOrderBuyNow = (paymentMethod, productDetailBuyNow, address, longitude
 }
 const placeOrderComboBuyNow = (paymentMethod, comboDetailBuyNow, address, longitude, latitude, navigate, voucher) => {
     return async (dispatch) => {
-        console.log('>>> voucher: ', voucher);
+        // console.log('>>> voucher: ', voucher);
         try {
             // dispatch(placeOrderBuyNowSuccess());
 
@@ -606,7 +606,7 @@ const fetchFavouriteProducs = (idUser) => {
                 );
                 // Lọc bỏ những phần tử null nếu có lỗi trong khi fetch product detail
                 const validProducts = listProductDetails.filter(product => product !== null);
-                console.log('validProducts: ', validProducts);
+                // console.log('validProducts: ', validProducts);
                 // Dispatch action với danh sách sản phẩm
                 dispatch(fetchFavouriteProducsSuccess(validProducts));
             }

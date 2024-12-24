@@ -148,10 +148,10 @@ const ProductItemModal = ({ showModalProduct, handleCloseModalProduct, product, 
     setSelectedStore(null); // Reset cửa hàng về null -> Ko chọn cửa hàng nào
     setSelectedSize(listSizes.length > 0 ? listSizes[0].name : ""); // Reset kích thước về kích thước đầu tiên
     setFinalPrice(product.discountedPrice);
-    handleCloseModalProduct();
-    // setTimeout(() => {
-    //   setFinalPrice(product?.discountedPrice);
-    // }, 500);
+    setFinalPrice(product?.discountedPrice);
+    setTimeout(() => {
+      handleCloseModalProduct();
+    }, 200);
   };
   return (
     <Modal

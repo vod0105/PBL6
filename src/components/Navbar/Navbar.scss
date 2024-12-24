@@ -136,8 +136,6 @@
     }
   }
   
-  
-  
   .navbar-right {
     display: flex;
     align-items: center;
@@ -170,9 +168,13 @@
         min-height: 10px;
         background-color: #e3000e;
         border-radius: 5px;
-        top: -8px;
-        right: -8px;
+        top: -4px;
+        right: -4px;
       }
+      // &.active {
+      //   padding-bottom: 2px;
+      //   border-bottom: 3px solid #d64747;
+      // }
     }
     .navbar-profile {
       position: relative;
@@ -212,7 +214,7 @@
       background-color: white;
       box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
       color: black;
-      margin-top: 5px; 
+      // margin-top: 5px; 
       /* Thêm hiệu ứng chuyển mượt mà khi hiện/ẩn */
       opacity: 0;
       visibility: hidden; 

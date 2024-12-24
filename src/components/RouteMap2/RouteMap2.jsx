@@ -35,7 +35,8 @@
 
 import React, { useEffect, useState } from 'react';
 import polyline from 'polyline';
-const RouteMap2 = () => {
+import axios from "axios";
+const RouteMap2 =  () => {
   const [route, setRoute] = useState(null);
   const [motorcycleDuration, setMotorcycleDuration] = useState(null);
   const decodePolyline = (encoded) => { // encoded: Chuỗi mã hóa
@@ -43,48 +44,43 @@ const RouteMap2 = () => {
     // Chuyển đổi [lng, lat] sang [lat, lng]
     return decodedCoords.map(coord => ({ lat: coord[0], lng: coord[1] }));
   };
-  useEffect(() => {
+  useEffect(async () => {
     // Tọa độ của 2 điểm (Điểm xuất phát và điểm đích)
     const coordinates = [
       { lat: 16.069908, lon: 108.151274 }, // Tọa độ của Hà Nội
       { lat: 16.0800328, lon: 108.147122 }, // Tọa độ của Vĩnh Yên
     ];
 
-    // API endpoint của OSRM để tính toán đường đi
     const url = `http://router.project-osrm.org/route/v1/driving/${coordinates[0].lon},${coordinates[0].lat};${coordinates[1].lon},${coordinates[1].lat}?overview=full&steps=true`;
+    try {
+      // Gửi yêu cầu API bằng axios
+      const response = await axios.get(url);
 
-    // Gửi yêu cầu API tới OSRM
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
-        
-        if (data && data.routes && data.routes.length > 0) {
-          const routeData = data.routes[0]; // Lấy kết quả lộ trình đầu tiên
-          setRoute(routeData);
+      if (response.data && response.data.routes && response.data.routes.length > 0) {
+        const routeData = response.data.routes[0]; // Lấy kết quả lộ trình đầu tiên
+        setRoute(routeData);
 
-          // Lấy thời gian duration (tính bằng giây)
-          const durationInSeconds = routeData.duration;
+        // Lấy thời gian duration (tính bằng giây)
+        const durationInSeconds = routeData.duration;
 
-          // Giả sử tốc độ trung bình của xe máy là 40 km/h (11.1 m/s)
-          const motorcycleSpeedInMetersPerSecond = 11.1;
+        // Giả sử tốc độ trung bình của xe máy là 40 km/h (11.1 m/s)
+        const motorcycleSpeedInMetersPerSecond = 11.1;
 
-          // Tính toán lại duration cho xe máy
-          const distanceInMeters = routeData.distance; // Đoạn đường dài tính bằng mét
-          const motorcycleDurationInSeconds = distanceInMeters / motorcycleSpeedInMetersPerSecond;
+        // Tính toán lại duration cho xe máy
+        const distanceInMeters = routeData.distance; // Đoạn đường dài tính bằng mét
+        const motorcycleDurationInSeconds = distanceInMeters / motorcycleSpeedInMetersPerSecond;
 
-          console.log('Đường đi:', routeData.geometry); // In thông tin lộ trình ra console
-          const decodedPath = decodePolyline(routeData.geometry);
-          console.log('>>> geometry -> route?: ', decodedPath); // Array các điểm -> Nối lại có đường đi với mỗi điểm: [lat, lng]
+        console.log("Đường đi:", routeData.geometry); // In thông tin lộ trình ra console
+        const decodedPath = decodePolyline(routeData.geometry);
+        console.log(">>> geometry -> route?: ", decodedPath); // Array các điểm -> Nối lại có đường đi với mỗi điểm: [lat, lng]
 
-          setMotorcycleDuration(motorcycleDurationInSeconds);
-          
-        } else {
-          console.log('Không tìm thấy đường đi');
-        }
-      })
-      .catch((error) => {
-        console.error('Lỗi khi gọi API:', error);
-      });
+        setMotorcycleDuration(motorcycleDurationInSeconds);
+      } else {
+        console.log("Không tìm thấy đường đi");
+      }
+    } catch (error) {
+      console.error("Lỗi khi gọi API:", error);
+    }
   }, []);
 
   return (

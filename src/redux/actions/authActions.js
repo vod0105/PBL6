@@ -139,7 +139,7 @@ const loginGoogleError = () => {
 const loginGoogle = (tokenGoogle) => {
     return async (dispatch) => {
         try {
-            console.log('>>> check token: ', tokenGoogle);
+            // console.log('>>> check token: ', tokenGoogle);
 
             const res = await loginGoogleService(tokenGoogle);
             const isSuccess = res && res.data ? res.data.success : false;

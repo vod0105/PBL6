@@ -19,7 +19,6 @@ const fetchAllCombosService = () => {
     });
 }
 const fetchAllDrinksService = (drinkId) => {
-    console.log('>>> drink id: ', drinkId);
     return instance({
         method: 'get',
         url: `/api/v1/public/products/category/${drinkId}`,

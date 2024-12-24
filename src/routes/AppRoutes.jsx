@@ -25,6 +25,8 @@ import Download from '../pages/Download/Download';
 import AllProducts from '../pages/AllProducts/AllProducts';
 import Loading from '../pages/Loading/Loading';
 import RouteMap2 from '../components/RouteMap2/RouteMap2';
+import Checkout_V2 from '../pages/Checkout_V2/Checkout_V2';
+import DeliveryMap_V2 from '../components/DeliveryMap_V2/DeliveryMap_V2';
 
 const AppRoutes = (props) => {
     return (
@@ -35,9 +37,10 @@ const AppRoutes = (props) => {
                 <Route path='/cart' element={<PrivateRoutes element={<Cart />} />} />
                 <Route path='/order' element={<PrivateRoutes element={<PlaceOrder />} />} />
                 <Route path='/account/*' element={<PrivateRoutes element={<Account />} />} />
-                <Route path='/checkout' element={<PrivateRoutes element={<Checkout />} />} />
+                <Route path='/checkout' element={<PrivateRoutes element={<Checkout_V2 />} />} />
+                
                 <Route path='/order-complete' element={<PrivateRoutes element={<OrderComplete />} />} />
-                <Route path='/order-in-transit/:orderCode' element={<PrivateRoutes element={<DeliveryMap />} />} />
+                <Route path='/order-in-transit/:orderCode' element={<PrivateRoutes element={<DeliveryMap_V2 />} />} />
 
                 {/* Public Routes */}
                 <Route path="/" element={<Home />} />
@@ -62,7 +65,7 @@ const AppRoutes = (props) => {
                 {/* <Route path="/order-complete" element={<OrderComplete />} /> */}
                 {/* <Route path="/order-in-transit/:orderCode" element={<DeliveryMap />} /> */}
 
-                <Route path="/test-map" element={<RouteMap2/>} />
+                {/* <Route path="/test-map" element={<RouteMap/>} /> */}
                 <Route path="*" element={<div>404 Not Found!!!</div>} />
             </Routes>
         </>

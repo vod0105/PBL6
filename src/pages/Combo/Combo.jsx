@@ -104,7 +104,7 @@ export default function Combo() {
         const responseAI = await axios.post(`${urlAI}/predict`, {
           image: base64FileImage
         });
-        console.log("response AI:", responseAI);
+        // console.log("response AI:", responseAI);
         if (responseAI?.data) {
           const nameProduct = responseAI.data;
           // setSearchTermAI(nameProduct);

@@ -34,9 +34,6 @@ const Home = () => {
     return state.user.listFavouriteProducts;
   })
 
-  // useEffect(() => {
-  //   dispatch(fetchProductsBestSale());
-  // }, []);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -47,35 +44,8 @@ const Home = () => {
     }
   }, [account, dispatch]);
 
-  // Image -> base64
-  const convertToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64String = reader.result.split(',')[1]; // Xóa phần "data:image/png;base64,"
-        resolve(base64String);
-      };
-      reader.onerror = (error) => {
-        reject(error);
-      };
-      reader.readAsDataURL(file);
-    });
-  };
-
-  const handleFileChange = async (event) => {
-    const file = event.target.files[0];
-
-    try {
-      const base64 = await convertToBase64(file);
-      console.log(base64);
-    } catch (error) {
-      console.error("Lỗi khi chuyển đổi ảnh: ", error);
-    }
-  };
-
   return (
     <div className='page-homepage'>
-      {/* <input type="file" accept="image/*" onChange={handleFileChange} /> */}
       <Header />
       <ExploreMenu />
       <BannerWelcome />

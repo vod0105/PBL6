@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import './DeliveryMap.scss'
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,11 +12,11 @@ import { toast } from 'react-toastify';
 import logoUser from '../../assets/logo/user.png'
 
 import L from 'leaflet';  // Import Leaflet to customize icon
-// import logoUser from '../../assets/logo/user.png'
 import iconUser from '../../assets/logo/map_user.png'
 import iconShipper from '../../assets/logo/map_shipper.png'
 import { fetchOrderInTransitByOrderCode } from '../../redux/actions/userActions';
 import { Modal } from 'react-bootstrap';
+import { debounce } from 'lodash';
 
 // Component Click chuột trên map
 const LocationMarker = ({ setPosition }) => {
@@ -24,15 +24,13 @@ const LocationMarker = ({ setPosition }) => {
     click(e) {
       const { lat, lng } = e.latlng;
       setPosition([lat, lng]); // Cập nhật vị trí với tọa độ đã click
-      // console.log('>>> longitude 2: ', lng);
-      // console.log('>>> latitude 2: ', lat);
     },
   });
   return null;
 };
 
 
-const DeliveryMap = () => {
+const DeliveryMap_V2 = () => {
   const { orderCode } = useParams();
   const dispatch = useDispatch();
   const orderInTransit = useSelector((state) => {
@@ -54,25 +52,10 @@ const DeliveryMap = () => {
     return `${day}/${month}/${year} lúc ${hours}:${minutes}`;
   };
 
-  // useEffect(() => { // orderCode thay đổi -> fetch lại để view order đang giao (Tương tự chi tiết sản phẩm đã làm)
-  //   console.log('orderCode: ', orderCode);
-  //   dispatch(fetchOrderInTransitByOrderCode(orderCode));
-  // }, [orderCode]);
-  // useEffect(() => { // Tọa độ shipper thay đổi -> Vẽ lại map
-  //   if (orderInTransit && orderInTransit.shipperDetail) { // Có shipper nhận hàng
-  //     setOrderCoords([orderInTransit.longitude, orderInTransit.latitude]);
-  //     setShipperCoords([orderInTransit.shipperDetail.longitude, orderInTransit.shipperDetail.latitude]);
-  //     console.log('>>> orderCoords: ', orderCoords);
-  //     console.log('>>> shipperCoords: ', shipperCoords);
-
-  //     fetchRoute(); // Call API ORS hiển thị trên map: route + distance + duration
-
-  //   }
-  // }, [orderInTransit]);
   const [orderCoords, setOrderCoords] = useState([107.9006, 16.2554]); // [lon, lat]: Tọa độ nhận hàng
   const [shipperCoords, setShipperCoords] = useState(null); // Tọa độ hiện tại của Shipper
   useEffect(() => {
-    // console.log('orderCode: ', orderCode);
+    window.scrollTo(0, 0);
     dispatch(fetchOrderInTransitByOrderCode(orderCode));
   }, [orderCode]);
 
@@ -83,16 +66,21 @@ const DeliveryMap = () => {
       // console.log('newShipperCoords: ', newShipperCoords);
       setOrderCoords(newOrderCoords);
       setShipperCoords(newShipperCoords);
-      // fetchRoute(); => Chưa cập nhật kịp
     }
   }, [orderInTransit]);
 
-  // Gọi fetchRoute khi 2 State orderCoords và shipperCoords đã được cập nhật
+  const debouncedFetchRoute = useCallback(
+    debounce(() => {
+      fetchRoute();
+    }, 1000), 
+    []
+  );
   useEffect(() => {
     if (orderCoords && shipperCoords) {
       fetchRoute();
+      // debouncedFetchRoute();
     }
-  }, [orderCoords, shipperCoords]); // dependency = state ??? => Vẫn được
+  }, [orderCoords, shipperCoords]); 
 
   // Map
   const [route, setRoute] = useState(null); // Đường đi trên map
@@ -100,50 +88,11 @@ const DeliveryMap = () => {
   const [duration, setDuration] = useState(null); // Thời gian di chuyển ước lượng
   const [addressCoords, setAddressCoords] = useState([16.075966, 108.149805]); // Tọa độ hiện tại của mình (Mới vô) / Tọa độ Click
   const apiKey = import.meta.env.VITE_API_KEY_MAP;
-  // const [orderCoords, setOrderCoords] = useState([108.149805, 16.075966]); // [lon, lat]: Tọa độ nhận hàng
-  // const [shipperCoords, setShipperCoords] = useState([108.1497442227022, 16.073974660899232]); // Tọa độ hiện tại của Shipper
-
-
-  // Lấy tọa độ hiện tại
-  const getCurrentCoors = () => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const latitude = position.coords.latitude;
-          const longitude = position.coords.longitude;
-          const latLon = [latitude, longitude];
-          setAddressCoords(latLon);
-        },
-        (error) => {
-          console.error("Error getting location:", error);
-          alert("Không thể lấy vị trí hiện tại. Vui lòng kiểm tra cài đặt vị trí.");
-        },
-        {
-          enableHighAccuracy: true,  // Yêu cầu độ chính xác cao
-          timeout: 10000,            // Thời gian tối đa để lấy vị trí (ms)
-          maximumAge: 0              // Luôn lấy vị trí mới nhất
-        }
-      );
-
-    } else {
-      console.error("Geolocation is not supported by this browser.");
-      alert("Trình duyệt của bạn không hỗ trợ lấy vị trí.");
-    }
-  }
   // Hàm xử lý click trên bản đồ 
   const handleMapClick = (event) => {
     const { lat, lng } = event.latlng;
     setAddressCoords([lat, lng]); // Lưu tọa độ đã click
   };
-
-  // Component để phóng to bản đồ
-  // const ZoomToAddress = () => {
-  //   const map = useMap();
-  //   if (addressCoords) {
-  //     map.setView(addressCoords, 16); // Phóng to đến tọa độ với level 18
-  //   }
-  //   return null;
-  // };
   const ZoomToAddress = ({ addressCoords }) => {
     const map = useMap();
     useEffect(() => {
@@ -153,67 +102,24 @@ const DeliveryMap = () => {
     }, [addressCoords, map]);
     return null;
   };
-
-
-  // Tọa độ -> Địa chỉ
-  // const fetchAddressFromCoordinates = async (latitude, longitude) => {
-  //   try {
-  //     const response = await axios.get(
-  //       `https://api.openrouteservice.org/geocode/reverse?point.lon=${longitude}&point.lat=${latitude}&size=1`,
-  //       {
-  //         headers: {
-  //           Authorization: apiKey,
-  //         },
-  //       }
-  //     );
-  //     if (response.data && response.data.features.length > 0) {
-  //       const address = response.data.features[0].properties.label; // Địa chỉ đầy đủ
-  //       setAddress(address);
-  //     }
-  //   } catch (err) {
-  //     console.error("Error details: ", err);
-  //   }
-  // };
-
   // Đường đi trên map
   const fetchRoute = async () => {
-    // Check if orderCoords and shipperCoords are valid coordinates
     if (!orderCoords || !shipperCoords || orderCoords.length < 2 || shipperCoords.length < 2) {
       toast.warn('Chưa có đủ thông tin tọa độ để tìm đường.');
       return;
     }
-    // alert('hehe');
+    const url = `http://router.project-osrm.org/route/v1/driving/${orderCoords[0]},${orderCoords[1]};${shipperCoords[0]},${shipperCoords[1]}?overview=full&steps=true`; // [long, lat]
+    const response = await axios.get(url);
     try {
-      const response = await axios.post(
-        `https://api.openrouteservice.org/v2/directions/driving-car`,
-        {
-          coordinates: [orderCoords, shipperCoords],
-          format: 'geojson',
-        },
-        {
-          headers: {
-            Authorization: apiKey,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
       if (
-        response.data &&
-        response.data.routes &&
-        response.data.routes[0]?.segments &&
-        response.data.routes[0].segments[0]?.distance &&
-        response.data.routes[0].segments[0]?.duration &&
-        response.data.routes[0].geometry
+        response.data && response.data.routes && response.data.routes.length > 0
       ) {
-        const routeDistance = response.data.routes[0].segments[0].distance; // mét
-        const routeDuration = response.data.routes[0].segments[0].duration; // giây
+        const routeData = response.data.routes[0];
+        const routeDistance = routeData.distance;// mét
+        const routeDuration = routeData.duration; // giây
         setDistance((routeDistance / 1000).toFixed(2)); // m -> km
         setDuration((routeDuration / 60).toFixed(2));   // s -> m
-        // console.log('>>> res 2 điểm trên map: ', response);
-        console.log('>>> tọa độ nhận hàng: ', orderCoords);
-        console.log('Số km: ', distance);
-        const decodedPath = decodePolyline(response.data.routes[0].geometry);
-        // console.log('>>> geometry -> route?: ', decodedPath); // Array các điểm -> Nối lại có đường đi với mỗi điểm: [lat, lng]
+        const decodedPath = decodePolyline(routeData.geometry);
         setRoute(decodedPath); // Đường đi
       }
     } catch (err) {
@@ -343,14 +249,6 @@ const DeliveryMap = () => {
                     <Popup>Vị trí của shipper</Popup>
                   </Marker>
                 )}
-                {/*Địa chỉ người dùng đã click */}
-                {/* {addressCoords && (
-                  <Marker position={addressCoords}>
-                    <Popup>
-                      Tọa độ của địa chỉ: {addressCoords[0]}, {addressCoords[1]}
-                    </Popup>
-                  </Marker>
-                )} */}
                 <LocationMarker setPosition={setAddressCoords} /> {/* Cập nhật vị trí đã click */}
                 <ZoomToAddress addressCoords={addressCoords} />
               </MapContainer>
@@ -375,4 +273,4 @@ const DeliveryMap = () => {
     </div>
   )
 }
-export default DeliveryMap
+export default DeliveryMap_V2

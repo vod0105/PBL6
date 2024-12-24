@@ -78,7 +78,6 @@ const ProductItemDetail = () => {
     dispatch(fetchRatingProductById(id));
     dispatch(fetchSimilarProducts(id));
     window.scrollTo(0, 0);
-    console.log(`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${id}`);
   }, [id]);
 
   // Select -> Lọc số sao ở review

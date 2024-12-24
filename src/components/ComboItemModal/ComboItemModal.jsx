@@ -149,10 +149,10 @@ const ComboItemModal = ({ showModalCombo, handleCloseModalCombo, combo, stores, 
     setQuantity(1);
     setSelectedStore(null); // Reset cửa hàng về null -> Ko chọn cửa hàng nào
     setSelectedSize(listSizes.length > 0 ? listSizes[0].name : ""); // Reset kích thước về kích thước đầu tiên
-    handleCloseModalCombo();
+    setFinalPrice(combo.price);
     setTimeout(() => {
-      setFinalPrice(combo.price);
-    }, 500);
+      handleCloseModalCombo();
+    }, 200);
   };
 
   // const drinks = [

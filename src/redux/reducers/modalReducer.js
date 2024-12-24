@@ -7,7 +7,6 @@ const initialState = {
 const modalReducer = (state = initialState, action) => {
     switch (action.type) {
         case 'SHOW_LOGIN_MODAL':
-            console.log(state);
             return { ...state, isLoginModalVisible: true };
         case 'HIDE_LOGIN_MODAL':
             return { ...state, isLoginModalVisible: false };

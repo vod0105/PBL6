@@ -21,12 +21,12 @@ const ChatButton = (props) => {
         GetAllIdOwner();
     }, []);
 
-    useEffect(()=>{
-        console.log("change new message count: ",newMessagesCount)
-    },[])
-    useEffect(()=>{
-        console.log("change new message count: ",newMessagesCount)
-    },[newMessagesCount])
+    // useEffect(()=>{
+    //     console.log("change new message count: ",newMessagesCount)
+    // },[])
+    // useEffect(()=>{
+    //     console.log("change new message count: ",newMessagesCount)
+    // },[newMessagesCount])
     // useEffect(() => {
     //     GetAllUnRead();
     // }, []); 
@@ -36,8 +36,8 @@ const ChatButton = (props) => {
         try {
             const res = await GetAllOwner();
             if (res.data.EC === 0) {
-                console.log("Lấy Owner thành công");
-                console.log("data Owner: ", res);
+                // console.log("Lấy Owner thành công");
+                // console.log("data Owner: ", res);
                 // Lấy danh sách người dùng có is_online là false
                 setTimeout(() => {
                     setOwner(res.data.DT);

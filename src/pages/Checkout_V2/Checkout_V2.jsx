@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./Checkout.scss";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,7 +12,7 @@ import iconOrder from '../../assets/logo/map_order.png'
 import axios from 'axios';
 import { MapContainer, TileLayer, Polyline, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import polyline from 'polyline'; // Import polyline library
+import { debounce } from 'lodash';
 
 // Component Click chuột trên map
 const LocationMarker = ({ setPosition }) => {
@@ -25,7 +25,7 @@ const LocationMarker = ({ setPosition }) => {
     return null;
 };
 
-const Checkout = () => {
+const Checkout_V2 = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const isBuyNow = useSelector((state) => state.user.isBuyNow);
@@ -49,7 +49,6 @@ const Checkout = () => {
     // Lọc các voucher hợp lệ theo điều kiện selectedStore và used = false
     const [filteredVouchers, setFilteredVouchers] = useState([]);
     useEffect(() => {
-        // console.log('listVouchersUser: ', listVouchersUser);
         if (listVouchersUser && listVouchersUser.length > 0) {
             const vouchers = listVouchersUser ? (listVouchersUser.filter(
                 (voucher) => voucher.storeId.includes(+selectedStore.storeId) && !voucher.used
@@ -149,8 +148,6 @@ const Checkout = () => {
     // MAP: OpenRouteService
     const [addressCoords, setAddressCoords] = useState([16.075966, 108.149805]); // Tọa độ click -> Chọn giao hàng ở đó -> Trên Map
     const [currentCoords, setCurrentCoords] = useState([16.075966, 108.149805]); // Tọa độ hiện tại của mình
-    // const [error, setError] = useState(null);
-    // const [clickedCoords, setClickedCoords] = useState(null); // Tọa độ click
     const apiKey = import.meta.env.VITE_API_KEY_MAP;
 
     // Lấy tọa độ hiện tại (Mới vô MAP)
@@ -160,8 +157,6 @@ const Checkout = () => {
                 (position) => {
                     const latitude = position.coords.latitude;
                     const longitude = position.coords.longitude;
-                    // console.log("Current Latitude:", latitude);
-                    // console.log("Current Longitude:", longitude);
                     const latLon = [latitude, longitude];
                     setAddressCoords(latLon);
                     setCurrentCoords(latLon);
@@ -198,26 +193,36 @@ const Checkout = () => {
 
     // Tọa độ -> Địa chỉ
     const fetchAddressFromCoordinates = async (latitude, longitude) => {
-        // console.log('lấy tọa độ từ địa chỉ');
+        const url = `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`;
         try {
-            const response = await axios.get(
-                `https://api.openrouteservice.org/geocode/reverse?point.lon=${longitude}&point.lat=${latitude}&size=1`,
-                {
-                    headers: {
-                        Authorization: apiKey,
-                    },
-                }
-            );
-            if (response.data && response.data.features.length > 0) {
-                const address = response.data.features[0].properties.label; // Địa chỉ đầy đủ
-                setAddress(address);
-                // alert(address);
+            const response = await axios.get(url);
+            if (response?.data?.address) {
+                const address = response.data.address; 
+                // console.log('>>>Địa chỉ:', address);
+                const formattedAddress = [ // Địa chỉ đầy đủ
+                    address.road,        // Tên đường,
+                    address.village,    // xã
+                    address.quarter,     // phường
+                    address.county,      // Huyện
+                    address.suburb,      // Quận
+                    address.city,        // Thành phố
+                    address.state,       // Tỉnh
+                    address.country      // Quốc gia
+                ]
+                .filter(Boolean) 
+                .join(', '); 
+                setAddress(formattedAddress);
             }
         } catch (err) {
             console.error("Error details: ", err);
         }
     };
-
+    const debouncedFetchAddress = useCallback(
+        debounce((lat, lon) => {
+          fetchAddressFromCoordinates(lat, lon);
+        }, 1100), 
+        []
+    );
     // Tính phí giao hàng dựa vào khoảng cách (đường chim bay)
     const [shippingFee, setShippingFee] = useState(0);
     const [distance, setDistance] = useState(0);
@@ -254,13 +259,15 @@ const Checkout = () => {
         window.scrollTo(0, 0);
         dispatch(fetchVouchers());
         getCurrentCoors();
-        fetchAddressFromCoordinates(addressCoords[0], addressCoords[1]);  // (lat, lon)
+        // debouncedFetchAddress(addressCoords[0],addressCoords[1]);
+        // fetchAddressFromCoordinates(addressCoords[0], addressCoords[1]);  // (lat, lon)
     }, []);
 
     // Click chuột -> Tọa độ thay đổi -> Input thay đổi
     useEffect(() => {
-        if (addressCoords) {
-            fetchAddressFromCoordinates(addressCoords[0], addressCoords[1]);  // Gọi hàm với tọa độ mới
+        if (addressCoords) {       
+            // fetchAddressFromCoordinates(addressCoords[0], addressCoords[1]);  // Gọi hàm với tọa độ mới
+            debouncedFetchAddress(addressCoords[0],addressCoords[1]);
             let distance = getDistance(addressCoords[0], addressCoords[1], selectedStore ? +selectedStore.latitude : 16.0471, selectedStore ? +selectedStore.longitude : 108.206); // note: thay tọa độ sau bằng tọa độ cửa hàng
             setDistance(distance);
             if (distance > 1.5) {
@@ -290,7 +297,8 @@ const Checkout = () => {
                             type="text"
                             placeholder="Họ tên người nhận"
                             value={fullname}
-                            disabled={true}
+                            // disabled={true}
+                            onChange={(e) => setFullname(e.target.value)}
                             required
                         />
                         <div className="form-group col-md-12">
@@ -301,6 +309,7 @@ const Checkout = () => {
                                 type="text"
                                 placeholder="Số điện thoại"
                                 value={phonenumber}
+                                onChange={(e) => setPhonenumber(e.target.value)}
                                 // disabled={true}
                                 required
                             />
@@ -313,7 +322,7 @@ const Checkout = () => {
                                 placeholder="Địa chỉ"
                                 value={address}
                                 onChange={(e) => setAddress(e.target.value)}
-                                disabled={true}
+                                // disabled={true}
                                 required
                             />
                         </div>
@@ -597,4 +606,4 @@ const Checkout = () => {
     );
 };
 
-export default Checkout;
+export default Checkout_V2;
