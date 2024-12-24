@@ -75,11 +75,12 @@
     border: none;
   }
 }
-@media (max-width: 1050px) {
+@media (max-width: 750px) {
   .explore-menu {
-    .explore-menu-text {
-      max-width: 100%;
-      font-size: 14px;
+    .explore-menu-list{
+      .explore-menu-list-item{
+        
+      }
     }
   }
 }

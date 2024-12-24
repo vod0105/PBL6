@@ -65,7 +65,7 @@ const Introduce = () => {
           <Row>
             <Col lg={12} className="mb-5 mb-lg-0">
               <p className="introduce-section-2-description">
-                Chúng tôi hiện có hơn 100 cửa hàng trải rộng trên khắp cả nước, tập trung tại các thành phố lớn như Hà Nội, TP. Hồ Chí Minh, Đà Nẵng và nhiều tỉnh thành khác.
+                Chúng tôi hiện có nhiều cửa hàng trải rộng trên khắp cả nước, tập trung tại các thành phố lớn như Hà Nội, TP. Hồ Chí Minh, Đà Nẵng và nhiều tỉnh thành khác.
                 Mỗi chi nhánh đều được đặt ở những vị trí thuận tiện, phục vụ nhanh chóng cho khách hàng
               </p>
               <p className='introduce-section-2-description'>Với sự phát triển mạnh mẽ, hệ thống cửa hàng của chúng tôi không ngừng mở rộng để đáp ứng nhu cầu ngày càng tăng. Dù bạn ở đâu, chúng tôi luôn sẵn sàng mang đến những bữa ăn ngon, tiện lợi và chất lượng.</p>

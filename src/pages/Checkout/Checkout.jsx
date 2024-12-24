@@ -251,11 +251,10 @@ const Checkout = () => {
     });
     // Mới vô -> Hiển thị trên input + map => Vị trí hiện tại
     useEffect(() => {
+        window.scrollTo(0, 0);
         dispatch(fetchVouchers());
         getCurrentCoors();
-
         fetchAddressFromCoordinates(addressCoords[0], addressCoords[1]);  // (lat, lon)
-
     }, []);
 
     // Click chuột -> Tọa độ thay đổi -> Input thay đổi

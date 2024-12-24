@@ -1,0 +1,255 @@
+[33mcommit 5f3c6479ec15d519a0bd840d12342284985d6cfd[m[33m ([m[1;36mHEAD -> [m[1;32mfe-user[m[33m)[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Tue Dec 24 12:44:57 2024 +0700
+
+    fix: remove sensitive files
+
+[33mcommit 07e4dfe0f542746c0587247e1a0125b3d9044308[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Tue Dec 24 12:44:08 2024 +0700
+
+    update css
+
+[33mcommit 2272f892968e998f755d3fef92453867a542f748[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Tue Dec 24 12:38:32 2024 +0700
+
+    update css
+
+[33mcommit 3ebcf527a7d6e799463fe7bb105efcbc635877b8[m[33m ([m[1;31morigin/fe-user[m[33m)[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Mon Dec 23 14:32:09 2024 +0700
+
+    update profile
+
+[33mcommit 3013769134f79941408bd6e2c8bc5fcbc717fe7e[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Sun Dec 22 15:59:13 2024 +0700
+
+    change base64 to api
+
+[33mcommit 2e4b5e4e4db78b687bfc3064499dfdcae7512c8e[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Sat Dec 21 10:02:40 2024 +0700
+
+    update scss
+
+[33mcommit 0bb37acea6718fa17016d320668835873288d8d9[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Fri Dec 20 15:09:13 2024 +0700
+
+    change .env
+
+[33mcommit 28b036e81e81288c986a9d15195d52ac986cc318[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Wed Dec 11 06:45:49 2024 +0700
+
+    add comment, scroll
+
+[33mcommit 6e3d857ee1b495e0b5451f170c6a06af3c16e07c[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Fri Dec 6 22:26:50 2024 +0700
+
+    add eye icon on password input
+
+[33mcommit 88707d90ef15dfbc3b9f87f011a76978c7741565[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Fri Dec 6 21:32:12 2024 +0700
+
+    fix url auth
+
+[33mcommit 5a0977ec8a270e53d0710c70d12080d4461d4c2f[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Sun Nov 24 16:52:14 2024 +0700
+
+    fix shipping fee, price on checkout page
+
+[33mcommit 703eaa3e70dc6b7271e3cefdd4f6032449781986[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Wed Nov 20 17:59:44 2024 +0700
+
+    add isLoading
+
+[33mcommit 1f4b86462a1a954ad531c2bfa5f604641a3e6f44[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Tue Nov 19 16:46:48 2024 +0700
+
+    page download; fix bug: page category, all products
+
+[33mcommit 5f1db3b27c830bfdab81a8642eb7008e21a0d962[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Mon Nov 18 21:37:16 2024 +0700
+
+    complete version 1
+
+[33mcommit c02961054aeb91dd06190cce1fbe2909c7b65ca2[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Thu Nov 14 12:05:20 2024 +0700
+
+    update list images in asset folder, fix bug checkout, order
+
+[33mcommit ac5bcfaf13a29af924066249ee500430b518d57f[m
+Author: vod0105 <102397278+vod0105@users.noreply.github.com>
+Date:   Tue Nov 12 14:37:47 2024 +0700
+
+    update chat auto
+
+[33mcommit e124dd754d3b4bfbf82aead6f26b62c63fc094d3[m
+Merge: 074d4ab b3f39ef
+Author: vod0105 <102397278+vod0105@users.noreply.github.com>
+Date:   Tue Nov 12 14:35:40 2024 +0700
+
+    Merge branch 'fe-user' of https://github.com/vod0105/PBL6 into fe-user
+
+[33mcommit b3f39efddd8be6542899b325bb55cb3bc24512a0[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Tue Nov 12 10:52:47 2024 +0700
+
+    update list images in asset folder; fix UI
+
+[33mcommit 251445fc41f00cdf7c0ce18e6076699666167607[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Mon Nov 11 22:23:07 2024 +0700
+
+    update delivery map; footer; fix UI
+
+[33mcommit 6efd4fea4151941a6ba87a680d9295313d706c0d[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Mon Nov 11 20:21:47 2024 +0700
+
+    add a voucher on checkout page, show list vouchers of the store on the store_detail page, save vouchers
+
+[33mcommit 372f3bcb9662aae138516df03671f9bccb41aec1[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Mon Nov 11 13:47:20 2024 +0700
+
+    login google, facebook; update to purchase only from one store on cart page
+
+[33mcommit 9063e30590d4fa5f7717f583a250779d7a1d0417[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Sun Nov 10 13:02:11 2024 +0700
+
+    change password
+
+[33mcommit 5b440c2448c35e1805602742025c2989a4735d3a[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Sat Nov 9 16:27:02 2024 +0700
+
+    refresh token, update form.select promotion on the checkout page
+
+[33mcommit 074d4abd3b0d558f9ba52dca9fa84300fb5fa2c7[m
+Author: vod0105 <102397278+vod0105@users.noreply.github.com>
+Date:   Sat Nov 9 09:28:09 2024 +0700
+
+    code auto chat
+
+[33mcommit c39d566c8729a0d8a9c1131ca152f0353d37b078[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Fri Nov 8 20:59:47 2024 +0700
+
+    update: increase, decrease 1 unit; add checkboxes in the first column to select items on cart page
+
+[33mcommit 5424112fa5a747c5790a9cf9d5ada4f07a3ba43e[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Fri Nov 8 16:11:12 2024 +0700
+
+    display average star rating, review count on the product detail & combo detail page; filter reviews by star rating on the product detail & combo detail page; display review list on the combo detail page.
+
+[33mcommit 2d3d10a57bd3ecfa34fa28043b386e13b31a8ca2[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Thu Nov 7 15:46:24 2024 +0700
+
+    show the distance order + shipping fee on checkout page, fix UI (cart page)
+
+[33mcommit e66d7da883e33e2b693fd3b0646aa00174eb4675[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Thu Nov 7 11:42:44 2024 +0700
+
+    diplay list favourite products (logined in) on homepag , similar products, combos on product detail, combo detail page
+
+[33mcommit 291a962557a68370e42fa616019ac0e2cfdf64e9[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Wed Nov 6 21:12:36 2024 +0700
+
+    AI: upload an image to find similar products
+
+[33mcommit a5681dd3478b45f4c1d3d35e83338690908540f7[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Tue Nov 5 11:31:50 2024 +0700
+
+    add voucher
+
+[33mcommit 0604ec2662d61c74c8b23fe3451a7eae0d1fca26[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Tue Nov 5 09:07:23 2024 +0700
+
+    zalopay: buy now a product, buy now a combo, purchase in cart
+
+[33mcommit bcd0dd3ff3f261583910eb71b7addb0bbc3c6891[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Mon Nov 4 22:11:48 2024 +0700
+
+    combo: add to cart, buy now, manage my cart
+
+[33mcommit 0de74b7f67512852945a0432c535c106335f5fc0[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Mon Nov 4 17:00:30 2024 +0700
+
+    add combo to cart
+
+[33mcommit 81e3d0673efbdeb6498d5c319dc5383ff874effd[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Mon Nov 4 15:52:50 2024 +0700
+
+    page combo
+
+[33mcommit b796f4a29f2f9c9a1acfe06a04197af92578d4f7[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Sat Nov 2 15:32:47 2024 +0700
+
+    resolve merge conflict in StoreDetail.scss + feedback + review + fixbug
+
+[33mcommit ed0ebb3c707c3f09c03763b201e628cd0929c6e2[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Sat Nov 2 15:31:17 2024 +0700
+
+    Resolve merge conflict in StoreDetail.scss
+
+[33mcommit a3e2228f4a405055dc93e3f1b0b4a00bf5c5c665[m
+Author: vod0105 <102397278+vod0105@users.noreply.github.com>
+Date:   Sat Nov 2 11:00:00 2024 +0700
+
+    chat sussess
+
+[33mcommit 8d4bb3eae27786227535fa850d6e7e251b9f19bb[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Mon Oct 28 20:44:42 2024 +0700
+
+    Calculate the distance between two points and display the route on the map
+
+[33mcommit 24fd497100c54bc416d6a2d42bbf5679b753485a[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Sun Oct 27 21:22:13 2024 +0700
+
+    pagination (components: food-display, category, promotion, orders)
+
+[33mcommit 27f5d9169145a4db26f30230feaa3fcc77b66618[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Sun Oct 27 20:32:11 2024 +0700
+
+    init zalopay
+
+[33mcommit 3a84ab2ca9c36f820d677c4650d0886c7267c24e[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Sun Oct 27 11:09:18 2024 +0700
+
+    display user reviews on the product detail page
+
+[33mcommit f7dc4ac0dd0c82c27837752b09e3580f880c50cb[m
+Author: BIENNHAT <nhatbien2003@gmail.com>
+Date:   Sun Oct 27 10:14:39 2024 +0700
+
+    review orders + fix bug (show products, show the avatar user in navbar, manage orders)
+
+[33mcommit 540d90d927463a722e4912eaebb7eb034dff49cb[m
+Author: BIENNHAT <nhatbien2003@gmail.com

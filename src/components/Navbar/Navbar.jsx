@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./Navbar.scss";
-import { assets } from "../../assets/assets";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { showLoginModal, showRegisterModal } from "../../redux/actions/modalActions";
@@ -8,10 +7,8 @@ import { showLoginModal, showRegisterModal } from "../../redux/actions/modalActi
 import logoStore from '../../assets/logo4.png'
 import logoCart from '../../assets/logo/cart.png'
 import logoUser from '../../assets/logo/user.png'
-
 import cate_1 from "../../assets/navbar/cate_1.png";
 import ChatButton from "../Chatbox/ChatButton";
-
 
 const Navbar = () => {
   // redux modal
@@ -66,8 +63,75 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(false);
+  const toggleLeftPanel = () => {
+    setIsLeftPanelOpen(!isLeftPanelOpen);
+  };
+
+  const panelRef = useRef(null);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (panelRef.current && !panelRef.current.contains(event.target) && !event.target.closest('.navbar-toggle')) {
+        setIsLeftPanelOpen(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
+
   return (
     <div className="navbar">
+      <button className="navbar-toggle" onClick={toggleLeftPanel}>
+        ☰
+      </button>
+
+      <div ref={panelRef} className={`left-panel ${isLeftPanelOpen ? "open" : ""}`}>
+        <button className="close-btn" onClick={toggleLeftPanel}>×</button>  {/* Nút đóng */}
+        <div className="left-panel-content">
+          <ul className="left-panel-list">
+            <li className="left-panel-item">
+              <NavLink to="/" className='left-panel-link'>Trang chủ</NavLink>
+            </li>
+            <li className="left-panel-item" >
+              <NavLink to="/introduce" className='left-panel-link'>Giới thiệu</NavLink>
+            </li>
+            {/* <li className="left-panel-item">
+              <NavLink to="/combo">Combo</NavLink>
+            </li> */} 
+            {
+              listCategories && listCategories.length > 0
+              &&
+              listCategories.map((category, index) => {
+                return (
+                  <li key={index} className="left-panel-item">
+                    <NavLink
+                      to={`/category/${category.categoryId}`}
+                      key={index}  
+                      className='left-panel-link'
+                    >
+                      {/* <img src={`${import.meta.env.VITE_BACKEND_URL}/api/v1/public/uploads/images/${category.image}`} alt="" /> */}
+                      {category.categoryName}
+                    </NavLink>
+                  </li>
+                )
+              })
+            }
+            <li className="left-panel-item" >
+              <NavLink to="/promotion" className='left-panel-link'>Khuyến mãi</NavLink>
+            </li>
+            <li className="left-panel-item" >
+              <NavLink to="/store" className='left-panel-link'>Cửa hàng</NavLink>
+            </li>
+            <li className="left-panel-item" >
+              <NavLink to="/dowload" className='left-panel-link'>Tải ngay</NavLink>
+            </li>
+          </ul>
+        </div>
+      </div>
+
       <NavLink
         to="/" className="logo"
         end // 'end' đảm bảo rằng chỉ '/' (Trang Chủ) được kích hoạt
@@ -140,6 +204,8 @@ const Navbar = () => {
           Liên hệ
         </NavLink> */}
 
+       
+
         <NavLink
           to="/store"
           className={({ isActive }) => (isActive ? 'active' : '')}
@@ -147,25 +213,18 @@ const Navbar = () => {
           Cửa hàng
         </NavLink>
 
-        {/* <NavLink
-          to="/test-ggmap"
-          className={({ isActive }) => (isActive ? 'active' : '')}
-        >
-          Test GGMAP
-        </NavLink> */}
-
-        {/* <NavLink
-          to="/test-loading"
-          className={({ isActive }) => (isActive ? 'active' : '')}
-        >
-          Test LOADING
-        </NavLink> */}
-
         <NavLink
           to="/download"
           className={({ isActive }) => (isActive ? 'active' : '')}
         >
           Tải ngay
+        </NavLink>
+
+        <NavLink
+          to="/test-map"
+          className={({ isActive }) => (isActive ? 'active' : '')}
+        >
+          TEST MAP 2
         </NavLink>
 
       </ul >

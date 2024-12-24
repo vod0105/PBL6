@@ -260,7 +260,7 @@ const fetchVouchersService = () => {
     });
 }
 const fetchFavouriteProducsService = (idUser) => {
-    let urlAI =import.meta.env.VITE_AI_URL || `http://10.10.2.94:5000`;
+    let urlAI =import.meta.env.VITE_AI_URL || `http://localhost:5000`;
     return axios({
         method: 'get',
         url: `${urlAI}/cross-sell/${idUser}`,

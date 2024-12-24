@@ -68,22 +68,22 @@ const ComboItemDetail = () => {
   const isLoading = useSelector((state) => state.product.isLoadingListSimilarCombos);
   // Tìm store chứa tất cả product trong combo
   const filterStoresWithAllComboProducts = (combo) => {
+    console.log('>>> combo detail: ',combo);
     if (!combo || !combo.products || combo.products.length === 0) return [];
     // Tạo một mảng gồm các storeId từ sản phẩm đầu tiên trong combo
     let commonStores = combo.products[0].stores.map(store => store.storeId);
 
-    // Duyệt qua từng product trong combo để tìm các storeId chung
+    // Duyệt qua từng product trong combo để tìm các storeId chung của All sản phẩm
     combo.products.forEach((product) => {
       const productStoreIds = product.stores.map(store => store.storeId);
       commonStores = commonStores.filter(storeId => productStoreIds.includes(storeId));
     });
 
-    // Lọc lại thông tin chi tiết của các stores có mặt trong commonStores
+    // Array detail infor của các stores có mặt trong commonStores
     const filteredStores = combo.products[0].stores.filter(store =>
       commonStores.includes(store.storeId)
     );
-    // console.log('list stores: ', filteredStores);
-    return filteredStores;
+    return filteredStores; 
   };
 
 
@@ -94,9 +94,6 @@ const ComboItemDetail = () => {
     return state.product.ratingCombo;
   })
   const account = useSelector((state) => state.auth.account); // Khách hàng đã đánh giá sản phẩm ni -> Vô coi đánh giá sản phẩm -> hiện "Bạn"
-  // useEffect(() => {
-  //   window.scrollTo(0, 0);
-  // }, []);
   useEffect(() => {
     dispatch(fetchComboById(id));
     dispatch(fetchAllStores());

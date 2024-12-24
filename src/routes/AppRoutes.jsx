@@ -24,6 +24,7 @@ import ComboItemDetail from '../components/ComboItemDetail/ComboItemDetail';
 import Download from '../pages/Download/Download';
 import AllProducts from '../pages/AllProducts/AllProducts';
 import Loading from '../pages/Loading/Loading';
+import RouteMap2 from '../components/RouteMap2/RouteMap2';
 
 const AppRoutes = (props) => {
     return (
@@ -61,6 +62,7 @@ const AppRoutes = (props) => {
                 {/* <Route path="/order-complete" element={<OrderComplete />} /> */}
                 {/* <Route path="/order-in-transit/:orderCode" element={<DeliveryMap />} /> */}
 
+                <Route path="/test-map" element={<RouteMap2/>} />
                 <Route path="*" element={<div>404 Not Found!!!</div>} />
             </Routes>
         </>
