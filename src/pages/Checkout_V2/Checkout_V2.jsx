@@ -50,13 +50,19 @@ const Checkout_V2 = () => {
     const [filteredVouchers, setFilteredVouchers] = useState([]);
     useEffect(() => {
         if (listVouchersUser && listVouchersUser.length > 0) {
-            const vouchers = listVouchersUser ? (listVouchersUser.filter(
-                (voucher) => voucher.storeId.includes(+selectedStore.storeId) && !voucher.used
-            )) : [];
-            // console.log('vouchers: ', vouchers);
-            setFilteredVouchers(vouchers)
+            const currentTime = new Date();
+            const vouchers = listVouchersUser.filter((voucher) => {
+                const startDate = new Date(voucher.startDate);
+                const endDate = new Date(voucher.endDate);
+                return (
+                    voucher.storeId.includes(+selectedStore.storeId) && 
+                    !voucher.used && // Chưa được sử dụng
+                    currentTime >= startDate && currentTime <= endDate 
+                );
+            });
+            setFilteredVouchers(vouchers);
         }
-    }, [listVouchersUser]);
+    }, [listVouchersUser, selectedStore]);
     // const filteredVouchers = listVouchersUser ? (listVouchersUser.filter(
     //     (voucher) => voucher.storeId.includes(selectedStore.storeId) && !voucher.used
     // )) : [];
