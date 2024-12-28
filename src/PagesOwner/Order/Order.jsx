@@ -11,7 +11,11 @@ import { assets } from "../../assets/assets.js";
 import IconButton from "@mui/material/IconButton";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { PiEyesBold } from "react-icons/pi";
+import ReactPaginate from "react-paginate";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Pagination } from "@mui/material";  // MUI imports
+
 const notificationSound = new Audio("/sound/tingting.mp3");
+
 const Order = ({ url }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,7 +24,7 @@ const Order = ({ url }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [orderStatus, setOrderStatus] = useState("Đơn hàng mới");
   const [totalPages, setTotalPages] = useState(0);
-  const itemsPerPage = 6;
+  const itemsPerPage = 5;
   const navigate = useNavigate();
 
   const fetchData = async () => {
@@ -36,12 +40,6 @@ const Order = ({ url }) => {
         }&size=${itemsPerPage}`,
         { headers }
       );
-
-      console.log(
-        `${url}/api/v1/owner/order/order/status?status=${orderStatus}&page=${
-          currentPage - 1
-        }&size=${itemsPerPage}`
-      );
       setData(response.data.data);
       setTotalPages(response.data.page);
     } catch (err) {
@@ -50,28 +48,6 @@ const Order = ({ url }) => {
       setLoading(false);
     }
   };
-
-  //
-  // useEffect(() => {
-  //   // Thiết lập hẹn giờ để phát âm thanh sau 3 giây
-  //   const timer = setTimeout(() => {
-  //     const speech = new SpeechSynthesisUtterance("Có đơn hàng mới");
-  //     speech.lang = "vi-VN";
-  //     window.speechSynthesis.speak(speech);
-  //     notificationSound.play().catch((error) => {
-  //       console.error("Lỗi phát âm thanh:", error);
-  //     });
-  //   }, 3000);
-
-  //   return () => clearTimeout(timer);
-  // }, []);
-  // //
-
-  //thong bao don hang
-
-  useEffect(() => {});
-
-  //
 
   useEffect(() => {
     fetchData();
@@ -92,7 +68,6 @@ const Order = ({ url }) => {
         Authorization: `Bearer ${tk}`,
         "Content-Type": "application/json",
       };
-
       const response = await axios.put(
         `${url}/api/v1/owner/order/update-status`,
         null,
@@ -104,9 +79,8 @@ const Order = ({ url }) => {
           },
         }
       );
-
       toast.success("Cập nhật trạng thái đơn hàng thành công");
-      fetchData(); // Fetch lại dữ liệu sau khi cập nhật trạng thái
+      fetchData();
     } catch (err) {
       console.error("Error:", err.response?.data || err.message);
       toast.error("Cập nhật trạng thái đơn hàng thất bại");
@@ -127,6 +101,7 @@ const Order = ({ url }) => {
         item.orderCode.toLowerCase().includes(searchTerm.toLowerCase())
       )
     : [];
+
   return (
     <div className="product">
       <SoundNotification url={url} />
@@ -167,136 +142,81 @@ const Order = ({ url }) => {
           </div>
         </div>
 
-        <table
-          className="table table-hover text-center align-items-center tb-product"
-          style={{ width: "80%", margin: "0 auto", marginTop: "20px" }}
-        >
-          <thead className="table-danger text-center">
-            <tr>
-              <th scope="col">Order Code</th>
-              <th scope="col">Image</th>
-              <th scope="col">Full Name</th>
-              <th scope="col">Total Price</th>
-              {orderStatus === "Đơn hàng mới" && <th scope="col">Action</th>}
-              <th scope="col">Details</th>
-            </tr>
-          </thead>
-          <tbody className="align-middle">
-            {filteredData.length > 0 ? (
-              filteredData.map((order) => (
-                <tr
-                  key={order.orderCode}
-                  style={{ borderBottom: "2px solid rgb(228, 223, 223)" }}
-                >
-                  <td>{order.orderCode}</td>
-                  <td>
-                    <img
-                      src={
-                        order.imageUser
-                          ? `data:image/jpeg;base64,${order.imageUser}`
-                          : assets.manOrder
-                      }
-                      className="img-cate"
-                      alt="Image cate"
-                      style={{
-                        width: "75px",
-                        height: "75px",
-                        objectFit: "contain",
-                      }}
-                    />
-                  </td>
-                  <td>{order.fullName}</td>
-                  <td>{order.totalPrice}</td>
-                  {orderStatus === "Đơn hàng mới" && (
-                    <td>
-                      <button
-                        type="button"
-                        style={{ border: "none", outline: "none" }}
-                        onClick={() => handleAcceptClick(order.orderCode)}
-                      >
-                        <IconButton aria-label="delete" size="medium">
+        <TableContainer component={Paper} style={{ width: "80%", margin: "0 auto", marginTop: "20px" }}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Order Code</TableCell>
+                <TableCell>Image</TableCell>
+                <TableCell>Full Name</TableCell>
+                <TableCell>Total Price</TableCell>
+                {orderStatus === "Đơn hàng mới" && <TableCell>Action</TableCell>}
+                <TableCell>Details</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {filteredData.length > 0 ? (
+                filteredData.map((order) => (
+                  <TableRow key={order.orderCode}>
+                    <TableCell>{order.orderCode}</TableCell>
+                    <TableCell>
+                      <img
+                        src={order.imageUser ? `data:image/jpeg;base64,${order.imageUser}` : assets.manOrder}
+                        className="img-cate"
+                        alt="Image cate"
+                        style={{ width: "50px", height: "50px", objectFit: "cover" }}
+                      />
+                    </TableCell>
+                    <TableCell>{order.fullName}</TableCell>
+                    <TableCell>{order.totalPrice}</TableCell>
+                    {orderStatus === "Đơn hàng mới" && (
+                      <TableCell>
+                        <IconButton
+                          aria-label="accept"
+                          size="medium"
+                          onClick={() => handleAcceptClick(order.orderCode)}
+                        >
                           <CheckBoxIcon />
                         </IconButton>
-                      </button>
-                    </td>
-                  )}
+                      </TableCell>
+                    )}
+                    <TableCell>
+                      <IconButton
+                        aria-label="view details"
+                        size="medium"
+                        onClick={() => handleRedirect(order.orderCode)}
+                      >
+                        <PiEyesBold style={{ width: "35px", height: "35px" }} />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={6} align="center">
+                    No data available
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
 
-                  <td>
-                    <button
-                      type="button"
-                      style={{
-                        border: "none",
-                        outline: "none",
-                      }}
-                      onClick={() => handleRedirect(order.orderCode)}
-                    >
-                      <PiEyesBold style={{ width: "35px", height: "35px" }} />
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="6">No data available</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-
-        <div
-          className="pagination pagenigate-pd pd"
-          style={{ marginTop: "80px", marginLeft: "-100px" }}
-        >
-          <button
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-          >
-            <FontAwesomeIcon icon={faBackward} />
-          </button>
-          {Array.from({ length: totalPages }, (_, index) => (
-            <button
-              key={index + 1}
-              onClick={() => setCurrentPage(index + 1)}
-              className={currentPage === index + 1 ? "active" : ""}
-            >
-              {index + 1}
-            </button>
-          ))}
-          <button
-            onClick={() =>
-              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-            }
-            disabled={currentPage === totalPages}
-          >
-            <FontAwesomeIcon icon={faForward} />
-          </button>
-          <ToastContainer />
+        {/* MUI Pagination */}
+        <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={(event, value) => setCurrentPage(value)}
+            variant="outlined"
+            color="primary"
+          />
         </div>
+
+        <ToastContainer />
       </div>
     </div>
   );
 };
 
 export default Order;
-// import React, { useEffect } from "react";
-
-// // Khởi tạo đối tượng Audio
-// const notificationSound = new Audio("/sound/tingting.mp3");
-
-// const Order = () => {
-//   useEffect(() => {
-//     // Thiết lập hẹn giờ để phát âm thanh sau 3 giây
-//     const timer = setTimeout(() => {
-//       notificationSound.play().catch((error) => {
-//         console.error("Lỗi phát âm thanh:", error);
-//       });
-//     }, 3000);
-
-//     // Hủy timer nếu component bị unmount
-//     return () => clearTimeout(timer);
-//   }, []);
-
-//   return <div>Đang phát âm thanh sau 3 giây...</div>;
-// };
-
-// export default Order;

@@ -41,6 +41,12 @@ const Product = ({ url }) => {
 
   // delete store
   const deleteProduct = async (productId) => {
+    const isConfirmed = window.confirm("Are you sure you want to delete this product?");
+  
+    if (!isConfirmed) {
+      // Nếu người dùng không xác nhận, dừng hàm
+      return;
+    }
     try {
       const tk = localStorage.getItem("access_token");
       const headers = {

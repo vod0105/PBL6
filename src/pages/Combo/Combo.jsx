@@ -106,7 +106,7 @@ const Combo = ({ url }) => {
             alignItems: "center",
           }}
         >
-          <h1 className="h-product">List Comnbo</h1>
+          <h1 className="h-product">List Combo</h1>
           <div className="store-search">
             <input
               type="text"

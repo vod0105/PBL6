@@ -49,7 +49,7 @@ const SoundNotification = ({ url }) => {
     const intervalId = setInterval(checkApi, 3000);
 
     return () => clearInterval(intervalId);
-  }, [url]);
+  }, []);
 
   return null;
 };

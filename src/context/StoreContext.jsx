@@ -6,7 +6,10 @@ const StoreContextProvider = ({ children }) => {
   const [user, setUser] = useState({ name: "Son" });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userData, setUserData] = useState("");
-  const [url, setUrl] = useState("http://10.10.2.94:8080");
+  const [url, setUrl] = useState(
+    "https://food-app-gvbhgyfabjcthbhd.southeastasia-01.azurewebsites.net"
+  );
+  // const [url, setUrl] = useState("http://192.168.1.35:8080");
   const [url2, setUrl2] = useState("http://10.10.27.227:8080");
   const [token, setToken] = useState("");
   const [stores, setStores] = useState([]);

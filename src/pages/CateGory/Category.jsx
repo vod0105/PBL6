@@ -101,7 +101,7 @@ const Category = ({ url }) => {
           <div className="store-search">
             <input
               type="text"
-              placeholder="Search by store name"
+              placeholder="Search by category name"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />

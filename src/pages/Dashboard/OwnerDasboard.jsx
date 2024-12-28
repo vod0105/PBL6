@@ -35,6 +35,7 @@ ChartJS.register(
 const OwnerDasboard = () => {
   const { setIsAuthenticated, setUserData, userData, url } =
     useContext(StoreContext);
+  const [weekly, setWeekly] = useState("");
 
   const [ordermonth, setordermonth] = useState("");
   const [allbudger, setallbudger] = useState("");
@@ -111,7 +112,6 @@ const OwnerDasboard = () => {
     fetchData();
   }, []);
 
-  //all budget
   //all budget
   useEffect(() => {
     const fetchData2 = async () => {
@@ -233,6 +233,33 @@ const OwnerDasboard = () => {
             },
           ],
         });
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu:", error);
+      }
+    };
+
+    fetchData2();
+  }, []);
+
+  //all weekly
+  useEffect(() => {
+    const fetchData2 = async () => {
+      try {
+        const tk = localStorage.getItem("access_token");
+        const headers = {
+          Authorization: `Bearer ${tk}`,
+          "Content-Type": "application/json",
+        };
+
+        const rs = await axios.get(`${url}/api/v1/owner/display/total/week`, {
+          headers,
+        });
+        console.log(`data`,rs.data.data);
+        const total = Object.values(rs.data.data)
+        .filter(value => value !== null)
+        .reduce((sum, currentValue) => sum + currentValue, 0);
+        console.log(`total`,total);
+        setWeekly(total/1000000);
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu:", error);
       }
@@ -363,7 +390,7 @@ const OwnerDasboard = () => {
               className="img-item"
               style={{ marginTop: "25px" }}
             />
-            <h3>50.000</h3> <span>(triệu đồng)</span>
+            <h3>{weekly}</h3> <span>(triệu đồng)</span>
           </div>
         </div>
       </div>
@@ -385,9 +412,9 @@ const OwnerDasboard = () => {
           <h3>Biểu đồ cột - Số lượng bán ra</h3>
           <Bar className="bar-chart" data={barData} />
         </div>
-        <div className="chart-right">
+        {/* <div className="chart-right">
           <Pie className="pie-chart" data={pieData} />
-        </div>
+        </div> */}
       </div>
     </div>
   );

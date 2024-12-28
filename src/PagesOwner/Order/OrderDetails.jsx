@@ -179,7 +179,8 @@ const OrderDetail = ({ url }) => {
                       <td>{item.productDetail.productName}</td>
                       <td>
                         <img
-                          src={`data:image/jpeg;base64,${item.productDetail.image}`}
+                          // src={`data:image/jpeg;base64,${item.productDetail.image}`}
+                          src={`${url}/api/v1/public/uploads/images/${item.productDetail.image}`}
                           className="img-product"
                           alt="Product Image"
                           style={{

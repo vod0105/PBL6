@@ -474,7 +474,7 @@ const Add = ({ url }) => {
                 <td>
                   <p>Open</p>
                   <input
-                    type="datetime-local"
+                    type="time"
                     name="Open"
                     onChange={onChangeHandler}
                     value={data.Open}
@@ -485,7 +485,7 @@ const Add = ({ url }) => {
                 <td>
                   <p>Close</p>
                   <input
-                    type="datetime-local"
+                    type="time"
                     name="Close"
                     onChange={onChangeHandler}
                     value={data.Close}

@@ -38,6 +38,7 @@ const Dashboard = () => {
   const [ordermonth, setordermonth] = useState("");
   const [allbudger, setallbudger] = useState("");
   const [registermonth, setregistermonth] = useState("");
+  const [weekly, setWeekly] = useState("");
   const [listDataBudgetOfYear, setlistDataBudgetOfYear] = useState([]);
   const [lineData, setLineData] = useState({
     labels: [],
@@ -146,6 +147,31 @@ const Dashboard = () => {
         });
 
         setallbudger(rs.data.data); // Cập nhật state với dữ liệu phản hồi từ API
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu:", error);
+      }
+    };
+
+    fetchData2();
+  }, []);
+
+  //all weekly
+  useEffect(() => {
+    const fetchData2 = async () => {
+      try {
+        const tk = localStorage.getItem("access_token");
+        const headers = {
+          Authorization: `Bearer ${tk}`,
+          "Content-Type": "application/json",
+        };
+
+        const rs = await axios.get(`${url}/api/v1/admin/display/total/week`, {
+          headers,
+        });
+        const total = Object.values(rs.data.data)
+        .filter(value => value !== null)
+        .reduce((sum, currentValue) => sum + currentValue, 0);
+        setWeekly(total/1000000);
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu:", error);
       }
@@ -390,7 +416,7 @@ const Dashboard = () => {
               className="img-item"
               style={{ marginTop: "25px" }}
             />
-            <h3>50.000</h3> <span>(triệu đồng)</span>
+            <h3>{weekly}</h3> <span>(triệu đồng)</span>
           </div>
         </div>
       </div>
@@ -413,9 +439,9 @@ const Dashboard = () => {
           <h4>Biểu đồ cột - Số lượng bán ra</h4>
           <Bar className="bar-chart" data={barData} />
         </div>
-        <div className="chart-right">
+        {/* <div className="chart-right">
           <Pie className="pie-chart" data={pieData} />
-        </div>
+        </div> */}
       </div>
     </div>
   );
