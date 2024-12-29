@@ -48,9 +48,7 @@ class HomeHeaderState extends State<HomeHeader> {
             },
             child: Row(
             children: [
-              const Text("Chào mừng ",style: TextStyle(
-                color: Colors.black45
-              ),),
+              
               Text("${Get.find<UserController>().userProfile!.fullName}",style: const TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w500

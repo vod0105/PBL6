@@ -30,7 +30,7 @@ class OrderFooterState extends State<OrderFooter> {
       } else if (index == 4) {
         Get.toNamed(AppRoute.PROFILE_PAGE);
       }
-    });
+    },);
   }
 
   @override

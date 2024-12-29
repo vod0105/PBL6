@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:android_project/blocs/QuantityBlocs.dart';
 import 'package:android_project/blocs/SizeBlocs.dart';
 import 'package:android_project/caCuLaTor/function.dart';
+import 'package:android_project/data/api/AppConstant.dart';
 import 'package:android_project/data/controller/Auth_controller.dart';
 import 'package:android_project/data/controller/Cart_controller.dart';
 import 'package:android_project/data/controller/Product_controller.dart';
@@ -12,6 +13,7 @@ import 'package:android_project/models/Model/Item/StoresItem.dart';
 import 'package:android_project/models/Model/RateModel.dart';
 import 'package:android_project/models/Model/UserModel.dart';
 import 'package:android_project/page/product_page/product_rate.dart';
+import 'package:android_project/page/widget/card/product_card.dart';
 import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
@@ -51,11 +53,13 @@ class ProductPageState extends State<ProductPage> {
   }
 
   void loadData() {
-    productid = widget.productId;
-    productitem = productController.getProductById(widget.productId);
-    productController.getComment(widget.productId);
-    productController
-        .getProductByCategoryId(productitem!.category!.categoryId!);
+    setState(() {
+      productid = widget.productId;
+      productitem = productController.getProductById(widget.productId);
+      productController.getComment(widget.productId);
+      productController
+          .getProductByCategoryId(productitem!.category!.categoryId!);
+    });
   }
 
   Future<void> getCurrentPosition() async {
@@ -348,7 +352,7 @@ class ProductPageState extends State<ProductPage> {
             pinned: true,
             backgroundColor: const Color.fromARGB(255, 243, 134, 134),
             bottom: PreferredSize(
-              preferredSize: Size.fromHeight(AppDimention.size20),
+              preferredSize: Size.fromHeight(AppDimention.size30),
               child: Container(
                   width: double.maxFinite,
                   padding: EdgeInsets.all(AppDimention.size10),
@@ -373,9 +377,17 @@ class ProductPageState extends State<ProductPage> {
             ),
             expandedHeight: 250,
             flexibleSpace: FlexibleSpaceBar(
-              background: Image.memory(
-                base64Decode(productitem!.image!),
+              background: FadeInImage.assetNetwork(
+                placeholder: 'assets/image/default.png',
+                image:
+                    "${Appconstant.BASE_URL}/api/v1/public/uploads/images/${productitem!.image}",
                 fit: BoxFit.cover,
+                imageErrorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    'assets/image/default.png',
+                    fit: BoxFit.cover,
+                  );
+                },
               ),
             ),
           ),
@@ -597,149 +609,46 @@ class ProductPageState extends State<ProductPage> {
                                       fontSize: 16, color: Colors.black38),
                                 ),
                               ),
-                              GridView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    childAspectRatio: 0.7,
-                                  ),
-                                  itemCount: productController
-                                              .productListByCategory.length >
-                                          10
-                                      ? 10
-                                      : productController
-                                          .productListByCategory.length,
-                                  itemBuilder: (context, index) {
-                                    return GestureDetector(
-                                        onTap: () {
-                                          Get.toNamed(
-                                              AppRoute.get_product_detail(
-                                                  productController
-                                                      .productList[index]
-                                                      .productId!));
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            border: Border.all(
-                                                width: 1,
-                                                color: const Color.fromRGBO(
-                                                    218, 218, 218, 0.494)),
-                                          ),
-                                          child: Column(
-                                            children: [
-                                              Container(
-                                                width: 170,
-                                                height: 150,
-                                                decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                    fit: BoxFit.cover,
-                                                    image: MemoryImage(
-                                                        base64Decode(
-                                                            productController
-                                                                .productList[
-                                                                    index]
-                                                                .image!)),
-                                                  ),
-                                                ),
-                                              ),
-                                              Container(
-                                                width: 170,
-                                                padding: EdgeInsets.only(
-                                                    left: AppDimention.size10),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    SizedBox(
-                                                      height:
-                                                          AppDimention.size5,
-                                                    ),
-                                                    Text(
-                                                      productController
-                                                          .productList[index]
-                                                          .productName!,
-                                                      style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: AppColor
-                                                              .mainColor),
-                                                    ),
-                                                    Text(
-                                                      "đ${_formatNumber(productController.productList[index].price!.toInt())}",
-                                                      style: const TextStyle(
-                                                          fontSize: 13),
-                                                    ),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        Row(
-                                                          children: [
-                                                            Wrap(
-                                                              children: List.generate(
-                                                                  5,
-                                                                  (index) => const Icon(
-                                                                      Icons
-                                                                          .star,
-                                                                      color: AppColor
-                                                                          .mainColor,
-                                                                      size: 8)),
-                                                            ),
-                                                            const Text(
-                                                              "(5)",
-                                                              style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color: AppColor
-                                                                      .mainColor),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        const Row(
-                                                          children: [
-                                                            Text(
-                                                              "1028",
-                                                              style: TextStyle(
-                                                                  fontSize: 12),
-                                                            ),
-                                                            SizedBox(
-                                                              width: 5,
-                                                            ),
-                                                            Icon(
-                                                              Icons
-                                                                  .chat_bubble_outline_rounded,
-                                                              size: 12,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    SizedBox(
-                                                        height: AppDimention
-                                                            .size15),
-                                                    const Row(
-                                                      children: [
-                                                        Icon(Icons
-                                                            .delivery_dining_sharp),
-                                                        Text(
-                                                          "Miễn phí vận chuyển",
-                                                          style: TextStyle(
-                                                              fontSize: 10),
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                        )
-                                                      ],
-                                                    )
-                                                  ],
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ));
-                                  })
+                              Container(
+                                child: productController
+                                        .isLoadingProductInCategory
+                                    ? const Center(
+                                        child: CircularProgressIndicator(),
+                                      )
+                                    : GridView.builder(
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        shrinkWrap: true,
+                                        gridDelegate:
+                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          childAspectRatio: 0.7,
+                                        ),
+                                        itemCount: productController
+                                                    .productListByCategory
+                                                    .length >
+                                                10
+                                            ? 10
+                                            : productController
+                                                .productListByCategory.length,
+                                        itemBuilder: (context, index) {
+                                          Productitem item = productController
+                                              .productListByCategory[index];
+                                          return ProductCard(
+                                              productName: item.productName!,
+                                              productPrice: _formatNumber(
+                                                  item.price!.toInt()),
+                                              avgRate: item.averageRate!,
+                                              stockQuantity: item.stockQuantity!
+                                                  .toDouble(),
+                                              image: item.image!,
+                                              onTap: () {
+                                                Get.toNamed(
+                                                    AppRoute.get_product_detail(
+                                                        item.productId!));
+                                              });
+                                        }),
+                              )
                             ],
                           )
                         : GetBuilder<ProductController>(builder: (controller) {
@@ -881,20 +790,20 @@ class ProductPageState extends State<ProductPage> {
                                                         textAlign:
                                                             TextAlign.justify,
                                                         style:
-                                                            const TextStyle()))
+                                                            const TextStyle())),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    Get.to(const ProductRate());
+                                                  },
+                                                  child: const Center(
+                                                    child: Text("Xem thêm"),
+                                                  ),
+                                                ),
                                               ],
                                             ),
                                           );
                                         });
                           })),
-                GestureDetector(
-                  onTap: () {
-                    Get.to(const ProductRate());
-                  },
-                  child: const Center(
-                    child: Text("Xem thêm"),
-                  ),
-                ),
                 SizedBox(
                   height: AppDimention.size10,
                 )

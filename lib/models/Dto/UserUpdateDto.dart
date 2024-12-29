@@ -3,6 +3,7 @@ class UserUpdateDto {
   String  avatar;
   String email;
   String address;
+  
   UserUpdateDto(
       {required this.fullName,
       required this.avatar,
@@ -15,5 +16,9 @@ class UserUpdateDto {
     data["email"] = email;
     data["address"] = address;
     return data;
+  }
+  @override
+  String toString() {
+    return "$fullName$avatar$email$address";
   }
 }

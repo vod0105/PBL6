@@ -1,4 +1,3 @@
-
 import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
@@ -20,16 +19,17 @@ class CartHeaderState extends State<CartHeader> {
         Stack(
           children: [
             Container(
-                width: AppDimention.screenWidth,
-                height: 60,
-                decoration: const BoxDecoration(color: AppColor.mainColor),
-                child: Center(
-                  child: Text(
-                    "Phần ăn đã chọn",
-                    style: TextStyle(
-                        color: Colors.white, fontSize: AppDimention.size30),
-                  ),
-                )),
+              width: AppDimention.screenWidth,
+              height: 60,
+              decoration: const BoxDecoration(color: AppColor.mainColor),
+              child: Center(
+                child: Text(
+                  "Phần ăn đã chọn",
+                  style: TextStyle(
+                      color: Colors.white, fontSize: AppDimention.size30),
+                ),
+              ),
+            ),
           ],
         )
       ],

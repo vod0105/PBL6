@@ -6,6 +6,7 @@ import 'package:android_project/data/controller/Promotion_controller.dart';
 import 'package:android_project/data/controller/Size_controller.dart';
 import 'package:android_project/data/controller/Store_Controller.dart';
 import 'package:android_project/data/controller/User_controller.dart';
+import 'package:android_project/data/service/AnnounceCheckService.dart';
 import 'package:android_project/page/login_page/loading/animation.dart';
 import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_dimention.dart';
@@ -31,6 +32,8 @@ class BarLoadingScreenState extends State<BarLoadingScreen>
   CategoryController categoryController = Get.find<CategoryController>();
   PromotionController promotionController = Get.find<PromotionController>();
 
+  
+
   @override
   void initState() {
     super.initState();
@@ -39,6 +42,19 @@ class BarLoadingScreenState extends State<BarLoadingScreen>
       vsync: this,
     );
     _controller.repeat().orCancel;
+
+       Get.putAsync(() => AnnounceCheckService().initService());
+        Get.find<CartController>().getAll();
+        Get.find<UserController>().getUserProfile();
+        Get.find<UserController>().getAnnounce();
+        Get.find<SizeController>().getAll();
+        Get.find<ComboController>().getAll();
+        Get.find<ProductController>().getAll();
+        Get.find<ProductController>().getRecommendProduct();
+        Get.find<Storecontroller>().getAll();
+        Get.find<CategoryController>().getAll();
+        Get.find<PromotionController>().getAll();
+
     loading();
   }
 

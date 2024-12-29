@@ -89,10 +89,12 @@ class SearchChatHeaderState extends State<SearchChatHeader> {
                     EdgeInsets.symmetric(vertical: AppDimention.size15),
                 focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppDimention.size30),
-                    borderSide: const BorderSide(width: 1.0, color: Colors.white)),
+                    borderSide:
+                        const BorderSide(width: 1.0, color: Colors.white)),
                 enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppDimention.size30),
-                    borderSide: const BorderSide(width: 1.0, color: Colors.white)),
+                    borderSide:
+                        const BorderSide(width: 1.0, color: Colors.white)),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(AppDimention.size30),
                 ),

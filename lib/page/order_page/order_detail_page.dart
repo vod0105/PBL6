@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:android_project/caCuLaTor/function.dart';
+import 'package:android_project/data/api/AppConstant.dart';
 import 'package:android_project/data/controller/Combo_controller.dart';
 import 'package:android_project/data/controller/Order_controller.dart';
 import 'package:android_project/data/controller/Product_controller.dart';
@@ -19,9 +20,9 @@ import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
 class OrderDetailPage extends StatefulWidget {
@@ -47,6 +48,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     Get.find<OrderController>().getOrderByOrderCode(widget.orderCode);
     _fetchShipper();
   }
+
   Future<void> _fetchShipper() async {
     final orderController = Get.find<OrderController>();
     while (orderController.isLoading) {
@@ -54,46 +56,55 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     }
     if (orderController.orderDetail!.shipperId != 0) {
       final userController = Get.find<UserController>();
-      shipper = await userController.getById(orderController.orderDetail!.shipperId!);
+      shipper =
+          await userController.getById(orderController.orderDetail!.shipperId!);
       setState(() {});
     }
   }
+
   Future<void> getRoute(LatLng startPoint, LatLng endPoint) async {
     const apiKey = '5b3ce3597851110001cf62482f6aa59251a040bca10bfec215ef276c';
-    final url = 'https://api.openrouteservice.org/v2/directions/driving-car?api_key=$apiKey&start=${startPoint.longitude},${startPoint.latitude}&end=${endPoint.longitude},${endPoint.latitude}';
+    final url =
+        'https://api.openrouteservice.org/v2/directions/driving-car?api_key=$apiKey&start=${startPoint.longitude},${startPoint.latitude}&end=${endPoint.longitude},${endPoint.latitude}';
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      final List<dynamic> coordinates = data['features'][0]['geometry']['coordinates'];
+      final List<dynamic> coordinates =
+          data['features'][0]['geometry']['coordinates'];
       setState(() {
-        routePoints = coordinates.map((point) => LatLng(point[1], point[0])).toList();
+        routePoints =
+            coordinates.map((point) => LatLng(point[1], point[0])).toList();
       });
     } else {
       Get.snackbar(
-          "Thông báo",
-          "Lấy đường đi thất bại",
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.white,
-          colorText: Colors.black,
-          icon: const Icon(Icons.card_giftcard_sharp, color: Colors.green),
-          borderRadius: 10,
-          margin: const EdgeInsets.all(10),
-          duration: const Duration(seconds: 1),
-          isDismissible: true,
-        );
+        "Thông báo",
+        "Lấy đường đi thất bại",
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.white,
+        colorText: Colors.black,
+        icon: const Icon(Icons.card_giftcard_sharp, color: Colors.green),
+        borderRadius: 10,
+        margin: const EdgeInsets.all(10),
+        duration: const Duration(seconds: 1),
+        isDismissible: true,
+      );
     }
   }
+
   String _formatNumber(int number) {
     return number.toString().replaceAllMapped(
           RegExp(r'(\d)(?=(\d{3})+(?!\d))'),
           (Match match) => '${match[1]}.',
         );
   }
+
   String formatTime(String isoDateTime) {
     DateTime dateTime = DateTime.parse(isoDateTime);
     return DateFormat('yyyy/MM/dd').format(dateTime);
   }
-  void _showDialogRoad(User shipper ,double latitude,double longitude ,Function getRoute) {
+
+  void _showDialogRoad(
+      User shipper, double latitude, double longitude, Function getRoute) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -124,7 +135,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             Marker(
                                 width: 100.0,
                                 height: 80.0,
-                                point: LatLng(shipper.latitude!, shipper.longitude!),
+                                point: LatLng(
+                                    shipper.latitude!, shipper.longitude!),
                                 child: Column(
                                   children: [
                                     Container(
@@ -169,7 +181,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                     ),
                                   ],
                                 )),
-                           
                           ],
                         ),
                         if (isShowRoute!)
@@ -189,7 +200,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         right: 10,
                         child: GestureDetector(
                           onTap: () {
-                            mapController.move(LatLng(shipper.latitude!, shipper.longitude!), zoomValue);
+                            mapController.move(
+                                LatLng(shipper.latitude!, shipper.longitude!),
+                                zoomValue);
                           },
                           child: Container(
                             width: AppDimention.size40,
@@ -216,7 +229,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             setState(() {
                               zoomValue = zoomValue + 1;
                             });
-                            mapController.move(LatLng(shipper.latitude!, shipper.longitude!), zoomValue);
+                            mapController.move(
+                                LatLng(shipper.latitude!, shipper.longitude!),
+                                zoomValue);
                           },
                           child: Container(
                             width: AppDimention.size40,
@@ -243,7 +258,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             setState(() {
                               zoomValue = zoomValue - 1;
                             });
-                            mapController.move(LatLng(shipper.latitude!, shipper.longitude!), zoomValue);
+                            mapController.move(
+                                LatLng(shipper.latitude!, shipper.longitude!),
+                                zoomValue);
                           },
                           child: Container(
                             width: AppDimention.size40,
@@ -279,8 +296,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             height: AppDimention.size40,
                             decoration: BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.circular(
-                                    AppDimention.size5),
+                                borderRadius:
+                                    BorderRadius.circular(AppDimention.size5),
                                 border: Border.all(
                                     width: 1, color: Colors.black26)),
                             child: const Center(
@@ -296,6 +313,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           ));
         });
   }
+
   void _makePhoneCall(String phoneNumber) async {
     final Uri launchUri = Uri(
       scheme: 'tel',
@@ -307,6 +325,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
       throw 'Could not launch $phoneNumber';
     }
   }
+
   void _sendSMS(String phoneNumber) async {
     final Uri smsUri = Uri(
       scheme: 'sms',
@@ -318,6 +337,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
       throw 'Could not send SMS to $phoneNumber';
     }
   }
+
   void _sendEmail(String email, String subject, String body) async {
     final Uri emailUri = Uri(
       scheme: 'mailto',
@@ -334,6 +354,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
       throw 'Could not send email to $email';
     }
   }
+
   void _showDialogContact(User shipper) {
     showDialog(
         context: context,
@@ -415,57 +436,97 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     decoration: const BoxDecoration(color: AppColor.mainColor),
                     child: Center(
                       child: Text("Chi tiết đơn hàng",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: AppDimention.size25,
-                        )
-                      ),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: AppDimention.size25,
+                          )),
                     ),
                   ),
                   Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Container(
+                      child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Container(
                             width: AppDimention.screenWidth,
                             margin: EdgeInsets.all(AppDimention.size10),
                             padding: EdgeInsets.all(AppDimention.size10),
                             decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius:BorderRadius.circular(AppDimention.size10)
-                            ),
-                            child: 
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      const Icon(Icons.qr_code_2_outlined,size: 16,color: AppColor.mainColor,),
-                                      SizedBox(width: AppDimention.size10,),
-                                      Text("${orderController.orderDetail!.orderCode}",style: const TextStyle(color: AppColor.mainColor,),),
-                                    ],
+                                color: Colors.white,
+                                borderRadius:
+                                    BorderRadius.circular(AppDimention.size10)),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.qr_code_2_outlined,
+                                      size: 16,
+                                      color: AppColor.mainColor,
+                                    ),
+                                    SizedBox(
+                                      width: AppDimention.size10,
+                                    ),
+                                    Text(
+                                      "${orderController.orderDetail!.orderCode}",
+                                      style: const TextStyle(
+                                        color: AppColor.mainColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.timelapse_rounded,
+                                      size: 16,
+                                      color: AppColor.mainColor,
+                                    ),
+                                    SizedBox(
+                                      width: AppDimention.size10,
+                                    ),
+                                    Text(
+                                      formatTime(orderController
+                                          .orderDetail!.createdAt!),
+                                      style: const TextStyle(
+                                        color: AppColor.mainColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.money,
+                                      size: 16,
+                                      color: AppColor.mainColor,
+                                    ),
+                                    SizedBox(
+                                      width: AppDimention.size10,
+                                    ),
+                                    Text(
+                                      "đ${_formatNumber(orderController.orderDetail!.totalAmount!.toInt())}",
+                                      style: const TextStyle(
+                                        color: AppColor.mainColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Text(
+                                  "Địa chỉ giao hàng : ${orderController.orderDetail!.deliveryAddress}",
+                                  style: const TextStyle(
+                                    color: AppColor.mainColor,
                                   ),
-                                  Row(
-                                    children: [
-                                      const Icon(Icons.timelapse_rounded,size: 16,color: AppColor.mainColor,),
-                                      SizedBox(width: AppDimention.size10,),
-                                      Text(formatTime (orderController.orderDetail!.createdAt!),style: const TextStyle(color: AppColor.mainColor,),),
-                                    ],
+                                ),
+                                Text(
+                                  "Trạng thái đơn hàng : ${orderController.orderDetail!.status}",
+                                  style: const TextStyle(
+                                    color: Colors.blue,
                                   ),
-                                  Row(
-                                    children: [
-                                      const Icon(Icons.money,size: 16,color: AppColor.mainColor,),
-                                      SizedBox(width: AppDimention.size10,),
-                                      Text("đ${_formatNumber(orderController.orderDetail!.totalAmount!.toInt())}",style: const TextStyle(color: AppColor.mainColor,),),
-                                    ],
-                                  ),
-                                  Text("Địa chỉ giao hàng : ${ orderController.orderDetail!.deliveryAddress}",style: const TextStyle(color: AppColor.mainColor,),),
-                                  Text("Trạng thái đơn hàng : ${orderController.orderDetail!.status}",style: const TextStyle(color: Colors.blue,),)
-                                  
-                                ],
-                              )
-                        ),
+                                )
+                              ],
+                            )),
                         if (orderController.orderDetail!.shipperId != 0)
                           shipper == null
                               ? const CircularProgressIndicator()
@@ -483,21 +544,23 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                             AppDimention.size10),
                                       ),
                                       child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                const Text("Thông tin người giao hàng",style: TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.w700
-                                                ),),
-                                                Text(shipper!.fullName!),
-                                                Text(
-                                                    "Số điện thoại : ${shipper!.phoneNumber!}"),
-                                                Text("Email : ${shipper!.email!}"),
-                                              ],
-                                            ),
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Text(
+                                            "Thông tin người giao hàng",
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w700),
+                                          ),
+                                          Text(shipper!.fullName!),
+                                          Text(
+                                              "Số điện thoại : ${shipper!.phoneNumber!}"),
+                                          Text("Email : ${shipper!.email!}"),
+                                        ],
+                                      ),
                                     ),
                                     Container(
                                       margin:
@@ -530,7 +593,13 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                           ),
                                           GestureDetector(
                                             onTap: () {
-                                              _showDialogRoad(shipper!,orderController.orderDetail!.latitude!,orderController.orderDetail!.longitude!,getRoute);
+                                              _showDialogRoad(
+                                                  shipper!,
+                                                  orderController
+                                                      .orderDetail!.latitude!,
+                                                  orderController
+                                                      .orderDetail!.longitude!,
+                                                  getRoute);
                                             },
                                             child: Container(
                                               width: AppDimention.size100 * 1.8,
@@ -554,10 +623,10 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                     ),
                                   ],
                                 ),
-                        if(orderController.orderDetail!.shipperId == 0)
-                        const Center(
-                                child: Text("Chưa có người giao hàng cho đơn hàng"),
-                              ),
+                        if (orderController.orderDetail!.shipperId == 0)
+                          const Center(
+                            child: Text("Chưa có người giao hàng cho đơn hàng"),
+                          ),
                         Column(
                           children: orderController.orderDetail!.orderDetails!
                               .map((item) {
@@ -597,13 +666,13 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                           margin: EdgeInsets.only(
                                               bottom: AppDimention.size10),
                                           decoration: BoxDecoration(
-                                              color: Colors.amber.withOpacity(0.5),
+                                              color:
+                                                  Colors.amber.withOpacity(0.5),
                                               borderRadius:
                                                   BorderRadius.circular(
                                                       AppDimention.size5)),
                                           child: Column(
                                             children: [
-
                                               Row(
                                                 children: [
                                                   Container(
@@ -611,11 +680,31 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                                     height: AppDimention.size80,
                                                     decoration: BoxDecoration(
                                                         image: DecorationImage(
-                                                            fit: BoxFit.cover,
-                                                            image: MemoryImage(
-                                                                base64Decode(
-                                                                    productOrder!
-                                                                        .productImage!))),
+                                                          fit: BoxFit.cover,
+                                                          image: Image.network(
+                                                            "${Appconstant.BASE_URL}/api/v1/public/uploads/images/${productOrder!.productImage}",
+                                                            loadingBuilder:
+                                                                (context, child,
+                                                                    loadingProgress) {
+                                                              if (loadingProgress ==
+                                                                  null) {
+                                                                return child;
+                                                              } else {
+                                                                return const Center(
+                                                                    child:
+                                                                        CircularProgressIndicator());
+                                                              }
+                                                            },
+                                                            errorBuilder:
+                                                                (context, error,
+                                                                    stackTrace) {
+                                                              return Image.asset(
+                                                                  "assets/image/LoadingBg.png",
+                                                                  fit: BoxFit
+                                                                      .cover);
+                                                            },
+                                                          ).image,
+                                                        ),
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(
@@ -650,7 +739,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                                           ],
                                                         ),
                                                       ),
-                                                      
                                                     ],
                                                   )
                                                 ],
@@ -744,124 +832,148 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                           Column(
                                             children: comboItem.products!
                                                 .map((item) => Container(
-                                                  width: AppDimention
-                                                      .screenWidth,
-                                                  padding: EdgeInsets.all(
-                                                      AppDimention
-                                                          .size10),
-                                                  margin: EdgeInsets.only(
-                                                      top: AppDimention
-                                                          .size10),
-                                                  decoration: BoxDecoration(
-                                                      color: Colors
-                                                          .grey[200],
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              AppDimention
-                                                                  .size5)),
-                                                  child: Row(
-                                                    children: [
-                                                      Container(
-                                                        width:
-                                                            AppDimention
-                                                                .size80,
-                                                        height:
-                                                            AppDimention
-                                                                .size80,
-                                                        decoration: BoxDecoration(
-                                                            image: DecorationImage(
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                                image: MemoryImage(
-                                                                    base64Decode(item
-                                                                        .image!))),
-                                                            borderRadius:
-                                                                BorderRadius.circular(
-                                                                    AppDimention
-                                                                        .size5)),
-                                                      ),
-                                                      SizedBox(
-                                                        width:
-                                                            AppDimention
-                                                                .size10,
-                                                      ),
-                                                      Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
+                                                      width: AppDimention
+                                                          .screenWidth,
+                                                      padding: EdgeInsets.all(
+                                                          AppDimention.size10),
+                                                      margin: EdgeInsets.only(
+                                                          top: AppDimention
+                                                              .size10),
+                                                      decoration: BoxDecoration(
+                                                          color:
+                                                              Colors.grey[200],
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  AppDimention
+                                                                      .size5)),
+                                                      child: Row(
                                                         children: [
-                                                          Text(
-                                                              "${item.productName}"),
-                                                          Text(
-                                                              "đ${_formatNumber(item.price!.toInt())}"),
-                                                          Row(
-                                                            children: [
-                                                              Wrap(
-                                                                children:
-                                                                    List.generate(
-                                                                        5,
-                                                                        (index) {
-                                                                  if (index <
-                                                                      item.averageRate!
-                                                                          .floor()) {
-                                                                    return Icon(
-                                                                        Icons.star,
-                                                                        color: Colors.red,
-                                                                        size: AppDimention.size15);
-                                                                  } else if (index == item.averageRate!.floor() &&
-                                                                      item.averageRate! % 1 !=
-                                                                          0) {
-                                                                    return Icon(
-                                                                        Icons.star_half,
-                                                                        color: Colors.red,
-                                                                        size: AppDimention.size15);
-                                                                  } else {
-                                                                    return Icon(
-                                                                        Icons.star_border,
-                                                                        color: Colors.red,
-                                                                        size: AppDimention.size15);
-                                                                  }
-                                                                }),
-                                                              ),
-                                                              Text(
-                                                                "(${item.averageRate})",
-                                                                style: const TextStyle(
-                                                                    color: Colors
-                                                                        .red,
-                                                                    fontSize:
-                                                                        12),
-                                                              ),
-                                                            ],
+                                                          Container(
+                                                            width: AppDimention
+                                                                .size80,
+                                                            height: AppDimention
+                                                                .size80,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                                    image:
+                                                                        DecorationImage(
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                      image: Image
+                                                                          .network(
+                                                                        "${Appconstant.BASE_URL}/api/v1/public/uploads/images/${item.image}",
+                                                                        loadingBuilder: (context,
+                                                                            child,
+                                                                            loadingProgress) {
+                                                                          if (loadingProgress ==
+                                                                              null) {
+                                                                            return child;
+                                                                          } else {
+                                                                            return const Center(child: CircularProgressIndicator());
+                                                                          }
+                                                                        },
+                                                                        errorBuilder: (context,
+                                                                            error,
+                                                                            stackTrace) {
+                                                                          return Image.asset(
+                                                                              "assets/image/default.png",
+                                                                              fit: BoxFit.cover);
+                                                                        },
+                                                                      ).image,
+                                                                    ),
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            AppDimention.size5)),
                                                           ),
                                                           SizedBox(
                                                             width: AppDimention
-                                                                    .size100 *
-                                                                2.3,
-                                                            child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .end,
-                                                              children: [
-                                                                GestureDetector(
-                                                                  onTap:
-                                                                      () {
-                                                                    Get.toNamed(
-                                                                        AppRoute.get_product_detail(item.productId!));
-                                                                  },
-                                                                  child:
-                                                                      const Center(
-                                                                    child:
-                                                                        Text("Chi tiết"),
+                                                                .size10,
+                                                          ),
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  "${item.productName}"),
+                                                              Text(
+                                                                  "đ${_formatNumber(item.price!.toInt())}"),
+                                                              Row(
+                                                                children: [
+                                                                  Wrap(
+                                                                    children: List
+                                                                        .generate(
+                                                                            5,
+                                                                            (index) {
+                                                                      if (index <
+                                                                          item.averageRate!
+                                                                              .floor()) {
+                                                                        return Icon(
+                                                                            Icons
+                                                                                .star,
+                                                                            color:
+                                                                                Colors.red,
+                                                                            size: AppDimention.size15);
+                                                                      } else if (index ==
+                                                                              item.averageRate!
+                                                                                  .floor() &&
+                                                                          item.averageRate! % 1 !=
+                                                                              0) {
+                                                                        return Icon(
+                                                                            Icons
+                                                                                .star_half,
+                                                                            color:
+                                                                                Colors.red,
+                                                                            size: AppDimention.size15);
+                                                                      } else {
+                                                                        return Icon(
+                                                                            Icons
+                                                                                .star_border,
+                                                                            color:
+                                                                                Colors.red,
+                                                                            size: AppDimention.size15);
+                                                                      }
+                                                                    }),
                                                                   ),
-                                                                )
-                                                              ],
-                                                            ),
+                                                                  Text(
+                                                                    "(${item.averageRate})",
+                                                                    style: const TextStyle(
+                                                                        color: Colors
+                                                                            .red,
+                                                                        fontSize:
+                                                                            12),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              SizedBox(
+                                                                width: AppDimention
+                                                                        .size100 *
+                                                                    2.3,
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .end,
+                                                                  children: [
+                                                                    GestureDetector(
+                                                                      onTap:
+                                                                          () {
+                                                                        Get.toNamed(
+                                                                            AppRoute.get_product_detail(item.productId!));
+                                                                      },
+                                                                      child:
+                                                                          const Center(
+                                                                        child: Text(
+                                                                            "Chi tiết"),
+                                                                      ),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              )
+                                                            ],
                                                           )
                                                         ],
-                                                      )
-                                                    ],
-                                                  ),
-                                                ))
+                                                      ),
+                                                    ))
                                                 .toList(),
                                           ),
                                           if (comboOrder.drinkId!.isNotEmpty)
@@ -890,14 +1002,13 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                                       width: AppDimention
                                                           .screenWidth,
                                                       padding: EdgeInsets.all(
-                                                          AppDimention
-                                                              .size10),
+                                                          AppDimention.size10),
                                                       margin: EdgeInsets.only(
                                                           top: AppDimention
                                                               .size10),
                                                       decoration: BoxDecoration(
-                                                          color: Colors
-                                                              .grey[200],
+                                                          color:
+                                                              Colors.grey[200],
                                                           borderRadius:
                                                               BorderRadius.circular(
                                                                   AppDimention
@@ -905,28 +1016,45 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                                       child: Row(
                                                         children: [
                                                           Container(
-                                                            width:
-                                                                AppDimention
-                                                                    .size80,
-                                                            height:
-                                                                AppDimention
-                                                                    .size80,
-                                                            decoration: BoxDecoration(
-                                                                image: DecorationImage(
-                                                                    fit: BoxFit
-                                                                        .cover,
-                                                                    image: MemoryImage(base64Decode(
-                                                                        productitem!
-                                                                            .image!))),
-                                                                borderRadius:
-                                                                    BorderRadius.circular(
-                                                                        AppDimention
-                                                                            .size5)),
+                                                            width: AppDimention
+                                                                .size80,
+                                                            height: AppDimention
+                                                                .size80,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                                    image:
+                                                                        DecorationImage(
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                      image: Image
+                                                                          .network(
+                                                                        "${Appconstant.BASE_URL}/api/v1/public/uploads/images/${productitem!.image}",
+                                                                        loadingBuilder: (context,
+                                                                            child,
+                                                                            loadingProgress) {
+                                                                          if (loadingProgress ==
+                                                                              null) {
+                                                                            return child;
+                                                                          } else {
+                                                                            return const Center(child: CircularProgressIndicator());
+                                                                          }
+                                                                        },
+                                                                        errorBuilder: (context,
+                                                                            error,
+                                                                            stackTrace) {
+                                                                          return Image.asset(
+                                                                              "assets/image/LoadingBg.png",
+                                                                              fit: BoxFit.cover);
+                                                                        },
+                                                                      ).image,
+                                                                    ),
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            AppDimention.size5)),
                                                           ),
                                                           SizedBox(
-                                                            width:
-                                                                AppDimention
-                                                                    .size10,
+                                                            width: AppDimention
+                                                                .size10,
                                                           ),
                                                           Column(
                                                             crossAxisAlignment:
@@ -940,28 +1068,37 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                                               Row(
                                                                 children: [
                                                                   Wrap(
-                                                                    children:
-                                                                        List.generate(
+                                                                    children: List
+                                                                        .generate(
                                                                             5,
                                                                             (index) {
                                                                       if (index <
-                                                                          productitem.averageRate!
+                                                                          productitem
+                                                                              .averageRate!
                                                                               .floor()) {
                                                                         return Icon(
-                                                                            Icons.star,
-                                                                            color: Colors.red,
+                                                                            Icons
+                                                                                .star,
+                                                                            color:
+                                                                                Colors.red,
                                                                             size: AppDimention.size15);
-                                                                      } else if (index == productitem.averageRate!.floor() &&
+                                                                      } else if (index ==
+                                                                              productitem.averageRate!
+                                                                                  .floor() &&
                                                                           productitem.averageRate! % 1 !=
                                                                               0) {
                                                                         return Icon(
-                                                                            Icons.star_half,
-                                                                            color: Colors.red,
+                                                                            Icons
+                                                                                .star_half,
+                                                                            color:
+                                                                                Colors.red,
                                                                             size: AppDimention.size15);
                                                                       } else {
                                                                         return Icon(
-                                                                            Icons.star_border,
-                                                                            color: Colors.red,
+                                                                            Icons
+                                                                                .star_border,
+                                                                            color:
+                                                                                Colors.red,
                                                                             size: AppDimention.size15);
                                                                       }
                                                                     }),
@@ -993,8 +1130,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                                                       },
                                                                       child:
                                                                           const Center(
-                                                                        child:
-                                                                            Text("Chi tiết"),
+                                                                        child: Text(
+                                                                            "Chi tiết"),
                                                                       ),
                                                                     )
                                                                   ],
@@ -1023,14 +1160,14 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               ),
             )
           : Scaffold(
-            body: SizedBox(
-              width: AppDimention.screenWidth,
-              height: AppDimention.screenHeight,
-              child: const Center(
-                child: CircularProgressIndicator(),
+              body: SizedBox(
+                width: AppDimention.screenWidth,
+                height: AppDimention.screenHeight,
+                child: const Center(
+                  child: CircularProgressIndicator(),
+                ),
               ),
-            ),
-          );
+            );
     });
   }
 }

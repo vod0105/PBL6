@@ -17,6 +17,7 @@ class SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return const Scaffold(
       resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           SearchHeader(),

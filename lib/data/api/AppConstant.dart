@@ -4,13 +4,13 @@ class Appconstant {
   static const  String APP_NAME = "NhatDepTrai";
   static const int APP_VERSION = 1;
 
-  static const String IP = "192.168.1.45";
-  static const String IPAI = "10.10.27.64";
+  static const String IP = "10.10.2.94";
+  static const String IPAI = "192.168.31.161";
   static const String PORT = "8080";
 
-  static const String BASE_URL = "http://$IP:$PORT";
-  static const String BASE_AI_URL = "http://$IP:5000";
-
+  static const String BASE_URL = "https://food-app-gvbhgyfabjcthbhd.southeastasia-01.azurewebsites.net";
+  static const String BASE_AI_URL = "https://45ff-14-191-113-242.ngrok-free.app";
+  static const String SOCKET_URL = "wss://food-app-gvbhgyfabjcthbhd.southeastasia-01.azurewebsites.net/ws/chat";
   static const String SEARCH_BYIMAGE_URL = "/predict";
   static const String AUTO_RESPONSE_URL = "/intent-detection";
   static const String RECOMMEND_PRODUCT_URL = "/cross-sell/{userId}";

@@ -9,28 +9,33 @@ class Storecontroller extends GetxController {
   Storecontroller({
     required this.storeRepo,
   });
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
 
-  List<StoresItem> _storeList = [];
-  List<StoresItem> get storeList => _storeList;
+  bool isLoading = false;
+  StoresItem? storeItem;
+  bool loadingCommonStore = false;
+  List<StoresItem> storeList = [];
+  bool isLoadingItem = false;
 
   Future<void> getAll() async {
-    _isLoading = true;
+    isLoading = true;
+    update();
     Response response = await storeRepo.getAll();
-
     if (response.statusCode == 200) {
       var data = response.body;
-      _storeList = [];
-      _storeList.addAll(StoresModel.fromJson(data).listStores ?? []);
+      storeList = [];
+      storeList.addAll(StoresModel.fromJson(data).listStores ?? []);
+
+      isLoading = false;
+      update();
     } else {
+      storeList = [];
+      isLoading = false;
+      update();
     }
-    _isLoading = false;
-    update();
   }
 
   String addressOfStore(int storeId) {
-    for (StoresItem item in _storeList) {
+    for (StoresItem item in storeList) {
       if (item.storeId == storeId) {
         return item.location!;
       }
@@ -39,7 +44,7 @@ class Storecontroller extends GetxController {
   }
 
   StoresItem? getStoreById(int idStore) {
-    for (StoresItem item in _storeList) {
+    for (StoresItem item in storeList) {
       if (item.storeId == idStore) {
         return item;
       }
@@ -47,20 +52,14 @@ class Storecontroller extends GetxController {
     return null;
   }
 
-  StoresItem? _storeItem;
-  StoresItem? get storeItem => _storeItem;
-  bool _isLoadingItem = false;
-  bool get isLoadingItem => _isLoadingItem;
-
   Future<void> getById(int id) async {
-    _isLoadingItem = true;
+    isLoadingItem = true;
     Response response = await storeRepo.getById(id);
     if (response.statusCode == 200) {
       var data = response.body;
-      _storeItem = StoresItem.fromJson(data["data"]);
-    } else {
-    }
-    _isLoadingItem = false;
+      storeItem = StoresItem.fromJson(data["data"]);
+    } else {}
+    isLoadingItem = false;
     update();
   }
 
@@ -73,7 +72,6 @@ class Storecontroller extends GetxController {
       return "No name";
     }
   }
-  bool loadingCommonStore = false;
 
   List<StoresItem> getCommonStores(List<Productitem> listProduct) {
     loadingCommonStore = true;

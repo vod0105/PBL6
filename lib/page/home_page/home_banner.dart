@@ -1,9 +1,8 @@
-import 'package:android_project/route/app_route.dart';
-import 'package:dots_indicator/dots_indicator.dart';
-import 'package:flutter/material.dart';
 import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
-import 'package:get/get.dart';
+import 'package:dots_indicator/dots_indicator.dart';
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeBanner extends StatefulWidget {
   const HomeBanner({super.key});
@@ -45,7 +44,6 @@ class HomeBannerState extends State<HomeBanner> {
         children: [
           SizedBox(
             height: AppDimention.size100 * 2.5,
-           
             child: PageView.builder(
               controller: pageController,
               itemCount: 3,
@@ -98,12 +96,19 @@ class HomeBannerState extends State<HomeBanner> {
       child: Stack(
         children: [
           GestureDetector(
-            onTap: () {
-              Get.toNamed(AppRoute.get_combo_detail(index));
+            onTap: () async {
+              if (await canLaunchUrl(Uri.parse(
+                  "https://ambitious-bush-01a78f310.4.azurestaticapps.net"))) {
+                await launchUrl(Uri.parse(
+                    "https://ambitious-bush-01a78f310.4.azurestaticapps.net"));
+              } else {
+                throw 'Could not launch https://ambitious-bush-01a78f310.4.azurestaticapps.net';
+              }
             },
             child: Container(
               height: AppDimention.size100 * 2.4,
-               margin: EdgeInsets.only(left: AppDimention.size10,right: AppDimention.size10),
+              margin: EdgeInsets.only(
+                  left: AppDimention.size10, right: AppDimention.size10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(AppDimention.size10),
                 color: const Color(0xFF69c5df),

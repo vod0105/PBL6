@@ -1,8 +1,8 @@
 import 'package:android_project/data/repository/Chart_repo.dart';
 import 'package:android_project/models/Model/ChartModel.dart';
 import 'package:android_project/models/Model/MessageModel.dart';
-import 'package:android_project/models/Model/UserModel.dart';
 import 'package:android_project/models/Model/UserChatModel.dart';
+import 'package:android_project/models/Model/UserModel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -95,8 +95,7 @@ class ChartController extends GetxController implements GetxService {
     Response response = await chartRepo.autoResponse(question, storeId);
     if (response.statusCode == 200) {
       var data = response.body;
-
-      return data as String;
+      return data?.toString();
     } else {
       Get.snackbar(
         "Bảo trì",

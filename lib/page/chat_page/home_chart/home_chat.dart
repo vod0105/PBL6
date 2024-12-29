@@ -16,15 +16,16 @@ class HomeChatState extends State<HomeChat> {
   Widget build(BuildContext context) {
     return const Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor:  Color(0xFFF4F4F4),
+      backgroundColor: Color(0xFFF4F4F4),
       body: Column(
         children: [
           HomeChatHeader(),
           Expanded(
-              child: SingleChildScrollView(
-            child: HomeChatBody()
-          )),
-        ProfileFooter()
+            child: SingleChildScrollView(
+              child: HomeChatBody(),
+            ),
+          ),
+          ProfileFooter()
         ],
       ),
     );

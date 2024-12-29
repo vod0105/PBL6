@@ -181,14 +181,15 @@ class RegisterPageState extends State<RegisterPage> {
               ),
               Container(
                 margin: EdgeInsets.only(
-                    left: AppDimention.size20, right: AppDimention.size20),
+                    left: AppDimention.size10, right: AppDimention.size10),
                 decoration: BoxDecoration(color: Colors.white, boxShadow: [
                   BoxShadow(
                       blurRadius: AppDimention.size10,
                       spreadRadius: 7,
                       offset: const Offset(1, 10),
-                      color: Colors.grey.withOpacity(0.2))
-                ]),
+                      color: Colors.grey.withOpacity(0.2)),
+                ],
+                borderRadius: BorderRadius.circular(8)),
                 child: TextField(
                   controller: phoneNumberController,
                   decoration: InputDecoration(
@@ -219,18 +220,19 @@ class RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               SizedBox(
-                height: AppDimention.size20,
+                height: AppDimention.size10,
               ),
               Container(
                 margin: EdgeInsets.only(
-                    left: AppDimention.size20, right: AppDimention.size20),
+                    left: AppDimention.size10, right: AppDimention.size10),
                 decoration: BoxDecoration(color: Colors.white, boxShadow: [
                   BoxShadow(
                       blurRadius: AppDimention.size10,
                       spreadRadius: 7,
                       offset: const Offset(1, 10),
-                      color: Colors.grey.withOpacity(0.2))
-                ]),
+                      color: Colors.grey.withOpacity(0.2)),
+                ],
+                borderRadius: BorderRadius.circular(8)),
                 child: TextField(
                   controller: fullnameController,
                   decoration: InputDecoration(
@@ -261,18 +263,19 @@ class RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               SizedBox(
-                height: AppDimention.size20,
+                height: AppDimention.size10,
               ),
               Container(
                 margin: EdgeInsets.only(
-                    left: AppDimention.size20, right: AppDimention.size20),
+                    left: AppDimention.size10, right: AppDimention.size10),
                 decoration: BoxDecoration(color: Colors.white, boxShadow: [
                   BoxShadow(
                       blurRadius: AppDimention.size10,
                       spreadRadius: 7,
                       offset: const Offset(1, 10),
-                      color: Colors.grey.withOpacity(0.2))
-                ]),
+                      color: Colors.grey.withOpacity(0.2)),
+                ],
+                borderRadius: BorderRadius.circular(8)),
                 child: TextField(
                   controller: emailController,
                   decoration: InputDecoration(
@@ -303,17 +306,18 @@ class RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               SizedBox(
-                height: AppDimention.size20,
+                height: AppDimention.size10,
               ),
               Container(
                 width: AppDimention.screenWidth,
                 height: AppDimention.size50,
                 margin: EdgeInsets.only(
-                  left: AppDimention.size20,
-                  right: AppDimention.size20,
+                  left: AppDimention.size10,
+                  right: AppDimention.size10,
                 ),
                 decoration: BoxDecoration(
                   color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
                   boxShadow: [
                     BoxShadow(
                       blurRadius: AppDimention.size10,
@@ -368,17 +372,18 @@ class RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
               Container(
                 width: AppDimention.screenWidth,
                 height: AppDimention.size50,
                 margin: EdgeInsets.only(
-                  left: AppDimention.size20,
-                  right: AppDimention.size20,
+                  left: AppDimention.size10,
+                  right: AppDimention.size10,
                 ),
                 decoration: BoxDecoration(
                   color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
                   boxShadow: [
                     BoxShadow(
                       blurRadius: AppDimention.size10,
@@ -431,18 +436,19 @@ class RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               SizedBox(
-                height: AppDimention.size20,
+                height: AppDimention.size10,
               ),
               Container(
                 margin: EdgeInsets.only(
-                    left: AppDimention.size20, right: AppDimention.size20),
+                    left: AppDimention.size10, right: AppDimention.size10),
                 decoration: BoxDecoration(color: Colors.white, boxShadow: [
                   BoxShadow(
                       blurRadius: AppDimention.size10,
                       spreadRadius: 7,
                       offset: const Offset(1, 10),
-                      color: Colors.grey.withOpacity(0.2))
-                ]),
+                      color: Colors.grey.withOpacity(0.2)),
+                ],
+                borderRadius: BorderRadius.circular(8)),
                 child: TextField(
                   controller: homeNumber,
                   decoration: InputDecoration(
@@ -473,18 +479,19 @@ class RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               SizedBox(
-                height: AppDimention.size20,
+                height: AppDimention.size10,
               ),
               Container(
                 margin: EdgeInsets.only(
-                    left: AppDimention.size20, right: AppDimention.size20),
+                    left: AppDimention.size10, right: AppDimention.size10),
                 decoration: BoxDecoration(color: Colors.white, boxShadow: [
                   BoxShadow(
                       blurRadius: AppDimention.size10,
                       spreadRadius: 7,
                       offset: const Offset(1, 10),
-                      color: Colors.grey.withOpacity(0.2))
-                ]),
+                      color: Colors.grey.withOpacity(0.2)),
+                ],
+                borderRadius: BorderRadius.circular(8)),
                 child: TextField(
                   controller: passwordController,
                   obscureText: isHidden!,
@@ -523,18 +530,19 @@ class RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               SizedBox(
-                height: AppDimention.size20,
+                height: AppDimention.size10,
               ),
               Container(
                 margin: EdgeInsets.only(
-                    left: AppDimention.size20, right: AppDimention.size20),
+                    left: AppDimention.size10, right: AppDimention.size10),
                 decoration: BoxDecoration(color: Colors.white, boxShadow: [
                   BoxShadow(
                       blurRadius: AppDimention.size10,
                       spreadRadius: 7,
                       offset: const Offset(1, 10),
-                      color: Colors.grey.withOpacity(0.2))
-                ]),
+                      color: Colors.grey.withOpacity(0.2)),
+                ],
+                borderRadius: BorderRadius.circular(8)),
                 child: TextField(
                   controller: rePasswordController,
                   obscureText: isHidden!,
@@ -573,7 +581,7 @@ class RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               SizedBox(
-                height: AppDimention.size20,
+                height: AppDimention.size10,
               ),
               SizedBox(
                 width: AppDimention.size290,
@@ -588,7 +596,7 @@ class RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               SizedBox(
-                height: AppDimention.size20,
+                height: AppDimention.size10,
               ),
               Center(
                 child: Container(

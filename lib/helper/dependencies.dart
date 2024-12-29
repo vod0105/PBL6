@@ -40,7 +40,8 @@ Future<void> init() async {
   Get.lazyPut(() => ComboRepo(apiClient: Get.find()));
   Get.lazyPut(() => ComboController(comboRepo: Get.find()));
 
-  Get.lazyPut(() => ProductRepo(apiClient: Get.find(),apiClientAI: Get.find()));
+  Get.lazyPut(
+      () => ProductRepo(apiClient: Get.find(), apiClientAI: Get.find()));
   Get.lazyPut(() => ProductController(productRepo: Get.find()));
 
   Get.lazyPut(() => StoreRepo(apiClient: Get.find()));
@@ -58,7 +59,7 @@ Future<void> init() async {
   Get.lazyPut(() => SizeRepo(apiClient: Get.find()));
   Get.lazyPut(() => SizeController(sizeRepo: Get.find()));
 
-  Get.lazyPut(() => ChartRepo(apiClient: Get.find(),apiClientAi: Get.find()));
+  Get.lazyPut(() => ChartRepo(apiClient: Get.find(), apiClientAi: Get.find()));
   Get.lazyPut(() => ChartController(chartRepo: Get.find()));
 
   Get.lazyPut(() => PromotionRepo(apiClient: Get.find()));

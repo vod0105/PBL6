@@ -1,8 +1,7 @@
 import 'dart:convert';
 
-import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:intl/intl.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 
 class FunctionMap {
@@ -36,8 +35,7 @@ class FunctionMap {
   }
 
   String formatTime(String isoDateTime) {
-    DateTime dateTime = DateTime.parse(isoDateTime);
-    return DateFormat('hh:mm').format(dateTime);
+    return isoDateTime.split(":")[0] + isoDateTime.split(":")[1];
   }
 
   Future<List<String>> listProvinces() async {

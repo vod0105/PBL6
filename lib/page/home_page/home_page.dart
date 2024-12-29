@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor:  const Color(0xFFF4F4F4),
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           const HomeHeader(),
@@ -40,29 +40,28 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   height: AppDimention.size15,
                 ),
-           
-                 Row(
+                Row(
                   children: [
-                    SizedBox(width: AppDimention.size10,),
-                    Text("Combo trong tuần",style: TextStyle(fontSize: 25,fontWeight: FontWeight.w600,color: Colors.black.withOpacity(0.7)),),
+                    SizedBox(
+                      width: AppDimention.size10,
+                    ),
+                    Text(
+                      "Combo trong tuần",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black.withOpacity(0.7)),
+                    ),
                   ],
                 ),
-                SizedBox(
-                  height: AppDimention.size10,
-                ),
+               
                 const HomeCombo(),
                 SizedBox(
                   height: AppDimention.size15,
                 ),
-                SizedBox(
-                  height: AppDimention.size15,
-                ),
+            
                 const HomeProductRecommend(),
-                SizedBox(
-                  height: AppDimention.size15,
-                ),
                 const HomeProductBestseller(),
-                
                 if (Get.find<ProductController>().productList.length > 10)
                   SizedBox(
                     width: AppDimention.screenWidth,

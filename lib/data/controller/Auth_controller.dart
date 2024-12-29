@@ -1,6 +1,5 @@
 import 'package:android_project/data/api/ApiClient.dart';
 import 'package:android_project/data/repository/Auth_repo.dart';
-import 'package:android_project/data/service/AnnounceCheckService.dart';
 import 'package:android_project/models/Dto/UserDto.dart';
 import 'package:android_project/models/Dto/UserRegisterDto.dart';
 import 'package:android_project/route/app_route.dart';
@@ -72,12 +71,11 @@ class AuthController extends GetxController implements GetxService {
     Response response = await authRepo.logout(token);
 
     if (response.statusCode == 200) {
+      // Xóa trạng thái login
       isLogin.value = false;
-      final announceService = Get.find<AnnounceCheckService>();
-      announceService.onClose();
-      Get.toNamed(AppRoute.LOGIN_PAGE);
-      update();
 
+      update();
+      Get.toNamed(AppRoute.LOGIN_PAGE);
       return true;
     } else {
       return false;

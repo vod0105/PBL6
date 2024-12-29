@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:android_project/data/controller/Auth_controller.dart';
 import 'package:android_project/data/controller/User_controller.dart';
 import 'package:android_project/data/repository/Product_repo.dart';
@@ -245,12 +246,14 @@ class ProductController extends GetxController {
     Response response = await productRepo.searchByImage(base64Image);
     if (response.statusCode == 200) {
       var data = response.body;
+
       productListSearch = [];
       for (Productitem item in productList) {
         if (item.productName!.toLowerCase().contains(data.toLowerCase())) {
           productListSearch.add(item);
         }
       }
+
       update();
     } else {
       productListSearch = [];
@@ -261,11 +264,11 @@ class ProductController extends GetxController {
   List<Productitem>? getListDrink() {
     List<Productitem> productListDrink = [];
     for (Productitem item in productList) {
-      if (item.category!.categoryName == "Nước uống") {
+      if (item.category!.categoryName == "Đồ uống") {
         productListDrink.add(item);
       }
     }
-    return productList;
+    return productListDrink;
   }
 
   Future<void> addComment(CommentDto dto) async {
@@ -290,7 +293,7 @@ class ProductController extends GetxController {
           isDismissible: true,
         );
       } else {}
-    // ignore: empty_catches
+      // ignore: empty_catches
     } catch (e) {}
   }
 

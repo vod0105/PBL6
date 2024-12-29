@@ -1,12 +1,12 @@
-import 'dart:convert';
-import 'package:android_project/route/app_route.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:android_project/data/api/AppConstant.dart';
 import 'package:android_project/data/controller/Category_controller.dart';
 import 'package:android_project/data/controller/Product_controller.dart';
+import 'package:android_project/route/app_route.dart';
 import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
+import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 
 class HomeFolder extends StatefulWidget {
   const HomeFolder({super.key});
@@ -66,7 +66,7 @@ class HomeFolderState extends State<HomeFolder> {
     });
 
     _scrollController.animateTo(
-      index * (AppDimention.size150 - 5 * index ),
+      index * (AppDimention.size150 - 5 * index),
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
@@ -97,8 +97,9 @@ class HomeFolderState extends State<HomeFolder> {
                         Text(
                           "Danh mục sản phẩm",
                           style: TextStyle(
-                            
-                              fontSize: 25, fontWeight: FontWeight.w600,color: Colors.black.withOpacity(0.7)),
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black.withOpacity(0.7)),
                         ),
                       ],
                     ),
@@ -126,13 +127,16 @@ class HomeFolderState extends State<HomeFolder> {
                                       onTap: () => _onCategorySelected(
                                           item.categoryId!, index),
                                       child: Container(
-                                        padding: EdgeInsets.only(left: AppDimention.size20,right: AppDimention.size20),
+                                        padding: EdgeInsets.only(
+                                            left: AppDimention.size20,
+                                            right: AppDimention.size20),
                                         height: AppDimention.size50,
                                         margin: EdgeInsets.only(
                                             left: AppDimention.size20,
                                             top: AppDimention.size10),
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(AppDimention.size10),
+                                          borderRadius: BorderRadius.circular(
+                                              AppDimention.size10),
                                           gradient: item.categoryId ==
                                                   categorySelected
                                               ? const LinearGradient(
@@ -155,7 +159,8 @@ class HomeFolderState extends State<HomeFolder> {
                                           ),
                                         ),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             Icon(
                                               listIconCategory[index],
@@ -165,13 +170,17 @@ class HomeFolderState extends State<HomeFolder> {
                                                   : Colors.amber,
                                               size: 15,
                                             ),
-                                            SizedBox(width: AppDimention.size10,),
-                                            Text(item.categoryName!,style: TextStyle(
-                                              color: item.categoryId ==
-                                                      categorySelected
-                                                  ? Colors.blue
-                                                  : Colors.amber
-                                            ),)
+                                            SizedBox(
+                                              width: AppDimention.size10,
+                                            ),
+                                            Text(
+                                              item.categoryName!,
+                                              style: TextStyle(
+                                                  color: item.categoryId ==
+                                                          categorySelected
+                                                      ? Colors.blue
+                                                      : Colors.amber),
+                                            )
                                           ],
                                         ),
                                       ),
@@ -207,19 +216,27 @@ class HomeFolderState extends State<HomeFolder> {
                                           },
                                           child: Container(
                                             width: AppDimention.size100 * 2.5,
-                                            height: AppDimention.size100 * 3.6,
+                                            height: AppDimention.size100 * 3.5,
                                             padding: EdgeInsets.all(
                                                 AppDimention.size10),
                                             margin: EdgeInsets.only(
                                                 left: AppDimention.size10,
                                                 right: AppDimention.size15,
-                                                top: AppDimention.size10),
+                                                top: AppDimention.size10,
+                                                bottom: 10),
                                             decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      AppDimention.size10),
-                                            ),
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        AppDimention.size10),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      offset:
+                                                          const Offset(0, 2),
+                                                      blurRadius: 8,
+                                                      color: Colors.black
+                                                          .withOpacity(0.1))
+                                                ]),
                                             child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
@@ -228,15 +245,19 @@ class HomeFolderState extends State<HomeFolder> {
                                                   width:
                                                       AppDimention.screenWidth,
                                                   height: AppDimention.size100 *
-                                                      2.4,
+                                                      2.3,
                                                   decoration: BoxDecoration(
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            AppDimention 
+                                                            AppDimention
                                                                 .size10),
                                                     image: DecorationImage(
                                                       fit: BoxFit.cover,
-                                                      image:item.image != null ?  MemoryImage(base64Decode(item.image!)) : const AssetImage("assets/image/LoadingBg.png"),
+                                                      image: item.image != null
+                                                          ? NetworkImage(
+                                                              "${Appconstant.BASE_URL}/api/v1/public/uploads/images/${item.image}")
+                                                          : const AssetImage(
+                                                              "assets/image/LoadingBg.png"),
                                                     ),
                                                   ),
                                                 ),
@@ -248,7 +269,9 @@ class HomeFolderState extends State<HomeFolder> {
                                                   style: TextStyle(
                                                       fontSize: 20,
                                                       fontWeight:
-                                                          FontWeight.w600,color: Colors.black.withOpacity(0.7)),
+                                                          FontWeight.w600,
+                                                      color: Colors.black
+                                                          .withOpacity(0.7)),
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                 ),
@@ -301,9 +324,10 @@ class HomeFolderState extends State<HomeFolder> {
                                                         ),
                                                         Text(
                                                           "(${item.averageRate})",
-                                                          style: const TextStyle(
-                                                              color:
-                                                                  Colors.red),
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: Colors
+                                                                      .red),
                                                         ),
                                                       ],
                                                     ),

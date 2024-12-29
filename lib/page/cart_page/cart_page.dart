@@ -14,7 +14,7 @@ class CartPage extends StatefulWidget {
 }
 
 class CartPageState extends State<CartPage> {
-  CartController cartController =  Get.find<CartController>();
+  CartController cartController = Get.find<CartController>();
   @override
   void initState() {
     super.initState();
@@ -22,9 +22,7 @@ class CartPageState extends State<CartPage> {
     cartController.getListCartV2();
     cartController.resetIDSelected();
     cartController.getDistinctStoreId();
-
     cartController.updateTotal(cartController.totalPrice, false);
-
   }
 
   @override
@@ -34,13 +32,14 @@ class CartPageState extends State<CartPage> {
         children: [
           CartHeader(),
           Expanded(
-              child: SingleChildScrollView(
-            child: Column(
-              children: [
-                CartList(),
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  CartList(),
+                ],
+              ),
             ),
-          )),
+          ),
           CartFooter()
         ],
       ),

@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:android_project/custom/big_text.dart';
-
 import 'package:android_project/data/controller/User_controller.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
@@ -36,22 +33,6 @@ class ProfileHeaderState extends State<ProfileHeader> {
             ),
             Row(
               children: [
-                Container(
-                  width: AppDimention.size80,
-                  height: AppDimention.size80,
-                  margin: EdgeInsets.only(
-                      left: AppDimention.size30, top: AppDimention.size30),
-                  decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(50)),
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: (userController.userProfile?.avatar != null &&
-                                  userController
-                                      .userProfile!.avatar!.isNotEmpty)
-                              ? MemoryImage(base64Decode(
-                                  userController.userProfile!.avatar!))
-                              : const AssetImage("assets/image/avatar.jpg"))),
-                ),
                 SizedBox(
                   width: AppDimention.size20,
                 ),

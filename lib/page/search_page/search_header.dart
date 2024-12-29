@@ -29,9 +29,12 @@ class SearchHeaderState extends State<SearchHeader> {
       searchController.text = productController.textSearch;
       return Container(
         margin: EdgeInsets.only(
-            top: AppDimention.size40, bottom: AppDimention.size20),
+            top: AppDimention.size40),
         padding: EdgeInsets.only(
             left: AppDimention.size20, right: AppDimention.size20),
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: Colors.grey[300]!))
+        ),
         child: Row(
           children: [
             GestureDetector(

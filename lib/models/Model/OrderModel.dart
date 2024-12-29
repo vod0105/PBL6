@@ -16,8 +16,8 @@ class OrderModel {
     }
   }
   OrderModel.fromAJson(Map<String, dynamic> json) {
-    status = json['status'];
-    message = json['message'];
+    status = json['status'] ?? "";
+    message = json['message'] ?? "";
     if (json['data'] != null) {
       orderItem = <OrderItem>[];
       orderItem!.add(OrderItem.fromJson(json['data']));
@@ -26,8 +26,8 @@ class OrderModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['status'] = status;
-    data['message'] = message;
+    data['status'] = status ?? "";
+    data['message'] = message ?? "";
     if (orderItem != null) {
       data['data'] = orderItem!.map((v) => v.toJson()).toList();
     }
@@ -68,19 +68,19 @@ class OrderItem {
       this.orderDetails});
 
   OrderItem.fromJson(Map<String, dynamic> json) {
-    orderId = json['orderId'];
-    orderCode = json['orderCode'];
-    userId = json['userId'];
-    shipperId = json['shipperId'];
-    orderDate = json['orderDate'];
-    totalAmount = json['totalAmount'];
-    status = json['status'];
-    deliveryAddress = json['deliveryAddress'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
-    longitude = json['longitude'];
-    latitude = json['latitude'];
-    feedback = json['feedBack'];
+    orderId = json['orderId'] ?? "";
+    orderCode = json['orderCode'] ?? "";
+    userId = json['userId'] ?? "";
+    shipperId = json['shipperId'] ?? "";
+    orderDate = json['orderDate'] ?? "";
+    totalAmount = json['totalAmount'] ?? "";
+    status = json['status'] ?? "";
+    deliveryAddress = json['deliveryAddress'] ?? "";
+    createdAt = json['createdAt'] ?? "";
+    updatedAt = json['updatedAt'] ?? "";
+    longitude = json['longitude'] ?? "";
+    latitude = json['latitude'] ?? "";
+    feedback = json['feedBack'] ;
     if (json['orderDetails'] != null) {
       orderDetails = <OrderDetails>[];
       json['orderDetails'].forEach((v) {
@@ -91,19 +91,19 @@ class OrderItem {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['orderId'] = orderId;
-    data['orderCode'] = orderCode;
-    data['shipperId'] = shipperId;
-    data['userId'] = userId;
-    data['orderDate'] = orderDate;
-    data['totalAmount'] = totalAmount;
-    data['status'] = status;
-    data['deliveryAddress'] = deliveryAddress;
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
-    data['longitude'] = longitude;
-    data['latitude'] = latitude;
-    data['feedBack'] = feedback;
+    data['orderId'] = orderId != null ? "" : orderId;
+    data['orderCode'] = orderCode != null ? "" : orderCode;
+    data['shipperId'] = shipperId != null ? "" : shipperId;
+    data['userId'] = userId != null ? "" : userId;
+    data['orderDate'] = orderDate != null ? "" : orderDate;
+    data['totalAmount'] = totalAmount != null ? "" : totalAmount;
+    data['status'] = status != null ? "" : status;
+    data['deliveryAddress'] = deliveryAddress != null ? "" : deliveryAddress;
+    data['createdAt'] = createdAt != null ? "" : createdAt;
+    data['updatedAt'] = updatedAt != null ? "" : updatedAt;
+    data['longitude'] = longitude != null ? "" : longitude;
+    data['latitude'] = latitude != null ? "" : latitude;
+    data['feedBack'] = feedback ;
     if (orderDetails != null) {
       data['orderDetails'] = orderDetails!.map((v) => v.toJson()).toList();
     }
@@ -119,7 +119,7 @@ class OrderDetails {
   OrderDetails({this.type, this.productDetail, this.comboDetail});
 
   OrderDetails.fromJson(Map<String, dynamic> json) {
-    type = json['type'];
+    type = json['type'] ?? "";
     productDetail = json['productDetail'] != null
         ? ProductDetail.fromJson(json['productDetail'])
         : null;
@@ -130,7 +130,7 @@ class OrderDetails {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['type'] = type;
+    data['type'] = type ?? "";
     if (productDetail != null) {
       data['productDetail'] = productDetail!.toJson();
     }
@@ -174,45 +174,45 @@ class ProductDetail {
       this.bestSeller});
 
   ProductDetail.fromJson(Map<String, dynamic> json) {
-    orderDetailId = json['orderDetailId'];
-    productId = json['productId'];
-    productName = json['productName'];
-    description = json['description'];
-    productImage = json['productImage'];
-    category = json['category'];
-    quantity = json['quantity'];
-    unitPrice = json['unitPrice'];
-    totalPrice = json['totalPrice'];
-    size = json['size'];
+    orderDetailId = json['orderDetailId'] ?? "";
+    productId = json['productId'] ?? "";
+    productName = json['productName'] ?? "";
+    description = json['description'] ?? "";
+    productImage = json['productImage'] ?? "";
+    category = json['category'] ?? "";
+    quantity = json['quantity'] ?? "";
+    unitPrice = json['unitPrice'] ?? "";
+    totalPrice = json['totalPrice'] ?? "";
+    size = json['size'] ?? "";
     if (json['drinkId'] != null) {
       drinkId = <String>[];
       json['drinkId'].forEach((v) {
         drinkId!.add(v.toString());
       });
     }
-    storeId = json['storeId'];
-    status = json['status'];
-    bestSeller = json['bestSeller'];
+    storeId = json['storeId'] ?? "";
+    status = json['status'] ?? "";
+    bestSeller = json['bestSeller'] ?? "";
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['orderDetailId'] = orderDetailId;
-    data['productId'] = productId;
-    data['productName'] = productName;
-    data['description'] = description;
-    data['productImage'] = productImage;
-    data['category'] = category;
-    data['quantity'] = quantity;
-    data['unitPrice'] = unitPrice;
-    data['totalPrice'] = totalPrice;
-    data['size'] = size;
+    data['orderDetailId'] = orderDetailId ?? "";
+    data['productId'] = productId ?? "";
+    data['productName'] = productName ?? "";
+    data['description'] = description ?? "";
+    data['productImage'] = productImage ?? "";
+    data['category'] = category ?? "";
+    data['quantity'] = quantity ?? "";
+    data['unitPrice'] = unitPrice ?? "";
+    data['totalPrice'] = totalPrice ?? "";
+    data['size'] = size ?? "";
     if (drinkId != null) {
       data['drinkId'] = drinkId!.map((v) => v.toString()).toList();
     }
-    data['storeId'] = storeId;
-    data['status'] = status;
-    data['bestSeller'] = bestSeller;
+    data['storeId'] = storeId ?? "";
+    data['status'] = status ?? "";
+    data['bestSeller'] = bestSeller ?? "";
     return data;
   }
 }
@@ -240,35 +240,35 @@ class ComboDetail {
   });
 
   ComboDetail.fromJson(Map<String, dynamic> json) {
-    orderDetailId = json['orderDetailId'];
-    comboId = json['comboId'];
-    quantity = json['quantity'];
-    unitPrice = json['unitPrice'];
-    totalPrice = json['totalPrice'];
-    size = json['size'];
-     if (json['drinkId'] != null) {
+    orderDetailId = json['orderDetailId'] ?? "";
+    comboId = json['comboId'] ?? "";
+    quantity = json['quantity'] ?? "";
+    unitPrice = json['unitPrice'] ?? "";
+    totalPrice = json['totalPrice'] ?? "";
+    size = json['size'] ?? "";
+    if (json['drinkId'] != null) {
       drinkId = <String>[];
       json['drinkId'].forEach((v) {
         drinkId!.add(v.toString());
       });
     }
-    storeId = json['storeId'];
-    status = json['status'];
+    storeId = json['storeId'] ?? "";
+    status = json['status'] ?? "";
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['orderDetailId'] = orderDetailId;
-    data['comboId'] = comboId;
-    data['quantity'] = quantity;
-    data['unitPrice'] = unitPrice;
-    data['totalPrice'] = totalPrice;
-    data['size'] = size;
+    data['orderDetailId'] = orderDetailId ?? "";
+    data['comboId'] = comboId ?? "";
+    data['quantity'] = quantity ?? "";
+    data['unitPrice'] = unitPrice ?? "";
+    data['totalPrice'] = totalPrice ?? "";
+    data['size'] = size ?? "";
     if (drinkId != null) {
       data['drinkId'] = drinkId!.map((v) => v.toString()).toList();
     }
-    data['storeId'] = storeId;
-    data['status'] = status;
+    data['storeId'] = storeId?? "";
+    data['status'] = status?? "";
     return data;
   }
 }

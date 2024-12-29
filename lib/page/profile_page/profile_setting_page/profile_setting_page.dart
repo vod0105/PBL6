@@ -375,7 +375,7 @@ class ProfileSettingPageState extends State<ProfileSettingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: const Color.fromRGBO(243, 243, 243, 1),
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           Expanded(
@@ -472,14 +472,17 @@ class ProfileSettingPageState extends State<ProfileSettingPage> {
                 ),
                 Container(
                   margin: EdgeInsets.only(
-                      left: AppDimention.size20, right: AppDimention.size20),
-                  decoration: BoxDecoration(color: Colors.white, boxShadow: [
-                    BoxShadow(
-                        blurRadius: AppDimention.size10,
-                        spreadRadius: 7,
-                        offset: const Offset(1, 10),
-                        color: Colors.grey.withOpacity(0.2))
-                  ]),
+                      left: AppDimention.size10, right: AppDimention.size10),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                            blurRadius: AppDimention.size10,
+                            spreadRadius: 8,
+                            offset: const Offset(1, 2),
+                            color: Colors.grey.withOpacity(0.1))
+                      ]),
                   child: TextField(
                     controller: fullNameController,
                     decoration: InputDecoration(
@@ -512,18 +515,21 @@ class ProfileSettingPageState extends State<ProfileSettingPage> {
                   ),
                 ),
                 SizedBox(
-                  height: AppDimention.size20,
+                  height: AppDimention.size10,
                 ),
                 Container(
                   margin: EdgeInsets.only(
-                      left: AppDimention.size20, right: AppDimention.size20),
-                  decoration: BoxDecoration(color: Colors.white, boxShadow: [
-                    BoxShadow(
-                        blurRadius: AppDimention.size10,
-                        spreadRadius: 7,
-                        offset: const Offset(1, 10),
-                        color: Colors.grey.withOpacity(0.2))
-                  ]),
+                      left: AppDimention.size10, right: AppDimention.size10),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                            blurRadius: AppDimention.size10,
+                            spreadRadius: 8,
+                            offset: const Offset(1, 2),
+                            color: Colors.grey.withOpacity(0.1))
+                      ]),
                   child: TextField(
                     controller: emailController,
                     decoration: InputDecoration(
@@ -556,26 +562,25 @@ class ProfileSettingPageState extends State<ProfileSettingPage> {
                   ),
                 ),
                 SizedBox(
-                  height: AppDimention.size20,
+                  height: AppDimention.size10,
                 ),
                 Container(
                   width: AppDimention.screenWidth,
                   height: AppDimention.size60,
                   margin: EdgeInsets.only(
-                    left: AppDimention.size20,
-                    right: AppDimention.size20,
+                    left: AppDimention.size10,
+                    right: AppDimention.size10,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: AppDimention.size10,
-                        spreadRadius: 7,
-                        offset: const Offset(1, 10),
-                        color: Colors.grey.withOpacity(0.2),
-                      ),
-                    ],
-                  ),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                            blurRadius: AppDimention.size10,
+                            spreadRadius: 8,
+                            offset: const Offset(1, 2),
+                            color: Colors.grey.withOpacity(0.1))
+                      ]),
                   child: DropdownButtonFormField<String>(
                     value: selectedProvince,
                     onChanged: (String? newValue) {
@@ -632,20 +637,19 @@ class ProfileSettingPageState extends State<ProfileSettingPage> {
                   width: AppDimention.screenWidth,
                   height: AppDimention.size60,
                   margin: EdgeInsets.only(
-                    left: AppDimention.size20,
-                    right: AppDimention.size20,
+                    left: AppDimention.size10,
+                    right: AppDimention.size10,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: AppDimention.size10,
-                        spreadRadius: 7,
-                        offset: const Offset(1, 10),
-                        color: Colors.grey.withOpacity(0.2),
-                      ),
-                    ],
-                  ),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                            blurRadius: AppDimention.size10,
+                            spreadRadius: 8,
+                            offset: const Offset(1, 2),
+                            color: Colors.grey.withOpacity(0.1))
+                      ]),
                   child: DropdownButtonFormField<String>(
                     value: selectedDistrict,
                     onChanged: (String? newValue) {
@@ -698,14 +702,17 @@ class ProfileSettingPageState extends State<ProfileSettingPage> {
                 ),
                 Container(
                   margin: EdgeInsets.only(
-                      left: AppDimention.size20, right: AppDimention.size20),
-                  decoration: BoxDecoration(color: Colors.white, boxShadow: [
-                    BoxShadow(
-                        blurRadius: AppDimention.size10,
-                        spreadRadius: 7,
-                        offset: const Offset(1, 10),
-                        color: Colors.grey.withOpacity(0.2))
-                  ]),
+                      left: AppDimention.size10, right: AppDimention.size10),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                            blurRadius: AppDimention.size10,
+                            spreadRadius: 8,
+                            offset: const Offset(1, 2),
+                            color: Colors.grey.withOpacity(0.1))
+                      ]),
                   child: TextField(
                     controller: addressController,
                     decoration: InputDecoration(
@@ -742,14 +749,17 @@ class ProfileSettingPageState extends State<ProfileSettingPage> {
                 ),
                 Container(
                   margin: EdgeInsets.only(
-                      left: AppDimention.size20, right: AppDimention.size20),
-                  decoration: BoxDecoration(color: Colors.white, boxShadow: [
-                    BoxShadow(
-                        blurRadius: AppDimention.size10,
-                        spreadRadius: 7,
-                        offset: const Offset(1, 10),
-                        color: Colors.grey.withOpacity(0.2))
-                  ]),
+                      left: AppDimention.size10, right: AppDimention.size10),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                            blurRadius: AppDimention.size10,
+                            spreadRadius: 8,
+                            offset: const Offset(1, 2),
+                            color: Colors.grey.withOpacity(0.1))
+                      ]),
                   child: TextField(
                     controller: phoneController,
                     decoration: InputDecoration(

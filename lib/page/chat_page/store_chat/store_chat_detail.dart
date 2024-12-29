@@ -1,5 +1,4 @@
-import 'dart:convert';
-
+import 'package:android_project/data/api/AppConstant.dart';
 import 'package:android_project/data/controller/Chart_controller.dart';
 import 'package:android_project/data/controller/Store_Controller.dart';
 import 'package:android_project/models/Model/Item/StoresItem.dart';
@@ -9,7 +8,6 @@ import 'package:android_project/theme/app_color.dart';
 import 'package:android_project/theme/app_dimention.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 class StoreChatDetail extends StatefulWidget {
   final int storeId;
@@ -71,8 +69,7 @@ class StoreChatDetailState extends State<StoreChatDetail> {
   }
 
   String formatTime(String isoDateTime) {
-    DateTime dateTime = DateTime.parse(isoDateTime);
-    return DateFormat('hh:mm').format(dateTime);
+    return "${isoDateTime.split(":")[0]} : ${isoDateTime.split(":")[1]}";
   }
 
   void loadQuestion() {
@@ -112,7 +109,8 @@ class StoreChatDetailState extends State<StoreChatDetail> {
     if (sendController.text.isEmpty == false) {
       listChat.add(sendController.text);
       listChat.add((await chatController.autoResponse(
-          sendController.text, widget.storeId))!);
+              sendController.text, widget.storeId)) ??
+          "Cảm ơn bạn đã đặt câu hỏi. Hiện tại chúng tối chưa trả lời được.");
     }
     sendController.text = "";
     _scrollToBottom();
@@ -126,7 +124,8 @@ class StoreChatDetailState extends State<StoreChatDetail> {
       combinedList.add(Align(
         alignment: Alignment.centerRight,
         child: Container(
-            padding: const EdgeInsets.only(left: 15, right: 15, bottom: 10, top: 10),
+            padding:
+                const EdgeInsets.only(left: 15, right: 15, bottom: 10, top: 10),
             margin: const EdgeInsets.only(top: 10, right: 10),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -218,7 +217,10 @@ class StoreChatDetailState extends State<StoreChatDetail> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text("${storesItem!.storeName}",maxLines: 1,),
+                                Text(
+                                  "${storesItem!.storeName}",
+                                  maxLines: 1,
+                                ),
                                 const Text("Liên hệ chủ cửa hàng"),
                               ],
                             ),
@@ -234,81 +236,96 @@ class StoreChatDetailState extends State<StoreChatDetail> {
           Expanded(
             child: SingleChildScrollView(
               child: Container(
-                  padding: EdgeInsets.only(bottom: AppDimention.size40),
-                  child: Column(
-                    children: [
-                      loaded
-                          ? Column(
-                              children: [
-                                Container(
-                                  width: AppDimention.screenWidth,
-                                  margin: EdgeInsets.only(
-                                      top: AppDimention.size10,
-                                      left: AppDimention.size10,
-                                      right: AppDimention.size10),
-                                  height: AppDimention.size100 * 2.2,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(
-                                              AppDimention.size10),
-                                          topRight: Radius.circular(
-                                              AppDimention.size10)),
-                                      image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: MemoryImage(base64Decode(
-                                              storesItem!.image!)))),
+                padding: EdgeInsets.only(bottom: AppDimention.size40),
+                child: Column(
+                  children: [
+                    loaded
+                        ? Column(
+                            children: [
+                              Container(
+                                width: AppDimention.screenWidth,
+                                margin: EdgeInsets.only(
+                                    top: AppDimention.size10,
+                                    left: AppDimention.size10,
+                                    right: AppDimention.size10),
+                                height: AppDimention.size100 * 2.2,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft:
+                                          Radius.circular(AppDimention.size10),
+                                      topRight:
+                                          Radius.circular(AppDimention.size10)),
+                                  image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: Image.network(
+                                        "${Appconstant.BASE_URL}/api/v1/public/uploads/images/${storesItem!.image}",
+                                        loadingBuilder:
+                                            (context, child, loadingProgress) {
+                                          if (loadingProgress == null) {
+                                            return child;
+                                          } else {
+                                            return const Center(
+                                                child:
+                                                    CircularProgressIndicator());
+                                          }
+                                        },
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                          return Image.asset(
+                                              "assets/image/default.png",
+                                              fit: BoxFit.cover);
+                                        },
+                                      ).image),
                                 ),
-                                Container(
-                                  width: AppDimention.screenWidth,
-                                  margin: EdgeInsets.only(
-                                      bottom: AppDimention.size10,
-                                      left: AppDimention.size10,
-                                      right: AppDimention.size10),
-                                  padding: EdgeInsets.all(AppDimention.size10),
-                                 
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(
-                                              AppDimention.size10),
-                                          bottomRight: Radius.circular(
-                                              AppDimention.size10)),
-                                      border: const Border(
-                                          bottom: BorderSide(
-                                              width: 1, color: Colors.black12),
-                                          left: BorderSide(
-                                              width: 1, color: Colors.black12),
-                                          right: BorderSide(
-                                              width: 1,
-                                              color: Colors.black12))),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Cửa hàng : ${storesItem!.storeName}",
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 18),
-                                      ),
-                                      SizedBox(
-                                        height: AppDimention.size10,
-                                      ),
-                                      Text("Địa chỉ : ${storesItem!.location}"),
-                                      SizedBox(
-                                        height: AppDimention.size10,
-                                      ),
-                                      Text(
-                                          "Số điện thoại : ${storesItem!.numberPhone}"),
-                                      SizedBox(
-                                        height: AppDimention.size10,
-                                      ),
-                                      Text(
-                                          "Thời gian hoạt động : ${"${formatTime(storesItem!.openingTime!)} - ${formatTime(storesItem!.closingTime!)}"}"),
-                                      SizedBox(
-                                        height: AppDimention.size10,
-                                      ),
-                                      Center(
-                                          child: GestureDetector(
+                              ),
+                              Container(
+                                width: AppDimention.screenWidth,
+                                margin: EdgeInsets.only(
+                                    bottom: AppDimention.size10,
+                                    left: AppDimention.size10,
+                                    right: AppDimention.size10),
+                                padding: EdgeInsets.all(AppDimention.size10),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(
+                                            AppDimention.size10),
+                                        bottomRight: Radius.circular(
+                                            AppDimention.size10)),
+                                    border: const Border(
+                                        bottom: BorderSide(
+                                            width: 1, color: Colors.black12),
+                                        left: BorderSide(
+                                            width: 1, color: Colors.black12),
+                                        right: BorderSide(
+                                            width: 1, color: Colors.black12))),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Cửa hàng : ${storesItem!.storeName}",
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 18),
+                                    ),
+                                    SizedBox(
+                                      height: AppDimention.size10,
+                                    ),
+                                    Text("Địa chỉ : ${storesItem!.location}"),
+                                    SizedBox(
+                                      height: AppDimention.size10,
+                                    ),
+                                    Text(
+                                        "Số điện thoại : ${storesItem!.numberPhone}"),
+                                    SizedBox(
+                                      height: AppDimention.size10,
+                                    ),
+                                    Text(
+                                        "Thời gian hoạt động : ${"${formatTime(storesItem!.openingTime!)} - ${formatTime(storesItem!.closingTime!)}"}"),
+                                    SizedBox(
+                                      height: AppDimention.size10,
+                                    ),
+                                    Center(
+                                      child: GestureDetector(
                                         onTap: () {
                                           Get.toNamed(AppRoute.get_store_detail(
                                               storesItem!.storeId!));
@@ -331,108 +348,116 @@ class StoreChatDetailState extends State<StoreChatDetail> {
                                             ),
                                           ),
                                         ),
-                                      ))
-                                    ],
-                                  ),
-                                )
-                              ],
-                            )
-                          : const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                      Column(children: [
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
+                          )
+                        : const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                    Column(
+                      children: [
                         Column(children: combinedList),
                         Column(
-                          children: listChat.asMap().entries.map((entry) {
-                            int index = entry.key;
-                            String item = entry.value;
+                          children: listChat.asMap().entries.map(
+                            (entry) {
+                              int index = entry.key;
+                              String item = entry.value;
 
-                            return Container(
-                              width: Get.width * 0.9,
-                              padding: const EdgeInsets.all(10),
-                              margin: const EdgeInsets.only(top: 10),
-                              decoration: BoxDecoration(
-                                color:
-                                    index % 2 == 0 ? Colors.red : Colors.grey[200],
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Text(
-                                item,
-                                style: TextStyle(
-                                    color: index % 2 == 0
-                                        ? Colors.white
-                                        : Colors.black),
-                              ),
-                            );
-                          }).toList(),
+                              return Container(
+                                width: Get.width * 0.9,
+                                padding: const EdgeInsets.all(10),
+                                margin: const EdgeInsets.only(top: 10),
+                                decoration: BoxDecoration(
+                                  color: index % 2 == 0
+                                      ? Colors.red
+                                      : Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Text(
+                                  item,
+                                  style: TextStyle(
+                                      color: index % 2 == 0
+                                          ? Colors.white
+                                          : Colors.black),
+                                ),
+                              );
+                            },
+                          ).toList(),
                         ),
-                      ]),
-                    ],
-                  )),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
           Container(
-              width: AppDimention.screenWidth,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-              ),
-              padding: EdgeInsets.only(
-                  bottom: AppDimention.size10, top: AppDimention.size10),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: AppDimention.size10,
-                      ),
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius:
-                                BorderRadius.circular(AppDimention.size5),
-                          ),
-                          padding: EdgeInsets.only(
-                              left: AppDimention.size10,
-                              right: AppDimention.size10),
-                          child: TextField(
-                            controller: sendController,
-                            focusNode: focusNode,
-                            maxLines: null,
-                            decoration: InputDecoration(
-                              hintText: "Chart ...",
-                              hintStyle: const TextStyle(color: Colors.black12),
-                              focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    width: 1.0, color: Colors.transparent),
-                              ),
-                              enabledBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    width: 1.0, color: Colors.transparent),
-                              ),
-                              border: const OutlineInputBorder(),
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: AppDimention.size10),
+            width: AppDimention.screenWidth,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+            ),
+            padding: EdgeInsets.only(
+                bottom: AppDimention.size10, top: AppDimention.size10),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    SizedBox(
+                      width: AppDimention.size10,
+                    ),
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius:
+                              BorderRadius.circular(AppDimention.size5),
+                        ),
+                        padding: EdgeInsets.only(
+                            left: AppDimention.size10,
+                            right: AppDimention.size10),
+                        child: TextField(
+                          controller: sendController,
+                          focusNode: focusNode,
+                          maxLines: null,
+                          decoration: InputDecoration(
+                            hintText: "Chart ...",
+                            hintStyle: const TextStyle(color: Colors.black12),
+                            focusedBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 1.0, color: Colors.transparent),
                             ),
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 1.0, color: Colors.transparent),
+                            ),
+                            border: const OutlineInputBorder(),
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: AppDimention.size10),
                           ),
                         ),
                       ),
-                      SizedBox(
-                        width: AppDimention.size10,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          storeResponse();
-                        },
-                        child: const Icon(Icons.send, color: Colors.amber),
-                      ),
-                      SizedBox(
-                        width: AppDimention.size10,
-                      ),
-                    ],
-                  ),
-                ],
-              ))
+                    ),
+                    SizedBox(
+                      width: AppDimention.size10,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        storeResponse();
+                      },
+                      child: const Icon(Icons.send, color: Colors.amber),
+                    ),
+                    SizedBox(
+                      width: AppDimention.size10,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );
